@@ -111,7 +111,6 @@ class _MyAppState extends State<MyApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                    check
                         Text(
                           "RÊMMBER ME",
                           style:
