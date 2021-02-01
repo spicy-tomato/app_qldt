@@ -4,14 +4,7 @@ import 'package:swipedetector/swipedetector.dart';
 import 'package:app_qldt/widgets/interface.dart';
 import 'package:app_qldt/widgets/item.dart';
 import 'package:app_qldt/utils/const.dart';
-
-final Map<DateTime, List> _holidays = {
-  DateTime(2020, 1, 1): ['New Year\'s Day'],
-  DateTime(2020, 1, 6): ['Epiphany'],
-  DateTime(2020, 2, 14): ['Valentine\'s Day'],
-  DateTime(2020, 4, 21): ['Easter Sunday'],
-  DateTime(2020, 11, 22): ['Easter Monday'],
-};
+import 'package:app_qldt/services/calendarService.dart';
 
 bool dateIsBetween(DateTime date, DateTime before, DateTime after) {
   return date.isAfter(before) && date.isBefore(after);
@@ -33,74 +26,80 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   CalendarController _calendarController;
   DateTime _lastSelectedDay;
 
+  static Future<Map<DateTime, List>> getList() async {
+    return getData();
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _events = new Map();
+    _selectedEvents = new List();
+
     DateTime now = DateTime.now();
-    final _selectedDay =
-        DateTime.utc(now.year, now.month, now.day, 12, 0, 0, 0);
+    final _selectedDay = DateTime.utc(now.year, now.month, now.day, 0, 0, 0, 0);
 
-    _events = {
-      _selectedDay.subtract(Duration(days: 30)): [
-        'Event A0',
-        'Event B0',
-        'Event C0'
-      ],
-      _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
-      _selectedDay.subtract(Duration(days: 20)): [
-        'Event A2',
-        'Event B2',
-        'Event C2',
-        'Event D2'
-      ],
-      _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
-      _selectedDay.subtract(Duration(days: 10)): [
-        'Event A4',
-        'Event B4',
-        'Event C4'
-      ],
-      _selectedDay.subtract(Duration(days: 4)): [
-        'Event A5',
-        'Event B5',
-        'Event C5'
-      ],
-      _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
-      _selectedDay: [
-        'Event A7',
-        'Event B7',
-        'Event C7',
-        'Event D7',
-        'Event E7'
-      ],
-      _selectedDay.add(Duration(days: 1)): [
-        'Event A8',
-        'Event B8',
-        'Event C8',
-        'Event D8'
-      ],
-      _selectedDay.add(Duration(days: 4)):
-          Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
-      _selectedDay.add(Duration(days: 7)): [
-        'Event A10',
-        'Event B10',
-        'Event C10'
-      ],
-      _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
-      _selectedDay.add(Duration(days: 17)): [
-        'Event A12',
-        'Event B12',
-        'Event C12',
-        'Event D12'
-      ],
-      _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
-      _selectedDay.add(Duration(days: 26)): [
-        'Event A14',
-        'Event B14',
-        'Event C14'
-      ],
-    };
+    // _events = {
+    // _selectedDay.subtract(Duration(days: 30)): [
+    //   'Event A0',
+    //   'Event B0',
+    //   'Event C0'
+    // ],
+    // _selectedDay.subtract(Duration(days: 27)): ['Event A1'],
+    // _selectedDay.subtract(Duration(days: 20)): [
+    //   'Event A2',
+    //   'Event B2',
+    //   'Event C2',
+    //   'Event D2'
+    // ],
+    // _selectedDay.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
+    // _selectedDay.subtract(Duration(days: 10)): [
+    //   'Event A4',
+    //   'Event B4',
+    //   'Event C4'
+    // ],
+    // _selectedDay.subtract(Duration(days: 4)): [
+    //   'Event A5',
+    //   'Event B5',
+    //   'Event C5'
+    // ],
+    // _selectedDay.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
+    // _selectedDay: [
+    //   'Event A7',
+    //   'Event B7',
+    //   'Event C7',
+    //   'Event D7',
+    //   'Event E7'
+    // ],
+    // _selectedDay.add(Duration(days: 1)): [
+    //   'Event A8',
+    //   'Event B8',
+    //   'Event C8',
+    //   'Event D8'
+    // ],
+    // _selectedDay.add(Duration(days: 4)):
+    //     Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
+    // _selectedDay.add(Duration(days: 7)): [
+    //   'Event A10',
+    //   'Event B10',
+    //   'Event C10'
+    // ],
+    // _selectedDay.add(Duration(days: 11)): ['Event A11', 'Event B11'],
+    // _selectedDay.add(Duration(days: 17)): [
+    //   'Event A12',
+    //   'Event B12',
+    //   'Event C12',
+    //   'Event D12'
+    // ],
+    // _selectedDay.add(Duration(days: 22)): ['Event A13', 'Event B13'],
+    // _selectedDay.add(Duration(days: 26)): [
+    //   'Event A14',
+    //   'Event B14',
+    //   'Event C14'
+    // ],
+    // };
 
-    _selectedEvents = _events[_selectedDay] ?? [];
     _calendarController = CalendarController();
 
     _animationController = AnimationController(
@@ -160,8 +159,17 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Item(
-            child: _buildCalendar(),
-          ),
+              child: FutureBuilder(
+                  future: getList(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<Map<DateTime, List>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    }
+
+                    _events = snapshot.data;
+                    return _buildCalendar();
+                  })),
           Interface.mediumBox(),
           Expanded(
             child: _buildEventList(),
@@ -175,7 +183,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     return TableCalendar(
       locale: 'vi_VI',
       events: _events,
-      holidays: _holidays,
+      // holidays: _holidays,
       weekendDays: [DateTime.sunday],
       startingDayOfWeek: StartingDayOfWeek.monday,
       initialCalendarFormat: CalendarFormat.month,
