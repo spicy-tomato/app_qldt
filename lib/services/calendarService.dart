@@ -32,14 +32,9 @@ Future<Map<DateTime, List>> getData() async {
       events[schedule.daySchedules].add(schedule.moduleClassName);
     });
 
-    events.forEach((key, value) {
-      print('$key: $value');
-    });
-
-    // print(events);
     return events;
   } catch (Exception) {
-    print("Error");
+    throw Exception('Cannot parse date');
   }
 }
 
