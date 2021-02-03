@@ -35,7 +35,7 @@ class _MyAppState extends State<LoginScreen> {
                   padding: EdgeInsets.all(15),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Color(0xffd8d8d8)),
-                  child: Image.asset('images/LogoUTC.jpg'),
+                  // child: Image.asset('images/LogoUTC.jpg'),
                 ),
               ),
               Padding(
