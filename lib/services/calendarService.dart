@@ -38,7 +38,6 @@ Future<Map<DateTime, List>> getData() async {
   } catch (Exception) {
     throw Exception('Cannot parse date');
   }
-
 }
 
 class Schedule {
@@ -63,8 +62,6 @@ class Schedule {
         shiftSchedules: int.parse(json['Shift_Schedules']),
         daySchedules: DateTime.parse(json['Day_Schedules']));
   }
-
-
 }
 
 // void main() async {

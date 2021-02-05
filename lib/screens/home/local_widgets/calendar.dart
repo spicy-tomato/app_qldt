@@ -70,10 +70,10 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       DateTime first, DateTime last, CalendarFormat format) {
     if (dateIsBetween(_lastSelectedDay, first, last)) {
       DateTime _dayWillBeSelected =
-      _lastSelectedDay.month == _calendarController.focusedDay.month
-          ? _lastSelectedDay
-          : DateTime(_calendarController.focusedDay.year,
-          _calendarController.focusedDay.month, 1);
+          _lastSelectedDay.month == _calendarController.focusedDay.month
+              ? _lastSelectedDay
+              : DateTime(_calendarController.focusedDay.year,
+                  _calendarController.focusedDay.month, 1);
       setState(() {
         _selectedEvents = _events[_dayWillBeSelected] ?? [];
         _calendarController.setSelectedDay(_dayWillBeSelected);
@@ -277,16 +277,18 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       padding: EdgeInsets.zero,
       children: _selectedEvents
           .map((events) => Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        child: Item(
-          child: ListTile(
-            title: Text( events.toString()),
-            onTap: () => print('$events tapped!'),
-          ),
-        ),
-      ))
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Item(
+                  child: ListTile(
+                    title: Text('ca : ' +
+                        events.shiftSchedules +
+                        '\n' +
+                        events.toString()),
+                    onTap: () => print('$events tapped!'),
+                  ),
+                ),
+              ))
           .toList(),
     );
-
   }
 }
