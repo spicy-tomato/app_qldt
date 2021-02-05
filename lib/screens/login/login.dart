@@ -30,13 +30,18 @@ class _MyAppState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Container(
-                  width: 70,
-                  height: 70,
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xffd8d8d8)),
-                  // child: Image.asset('images/LogoUTC.jpg'),
-                ),
+                    width: 70,
+                    height: 70,
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xffd8d8d8)),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'images/LogoUTC.jpg',
+                        )
+                      ],
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
@@ -94,7 +99,7 @@ class _MyAppState extends State<LoginScreen> {
                     color: Colors.blue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pushNamed(context, '/home');
                     },
                     child: Text("LOGIN"),

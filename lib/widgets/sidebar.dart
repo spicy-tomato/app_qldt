@@ -13,44 +13,38 @@ class Sidebar extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.28,
-              child: DrawerHeader(
-                child: Stack(
-                  children: [
-                    Text('Sidebar'),
-                    Align(
-                      alignment: Alignment(1, -0.7),
-                      child: InkWell(
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.cancel_rounded,
-                            color: Colors.white,
-                            size: Const.sideBarIconSize,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                decoration: BoxDecoration(color: Colors.blue),
-              ),
+            new ListTile(
+              trailing: new Icon(Icons.close),
+              onTap: () => Navigator.of(context).pop(),
             ),
-            ListTile(
-              title: Text('Item 1'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Item 2'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
+            new UserAccountsDrawerHeader(
+                accountName: new Text("MSV:191203380"),
+                accountEmail: new Text("trantambcd@gmail.com"),
+                currentAccountPicture: new CircleAvatar(
+                  child: Row(
+                    children: [Image.asset('images/avatar.jpg')],
+                  ),
+                )),
+            new ListTile(
+                title: new Text('HOME'),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+            new ListTile(
+                title: new Text('Today'),
+                onTap: () {
+                  Navigator.pop(context, '/feature/pageone.dart');
+                }),
+            new ListTile(
+                title: new Text('Page two'),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+            new ListTile(
+                title: new Text('Page three'),
+                onTap: () {
+                  Navigator.pop(context);
+                }),
           ],
         ),
       ),
