@@ -30,7 +30,7 @@ Future<Map<DateTime, List>> getData() async {
       if (events[schedule.daySchedules] == null) {
         events[schedule.daySchedules] = new List();
       }
-      events[schedule.daySchedules].add(schedule.moduleName);
+      events[schedule.daySchedules].add(schedule);
     });
 
     return events;
