@@ -280,7 +280,9 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 margin: const EdgeInsets.only(bottom: 8),
                 child: Item(
                   child: ListTile(
-                    title: Text(event.toString()),
+                    title: Text('Ca : ' + event.shiftSchedules.toString() + '\n' +
+                        'Phòng: ' + event.idRoom + '\n' +
+                        event.moduleName),
                     onTap: () => print('$event tapped!'),
                   ),
                 ),
