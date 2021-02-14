@@ -1,3 +1,4 @@
+import 'package:app_qldt/screens/firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'screens/home/home.dart';
 import 'screens/login/login.dart';
@@ -8,8 +9,9 @@ void main() {
     MaterialApp(
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/': (context) => LoginScreen(),
+        // '/': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
+        '/': (context) => FirebaseScreen(),
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

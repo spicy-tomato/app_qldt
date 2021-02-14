@@ -38,7 +38,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     _selectedEvents = new List();
 
     DateTime now = DateTime.now();
-    final _selectedDay = DateTime.utc(now.year, now.month, now.day, 0, 0, 0, 0);
+    final _selectedDay = DateTime.utc(now.year, 10, 10, 0, 0, 0, 0);
 
     _calendarController = CalendarController();
 
