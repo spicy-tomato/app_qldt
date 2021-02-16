@@ -9,9 +9,9 @@ void main() {
     MaterialApp(
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        // '/': (context) => LoginScreen(),
+        '/': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
-        '/': (context) => FirebaseScreen(),
+        // '/': (context) => FirebaseScreen(),
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

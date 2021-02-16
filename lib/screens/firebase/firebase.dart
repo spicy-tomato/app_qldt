@@ -39,6 +39,7 @@ class FirebaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebase = Firebase(_firebaseMessaging);
     firebase.initialise();
+    return Container();
   }
 }
 
