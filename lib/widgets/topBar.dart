@@ -35,12 +35,13 @@ class TopBar extends StatelessWidget {
           Align(
             alignment: Alignment(-1, -0.2),
             child: IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  size: Const.topBarIconSize,
-                  color: Const.topBarTextColor,
-                ),
-                onPressed: onPressed,),
+              icon: Icon(
+                Icons.menu,
+                size: Const.topBarIconSize,
+                color: Const.topBarTextColor,
+              ),
+              onPressed: onPressed,
+            ),
           )
         ],
       ),

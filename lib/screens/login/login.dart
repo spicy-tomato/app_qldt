@@ -30,13 +30,18 @@ class _MyAppState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Container(
-                  width: 70,
-                  height: 70,
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Color(0xffd8d8d8)),
-                  // child: Image.asset('images/LogoUTC.jpg'),
-                ),
+                    width: 70,
+                    height: 70,
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xffd8d8d8)),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'images/LogoUTC.jpg',
+                        )
+                      ],
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
@@ -57,7 +62,7 @@ class _MyAppState extends State<LoginScreen> {
                         labelText: "USERNAME",
                         errorText: _userInvalid ? _userErr : null,
                         labelStyle:
-                            TextStyle(color: Color(0xff888888), fontSize: 15))),
+                        TextStyle(color: Color(0xff888888), fontSize: 15))),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
@@ -94,8 +99,8 @@ class _MyAppState extends State<LoginScreen> {
                     color: Colors.blue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
-                    onPressed: (){
-                      Navigator.pushNamed(context, '/home');
+                    onPressed: () {
+                      onSignInClicked();
                     },
                     child: Text("LOGIN"),
                   ),
@@ -112,13 +117,13 @@ class _MyAppState extends State<LoginScreen> {
                         Text(
                           "REMEMBER ME",
                           style:
-                              TextStyle(fontSize: 15, color: Color(0xff888888)),
+                          TextStyle(fontSize: 15, color: Color(0xff888888)),
                         ),
                       ],
                     ),
                   )),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
                 child: Container(
                   height: 30,
                   width: double.infinity,
@@ -128,7 +133,7 @@ class _MyAppState extends State<LoginScreen> {
                       Text(
                         "NEW USER ? LOGIN",
                         style:
-                            TextStyle(fontSize: 15, color: Color(0xff888888)),
+                        TextStyle(fontSize: 15, color: Color(0xff888888)),
                       ),
                       Text(
                         "FORGOT PASSWORD?",
@@ -148,6 +153,24 @@ class _MyAppState extends State<LoginScreen> {
   void showPassWord() {
     setState(() {
       _showPass = !_showPass;
+    });
+  }
+
+  void onSignInClicked() {
+    setState(() {
+      if (_userController.text.length != 9) {
+        _userInvalid = true;
+      } else {
+        _userInvalid = false;
+      }
+      if (_passController.text.length < 6) {
+        _passInvalid = true;
+      } else {
+        _passInvalid = false;
+      }
+      if (!_userInvalid && !_passInvalid) {
+        Navigator.pushNamed(context, '/home');
+      }
     });
   }
 }
