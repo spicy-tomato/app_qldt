@@ -38,7 +38,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     _selectedEvents = new List();
 
     DateTime now = DateTime.now();
-    final _selectedDay = DateTime.utc(now.year, now.month, now.day, 0, 0, 0, 0);
+    final _selectedDay = DateTime.utc(now.year, 10, 10, 0, 0, 0, 0);
 
     _calendarController = CalendarController();
 
@@ -68,23 +68,31 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   void _onVisibleDaysChanged(
       DateTime first, DateTime last, CalendarFormat format) {
+    print('On visible day changed');
     if (dateIsBetween(_lastSelectedDay, first, last)) {
+      // print('Date is between');
       DateTime _dayWillBeSelected =
           _lastSelectedDay.month == _calendarController.focusedDay.month
               ? _lastSelectedDay
               : DateTime(_calendarController.focusedDay.year,
                   _calendarController.focusedDay.month, 1);
       setState(() {
-        _selectedEvents = _events[_dayWillBeSelected] ?? [];
         _calendarController.setSelectedDay(_dayWillBeSelected);
+        _selectedEvents = _events[_dayWillBeSelected] ?? [];
+        print('Day will be selected: $_dayWillBeSelected');
+        print('Seleted events: $_selectedEvents');
       });
     } else {
+      // print('Date is not between');
       DateTime _dayWillBeSelected = format == CalendarFormat.month
           ? _calendarController.focusedDay
           : first;
+
       setState(() {
-        _selectedEvents = _events[_dayWillBeSelected] ?? [];
         _calendarController.setSelectedDay(_dayWillBeSelected);
+        _selectedEvents = _events[_dayWillBeSelected] ?? [];
+        print('Day will be selected: $_dayWillBeSelected');
+        print('Seleted events: $_selectedEvents');
       });
     }
   }

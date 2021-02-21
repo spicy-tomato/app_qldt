@@ -1,3 +1,4 @@
+// import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -30,7 +31,7 @@ Future<Map<DateTime, List>> getData() async {
       if (events[schedule.daySchedules] == null) {
         events[schedule.daySchedules] = new List();
       }
-      events[schedule.daySchedules].add(schedule);
+      events[schedule.daySchedules].add(schedule.moduleName);
     });
 
     return events;
@@ -60,10 +61,6 @@ class Schedule {
         idRoom: json['ID_Room'],
         shiftSchedules: int.parse(json['Shift_Schedules']),
         daySchedules: DateTime.parse(json['Day_Schedules']));
-  }
-
-  String toString() {
-    return "Mã HP: $idModuleClass, HP: $moduleName";
   }
 }
 

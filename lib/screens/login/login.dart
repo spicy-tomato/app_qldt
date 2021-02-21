@@ -100,7 +100,7 @@ class _MyAppState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      onSignInClicked();
                     },
                     child: Text("LOGIN"),
                   ),
@@ -153,6 +153,24 @@ class _MyAppState extends State<LoginScreen> {
   void showPassWord() {
     setState(() {
       _showPass = !_showPass;
+    });
+  }
+
+  void onSignInClicked() {
+    setState(() {
+      if (_userController.text.length != 9) {
+        _userInvalid = true;
+      } else {
+        _userInvalid = false;
+      }
+      if (_passController.text.length < 6) {
+        _passInvalid = true;
+      } else {
+        _passInvalid = false;
+      }
+      if (!_userInvalid && !_passInvalid) {
+        Navigator.pushNamed(context, '/home');
+      }
     });
   }
 }
