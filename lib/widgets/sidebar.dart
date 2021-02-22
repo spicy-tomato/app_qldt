@@ -36,14 +36,14 @@ class Sidebar extends StatelessWidget {
                   Navigator.pop(context, '/feature/pageone.dart');
                 }),
             new ListTile(
-                title: new Text('Page two'),
+                title: new Text('Firebase'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, '/firebase');
                 }),
             new ListTile(
-                title: new Text('Page three'),
+                title: new Text('Logout'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/');
                 }),
           ],
         ),

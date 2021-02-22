@@ -2,11 +2,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:app_qldt/model/schedule.dart';
 
-const url =
-'https://ancolincode.000webhostapp.com/utcapi/api-v2/tkb.php?id=V181604559';
+const baseUrl =
+'https://ancolincode.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
     // 'https://localhost/utcapi/api-v2/tkb.php?id=V181604559';
 
-Future<List> fetchData() async {
+Future<List> fetchData(String studentId) async {
+  String url = baseUrl + studentId;
   final responseData = await http.get(url);
 
   if (responseData.statusCode == 200) {
@@ -23,9 +24,9 @@ Future<List> fetchData() async {
   }
 }
 
-Future<Map<DateTime, List>> getData() async {
+Future<Map<DateTime, List>> getData(String studentId) async {
   try {
-    List<Schedule> data = (await fetchData()) as List<Schedule>;
+    List<Schedule> data = (await fetchData(studentId)) as List<Schedule>;
     Map<DateTime, List> events = new Map();
 
     data.forEach((schedule) {

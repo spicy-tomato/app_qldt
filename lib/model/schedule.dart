@@ -5,12 +5,13 @@ class Schedule {
   final int shiftSchedules;
   final DateTime daySchedules;
 
-  Schedule(
-      {this.idModuleClass,
-      this.moduleName,
-      this.idRoom,
-      this.shiftSchedules,
-      this.daySchedules});
+  Schedule({
+    this.idModuleClass,
+    this.moduleName,
+    this.idRoom,
+    this.shiftSchedules,
+    this.daySchedules,
+  });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(

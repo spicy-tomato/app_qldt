@@ -1,3 +1,5 @@
+import 'package:app_qldt/screens/firebase/firebase.dart';
+import 'package:app_qldt/services/tokenService.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:swipedetector/swipedetector.dart';
@@ -11,9 +13,14 @@ bool dateIsBetween(DateTime date, DateTime before, DateTime after) {
 }
 
 class Calendar extends StatefulWidget {
-  Calendar({Key key, this.title}) : super(key: key);
+  Calendar({
+    Key key,
+    @required this.studentId,
+    @required this.firebase,
+  }) : super(key: key);
 
-  final String title;
+  final String studentId;
+  final Firebase firebase;
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -26,13 +33,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   CalendarController _calendarController;
   DateTime _lastSelectedDay;
 
-  static Future<Map<DateTime, List>> getList() async {
-    return getData();
+  Future<Map<DateTime, List>> getList() async {
+    return getData(widget.studentId);
   }
 
   @override
   void initState() {
     super.initState();
+    upsertToken(widget.firebase, widget.studentId);
 
     _events = new Map();
     _selectedEvents = new List();
@@ -68,7 +76,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   void _onVisibleDaysChanged(
       DateTime first, DateTime last, CalendarFormat format) {
-    print('On visible day changed');
+    // print('On visible day changed');
     if (dateIsBetween(_lastSelectedDay, first, last)) {
       // print('Date is between');
       DateTime _dayWillBeSelected =
@@ -79,8 +87,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       setState(() {
         _calendarController.setSelectedDay(_dayWillBeSelected);
         _selectedEvents = _events[_dayWillBeSelected] ?? [];
-        print('Day will be selected: $_dayWillBeSelected');
-        print('Seleted events: $_selectedEvents');
+        // print('Day will be selected: $_dayWillBeSelected');
+        // print('Seleted events: $_selectedEvents');
       });
     } else {
       // print('Date is not between');
@@ -91,8 +99,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       setState(() {
         _calendarController.setSelectedDay(_dayWillBeSelected);
         _selectedEvents = _events[_dayWillBeSelected] ?? [];
-        print('Day will be selected: $_dayWillBeSelected');
-        print('Seleted events: $_selectedEvents');
+        // print('Day will be selected: $_dayWillBeSelected');
+        // print('Seleted events: $_selectedEvents');
       });
     }
   }
@@ -288,10 +296,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 margin: const EdgeInsets.only(bottom: 8),
                 child: Item(
                   child: ListTile(
-                    title: Text('Ca : ' + event.shiftSchedules.toString() + '\n' +
-                        'Phòng: ' + event.idRoom + '\n' +
+                    title: Text('Ca : ' +
+                        event.shiftSchedules.toString() +
+                        '\n' +
+                        'Phòng: ' +
+                        event.idRoom +
+                        '\n' +
                         event.moduleName),
-                    onTap: () => print('$event tapped!'),
+                    // onTap: () => print('$event tapped!'),
                   ),
                 ),
               ))

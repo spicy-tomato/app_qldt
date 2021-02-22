@@ -11,8 +11,8 @@ class _MyAppState extends State<LoginScreen> {
   TextEditingController _passController = new TextEditingController();
   var _userErr = "tài khoản không hợp lệ"; // check ch
   var _passErr = "tài khoản không hợp lệ"; //
-  var _userInvalid = false;
-  var _passInvalid = false;
+  var _userValid = false;
+  var _passValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class _MyAppState extends State<LoginScreen> {
                     controller: _userController,
                     decoration: InputDecoration(
                         labelText: "USERNAME",
-                        errorText: _userInvalid ? _userErr : null,
+                        errorText: _userValid ? _userErr : null,
                         labelStyle:
                             TextStyle(color: Color(0xff888888), fontSize: 15))),
               ),
@@ -75,7 +75,7 @@ class _MyAppState extends State<LoginScreen> {
                           obscureText: !_showPass,
                           decoration: InputDecoration(
                               labelText: "PASSWORD",
-                              errorText: _passInvalid ? _passErr : null,
+                              errorText: _passValid ? _passErr : null,
                               labelStyle: TextStyle(
                                   color: Color(0xff888888), fontSize: 15))),
                       GestureDetector(
@@ -100,7 +100,7 @@ class _MyAppState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/home');
+                      onSignInClicked();
                     },
                     child: Text("LOGIN"),
                   ),
@@ -153,6 +153,34 @@ class _MyAppState extends State<LoginScreen> {
   void showPassWord() {
     setState(() {
       _showPass = !_showPass;
+    });
+  }
+
+  void onSignInClicked() {
+    setState(() {
+      // if (_userController.text.length != 9) {
+      //   _userValid = true;
+      // } else {
+      //   _userValid = false;
+      // }
+
+      _userValid = true;
+
+      // if (_passController.text.length < 6) {
+      //   _passValid = true;
+      // } else {
+      //   _passValid = false;
+      // }
+
+      _passValid = true;
+
+      if (_userValid && _passValid) {
+        Navigator.pushNamed(
+          context,
+          '/home',
+          arguments: _userController.text,
+        );
+      }
     });
   }
 }

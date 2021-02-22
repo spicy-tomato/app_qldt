@@ -11,7 +11,7 @@ void main() {
       routes: <String, WidgetBuilder>{
         '/': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
-        // '/': (context) => FirebaseScreen(),
+        '/firebase': (context) => FirebaseScreen(),
       },
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
