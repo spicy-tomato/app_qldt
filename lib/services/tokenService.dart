@@ -16,7 +16,8 @@ void upsertToken(Firebase firebase, String studentId) async {
       '"token": "$token"'
       '}';
 
-  print(body);
+  // final directory = await getApplicationDocumentsDirectory();
+  // print(directory.path);
 
   Response response = await post(
     baseUrl,
@@ -26,5 +27,5 @@ void upsertToken(Firebase firebase, String studentId) async {
 
   String rbody = response.body;
 
-  print(rbody);
+  print('-- Upsert token -- Response body: $rbody');
 }

@@ -1,26 +1,44 @@
 import 'package:app_qldt/screens/firebase/firebase.dart';
 import 'package:app_qldt/screens/home/local_widgets/calendar.dart';
+import 'package:app_qldt/services/autoLogin.dart';
 import 'package:app_qldt/widgets/interface.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
-  Widget build(BuildContext context) {
-    final String studentId =
-        ModalRoute.of(context).settings.arguments as String;
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     final firebase = Firebase(_firebaseMessaging);
     firebase.initialise();
 
     return Interface(
-      title: 'Trang chủ',
-      child: Calendar(
-        studentId: studentId,
-        firebase: firebase,
-      ),
-    );
+        title: 'Trang chủ',
+        child: FutureBuilder(
+          future: getSavedLoginInfo(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return Calendar(
+              studentId: snapshot.data,
+              firebase: firebase,
+            );
+          },
+        ));
   }
 }

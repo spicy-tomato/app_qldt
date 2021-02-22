@@ -33,20 +33,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   CalendarController _calendarController;
   DateTime _lastSelectedDay;
 
-  Future<Map<DateTime, List>> getList() async {
+  Future<Map<DateTime, List>> getList() {
     return getData(widget.studentId);
   }
 
   @override
   void initState() {
     super.initState();
-    upsertToken(widget.firebase, widget.studentId);
 
-    _events = new Map();
     _selectedEvents = new List();
-
-    DateTime now = DateTime.now();
-    final _selectedDay = DateTime.utc(now.year, 10, 10, 0, 0, 0, 0);
 
     _calendarController = CalendarController();
 
@@ -57,7 +52,9 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
     _animationController.forward();
 
-    _lastSelectedDay = _selectedDay;
+    _lastSelectedDay = DateTime.now();
+
+    upsertToken(widget.firebase, widget.studentId);
   }
 
   @override
@@ -68,6 +65,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   }
 
   void _onDaySelected(DateTime day, List events, List holidays) {
+    print('On day selected');
+
     setState(() {
       _selectedEvents = events;
       _lastSelectedDay = day;
@@ -76,9 +75,11 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   void _onVisibleDaysChanged(
       DateTime first, DateTime last, CalendarFormat format) {
-    // print('On visible day changed');
+    print('----------------------------');
+    print('On visible day changed');
+
     if (dateIsBetween(_lastSelectedDay, first, last)) {
-      // print('Date is between');
+      print('Date is between');
       DateTime _dayWillBeSelected =
           _lastSelectedDay.month == _calendarController.focusedDay.month
               ? _lastSelectedDay
@@ -87,11 +88,11 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       setState(() {
         _calendarController.setSelectedDay(_dayWillBeSelected);
         _selectedEvents = _events[_dayWillBeSelected] ?? [];
-        // print('Day will be selected: $_dayWillBeSelected');
-        // print('Seleted events: $_selectedEvents');
+        print('Day will be selected: $_dayWillBeSelected');
+        print('Selected events: $_selectedEvents');
       });
     } else {
-      // print('Date is not between');
+      print('Date is not between');
       DateTime _dayWillBeSelected = format == CalendarFormat.month
           ? _calendarController.focusedDay
           : first;
@@ -99,8 +100,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       setState(() {
         _calendarController.setSelectedDay(_dayWillBeSelected);
         _selectedEvents = _events[_dayWillBeSelected] ?? [];
-        // print('Day will be selected: $_dayWillBeSelected');
-        // print('Seleted events: $_selectedEvents');
+        print('Day will be selected: $_dayWillBeSelected');
+        print('Selected events: $_selectedEvents');
       });
     }
   }
@@ -110,28 +111,34 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SwipeDetector(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Item(
-              child: FutureBuilder(
-                  future: getList(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<Map<DateTime, List>> snapshot) {
-                    if (!snapshot.hasData) {
-                      return Container();
-                    }
+    return FutureBuilder(
+      future: getList(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<Map<DateTime, List>> snapshot,
+      ) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-                    _events = snapshot.data;
-                    return _buildCalendar();
-                  })),
-          Interface.mediumBox(),
-          Expanded(
-            child: _buildEventList(),
+        _events = snapshot.data;
+        return SwipeDetector(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Item(
+                child: _buildCalendar(),
+              ),
+              Interface.mediumBox(),
+              Expanded(
+                child: _buildEventList(),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -265,7 +272,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       calendarController: _calendarController,
       onDaySelected: (date, events, holidays) {
         _onDaySelected(date, events, holidays);
-        _animationController.forward(from: 0.0);
+        // _animationController.forward(from: 0.0);
       },
       onVisibleDaysChanged: (first, last, format) {
         _onVisibleDaysChanged(first, last, format);
@@ -292,21 +299,23 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     return ListView(
       padding: EdgeInsets.zero,
       children: _selectedEvents
-          .map((event) => Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                child: Item(
-                  child: ListTile(
-                    title: Text('Ca : ' +
-                        event.shiftSchedules.toString() +
-                        '\n' +
-                        'Phòng: ' +
-                        event.idRoom +
-                        '\n' +
-                        event.moduleName),
-                    // onTap: () => print('$event tapped!'),
-                  ),
+          .map(
+            (event) => Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: Item(
+                child: ListTile(
+                  title: Text('Ca : ' +
+                      event.shiftSchedules.toString() +
+                      '\n' +
+                      'Phòng: ' +
+                      event.idRoom +
+                      '\n' +
+                      event.moduleName),
+                  // onTap: () => print('$event tapped!'),
                 ),
-              ))
+              ),
+            ),
+          )
           .toList(),
     );
   }

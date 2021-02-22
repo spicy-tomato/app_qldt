@@ -1,3 +1,5 @@
+import 'package:app_qldt/screens/home/home.dart';
+import 'package:app_qldt/services/autoLogin.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,13 +11,19 @@ class _MyAppState extends State<LoginScreen> {
   bool _showPass = false;
   TextEditingController _userController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
-  var _userErr = "tài khoản không hợp lệ"; // check ch
-  var _passErr = "tài khoản không hợp lệ"; //
-  var _userValid = false;
-  var _passValid = false;
+  String _userErr = "tài khoản không hợp lệ"; // check ch
+  String _passErr = "tài khoản không hợp lệ"; //
+  bool _userValid = false;
+  bool _passValid = false;
+
+  String savedStudentId;
 
   @override
   Widget build(BuildContext context) {
+    if (savedStudentId != null) {
+      autoLogin();
+    }
+
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -100,7 +108,7 @@ class _MyAppState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
                     onPressed: () {
-                      onSignInClicked();
+                      signInByLogin();
                     },
                     child: Text("LOGIN"),
                   ),
@@ -150,35 +158,34 @@ class _MyAppState extends State<LoginScreen> {
     );
   }
 
+  void autoLogin() {
+    Navigator.pushNamed(
+      context,
+      'home',
+      arguments: savedStudentId,
+    );
+  }
+
   void showPassWord() {
     setState(() {
       _showPass = !_showPass;
     });
   }
 
-  void onSignInClicked() {
+  Future<void> signInByLogin() async {
+
+    saveLoginInfo(_userController.text);
+
     setState(() {
-      // if (_userController.text.length != 9) {
-      //   _userValid = true;
-      // } else {
-      //   _userValid = false;
-      // }
-
       _userValid = true;
-
-      // if (_passController.text.length < 6) {
-      //   _passValid = true;
-      // } else {
-      //   _passValid = false;
-      // }
-
       _passValid = true;
 
       if (_userValid && _passValid) {
-        Navigator.pushNamed(
+        Navigator.push(
           context,
-          '/home',
-          arguments: _userController.text,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
         );
       }
     });

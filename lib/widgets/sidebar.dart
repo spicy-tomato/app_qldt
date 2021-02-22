@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_qldt/utils/const.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Sidebar extends StatelessWidget {
   @override
@@ -42,8 +43,10 @@ class Sidebar extends StatelessWidget {
                 }),
             new ListTile(
                 title: new Text('Logout'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/');
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  prefs.remove('student_id');
+                  Navigator.pushNamed(context, 'login');
                 }),
           ],
         ),

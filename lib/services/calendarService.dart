@@ -4,7 +4,6 @@ import 'package:app_qldt/model/schedule.dart';
 
 const baseUrl =
 'https://ancolincode.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
-    // 'https://localhost/utcapi/api-v2/tkb.php?id=V181604559';
 
 Future<List> fetchData(String studentId) async {
   String url = baseUrl + studentId;
