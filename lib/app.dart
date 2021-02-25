@@ -27,6 +27,9 @@ class App extends StatelessWidget {
 
       case 'home':
         return MaterialPageRoute(builder: (_) => HomeScreen());
+
+      default:
+        return MaterialPageRoute(builder: null);
     }
   }
 }

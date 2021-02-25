@@ -1,11 +1,14 @@
-import 'package:app_qldt/screens/firebase/firebase.dart';
 import 'package:http/http.dart';
+import 'package:firebase_repository/firebase_repository.dart';
 
 const baseUrl =
-    'http://ancolincode.000webhostapp.com/utcapi/api-v2/client/upsert_token.php';
+    'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/upsert_token.php';
 
-void upsertToken(Firebase firebase, String studentId) async {
+void upsertToken(FirebaseRepository firebase, String studentId) async {
   String token = await firebase.getToken();
+
+  print(token);
+  print(studentId);
 
   // Map<String, String> headers = {
   //   "Content-type": "application/json",

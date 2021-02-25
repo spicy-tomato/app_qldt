@@ -1,9 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:app_qldt/model/schedule.dart';
+import 'package:app_qldt/models/schedule.dart';
 
 const baseUrl =
-'https://ancolincode.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
+    'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
 
 Future<List> fetchData(String studentId) async {
   String url = baseUrl + studentId;

@@ -1,4 +1,3 @@
-import 'package:app_qldt/screens/firebase/firebase.dart';
 import 'package:app_qldt/services/tokenService.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -7,6 +6,7 @@ import 'package:app_qldt/widgets/interface.dart';
 import 'package:app_qldt/widgets/item.dart';
 import 'package:app_qldt/utils/const.dart';
 import 'package:app_qldt/services/calendarService.dart';
+import 'package:firebase_repository/firebase_repository.dart';
 
 bool dateIsBetween(DateTime date, DateTime before, DateTime after) {
   return date.isAfter(before) && date.isBefore(after);
@@ -16,11 +16,11 @@ class Calendar extends StatefulWidget {
   Calendar({
     Key key,
     @required this.studentId,
-    @required this.firebase,
+    @required this.firebaseRepository,
   }) : super(key: key);
 
   final String studentId;
-  final Firebase firebase;
+  final FirebaseRepository firebaseRepository;
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -32,10 +32,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   AnimationController _animationController;
   CalendarController _calendarController;
   DateTime _lastSelectedDay;
-
-  Future<Map<DateTime, List>> getList() {
-    return getData(widget.studentId);
-  }
 
   @override
   void initState() {
@@ -54,7 +50,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
     _lastSelectedDay = DateTime.now();
 
-    upsertToken(widget.firebase, widget.studentId);
+    upsertToken(widget.firebaseRepository, widget.studentId);
   }
 
   @override
@@ -64,59 +60,12 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _onDaySelected(DateTime day, List events, List holidays) {
-    print('On day selected');
-
-    setState(() {
-      _selectedEvents = events;
-      _lastSelectedDay = day;
-    });
-  }
-
-  void _onVisibleDaysChanged(
-      DateTime first, DateTime last, CalendarFormat format) {
-    print('----------------------------');
-    print('On visible day changed');
-
-    if (dateIsBetween(_lastSelectedDay, first, last)) {
-      print('Date is between');
-      DateTime _dayWillBeSelected =
-          _lastSelectedDay.month == _calendarController.focusedDay.month
-              ? _lastSelectedDay
-              : DateTime(_calendarController.focusedDay.year,
-                  _calendarController.focusedDay.month, 1);
-      setState(() {
-        _calendarController.setSelectedDay(_dayWillBeSelected);
-        _selectedEvents = _events[_dayWillBeSelected] ?? [];
-        print('Day will be selected: $_dayWillBeSelected');
-        print('Selected events: $_selectedEvents');
-      });
-    } else {
-      print('Date is not between');
-      DateTime _dayWillBeSelected = format == CalendarFormat.month
-          ? _calendarController.focusedDay
-          : first;
-
-      setState(() {
-        _calendarController.setSelectedDay(_dayWillBeSelected);
-        _selectedEvents = _events[_dayWillBeSelected] ?? [];
-        print('Day will be selected: $_dayWillBeSelected');
-        print('Selected events: $_selectedEvents');
-      });
-    }
-  }
-
-  void _onCalendarCreated(
-      DateTime first, DateTime last, CalendarFormat format) {}
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: getList(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<Map<DateTime, List>> snapshot,
-      ) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<DateTime, List>> snapshot) {
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -281,6 +230,54 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     );
   }
 
+  void _onDaySelected(DateTime day, List events, List holidays) {
+    print('On day selected');
+
+    setState(() {
+      _selectedEvents = events;
+      _lastSelectedDay = day;
+    });
+  }
+
+  void _onVisibleDaysChanged(
+      DateTime first, DateTime last, CalendarFormat format) {
+    print('----------------------------');
+    // print('On visible day changed');
+
+    if (dateIsBetween(_lastSelectedDay, first, last)) {
+      print('Date is between');
+      DateTime _dayWillBeSelected =
+          _lastSelectedDay.month == _calendarController.focusedDay.month
+              ? _lastSelectedDay
+              : DateTime(_calendarController.focusedDay.year,
+                  _calendarController.focusedDay.month, 1);
+
+      // print('Day will be selected: $_dayWillBeSelected');
+      // print('Selected day: ${_calendarController.selectedDay}');
+
+      setState(() {
+        _calendarController.setSelectedDay(_dayWillBeSelected);
+        _selectedEvents = _events[toStandard(_dayWillBeSelected)] ?? [];
+        print('Selected events: $_selectedEvents');
+      });
+    } else {
+      print('Date is not between');
+      DateTime _dayWillBeSelected = _calendarController.focusedDay;
+
+      // print('Day will be selected: $_dayWillBeSelected');
+      // print('Selected day: ${_calendarController.selectedDay}');
+
+      setState(() {
+        _calendarController.setSelectedDay(_dayWillBeSelected);
+        _selectedEvents = _events[toStandard(_dayWillBeSelected)] ?? [];
+        print('Selected events: $_selectedEvents');
+      });
+    }
+  }
+
+  void _onCalendarCreated(
+      DateTime first, DateTime last, CalendarFormat format) {}
+
   Widget _buildEventsMarker(DateTime date) {
     return Container(
       width: 6.5,
@@ -318,5 +315,13 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
           )
           .toList(),
     );
+  }
+
+  Future<Map<DateTime, List>> getList() {
+    return getData(widget.studentId);
+  }
+
+  DateTime toStandard(DateTime dt) {
+    return DateTime(dt.year, dt.month, dt.day);
   }
 }

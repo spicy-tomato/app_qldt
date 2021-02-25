@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 
-class Firebase {
-  final FirebaseMessaging _firebaseMessaging;
+class FirebaseRepository {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  Firebase(this._firebaseMessaging);
+  FirebaseRepository();
 
   Future initialise() async {
     if (Platform.isIOS) {
@@ -28,15 +27,5 @@ class Firebase {
 
   Future<String> getToken() async {
     return await _firebaseMessaging.getToken();
-  }
-}
-
-class FirebaseScreen extends StatelessWidget {
-  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  Widget build(BuildContext context) {
-    final firebase = Firebase(_firebaseMessaging);
-    firebase.initialise();
-    return Container();
   }
 }

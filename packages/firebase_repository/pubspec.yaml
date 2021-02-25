@@ -1,0 +1,9 @@
+name: firebase_repository
+description: Dart package which manage Firebase extension.
+version: 1.0.0
+
+environment:
+  sdk: ">=2.8.0 <3.0.0"
+
+dependencies:
+  firebase_messaging: ^7.0.3

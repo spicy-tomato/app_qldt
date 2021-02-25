@@ -38,18 +38,19 @@ class _MyAppState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: Container(
-                    width: 70,
-                    height: 70,
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Color(0xffd8d8d8)),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'images/LogoUTC.jpg',
-                        )
-                      ],
-                    )),
+                  width: 70,
+                  height: 70,
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: Color(0xffd8d8d8)),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'images/LogoUTC.jpg',
+                      )
+                    ],
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
@@ -173,7 +174,6 @@ class _MyAppState extends State<LoginScreen> {
   }
 
   Future<void> signInByLogin() async {
-
     saveLoginInfo(_userController.text);
 
     setState(() {
