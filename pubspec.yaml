@@ -53,6 +53,7 @@ dependencies:
   formz: ^0.3.2
 
   # cupertino_icons: ^1.0.0
+  flutter_native_splash: ^0.3.0
 
 dev_dependencies:
   flutter_test:
