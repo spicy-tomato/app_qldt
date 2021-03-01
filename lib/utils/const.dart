@@ -1,59 +1,61 @@
 import 'package:flutter/material.dart';
 
 class Const {
-  static Color primaryColor = Color(0xff0779e4);
+  static const Color primaryColor = Color(0xff0779e4);
 
   // Interface
-  static Color interfaceBackgroundColor = Color(0xeef6f5f5);
+  static const Color interfaceBackgroundColor = Color(0xeef6f5f5);
 
   // Top bar
-  static double topBarHeightRatio = 0.20;
-  static Color topBarBackgroundColor = primaryColor;
-  static Color topBarTextColor = Colors.white;
-  static double topBarFontSize = 25;
-  static double topBarIconSize = 40;
+  static const double topBarHeightRatio = 0.20;
+  static const Color topBarBackgroundColor = primaryColor;
+  static const Color topBarTextColor = Colors.white;
+  static const double topBarFontSize = 25;
+  static const double topBarIconSize = 40;
 
   // Side bar
-  static Color sideBarBackgroundColor = primaryColor;
-  static double sideBarIconSize = 40;
+  static const Color sideBarBackgroundColor = primaryColor;
+  static const double sideBarIconSize = 40;
 
   // Content
-  static double contentTopPaddingRatio = 0.155;
-  static double contentLeftPaddingRatio = 0.035;
-  static double contentRightPaddingRatio = contentLeftPaddingRatio;
-  static BorderRadius topBarBorderRadius = BorderRadius.only(
+  static const double contentTopPaddingRatio = 0.155;
+  static const double contentLeftPaddingRatio = 0.035;
+  static const double contentRightPaddingRatio = contentLeftPaddingRatio;
+  static const BorderRadius topBarBorderRadius = BorderRadius.only(
     bottomLeft: Radius.circular(15),
     bottomRight: Radius.circular(15),
   );
 
   // Items
-  static BorderRadius itemBorderRadius = BorderRadius.all(Radius.circular(15));
-  static Color itemBackgroundColor = Colors.white;
+  static const BorderRadius itemBorderRadius =
+      BorderRadius.all(Radius.circular(15));
+  static const Color itemBackgroundColor = Colors.white;
 
   // Calendar
-  static Color calendarTodayBackgroundColor = primaryColor;
-  static Color calendarOutsideTodayBackgroundColor = Color(0xff77d8d8);
-  static Color calendarSelectedBackgroundColor = Color(0xffff5722);
-  static Color calendarOutsideDayBackgroundColor =
-  calendarTextColor.withOpacity(0.4);
-  static Color calendarWeekendBackgroundColor = calendarSelectedBackgroundColor;
-  static Color calendarMarkerColor = Color(0xff4cbbb9);
-  static Color calendarOutsideMarkerColor = calendarMarkerColor.withOpacity(
-      0.4);
+  static const Color calendarTodayBackgroundColor = primaryColor;
+  static const Color calendarOutsideTodayBackgroundColor = Color(0xff77d8d8);
+  static const Color calendarSelectedBackgroundColor = Color(0xffff5722);
+  static const Color calendarOutsideDayBackgroundColor =
+      Color(0xff9cc9f4); // calendarTextColor.withOpacity(0.4);
+  static const Color calendarWeekendBackgroundColor =
+      calendarSelectedBackgroundColor;
+  static const Color calendarOutsideWeekendBackgroundColor =
+      Color(0xffffbca7); // calendarWeekendBackgroundColor.withOpacity(0.4);
+  static const Color calendarMarkerColor = Color(0xff4cbbb9);
+  static const Color calendarOutsideMarkerColor =
+      Color(0xffb7e4e3); // calendarMarkerColor.withOpacity(0.4);
 
-  static Color calendarTextColor = topBarBackgroundColor;
-  static Color calendarTodayTextColor = Colors.white;
-  static Color calendarSelectedDayTextColor = Colors.white;
-  static Color calendarWeekdayOfWeek = topBarBackgroundColor;
-  static Color calendarWeekendOfWeek = calendarSelectedBackgroundColor;
+  static const Color calendarTextColor = topBarBackgroundColor;
+  static const Color calendarTodayTextColor = Colors.white;
+  static const Color calendarSelectedDayTextColor = Colors.white;
+  static const Color calendarWeekdayOfWeek = topBarBackgroundColor;
+  static const Color calendarWeekendOfWeek = calendarSelectedBackgroundColor;
 
-  static double calendarDayFontSize = 17;
+  static const double calendarDayFontSize = 17;
 
-  static double calendarHeaderMarginBottom = 10;
-  static double calendarDayWidth = 20;
-  static double calendarDayHeight = calendarDayWidth;
+  static const double calendarHeaderMarginBottom = 10;
+  static const double calendarDayWidth = 20;
+  static const double calendarDayHeight = calendarDayWidth;
 
-  static Alignment calendarMarkerAlignment = Alignment(0, 0.8);
-
-
+  static const Alignment calendarMarkerAlignment = Alignment(0, 0.8);
 }

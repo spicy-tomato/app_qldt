@@ -22,6 +22,28 @@ class Schedule {
         daySchedules: DateTime.parse(json['Day_Schedules']));
   }
 
+  factory Schedule.fromMap(Map<String, dynamic> map){
+    return Schedule(
+      idModuleClass: map['Id_Module_Class'],
+      moduleName: map['Module_Name'],
+      idRoom: map['Id_Room'],
+      shiftSchedules: map['Shift_Schedules'],
+      daySchedules: DateTime.parse(
+        map['Day_Schedules'],
+      ),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'Id_Module_Class': idModuleClass,
+      'Module_Name': moduleName,
+      'Id_Room': idRoom,
+      'Shift_Schedules': shiftSchedules,
+      'Day_Schedules': daySchedules.toIso8601String(),
+    };
+  }
+
   String toString() {
     return "Mã HP: $idModuleClass, HP: $moduleName";
   }

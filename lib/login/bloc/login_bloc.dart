@@ -16,8 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({
     @required AuthenticationRepository authenticationRepository,
-  })  : assert(authenticationRepository != null),
-        _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         super(const LoginState());
 
   @override
@@ -62,11 +61,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
-        await _authenticationRepository.logIn(
-          username: state.username.value,
+        bool shouldLogin = await _authenticationRepository.logIn(
+          id: state.username.value,
           password: state.password.value,
         );
-        yield state.copyWith(status: FormzStatus.submissionSuccess);
+
+        if (shouldLogin) {
+          yield state.copyWith(status: FormzStatus.submissionSuccess);
+        } else {
+          yield state.copyWith(status: FormzStatus.submissionFailure);
+        }
       } on Exception catch (_) {
         yield state.copyWith(status: FormzStatus.submissionFailure);
       }

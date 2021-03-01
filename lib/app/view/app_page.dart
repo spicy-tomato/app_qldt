@@ -1,8 +1,8 @@
 import 'package:app_qldt/authentication/authentication.dart';
+import 'package:app_qldt/calendar/calendar.dart';
 import 'package:app_qldt/screen/screen.dart';
-import 'package:app_qldt/screens/home/local_widgets/calendar.dart';
 import 'package:sidebar_repository/sidebar_repository.dart';
-import 'package:tab_repository/tab_repository.dart';
+import 'package:tab_repository/screen_repository.dart';
 
 import 'package:app_qldt/sidebar/sidebar.dart';
 import 'package:app_qldt/topbar/topbar.dart';
@@ -13,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_repository/firebase_repository.dart';
 
 class App extends StatelessWidget {
-  // final _navigatorKey = new GlobalKey<NavigatorState>();
   final ScreenRepository screenRepository;
 
   static Route route(ScreenRepository screenRepository) {
@@ -34,7 +33,7 @@ class App extends StatelessWidget {
       create: (context) {
         return SidebarBloc(
           sidebarRepository: SidebarRepository(),
-          tabRepository: screenRepository,
+          screenRepository: screenRepository,
         );
       },
       child: SafeArea(
@@ -66,8 +65,6 @@ class App extends StatelessWidget {
                         screenRepository: screenRepository,
                       ),
                       child: BlocBuilder<ScreenBloc, ScreenState>(
-                        buildWhen: (previous, current) =>
-                            previous.screenPage != current.screenPage,
                         builder: (context, state) =>
                             getScreen(state.screenPage),
                       ),
@@ -84,11 +81,13 @@ class App extends StatelessWidget {
   }
 
   static Widget getScreen(ScreenPage screenPage) {
+    // print('Screen page: $screenPage');
+
     switch (screenPage) {
-      case ScreenPage.Home:
+      case ScreenPage.home:
         return BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            return Calendar(
+            return CalendarPage(
               studentId: state.user.id,
               firebaseRepository: FirebaseRepository(),
             );
@@ -98,7 +97,7 @@ class App extends StatelessWidget {
       default:
         return BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            return Calendar(
+            return CalendarPage(
               studentId: state.user.id,
               firebaseRepository: FirebaseRepository(),
             );

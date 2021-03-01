@@ -54,8 +54,6 @@ class Sidebar extends StatelessWidget {
             ListTile(
               title: const Text('Logout'),
               onTap: () async {
-                // final prefs = await SharedPreferences.getInstance();
-                // prefs.remove('student_id');
                 context
                     .read<AuthenticationBloc>()
                     .add(AuthenticationLogoutRequested());

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,16 +9,16 @@ class UserRepository {
   User _user;
 
   Future<User> getUser() async {
-    if (_user != null) return _user;
+    Map<String, dynamic> loginInfo = await _getSavedLoginInfo();
 
-    String loginInfo = await _getSavedLoginInfo();
-    _user = User(loginInfo);
+    if (loginInfo == null) return User.empty;
 
+    _user = User.fromJson(loginInfo);
     return _user;
   }
 
-  Future<String> _getSavedLoginInfo() async {
+  Future<Map<String, dynamic>> _getSavedLoginInfo() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('student_id');
+    return jsonDecode(prefs.getString('user_info'));
   }
 }

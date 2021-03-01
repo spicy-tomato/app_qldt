@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_qldt/login/login.dart';
-import 'local/local.dart';
+import 'local_widgets//local_widgets.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -11,13 +11,13 @@ class LoginForm extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                content: Text('Authentication Failure'),
-              ),
-            );
+          // Scaffold.of(context)
+          //   ..hideCurrentSnackBar()
+          //   ..showSnackBar(
+          //     const SnackBar(
+          //       content: Text('Authentication Failure'),
+          //     ),
+          //   );
         }
       },
       child: Column(
@@ -30,7 +30,7 @@ class LoginForm extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
-            child: Text(
+            child: const Text(
               " LOGIN\n",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ class LoginForm extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: UsernameInput(),
           ),
           Padding(
@@ -51,20 +51,21 @@ class LoginForm extends StatelessWidget {
             child: LoginButton(),
           ),
           Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-              child: Container(
-                height: 30,
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "REMEMBER ME",
-                      style: TextStyle(fontSize: 15, color: Color(0xff888888)),
-                    ),
-                  ],
-                ),
-              )),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  const Text(
+                    "REMEMBER ME",
+                    style: TextStyle(fontSize: 15, color: Color(0xff888888)),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
             child: Container(
@@ -73,11 +74,11 @@ class LoginForm extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     "NEW USER ? LOGIN",
                     style: TextStyle(fontSize: 15, color: Color(0xff888888)),
                   ),
-                  Text(
+                  const Text(
                     "FORGOT PASSWORD?",
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )

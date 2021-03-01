@@ -19,9 +19,7 @@ class AuthenticationBloc
   AuthenticationBloc({
     @required AuthenticationRepository authenticationRepository,
     @required UserRepository userRepository,
-  })  : assert(authenticationRepository != null),
-        assert(userRepository != null),
-        _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     _authenticationStatusSubscription = _authenticationRepository.stream

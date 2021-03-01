@@ -19,9 +19,9 @@ class TopBar extends StatelessWidget {
       child: Stack(
         children: [
           Align(
-            alignment: Alignment(0, -0.1),
+            alignment: const Alignment(0, -0.1),
             child: Container(
-              child: Text(
+              child: const Text(
                 'Top bar',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -32,11 +32,11 @@ class TopBar extends StatelessWidget {
             ),
           ),
           Align(
-            alignment: Alignment(-1, -0.2),
+            alignment: const Alignment(-1, -0.2),
             child: BlocBuilder<SidebarBloc, SidebarState>(
               builder: (context, state) {
                 return IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.menu,
                     size: Const.topBarIconSize,
                     color: Const.topBarTextColor,

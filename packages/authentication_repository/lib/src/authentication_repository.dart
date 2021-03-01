@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'services/services.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -13,28 +16,40 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<void> logIn({
-    @required String username,
+  Future<bool> logIn({
+    @required String id,
     @required String password,
   }) async {
-    assert(username != null);
+    assert(id != null);
     assert(password != null);
 
-    _saveLoginInfo(username: username, password: password);
-    _controller.add(AuthenticationStatus.authenticated);
+    final _loginUser = LoginUser(id, password);
+    final _loginService = LoginService(_loginUser);
+
+    String response = await _loginService.login();
+    LoginResponse loginResponse = LoginResponse.fromJson(jsonDecode(response));
+
+    if (loginResponse.message == 'success') {
+      await _saveUserInfo(jsonEncode(loginResponse.info));
+      _controller.add(AuthenticationStatus.authenticated);
+      return true;
+    }
+
+    _controller.add(AuthenticationStatus.unauthenticated);
+    return false;
   }
 
   void logOut() {
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void dispose() => _controller.close();
+  void dispose() {
+    print('----- Disposed ------');
+    _controller.close();
+  }
 
-  void _saveLoginInfo({
-    @required String username,
-    @required String password,
-  }) async {
+  Future<void> _saveUserInfo(String info) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('student_id', username);
+    prefs.setString('user_info', info);
   }
 }
