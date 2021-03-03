@@ -2,14 +2,14 @@ import 'package:app_qldt/authentication/authentication.dart';
 import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 import 'package:app_qldt/calendar/view/local_widgets/outsideWeekendDayBuilder.dart';
 import 'package:app_qldt/models/schedule.dart';
-import 'package:app_qldt/services/offlineCalendarService.dart';
-import 'package:app_qldt/services/tokenService.dart';
+import 'package:app_qldt/services/offline_calendar_service.dart';
+import 'package:app_qldt/services/token_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:app_qldt/widgets/interface.dart';
 import 'package:app_qldt/widgets/item.dart';
-import 'package:app_qldt/services/calendarService.dart';
+import 'package:app_qldt/services/calendar_service.dart';
 import 'package:firebase_repository/firebase_repository.dart';
 
 import 'package:app_qldt/calendar/view/local_widgets/local_widgets.dart';
@@ -27,26 +27,37 @@ extension DateTimeExtexsion on DateTime {
   }
 }
 
-class CalendarPage extends StatelessWidget {
+class CalendarPage extends StatefulWidget {
   final String studentId;
   final FirebaseRepository firebaseRepository;
 
-  const CalendarPage({
+  CalendarPage({
     Key key,
     @required this.studentId,
     @required this.firebaseRepository,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    TokenService.upsert(firebaseRepository, studentId);
+  State<StatefulWidget> createState() => _CalendarPageState();
+}
 
+class _CalendarPageState extends State<CalendarPage> {
+  Future<Map<DateTime, List<dynamic>>> data;
+
+  @override
+  void initState() {
+    data = _overallFuture();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         return FutureBuilder(
-          future: _getSchedule(),
+          future: data,
           builder: (BuildContext context,
-              AsyncSnapshot<Map<DateTime, List>> snapshot) {
+              AsyncSnapshot<Map<DateTime, List<dynamic>>> snapshot) {
             if (!snapshot.hasData) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -76,18 +87,21 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
-  Future<Map<DateTime, List>> _getSchedule() async {
+  Future<Map<DateTime, List<dynamic>>> _overallFuture() async {
+    await TokenService.upsert(widget.firebaseRepository, widget.studentId);
+    return await _getSchedule();
+  }
+
+  Future<Map<DateTime, List<dynamic>>> _getSchedule() async {
     List<Schedule> rawData =
-        await CalenderService.getRawCalendarData(studentId);
+        await CalenderService.getRawCalendarData(widget.studentId);
 
     if (rawData != null) {
       await OfflineCalendarService.removeSavedCalendar();
       await OfflineCalendarService.saveCalendar(rawData);
     }
 
-    Map<DateTime, List> data = await OfflineCalendarService.getCalendar();
-
-    return data;
+    return OfflineCalendarService.getCalendar();
   }
 }
 

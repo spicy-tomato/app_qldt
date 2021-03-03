@@ -13,6 +13,12 @@ class DatabaseProvider {
     return _database ?? await initDb();
   }
 
+  Future<List> get schedule async {
+    final _db = _database ?? await database;
+    return await _db.query('Schedule');
+  }
+
+
   static const scheduleTable = ''
       'CREATE TABLE IF NOT EXISTS Schedule('
       'Id INTEGER PRIMARY KEY AUTOINCREMENT,'
@@ -24,41 +30,59 @@ class DatabaseProvider {
 
   Future<Database> initDb() async {
     String path = join(await getDatabasesPath(), 'core.db');
-    print('Initializing database');
+    // print('Initializing database');
 
     bool dbExisted = await databaseExists(path);
 
     if (!dbExisted) {
-      print('Db is not exists');
+      // print('Db is not exists');
 
       try {
         await Directory(dirname(path)).create(recursive: true);
       } catch (_) {}
     }
 
-    return await openDatabase(
+    await openDb();
+
+    return _database;
+  }
+
+  Future<void> deleteDb() async {
+    String path = join(await getDatabasesPath(), 'core.db');
+
+    await _database?.close();
+    await deleteDatabase(path);
+  }
+
+  Future<void> openDb() async {
+    if (_database != null && _database.isOpen) {
+      return;
+    }
+
+    String path = join(await getDatabasesPath(), 'core.db');
+
+    _database = await openDatabase(
       path,
       version: 2,
       onCreate: (Database db, int version) async {
-        await db.execute(scheduleTable);
+        try {
+          await db.execute(scheduleTable);
+        } on Exception catch (e) {
+          print(e);
+        }
       },
     );
   }
 
-  Future<List> get schedule async {
-    final _db = await database;
-    return await _db.query('Schedule');
-  }
-
   Future<void> insertSchedule(Map<String, dynamic> schedule) async {
-    final _db = await database;
-    await _db.insert('Schedule', schedule);
+    _database = await database;
+    await _database.insert('Schedule', schedule);
   }
 
   Future<void> deleteSchedule() async {
     try {
-      final _db = await database;
-      await _db.delete('Schedule');
+      _database = await database;
+      await _database.delete('Schedule');
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

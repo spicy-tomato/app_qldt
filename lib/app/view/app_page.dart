@@ -14,31 +14,40 @@ import 'package:firebase_repository/firebase_repository.dart';
 
 class App extends StatelessWidget {
   final ScreenRepository screenRepository;
+  final FirebaseRepository firebaseRepository;
 
-  static Route route(ScreenRepository screenRepository) {
+  static Route route(
+    ScreenRepository screenRepository,
+    FirebaseRepository firebaseRepository,
+  ) {
     return MaterialPageRoute<void>(
-      builder: (_) => App(screenRepository: screenRepository),
+      builder: (_) => App(
+        screenRepository: screenRepository,
+        firebaseRepository: firebaseRepository,
+      ),
     );
   }
 
-  const App({
+  App({
     Key key,
     @required this.screenRepository,
+    @required this.firebaseRepository,
   })  : assert(screenRepository != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        return SidebarBloc(
-          sidebarRepository: SidebarRepository(),
-          screenRepository: screenRepository,
-        );
-      },
-      child: SafeArea(
+    return SafeArea(
+      child: BlocProvider(
+        create: (context) {
+          return SidebarBloc(
+            sidebarRepository: SidebarRepository(),
+            screenRepository: screenRepository,
+          );
+        },
         child: Scaffold(
           backgroundColor: Const.interfaceBackgroundColor,
+          drawer: Sidebar(),
           body: BlocListener<SidebarBloc, SidebarState>(
             listener: (context, state) {
               if (state.status.shouldOpen) {
@@ -74,7 +83,6 @@ class App extends StatelessWidget {
               ),
             ),
           ),
-          drawer: Sidebar(),
         ),
       ),
     );
@@ -95,14 +103,7 @@ class App extends StatelessWidget {
         );
 
       default:
-        return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-            return CalendarPage(
-              studentId: state.user.id,
-              firebaseRepository: FirebaseRepository(),
-            );
-          },
-        );
+        return Container();
     }
   }
 }

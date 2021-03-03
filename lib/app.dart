@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_repository/firebase_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_qldt/authentication/authentication.dart';
@@ -8,6 +11,8 @@ import 'package:app_qldt/splash/splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tab_repository/screen_repository.dart';
 import 'package:user_repository/user_repository.dart';
+
+import 'app/transition_route_observer.dart';
 
 class Application extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
@@ -34,6 +39,13 @@ class Application extends StatelessWidget {
       ),
     );
   }
+
+  static int getRandomTime() {
+    final rng = new Random();
+    int minTime = 2550;
+    int maxTime = 5000;
+    return rng.nextInt(maxTime - minTime) + minTime;
+  }
 }
 
 class AppView extends StatefulWidget {
@@ -58,11 +70,14 @@ class _AppViewState extends State<AppView> {
       supportedLocales: [
         const Locale('vi', ''),
       ],
+      navigatorObservers: [TransitionRouteObserver()],
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             switch (state.status) {
               case AuthenticationStatus.unauthenticated:
+                await Future.delayed(
+                    Duration(milliseconds: Application.getRandomTime()));
                 _navigator.pushAndRemoveUntil<void>(
                   LoginPage.route(),
                   (route) => false,
@@ -71,7 +86,7 @@ class _AppViewState extends State<AppView> {
 
               case AuthenticationStatus.authenticated:
                 _navigator.pushAndRemoveUntil<void>(
-                  App.route(ScreenRepository()),
+                  App.route(ScreenRepository(), FirebaseRepository()),
                   (route) => false,
                 );
                 break;

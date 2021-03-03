@@ -1,8 +1,11 @@
 package com.example.app_qldt
 
+import android.content.ContentResolver
+import android.content.Context
+import android.media.RingtoneManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import android.content.ContentResolver
+import io.flutter.plugin.common.MethodChannel
 import java.util.*
 
 class MainActivity : FlutterActivity() {
@@ -22,7 +25,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun resourceToUriString(context: Context, resId: Int): String? {
+    private fun resourceToUriString(context: Context, resId: Int): String {
         return (ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
                 + context.resources.getResourcePackageName(resId)
                 + "/"

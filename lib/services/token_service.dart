@@ -5,8 +5,8 @@ class TokenService {
   static final _baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/upsert_token.php';
 
-  static upsert(FirebaseRepository firebase, String studentId) async {
-    String token = await firebase.getToken();
+  static void upsert(FirebaseRepository firebaseRepository, String studentId) async {
+    String token = await firebaseRepository.getToken();
 
     String body = '{'
         '"student_id": "$studentId",'

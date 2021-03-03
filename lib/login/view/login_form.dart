@@ -6,6 +6,42 @@ import 'package:app_qldt/login/login.dart';
 import 'local_widgets//local_widgets.dart';
 
 class LoginForm extends StatelessWidget {
+  // @override
+  // Widget build(BuildContext context) {
+  //   return BlocListener<LoginBloc, LoginState>(
+  //     listener: (context, state) {
+  //       if (state.status.isSubmissionFailure) {
+  //         // Scaffold.of(context)
+  //         //   ..hideCurrentSnackBar()
+  //         //   ..showSnackBar(
+  //         //     const SnackBar(
+  //         //       content: Text('Authentication Failure'),
+  //         //     ),
+  //         //   );
+  //       }
+  //     },
+  //     child: Stack(
+  //       children: <Widget>[
+  //         GradientBox(
+  //           colors: [
+  //             Const.primaryColor,
+  //             Const.primaryColor.withOpacity(0.5),
+  //           ],
+  //           begin: Alignment.topLeft,
+  //           end: Alignment.bottomRight,
+  //         ),
+  //         SingleChildScrollView(
+  //           child: Stack(
+  //             alignment: Alignment.center,
+  //             children: <Widget>[
+  //               Positioned(child: child)
+  //             ],
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -22,7 +58,7 @@ class LoginForm extends StatelessWidget {
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),

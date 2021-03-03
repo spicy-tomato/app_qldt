@@ -40,6 +40,7 @@ class AuthenticationRepository {
   }
 
   void logOut() {
+    _removeUserInfo();
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
@@ -50,6 +51,13 @@ class AuthenticationRepository {
 
   Future<void> _saveUserInfo(String info) async {
     final prefs = await SharedPreferences.getInstance();
+    // print(info);
     prefs.setString('user_info', info);
+  }
+
+
+  Future<void> _removeUserInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('user_info');
   }
 }

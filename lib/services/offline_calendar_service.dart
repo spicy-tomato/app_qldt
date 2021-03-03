@@ -1,21 +1,23 @@
 import 'package:app_qldt/models/schedule.dart';
-import 'package:app_qldt/services/DatabaseProvider.dart';
+import 'package:app_qldt/services/database_provider.dart';
 
 class OfflineCalendarService {
   static Future<void> saveCalendar(List<Schedule> rawData) async {
+    // print('Trying to save calendar');
     rawData.forEach((row) async {
       await DatabaseProvider.db.insertSchedule(row.toMap());
     });
   }
 
   static Future<Map<DateTime, List>> getCalendar() async {
+    // print('Getting calendar');
     List<Map<String, dynamic>> rawData = await DatabaseProvider.db.schedule;
     Map<DateTime, dynamic> data = _parseToStandardStructure(rawData);
     return data;
   }
 
   static Future<void> removeSavedCalendar() async {
-    print('Trying to remove saved calendar');
+    // print('Trying to remove saved calendar');
     await DatabaseProvider.db.deleteSchedule();
   }
 
