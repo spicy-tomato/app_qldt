@@ -16,6 +16,7 @@ class Const {
   // Side bar
   static const Color sideBarBackgroundColor = primaryColor;
   static const double sideBarIconSize = 40;
+  static const double sideBarTileFontSize = 16;
 
   // Content
   static const double contentTopPaddingRatio = 0.155;

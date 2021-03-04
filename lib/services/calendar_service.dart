@@ -10,21 +10,21 @@ class CalenderService {
   static final baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
 
-  static Future<List<Schedule>> getRawCalendarData(String studentId) async {
+  static Future<List<Schedule>?> getRawCalendarData(String studentId) async {
     try {
-      List data = await CalenderService._fetchData(studentId);
+      List? data = await CalenderService._fetchData(studentId);
 
       if (data != null) {
         return data as List<Schedule>;
       }
 
       return null;
-    } catch (Exception) {
+    } on Exception catch (_) {
       throw Exception('Cannot parse date');
     }
   }
 
-  static Future<List> _fetchData(String studentId) async {
+  static Future<List?> _fetchData(String studentId) async {
     String url = baseUrl + studentId;
 
     try {

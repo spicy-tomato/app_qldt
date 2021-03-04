@@ -1,5 +1,6 @@
 import 'dart:async';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -32,6 +33,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   ) {
     if (state.lastSelectedDay != event.selectedDay) {
       return state.copyWith(
+        true,
         visibleDay: event.selectedDay,
         selectedEvents: event.selectedEvents,
         lastSelectedDay: event.selectedDay,
@@ -39,13 +41,14 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       );
     }
 
-    return state;
+    return state.copyWith(false);
   }
 
   CalendarState _mapCalendarDayChangedToState(
     CalendarVisibleDayChanged event,
   ) {
     return state.copyWith(
+      true,
       visibleDay: event.visibleDay,
       selectedEvents: event.visibleDayEvents,
     );

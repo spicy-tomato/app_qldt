@@ -4,7 +4,7 @@ import 'package:app_qldt/utils/const.dart';
 class Item extends StatelessWidget {
   final Widget child;
 
-  const Item({Key key, this.child}) : super(key: key);
+  const Item({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

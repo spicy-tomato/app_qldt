@@ -13,11 +13,11 @@ class User extends Equatable {
 
   final String id;
   final String name;
-  final DateTime dob;
-  final String idClass;
-  final String idCardNumber;
-  final String phoneNumberStudent;
-  final String address;
+  final DateTime? dob;
+  final String? idClass;
+  final String? idCardNumber;
+  final String? phoneNumberStudent;
+  final String? address;
 
   @override
   List<dynamic> get props =>

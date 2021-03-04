@@ -7,17 +7,11 @@ abstract class SidebarEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SidebarStatusChanged extends SidebarEvent {
-  final SidebarStatus status;
+class SidebarScreenPageChange extends SidebarEvent {
+  final ScreenPage screenPage;
 
-  const SidebarStatusChanged(this.status);
+  SidebarScreenPageChange(this.screenPage);
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [screenPage];
 }
-
-class SidebarCloseRequested extends SidebarEvent {}
-
-class SidebarOpenRequested extends SidebarEvent {}
-
-//  TODO: Change tab event

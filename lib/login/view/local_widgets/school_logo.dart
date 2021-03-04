@@ -7,15 +7,11 @@ class SchoolLogo extends StatelessWidget {
       width: 150,
       height: 150,
       padding: const EdgeInsets.all(15),
-      child: Row(
-        children: [
-          Hero(
-            tag: 'loginLogo',
-            child: Image.asset(
-              'images/LogoUTC.jpg',
-            ),
-          ),
-        ],
+      child: Hero(
+        tag: 'loginLogo',
+        child: Image.asset(
+          'images/LogoUTC.jpg',
+        ),
       ),
     );
   }

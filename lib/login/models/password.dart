@@ -1,3 +1,4 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
 enum PasswordValidateError { empty }
@@ -8,7 +9,11 @@ class Password extends FormzInput<String, PasswordValidateError> {
   const Password.dirty(String value) : super.dirty(value);
 
   @override
-  PasswordValidateError validator(String value) {
-    return value?.isNotEmpty == true ? null : PasswordValidateError.empty;
+  PasswordValidateError? validator(String? value) {
+    if (value?.isNotEmpty == true) {
+      return null;
+    } else {
+      return PasswordValidateError.empty;
+    }
   }
 }

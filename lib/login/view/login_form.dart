@@ -1,47 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:app_qldt/login/login.dart';
-import 'local_widgets//local_widgets.dart';
+
+import 'local_widgets/local_widgets.dart';
 
 class LoginForm extends StatelessWidget {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return BlocListener<LoginBloc, LoginState>(
-  //     listener: (context, state) {
-  //       if (state.status.isSubmissionFailure) {
-  //         // Scaffold.of(context)
-  //         //   ..hideCurrentSnackBar()
-  //         //   ..showSnackBar(
-  //         //     const SnackBar(
-  //         //       content: Text('Authentication Failure'),
-  //         //     ),
-  //         //   );
-  //       }
-  //     },
-  //     child: Stack(
-  //       children: <Widget>[
-  //         GradientBox(
-  //           colors: [
-  //             Const.primaryColor,
-  //             Const.primaryColor.withOpacity(0.5),
-  //           ],
-  //           begin: Alignment.topLeft,
-  //           end: Alignment.bottomRight,
-  //         ),
-  //         SingleChildScrollView(
-  //           child: Stack(
-  //             alignment: Alignment.center,
-  //             children: <Widget>[
-  //               Positioned(child: child)
-  //             ],
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -102,24 +71,21 @@ class LoginForm extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-            child: Container(
-              height: 30,
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  const Text(
-                    "NEW USER ? LOGIN",
-                    style: TextStyle(fontSize: 15, color: Color(0xff888888)),
-                  ),
-                  const Text(
-                    "FORGOT PASSWORD?",
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )
-                ],
-              ),
+          Container(
+            height: 30,
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                const Text(
+                  "NEW USER ? LOGIN",
+                  style: TextStyle(fontSize: 15, color: Color(0xff888888)),
+                ),
+                const Text(
+                  "FORGOT PASSWORD?",
+                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                )
+              ],
             ),
           ),
         ],

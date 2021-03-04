@@ -1,43 +1,35 @@
 import 'dart:async';
 
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:app_qldt/models/screen.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-
-import 'package:sidebar_repository/sidebar_repository.dart';
-import 'package:tab_repository/screen_repository.dart';
 
 part 'sidebar_event.dart';
 
 part 'sidebar_state.dart';
 
 class SidebarBloc extends Bloc<SidebarEvent, SidebarState> {
-  final SidebarRepository _sidebarRepository;
-  final ScreenRepository _screenRepository;
-
-  SidebarBloc(
-      {@required SidebarRepository sidebarRepository,
-      @required ScreenRepository screenRepository})
-      : assert(sidebarRepository != null),
-        _sidebarRepository = sidebarRepository,
-        _screenRepository = screenRepository,
-        super(SidebarState.closed()) {
-    _sidebarRepository.status.listen(
-      (status) => add(SidebarStatusChanged(status)),
-    );
-  }
+  SidebarBloc() : super(const SidebarState.home());
 
   @override
   Stream<SidebarState> mapEventToState(SidebarEvent event) async* {
-    if (event is SidebarCloseRequested) {
-      yield const SidebarState.closed();
-    } else if (event is SidebarOpenRequested) {
-      yield const SidebarState.opened();
+    if (event is SidebarScreenPageChange) {
+      yield _mapSidebarScreenPageChange(event);
     }
   }
 
-  // ScreenPage _tryGetTabScreen() {
-  //   final tab = _screenRepository.screenPage;
-  //   return tab;
-  // }
+  SidebarState _mapSidebarScreenPageChange(
+    SidebarScreenPageChange event,
+  ) {
+    switch (event.screenPage) {
+      case ScreenPage.notification:
+        return SidebarState.notification();
+
+      default:
+        return SidebarState.home();
+    }
+  }
 }

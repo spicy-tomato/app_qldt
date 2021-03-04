@@ -5,12 +5,15 @@ import 'package:app_qldt/models/schedule.dart';
 import 'package:app_qldt/services/offline_calendar_service.dart';
 import 'package:app_qldt/services/token_service.dart';
 import 'package:flutter/material.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:table_calendar/table_calendar.dart';
 import 'package:app_qldt/widgets/interface.dart';
 import 'package:app_qldt/widgets/item.dart';
 import 'package:app_qldt/services/calendar_service.dart';
-import 'package:firebase_repository/firebase_repository.dart';
 
 import 'package:app_qldt/calendar/view/local_widgets/local_widgets.dart';
 import 'package:app_qldt/calendar/view/style/style.dart';
@@ -29,12 +32,10 @@ extension DateTimeExtexsion on DateTime {
 
 class CalendarPage extends StatefulWidget {
   final String studentId;
-  final FirebaseRepository firebaseRepository;
 
   CalendarPage({
-    Key key,
-    @required this.studentId,
-    @required this.firebaseRepository,
+    Key? key,
+    required this.studentId,
   }) : super(key: key);
 
   @override
@@ -42,7 +43,7 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  Future<Map<DateTime, List<dynamic>>> data;
+  late Future<Map<DateTime, List<dynamic>>> data;
 
   @override
   void initState() {
@@ -72,7 +73,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Item(
-                    child: Calendar(events: snapshot.data),
+                    child: Calendar(events: snapshot.data!),
                   ),
                   Interface.mediumBox(),
                   Expanded(
@@ -88,12 +89,12 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Future<Map<DateTime, List<dynamic>>> _overallFuture() async {
-    await TokenService.upsert(widget.firebaseRepository, widget.studentId);
+    await TokenService.upsert(widget.studentId);
     return await _getSchedule();
   }
 
   Future<Map<DateTime, List<dynamic>>> _getSchedule() async {
-    List<Schedule> rawData =
+    List<Schedule>? rawData =
         await CalenderService.getRawCalendarData(widget.studentId);
 
     if (rawData != null) {
@@ -109,8 +110,8 @@ class Calendar extends StatefulWidget {
   final Map<DateTime, List> events;
 
   Calendar({
-    Key key,
-    @required this.events,
+    Key? key,
+    required this.events,
   }) : super(key: key);
 
   @override
@@ -118,10 +119,10 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
-  AnimationController _animationController;
-  CalendarController _calendarController;
-  HeaderStyle _headerStyle;
-  DaysOfWeekStyle _daysOfWeekStyle;
+  late AnimationController _animationController;
+  late CalendarController _calendarController;
+  late HeaderStyle _headerStyle;
+  late DaysOfWeekStyle _daysOfWeekStyle;
 
   @override
   void initState() {
@@ -150,8 +151,10 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarBloc, CalendarState>(
-      buildWhen: (previous, current) =>
-          previous.visibleDay != current.visibleDay,
+      buildWhen: (previous, current) {
+        return previous.visibleDay != null &&
+            previous.visibleDay != current.visibleDay;
+      },
       builder: (context, state) {
         return _buildCalendar();
       },
@@ -229,7 +232,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   void _onVisibleDaysChanged(
       DateTime first, DateTime last, CalendarFormat format) {
     DateTime _lastSelectedDay =
-        context.read<CalendarBloc>().state.lastSelectedDay;
+        context.read<CalendarBloc>().state.lastSelectedDay!;
 
     if (_lastSelectedDay.isBetween(first, last)) {
       DateTime _dayWillBeSelected =
@@ -263,8 +266,7 @@ class _EventListState extends State<EventList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CalendarBloc, CalendarState>(
-      // buildWhen: (previous, current) =>
-      //     previous.visibleDay != previous.visibleDay,
+      buildWhen: (previous, current) => current.buildFirstTime,
       builder: (context, state) {
         return ListView(
           padding: const EdgeInsets.only(),
@@ -274,7 +276,7 @@ class _EventListState extends State<EventList> {
     );
   }
 
-  List<Widget> getList(List selectedEvents) {
+  List<Widget> getList(List? selectedEvents) {
     if (selectedEvents == null) {
       return <Widget>[Container()];
     }

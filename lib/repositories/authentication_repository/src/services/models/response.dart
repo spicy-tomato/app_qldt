@@ -1,7 +1,7 @@
 enum LoginStatus { successful, failed }
 
 class LoginResponse {
-  final String message;
+  final String? message;
   final dynamic info;
 
   LoginResponse({this.message, this.info});

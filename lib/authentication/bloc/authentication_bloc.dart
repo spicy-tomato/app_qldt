@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-import 'package:user_repository/user_repository.dart';
+import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 
 part 'authentication_event.dart';
 
@@ -14,11 +14,11 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
-  StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
+  late StreamSubscription<AuthenticationStatus> _authenticationStatusSubscription;
 
   AuthenticationBloc({
-    @required AuthenticationRepository authenticationRepository,
-    @required UserRepository userRepository,
+    required AuthenticationRepository authenticationRepository,
+    required UserRepository userRepository,
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
@@ -33,14 +33,14 @@ class AuthenticationBloc
     if (event is AuthenticationStatusChanged) {
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
-      print('Request to logout');
-      _authenticationRepository.logOut();
+      print('${DateTime.now()}: Request to logout');
+      await _authenticationRepository.logOut();
     }
   }
 
   @override
   Future<void> close() {
-    _authenticationStatusSubscription?.cancel();
+    _authenticationStatusSubscription.cancel();
     _authenticationRepository.dispose();
     return super.close();
   }
@@ -61,7 +61,7 @@ class AuthenticationBloc
     return const AuthenticationState.unknown();
   }
 
-  Future<User> _tryGetUser() async {
+  Future<User?> _tryGetUser() async {
     try {
       final user = await _userRepository.getUser();
       return user;

@@ -6,12 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'models/models.dart';
 
 class UserRepository {
-  User _user;
+  late User _user;
 
-  Future<User> getUser() async {
+  Future<User?> getUser() async {
     Map<String, dynamic> loginInfo = await _getSavedLoginInfo();
 
-    if (loginInfo == null) return User.empty;
+    if (loginInfo.isEmpty) return null;
 
     _user = User.fromJson(loginInfo);
     return _user;
@@ -19,6 +19,12 @@ class UserRepository {
 
   Future<Map<String, dynamic>> _getSavedLoginInfo() async {
     final prefs = await SharedPreferences.getInstance();
-    return jsonDecode(prefs.getString('user_info'));
+    String? infoStr = prefs.getString('user_info');
+
+    if (infoStr == null){
+      return new Map();
+    }
+
+    return jsonDecode(infoStr);
   }
 }

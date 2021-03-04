@@ -9,10 +9,10 @@ class OfflineCalendarService {
     });
   }
 
-  static Future<Map<DateTime, List>> getCalendar() async {
+  static Future<Map<DateTime, List<dynamic>>> getCalendar() async {
     // print('Getting calendar');
-    List<Map<String, dynamic>> rawData = await DatabaseProvider.db.schedule;
-    Map<DateTime, dynamic> data = _parseToStandardStructure(rawData);
+    List<Map<String, dynamic>>? rawData = await DatabaseProvider.db.schedule;
+    Map<DateTime, List> data = _parseToStandardStructure(rawData);
     return data;
   }
 
@@ -22,10 +22,14 @@ class OfflineCalendarService {
   }
 
   static Map<DateTime, List> _parseToStandardStructure(
-      List<Map<String, dynamic>> maps) {
+      List<Map<String, dynamic>>? maps) {
+    if (maps == null) {
+      return new Map();
+    }
+
     List<Schedule> rawData = List.generate(
       maps.length,
-      (index) => Schedule.fromMap(maps[index]),
+          (index) => Schedule.fromMap(maps[index]),
     );
 
     Map<DateTime, List> events = new Map();
@@ -34,7 +38,7 @@ class OfflineCalendarService {
       if (events[schedule.daySchedules] == null) {
         events[schedule.daySchedules] = [];
       }
-      events[schedule.daySchedules].add(schedule);
+      events[schedule.daySchedules]!.add(schedule);
     });
 
     return events;

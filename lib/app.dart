@@ -1,17 +1,18 @@
 import 'dart:math';
 
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:firebase_repository/firebase_repository.dart';
 import 'package:flutter/material.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/repositories/user_repository/user_repository.dart';
+
 import 'package:app_qldt/authentication/authentication.dart';
 import 'package:app_qldt/app/app.dart';
 import 'package:app_qldt/login/login.dart';
 import 'package:app_qldt/splash/splash.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tab_repository/screen_repository.dart';
-import 'package:user_repository/user_repository.dart';
-
 import 'app/transition_route_observer.dart';
 
 class Application extends StatelessWidget {
@@ -19,12 +20,10 @@ class Application extends StatelessWidget {
   final UserRepository userRepository;
 
   const Application({
-    Key key,
-    @required this.authenticationRepository,
-    @required this.userRepository,
-  })  : assert(authenticationRepository != null),
-        assert(userRepository != null),
-        super(key: key);
+    Key? key,
+    required this.authenticationRepository,
+    required this.userRepository,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,7 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState;
+  NavigatorState? get _navigator => _navigatorKey.currentState;
 
   @override
   Widget build(BuildContext context) {
@@ -76,29 +75,41 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) async {
             switch (state.status) {
               case AuthenticationStatus.unauthenticated:
-                await Future.delayed(
-                    Duration(milliseconds: Application.getRandomTime()));
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
+                //  Display splash page in 2 seconds, then display login page
+                _navigator!.pushAndRemoveUntil<void>(
+                  SplashPage.route(),
+                      (route) => false,
                 );
+
+                Future.delayed(const Duration(seconds: 2), () {
+                  _navigator!.pushAndRemoveUntil<void>(
+                    LoginPage.route(),
+                    (route) => false,
+                  );
+                });
                 break;
 
               case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  App.route(ScreenRepository(), FirebaseRepository()),
+                _navigator!.pushAndRemoveUntil<void>(
+                  App.route(),
                   (route) => false,
                 );
                 break;
 
               default:
+                _navigator!.pushAndRemoveUntil<void>(
+                  SplashPage.route(),
+                  (route) => false,
+                );
                 break;
             }
           },
           child: child,
         );
       },
-      onGenerateRoute: (_) => SplashPage.route(),
+      onGenerateRoute: (_) {
+        return SplashPage.route();
+      },
     );
   }
 }

@@ -1,9 +1,0 @@
-name: tab_repository
-description: Dart package which manage current tab view.
-version: 1.0.0
-
-environment:
-  sdk: ">=2.8.0 <3.0.0"
-
-dependencies:
-  equatable: ^1.2.6

@@ -10,12 +10,12 @@ class TransitionRouteObserver<R extends TransitionRoute<dynamic>>
   /// Going forward, [routeAware] will be informed about qualifying changes
   /// to [route], e.g. when [route] is covered by another route or when [route]
   /// is popped off the [Navigator] stack.
-  void subscribe(TransitionRouteAware routeAware, R route) {
+  void subscribe(TransitionRouteAware? routeAware, R? route) {
     assert(routeAware != null);
     assert(route != null);
     final Set<TransitionRouteAware> subscribers =
-    _listeners.putIfAbsent(route, () => <TransitionRouteAware>{});
-    if (subscribers.add(routeAware)) {
+    _listeners.putIfAbsent(route!, () => <TransitionRouteAware>{});
+    if (subscribers.add(routeAware!)) {
       routeAware.didPush();
       Future.delayed(route.transitionDuration, () {
         routeAware.didPushAfterTransition();
@@ -27,18 +27,18 @@ class TransitionRouteObserver<R extends TransitionRoute<dynamic>>
   ///
   /// [routeAware] is no longer informed about changes to its route. If the given argument was
   /// subscribed to multiple types, this will unregister it (once) from each type.
-  void unsubscribe(TransitionRouteAware routeAware) {
+  void unsubscribe(TransitionRouteAware? routeAware) {
     assert(routeAware != null);
     for (R route in _listeners.keys) {
-      final Set<TransitionRouteAware> subscribers = _listeners[route];
+      final Set<TransitionRouteAware>? subscribers = _listeners[route];
       subscribers?.remove(routeAware);
     }
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route is R && previousRoute is R) {
-      final List<TransitionRouteAware> previousSubscribers =
+      final List<TransitionRouteAware>? previousSubscribers =
       _listeners[previousRoute]?.toList();
 
       if (previousSubscribers != null) {
@@ -47,7 +47,7 @@ class TransitionRouteObserver<R extends TransitionRoute<dynamic>>
         }
       }
 
-      final List<TransitionRouteAware> subscribers =
+      final List<TransitionRouteAware>? subscribers =
       _listeners[route]?.toList();
 
       if (subscribers != null) {
@@ -59,9 +59,9 @@ class TransitionRouteObserver<R extends TransitionRoute<dynamic>>
   }
 
   @override
-  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route is R && previousRoute is R) {
-      final Set<TransitionRouteAware> previousSubscribers =
+      final Set<TransitionRouteAware>? previousSubscribers =
       _listeners[previousRoute];
 
       if (previousSubscribers != null) {

@@ -1,6 +1,7 @@
 import 'package:app_qldt/login/bloc/login_bloc.dart';
-import 'package:authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'login_form.dart';
@@ -11,7 +12,7 @@ class LoginPage extends StatelessWidget {
       pageBuilder: (context, __, ___) => LoginPage(),
       transitionsBuilder: (context, animation, _, child) =>
           FadeTransition(opacity: animation, child: child),
-      // transitionDuration: Duration(milliseconds: 500),
+      transitionDuration: Duration(milliseconds: 1500),
     );
   }
 
@@ -38,8 +39,10 @@ class LoginPage extends StatelessWidget {
 }
 
 class CustomRoute<T> extends MaterialPageRoute<T> {
-  CustomRoute({WidgetBuilder builder, RouteSettings settings})
-      : super(builder: builder, settings: settings);
+  CustomRoute({
+    required WidgetBuilder builder,
+    required RouteSettings settings,
+  }) : super(builder: builder, settings: settings);
 
   @override
   Widget buildTransitions(

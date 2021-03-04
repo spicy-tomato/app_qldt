@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseProvider {
   static final DatabaseProvider db = DatabaseProvider._();
-  static Database _database;
+  static Database? _database;
 
   DatabaseProvider._();
 
@@ -13,7 +13,7 @@ class DatabaseProvider {
     return _database ?? await initDb();
   }
 
-  Future<List> get schedule async {
+  Future<List<Map<String, dynamic>>?> get schedule async {
     final _db = _database ?? await database;
     return await _db.query('Schedule');
   }
@@ -29,7 +29,7 @@ class DatabaseProvider {
       'Day_Schedules TEXT);';
 
   Future<Database> initDb() async {
-    String path = join(await getDatabasesPath(), 'core.db');
+    String path = join((await getDatabasesPath())!, 'core.db');
     // print('Initializing database');
 
     bool dbExisted = await databaseExists(path);
@@ -44,22 +44,22 @@ class DatabaseProvider {
 
     await openDb();
 
-    return _database;
+    return _database!;
   }
 
   Future<void> deleteDb() async {
-    String path = join(await getDatabasesPath(), 'core.db');
+    String path = join((await getDatabasesPath())!, 'core.db');
 
     await _database?.close();
     await deleteDatabase(path);
   }
 
   Future<void> openDb() async {
-    if (_database != null && _database.isOpen) {
+    if (_database != null && _database!.isOpen) {
       return;
     }
 
-    String path = join(await getDatabasesPath(), 'core.db');
+    String path = join((await getDatabasesPath())!, 'core.db');
 
     _database = await openDatabase(
       path,
@@ -76,13 +76,13 @@ class DatabaseProvider {
 
   Future<void> insertSchedule(Map<String, dynamic> schedule) async {
     _database = await database;
-    await _database.insert('Schedule', schedule);
+    await _database!.insert('Schedule', schedule);
   }
 
   Future<void> deleteSchedule() async {
     try {
       _database = await database;
-      await _database.delete('Schedule');
+      await _database!.delete('Schedule');
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

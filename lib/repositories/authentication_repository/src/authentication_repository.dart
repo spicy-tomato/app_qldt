@@ -17,13 +17,13 @@ class AuthenticationRepository {
   }
 
   Future<bool> logIn({
-    @required String id,
-    @required String password,
+    @required String? id,
+    @required String? password,
   }) async {
     assert(id != null);
     assert(password != null);
 
-    final _loginUser = LoginUser(id, password);
+    final _loginUser = LoginUser(id!, password!);
     final _loginService = LoginService(_loginUser);
 
     String response = await _loginService.login();
@@ -39,8 +39,8 @@ class AuthenticationRepository {
     return false;
   }
 
-  void logOut() {
-    _removeUserInfo();
+  Future<void> logOut() async {
+    await _removeUserInfo();
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

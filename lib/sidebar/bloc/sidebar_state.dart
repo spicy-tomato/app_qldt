@@ -1,15 +1,15 @@
 part of 'sidebar_bloc.dart';
 
 class SidebarState extends Equatable {
-  final SidebarStatus status;
+  final ScreenPage screenPage;
 
   // TODO: Opening tab
-  const SidebarState._({this.status = SidebarStatus.closed,});
+  const SidebarState._({this.screenPage = ScreenPage.home});
 
-  const SidebarState.closed() : this._();
+  const SidebarState.home() : this._();
 
-  const SidebarState.opened() : this._(status: SidebarStatus.opened);
+  const SidebarState.notification() : this._(screenPage: ScreenPage.notification);
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [screenPage];
 }

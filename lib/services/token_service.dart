@@ -1,12 +1,12 @@
 import 'package:http/http.dart';
-import 'package:firebase_repository/firebase_repository.dart';
+import 'package:app_qldt/repositories/firebase_repository/firebase_repository.dart';
 
 class TokenService {
   static final _baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/upsert_token.php';
 
-  static void upsert(FirebaseRepository firebaseRepository, String studentId) async {
-    String token = await firebaseRepository.getToken();
+  static Future<void> upsert(String studentId) async {
+    String? token = await FirebaseRepository.getToken();
 
     String body = '{'
         '"student_id": "$studentId",'
