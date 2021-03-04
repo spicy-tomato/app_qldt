@@ -1,9 +1,6 @@
 import 'package:app_qldt/authentication/authentication.dart';
 import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 import 'package:app_qldt/calendar/view/local_widgets/outsideWeekendDayBuilder.dart';
-import 'package:app_qldt/models/schedule.dart';
-import 'package:app_qldt/services/offline_calendar_service.dart';
-import 'package:app_qldt/services/token_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -13,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:app_qldt/widgets/interface.dart';
 import 'package:app_qldt/widgets/item.dart';
-import 'package:app_qldt/services/calendar_service.dart';
 
 import 'package:app_qldt/calendar/view/local_widgets/local_widgets.dart';
 import 'package:app_qldt/calendar/view/style/style.dart';
@@ -31,39 +27,36 @@ extension DateTimeExtexsion on DateTime {
 }
 
 class CalendarPage extends StatefulWidget {
-  final String studentId;
+  final Map<DateTime, List<dynamic>> schedulesData;
 
   CalendarPage({
     Key? key,
-    required this.studentId,
+    required this.schedulesData,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CalendarPageState();
+  State<StatefulWidget> createState() => _CalendarPageState(schedulesData);
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  late Future<Map<DateTime, List<dynamic>>> data;
+  late Map<DateTime, List<dynamic>> data;
+  late Future<Map<DateTime, List<dynamic>>> refreshData;
 
-  @override
-  void initState() {
-    data = _overallFuture();
-    super.initState();
-  }
+  _CalendarPageState(this.data);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         return FutureBuilder(
-          future: data,
+          // future: data,
           builder: (BuildContext context,
               AsyncSnapshot<Map<DateTime, List<dynamic>>> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+            // if (!snapshot.hasData) {
+            //   return const Center(
+            //     child: CircularProgressIndicator(),
+            //   );
+            // }
 
             return BlocProvider(
               create: (context) {
@@ -73,7 +66,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Item(
-                    child: Calendar(events: snapshot.data!),
+                    child: Calendar(events: data),
                   ),
                   Interface.mediumBox(),
                   Expanded(
@@ -86,23 +79,6 @@ class _CalendarPageState extends State<CalendarPage> {
         );
       },
     );
-  }
-
-  Future<Map<DateTime, List<dynamic>>> _overallFuture() async {
-    await TokenService.upsert(widget.studentId);
-    return await _getSchedule();
-  }
-
-  Future<Map<DateTime, List<dynamic>>> _getSchedule() async {
-    List<Schedule>? rawData =
-        await CalenderService.getRawCalendarData(widget.studentId);
-
-    if (rawData != null) {
-      await OfflineCalendarService.removeSavedCalendar();
-      await OfflineCalendarService.saveCalendar(rawData);
-    }
-
-    return OfflineCalendarService.getCalendar();
   }
 }
 

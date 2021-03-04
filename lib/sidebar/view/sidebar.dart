@@ -34,7 +34,7 @@ class Sidebar extends StatelessWidget {
               right: screenWidth * 0.1,
               child: CircleAvatar(
                 backgroundColor: Colors.white,
-                child: BlocBuilder<SidebarBloc, SidebarState>(
+                child: BlocBuilder<ScreenBloc, ScreenState>(
                   builder: (context, state) {
                     return IconButton(
                       icon: const Icon(Icons.close_rounded),
@@ -89,7 +89,7 @@ class Sidebar extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-                    child: BlocBuilder<SidebarBloc, SidebarState>(
+                    child: BlocBuilder<ScreenBloc, ScreenState>(
                       builder: (context, state) {
                         return ListView(
                           padding: const EdgeInsets.symmetric(
@@ -110,14 +110,14 @@ class Sidebar extends StatelessWidget {
     );
   }
 
-  List<Widget> _getSidebarItems(BuildContext context, SidebarState state) {
+  List<Widget> _getSidebarItems(BuildContext context, ScreenState state) {
     List<Widget> _items = _getScreenPagesList(context, state);
     _items.add(_logoutTile(context, state));
 
     return _items;
   }
 
-  List<Widget> _getScreenPagesList(BuildContext context, SidebarState state) {
+  List<Widget> _getScreenPagesList(BuildContext context, ScreenState state) {
     Widget _firstListItem;
 
     if (state.screenPage.index == 0) {
@@ -156,7 +156,7 @@ class Sidebar extends StatelessWidget {
     return _list;
   }
 
-  Widget _logoutTile(BuildContext context, SidebarState state) {
+  Widget _logoutTile(BuildContext context, ScreenState state) {
     if (state.screenPage.index == ScreenPage.values.length - 1) {
       return _NextToLogoutTile();
     }
@@ -190,7 +190,7 @@ class _CurrentScreenPageTile extends StatelessWidget {
         ),
         onTap: () {
           Navigator.maybePop(context);
-          context.read<SidebarBloc>().add(SidebarScreenPageChange(screenPage));
+          context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
         },
       ),
     );
@@ -218,8 +218,8 @@ class _NextToAboveScreenPageTile extends StatelessWidget {
           onTap: () {
             Navigator.maybePop(context);
             context
-                .read<SidebarBloc>()
-                .add(SidebarScreenPageChange(screenPage));
+                .read<ScreenBloc>()
+                .add(ScreenPageChange(screenPage));
           },
         ),
       ),
@@ -248,8 +248,8 @@ class _NextToBelowScreenPageTile extends StatelessWidget {
           onTap: () {
             Navigator.maybePop(context);
             context
-                .read<SidebarBloc>()
-                .add(SidebarScreenPageChange(screenPage));
+                .read<ScreenBloc>()
+                .add(ScreenPageChange(screenPage));
           },
         ),
       ),
@@ -274,7 +274,7 @@ class _NormalScreenPageTile extends StatelessWidget {
       ),
       onTap: () {
         Navigator.maybePop(context);
-        context.read<SidebarBloc>().add(SidebarScreenPageChange(screenPage));
+        context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
       },
     );
   }

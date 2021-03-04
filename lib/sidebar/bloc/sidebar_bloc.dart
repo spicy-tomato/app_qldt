@@ -11,25 +11,25 @@ part 'sidebar_event.dart';
 
 part 'sidebar_state.dart';
 
-class SidebarBloc extends Bloc<SidebarEvent, SidebarState> {
-  SidebarBloc() : super(const SidebarState.home());
+class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
+  ScreenBloc() : super(const ScreenState.home());
 
   @override
-  Stream<SidebarState> mapEventToState(SidebarEvent event) async* {
-    if (event is SidebarScreenPageChange) {
-      yield _mapSidebarScreenPageChange(event);
+  Stream<ScreenState> mapEventToState(ScreenEvent event) async* {
+    if (event is ScreenPageChange) {
+      yield _mapScreenPageChangeToState(event);
     }
   }
 
-  SidebarState _mapSidebarScreenPageChange(
-    SidebarScreenPageChange event,
+  ScreenState _mapScreenPageChangeToState(
+    ScreenPageChange event,
   ) {
     switch (event.screenPage) {
       case ScreenPage.notification:
-        return SidebarState.notification();
+        return ScreenState.notification();
 
       default:
-        return SidebarState.home();
+        return ScreenState.home();
     }
   }
 }

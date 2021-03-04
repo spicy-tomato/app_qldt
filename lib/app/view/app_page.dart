@@ -1,33 +1,34 @@
-import 'package:app_qldt/authentication/authentication.dart';
-import 'package:app_qldt/calendar/calendar.dart';
-import 'package:app_qldt/models/screen.dart';
-import 'package:app_qldt/screen/screen.dart';
-
-import 'package:app_qldt/sidebar/sidebar.dart';
-import 'package:app_qldt/topbar/topbar.dart';
-import 'package:app_qldt/utils/const.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:app_qldt/authentication/authentication.dart';
+import 'package:app_qldt/calendar/calendar.dart';
+import 'package:app_qldt/models/screen.dart';
+import 'package:app_qldt/sidebar/sidebar.dart';
+import 'package:app_qldt/topbar/topbar.dart';
+import 'package:app_qldt/utils/const.dart';
+
 class App extends StatelessWidget {
-  static Route route() {
+  final Map<DateTime, List<dynamic>> schedulesData;
+
+  static Route route(Map<DateTime, List<dynamic>> schedulesData) {
     return MaterialPageRoute<void>(
-      builder: (_) => App(),
+      builder: (_) => App(schedulesData: schedulesData),
     );
   }
 
-  App({Key? key}) : super(key: key);
+  App({Key? key, required this.schedulesData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider(
         create: (context) {
-          return SidebarBloc();
+          return ScreenBloc();
         },
-        child: BlocBuilder<SidebarBloc, SidebarState>(
+        child: BlocBuilder<ScreenBloc, ScreenState>(
           builder: (context, state) {
             return Scaffold(
               backgroundColor: Const.interfaceBackgroundColor,
@@ -45,20 +46,8 @@ class App extends StatelessWidget {
                         right: MediaQuery.of(context).size.width *
                             Const.contentRightPaddingRatio,
                       ),
-                      child: BlocProvider(
-                        create: (context) => ScreenBloc(),
-                        child: BlocBuilder<ScreenBloc, ScreenState>(
-                          buildWhen: (previous, current) {
-                            // print(previous.screenPage);
-                            // print(current.screenPage);
-                            // print('---------');
-                            return previous.screenPage != current.screenPage;
-                          },
-                          builder: (context, state) =>
-                              getScreen(state.screenPage),
-                        ),
-                      ),
-                    )
+                      child: _getScreen(state.screenPage, schedulesData),
+                    ),
                   ],
                 ),
               ),
@@ -69,12 +58,15 @@ class App extends StatelessWidget {
     );
   }
 
-  static Widget getScreen(ScreenPage screenPage) {
+  static Widget _getScreen(
+    ScreenPage screenPage,
+    Map<DateTime, List<dynamic>> schedulesData,
+  ) {
     switch (screenPage) {
       case ScreenPage.home:
         return BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            return CalendarPage(studentId: state.user.id);
+            return CalendarPage(schedulesData: schedulesData);
           },
         );
 

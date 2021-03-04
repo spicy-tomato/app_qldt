@@ -1,16 +1,16 @@
 part of 'sidebar_bloc.dart';
 
-abstract class SidebarEvent extends Equatable {
-  const SidebarEvent();
+abstract class ScreenEvent extends Equatable {
+  const ScreenEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class SidebarScreenPageChange extends SidebarEvent {
+class ScreenPageChange extends ScreenEvent {
   final ScreenPage screenPage;
 
-  SidebarScreenPageChange(this.screenPage);
+  ScreenPageChange(this.screenPage);
 
   @override
   List<Object> get props => [screenPage];

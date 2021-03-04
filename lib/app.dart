@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:app_qldt/services/calendar_service.dart';
+import 'package:app_qldt/services/offline_calendar_service.dart';
+import 'package:app_qldt/services/token_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -14,6 +17,7 @@ import 'package:app_qldt/app/app.dart';
 import 'package:app_qldt/login/login.dart';
 import 'package:app_qldt/splash/splash.dart';
 import 'app/transition_route_observer.dart';
+import 'models/schedule.dart';
 
 class Application extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
@@ -78,7 +82,7 @@ class _AppViewState extends State<AppView> {
                 //  Display splash page in 2 seconds, then display login page
                 _navigator!.pushAndRemoveUntil<void>(
                   SplashPage.route(),
-                      (route) => false,
+                  (route) => false,
                 );
 
                 Future.delayed(const Duration(seconds: 2), () {
@@ -90,8 +94,11 @@ class _AppViewState extends State<AppView> {
                 break;
 
               case AuthenticationStatus.authenticated:
+                Map<DateTime, List<dynamic>> schedulesData =
+                    await _setupAuthenticated(state);
+
                 _navigator!.pushAndRemoveUntil<void>(
-                  App.route(),
+                  App.route(schedulesData),
                   (route) => false,
                 );
                 break;
@@ -111,5 +118,22 @@ class _AppViewState extends State<AppView> {
         return SplashPage.route();
       },
     );
+  }
+
+  Future<Map<DateTime, List<dynamic>>> _setupAuthenticated(
+      AuthenticationState state) async {
+    //  Upsert token
+    await TokenService.upsert(state.user.id);
+
+    //  Get schedules
+    List<Schedule>? rawData =
+        await CalenderService.getRawCalendarData(state.user.id);
+
+    if (rawData != null) {
+      await OfflineCalendarService.removeSavedCalendar();
+      await OfflineCalendarService.saveCalendar(rawData);
+    }
+
+    return await OfflineCalendarService.getCalendar();
   }
 }

@@ -19,7 +19,7 @@ class TopBar extends StatelessWidget {
         color: Const.topBarBackgroundColor,
       ),
       height: MediaQuery.of(context).size.height * Const.topBarHeightRatio,
-      child: BlocBuilder<SidebarBloc, SidebarState>(
+      child: BlocBuilder<ScreenBloc, ScreenState>(
         builder: (context, state) {
           return Stack(
             children: <Widget>[
