@@ -13,11 +13,23 @@ class DatabaseProvider {
     return _database ?? await initDb();
   }
 
-  Future<List<Map<String, dynamic>>?> get schedule async {
+  Future<List<Map<String, dynamic>>> get schedule async {
     final _db = _database ?? await database;
     return await _db.query('Schedule');
   }
 
+  Future<List<Map<String, dynamic>>> get notification async {
+    final _db = _database ?? await database;
+    try {
+      return await _db.query(
+        'Notification',
+        orderBy: "ID_Notification DESC",
+      );
+    } on Exception catch (_) {
+      await _database!.execute(notificationTable);
+      return await _db.query('Notification');
+    }
+  }
 
   static const scheduleTable = ''
       'CREATE TABLE IF NOT EXISTS Schedule('
@@ -28,8 +40,20 @@ class DatabaseProvider {
       'Shift_Schedules INTEGER,'
       'Day_Schedules TEXT);';
 
+  static const notificationTable = ''
+      'CREATE TABLE IF NOT EXISTS Notification('
+      'Id INTEGER PRIMARY KEY AUTOINCREMENT,'
+      'ID_Notification INTEGER,'
+      'Title TEXT,'
+      'Content TEXT,'
+      'Typez TEXT,'
+      'Sender TEXT,'
+      'Time_Start TEXT,'
+      'Time_End TEXT,'
+      'Expired TEXT);';
+
   Future<Database> initDb() async {
-    String path = join((await getDatabasesPath())!, 'core.db');
+    String path = await _getPath();
     // print('Initializing database');
 
     bool dbExisted = await databaseExists(path);
@@ -48,7 +72,7 @@ class DatabaseProvider {
   }
 
   Future<void> deleteDb() async {
-    String path = join((await getDatabasesPath())!, 'core.db');
+    String path = await _getPath();
 
     await _database?.close();
     await deleteDatabase(path);
@@ -59,14 +83,15 @@ class DatabaseProvider {
       return;
     }
 
-    String path = join((await getDatabasesPath())!, 'core.db');
+    String path = await _getPath();
 
     _database = await openDatabase(
       path,
-      version: 2,
+      version: 1,
       onCreate: (Database db, int version) async {
         try {
           await db.execute(scheduleTable);
+          await db.execute(notificationTable);
         } on Exception catch (e) {
           print(e);
         }
@@ -86,5 +111,23 @@ class DatabaseProvider {
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
+  }
+
+  Future<void> insertNotification(Map<String, dynamic> notification) async {
+    _database = await database;
+    await _database!.insert('Notification', notification);
+  }
+
+  Future<void> deleteNotification() async {
+    try {
+      _database = await database;
+      await _database!.delete('Notification');
+    } on Exception catch (e) {
+      print('Error: ${e.toString()}');
+    }
+  }
+
+  Future<String> _getPath() async {
+    return join((await getDatabasesPath())!, 'core.db');
   }
 }

@@ -1,10 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseRepository {
-  static Future<void> initialise() async {
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
+  Future<void> initialise() async {
     _firebaseMessaging.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
@@ -24,17 +23,7 @@ class FirebaseRepository {
     });
   }
 
-  static Future<void> setupFirebaseMessagingBackground() async {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  static Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    await Firebase.initializeApp();
-    print('Handling a background message: ${message.messageId}');
-  }
-
-  static Future<String?> getToken() async {
+  Future<String?> getToken() async {
     print('Getting token');
     try {
       return await FirebaseMessaging.instance.getToken();

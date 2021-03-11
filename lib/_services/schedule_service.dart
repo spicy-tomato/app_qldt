@@ -1,18 +1,23 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:app_qldt/models/schedule.dart';
 
-class CalenderService {
-  static final timeout = 10;
-  static final baseUrl =
+import 'package:app_qldt/_models/schedule.dart';
+
+class ScheduleService {
+  static final _timeout = 5;
+  static final _baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
 
-  static Future<List<Schedule>?> getRawCalendarData(String studentId) async {
+  final String studentId;
+
+  ScheduleService(this.studentId);
+
+  Future<List<Schedule>?> getRawScheduleData() async {
     try {
-      List? data = await CalenderService._fetchData(studentId);
+      List? data = await _fetchData();
 
       if (data != null) {
         return data as List<Schedule>;
@@ -24,19 +29,21 @@ class CalenderService {
     }
   }
 
-  static Future<List?> _fetchData(String studentId) async {
-    String url = baseUrl + studentId;
+  Future<List?> _fetchData() async {
+    String url = _baseUrl + studentId;
 
     try {
       final responseData =
-          await http.get(Uri.parse(url)).timeout(Duration(seconds: timeout));
+          await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
 
       if (responseData.statusCode == 200) {
         List data = jsonDecode(responseData.body) as List;
         List<Schedule> listModel = [];
-        data.forEach((element) {
+
+        for (var element in data) {
           listModel.add(Schedule.fromJson(element));
-        });
+        }
+
         return listModel;
       } else {
         print("Cannot GET. Response status code: ${responseData.statusCode}");

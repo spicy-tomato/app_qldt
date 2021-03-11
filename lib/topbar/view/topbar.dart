@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/models/screen.dart';
+import 'package:app_qldt/_models/screen.dart';
 import 'package:app_qldt/sidebar/bloc/sidebar_bloc.dart';
 import 'package:app_qldt/sidebar/sidebar.dart';
-import 'package:app_qldt/utils/const.dart';
+import 'package:app_qldt/_utils/const.dart';
 
 class TopBar extends StatelessWidget {
   const TopBar({Key? key}) : super(key: key);

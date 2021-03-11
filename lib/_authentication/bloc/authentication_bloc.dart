@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:app_qldt/repositories/user_repository/user_repository.dart';
+
+import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 
 part 'authentication_event.dart';
 

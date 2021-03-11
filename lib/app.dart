@@ -1,23 +1,22 @@
 import 'dart:math';
 
-import 'package:app_qldt/services/calendar_service.dart';
-import 'package:app_qldt/services/offline_calendar_service.dart';
-import 'package:app_qldt/services/token_service.dart';
+import 'package:app_qldt/_services/local_notification_service.dart';
+import 'package:app_qldt/_services/local_schedule_service.dart';
+import 'package:app_qldt/_services/token_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
-import 'package:app_qldt/repositories/user_repository/user_repository.dart';
+import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 
-import 'package:app_qldt/authentication/authentication.dart';
+import 'package:app_qldt/_authentication/authentication.dart';
 import 'package:app_qldt/app/app.dart';
 import 'package:app_qldt/login/login.dart';
 import 'package:app_qldt/splash/splash.dart';
 import 'app/transition_route_observer.dart';
-import 'models/schedule.dart';
 
 class Application extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
@@ -94,11 +93,22 @@ class _AppViewState extends State<AppView> {
                 break;
 
               case AuthenticationStatus.authenticated:
-                Map<DateTime, List<dynamic>> schedulesData =
-                    await _setupAuthenticated(state);
+                final tokenService = TokenService();
+                tokenService.init();
+                tokenService.upsert(state.user.id);
+
+                final localNotificationService = LocalNotificationService(state.user.id);
+                final localScheduleService = LocalScheduleService(state.user.id);
+
+                await localNotificationService.refresh();
+                await localScheduleService.refresh();
 
                 _navigator!.pushAndRemoveUntil<void>(
-                  App.route(schedulesData),
+                  App.route(
+                    studentId: state.user.id,
+                    localScheduleService: localScheduleService,
+                    localNotificationService: localNotificationService,
+                  ),
                   (route) => false,
                 );
                 break;
@@ -118,22 +128,5 @@ class _AppViewState extends State<AppView> {
         return SplashPage.route();
       },
     );
-  }
-
-  Future<Map<DateTime, List<dynamic>>> _setupAuthenticated(
-      AuthenticationState state) async {
-    //  Upsert token
-    await TokenService.upsert(state.user.id);
-
-    //  Get schedules
-    List<Schedule>? rawData =
-        await CalenderService.getRawCalendarData(state.user.id);
-
-    if (rawData != null) {
-      await OfflineCalendarService.removeSavedCalendar();
-      await OfflineCalendarService.saveCalendar(rawData);
-    }
-
-    return await OfflineCalendarService.getCalendar();
   }
 }

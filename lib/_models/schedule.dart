@@ -15,14 +15,15 @@ class Schedule {
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(
-        idModuleClass: json['ID_Module_Class'],
-        moduleName: json['Module_Name'],
-        idRoom: json['ID_Room'],
-        shiftSchedules: int.parse(json['Shift_Schedules']),
-        daySchedules: DateTime.parse(json['Day_Schedules']));
+      idModuleClass: json['ID_Module_Class'],
+      moduleName: json['Module_Name'],
+      idRoom: json['ID_Room'],
+      shiftSchedules: int.parse(json['Shift_Schedules']),
+      daySchedules: DateTime.parse(json['Day_Schedules']),
+    );
   }
 
-  factory Schedule.fromMap(Map<String, dynamic> map){
+  factory Schedule.fromMap(Map<String, dynamic> map) {
     return Schedule(
       idModuleClass: map['Id_Module_Class'],
       moduleName: map['Module_Name'],

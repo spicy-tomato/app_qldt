@@ -1,7 +1,7 @@
 import 'dart:async';
 
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:app_qldt/models/screen.dart';
+import 'package:app_qldt/_models/screen.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
