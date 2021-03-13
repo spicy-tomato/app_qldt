@@ -63,6 +63,28 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        //  Brightness and colors
+        brightness: Brightness.light,
+        primaryColor: Color(0xff4A2A73),
+        accentColor: Color(0xffF46781),
+        backgroundColor: Color(0xff4A2A73),
+
+        //  Font family
+        fontFamily: 'Montserrat',
+
+        //  Text theme
+        textTheme: TextTheme(
+          //  https://api.flutter.dev/flutter/material/TextTheme-class.html
+          //  Headline
+          headline5: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
+          headline6: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+
+          //  Body text
+          bodyText1: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+          bodyText2: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+        ),
+      ),
       navigatorKey: _navigatorKey,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

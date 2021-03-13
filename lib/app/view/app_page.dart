@@ -11,7 +11,6 @@ import 'package:app_qldt/calendar/calendar.dart';
 import 'package:app_qldt/_models/screen.dart';
 import 'package:app_qldt/sidebar/sidebar.dart';
 import 'package:app_qldt/topbar/topbar.dart';
-import 'package:app_qldt/_utils/const.dart';
 import 'package:collection/collection.dart';
 
 enum ServiceEnum {
@@ -32,8 +31,8 @@ class UserDataModel extends InheritedModel<ServiceEnum> {
   @override
   bool updateShouldNotify(UserDataModel old) {
     return !DeepCollectionEquality().equals(
-          localScheduleService.schedulesData,
-          old.localScheduleService.schedulesData,
+          localScheduleService.eventsData,
+          old.localScheduleService.eventsData,
         ) ||
         !DeepCollectionEquality().equals(
           localNotificationService.notificationData,
@@ -50,8 +49,8 @@ class UserDataModel extends InheritedModel<ServiceEnum> {
             )) ||
         (aspect.contains(ServiceEnum.notification) &&
             !DeepCollectionEquality().equals(
-              localScheduleService.schedulesData,
-              old.localScheduleService.schedulesData,
+              localScheduleService.eventsData,
+              old.localScheduleService.eventsData,
             ));
   }
 
@@ -87,18 +86,13 @@ class App extends StatelessWidget {
         child: BlocBuilder<ScreenBloc, ScreenState>(
           builder: (context, state) {
             return Scaffold(
-              backgroundColor: Const.interfaceBackgroundColor,
+              backgroundColor: Theme.of(context).backgroundColor,
               drawer: Sidebar(),
               body: Container(
-                child: Stack(
+                child: Column(
                   children: <Widget>[
                     TopBar(),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * Const.contentTopPaddingRatio,
-                        left: MediaQuery.of(context).size.width * Const.contentLeftPaddingRatio,
-                        right: MediaQuery.of(context).size.width * Const.contentRightPaddingRatio,
-                      ),
+                    Expanded(
                       child: _getScreen(state.screenPage),
                     ),
                   ],
