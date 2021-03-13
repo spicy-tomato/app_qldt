@@ -19,7 +19,8 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> notificationData = UserDataModel.of(context)!.localNotificationService.notificationData;
+    List<dynamic> notificationData =
+        UserDataModel.of(context)!.localNotificationService.notificationData;
 
     return Item(
       child: SmartRefresher(
@@ -47,7 +48,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   subtitle: Text(
                     notificationData[index].content,
                   ),
-                  onTap: () => print(notificationData[index]),
+                  // onTap: () => print(notificationData[index]),
                 ),
               ),
             );
@@ -61,9 +62,7 @@ class _NotificationPageState extends State<NotificationPage> {
     await UserDataModel.of(context)!.localNotificationService.refresh();
     await Future.delayed(Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void _onLoading() async {

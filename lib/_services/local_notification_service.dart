@@ -11,6 +11,7 @@ class LocalNotificationService {
     _notificationService = new NotificationService(studentId);
   }
 
+
   Future<List<dynamic>> refresh() async {
     List<UserNotification>? rawData = await _notificationService.getNotification(studentId);
 
@@ -19,11 +20,11 @@ class LocalNotificationService {
       await save(rawData);
     }
 
-    print('Refreshing notification');
+    // print('Refreshing notification');
 
     notificationData = await getFromDb();
 
-    print(notificationData);
+    // print(notificationData);
 
     return this.notificationData;
   }

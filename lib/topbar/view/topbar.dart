@@ -3,56 +3,74 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/_models/screen.dart';
 import 'package:app_qldt/sidebar/bloc/sidebar_bloc.dart';
 import 'package:app_qldt/sidebar/sidebar.dart';
-import 'package:app_qldt/_utils/const.dart';
 
 class TopBar extends StatelessWidget {
-  const TopBar({Key? key}) : super(key: key);
+  final IconData? rightButtonIcon;
+  final GestureTapCallback? rightButtonOnTap;
+
+  const TopBar({
+    Key? key,
+    this.rightButtonIcon,
+    this.rightButtonOnTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: Const.topBarBorderRadius,
-        color: Const.topBarBackgroundColor,
-      ),
-      height: MediaQuery.of(context).size.height * Const.topBarHeightRatio,
+      height: 60,
       child: BlocBuilder<ScreenBloc, ScreenState>(
         builder: (context, state) {
           return Stack(
             children: <Widget>[
-              Align(
-                alignment: const Alignment(0, -0.1),
-                child: Container(
-                  child: Text(
-                    state.screenPage.string,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: Const.topBarFontSize,
-                      color: Const.topBarTextColor,
-                    ),
-                  ),
-                ),
+              _TopBarItem(
+                icon: Icons.menu,
+                onTap: () => Scaffold.of(context)..openDrawer(),
+                alignment: const Alignment(-0.95, 0),
               ),
-              Align(
-                alignment: const Alignment(-1, -0.2),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.menu,
-                    size: Const.topBarIconSize,
-                    color: Const.topBarTextColor,
-                  ),
-                  onPressed: () {
-                    // context.read<SidebarBloc>().add(SidebarOpenRequested());
-                    Scaffold.of(context)..openDrawer();
-                  },
-                ),
-              ),
+              rightButtonOnTap != null
+                  ? _TopBarItem(
+                      icon: rightButtonIcon!,
+                      onTap: rightButtonOnTap!,
+                      alignment: const Alignment(0.95, 0),
+                    )
+                  : Container(),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _TopBarItem extends StatelessWidget {
+  final GestureTapCallback onTap;
+  final Alignment alignment;
+  final IconData icon;
+
+  const _TopBarItem({
+    Key? key,
+    required this.icon,
+    required this.onTap,
+    required this.alignment,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: alignment,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.all(7.5),
+          child: Icon(
+            icon,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

@@ -40,9 +40,6 @@ class Sidebar extends StatelessWidget {
                       icon: const Icon(Icons.close_rounded),
                       color: Const.primaryColor,
                       onPressed: () {
-                        // context
-                        //     .read<SidebarBloc>()
-                        //     .add(SidebarCloseRequested());
                         Navigator.maybePop(context);
                       },
                     );

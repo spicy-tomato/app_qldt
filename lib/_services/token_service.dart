@@ -13,7 +13,7 @@ class TokenService {
   Future<void> upsert(String studentId) async {
     String? token = await _firebaseRepository.getToken();
 
-    print('Token: $token');
+    // print('Token: $token');
 
     String body = '{'
         '"student_id": "$studentId",'
