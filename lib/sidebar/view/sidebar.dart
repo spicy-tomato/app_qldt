@@ -24,7 +24,12 @@ class Sidebar extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Const.sideBarBackgroundColor, Const.calendarMarkerColor],
+            colors: [
+              Theme.of(context).backgroundColor,
+              Color(0xff7579e7),
+              Color(0xff9ab3f5),
+              Color(0xffbedcfa),
+            ],
           ),
         ),
         child: Stack(
@@ -68,8 +73,7 @@ class Sidebar extends StatelessWidget {
                                   color: Colors.red,
                                   width: 4,
                                 ),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(50)),
+                                borderRadius: const BorderRadius.all(Radius.circular(50)),
                                 image: const DecorationImage(
                                   image: ExactAssetImage('images/avatar.jpg'),
                                   fit: BoxFit.cover,
@@ -183,7 +187,11 @@ class _CurrentScreenPageTile extends StatelessWidget {
       child: ListTile(
         title: Text(
           screenPage.string,
-          style: tileTextStyle(),
+          style: TextStyle(
+            fontSize: 18,
+            color: Theme.of(context).backgroundColor,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         onTap: () {
           Navigator.maybePop(context);
@@ -214,9 +222,7 @@ class _NextToAboveScreenPageTile extends StatelessWidget {
           ),
           onTap: () {
             Navigator.maybePop(context);
-            context
-                .read<ScreenBloc>()
-                .add(ScreenPageChange(screenPage));
+            context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
           },
         ),
       ),
@@ -244,9 +250,7 @@ class _NextToBelowScreenPageTile extends StatelessWidget {
           ),
           onTap: () {
             Navigator.maybePop(context);
-            context
-                .read<ScreenBloc>()
-                .add(ScreenPageChange(screenPage));
+            context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
           },
         ),
       ),
@@ -298,9 +302,7 @@ class _NextToLogoutTile extends StatelessWidget {
             style: tileTextStyle(),
           ),
           onTap: () async {
-            context
-                .read<AuthenticationBloc>()
-                .add(AuthenticationLogoutRequested());
+            context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
           },
         ),
       ),
@@ -323,9 +325,7 @@ class _NormalLogoutTile extends StatelessWidget {
           onTap: () async {
             print(state.status);
             print(state.user);
-            context
-                .read<AuthenticationBloc>()
-                .add(AuthenticationLogoutRequested());
+            context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
           },
         );
       },

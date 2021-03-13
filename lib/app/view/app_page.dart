@@ -61,7 +61,6 @@ class UserDataModel extends InheritedModel<ServiceEnum> {
 
 class App extends StatelessWidget {
   static Route route({
-    required String studentId,
     required LocalNotificationService localNotificationService,
     required LocalScheduleService localScheduleService,
   }) {

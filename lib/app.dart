@@ -100,7 +100,6 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) async {
             switch (state.status) {
               case AuthenticationStatus.unauthenticated:
-                //  Display splash page in 2 seconds, then display login page
                 _navigator!.pushAndRemoveUntil<void>(
                   SplashPage.route(),
                   (route) => false,
@@ -127,7 +126,6 @@ class _AppViewState extends State<AppView> {
 
                 _navigator!.pushAndRemoveUntil<void>(
                   App.route(
-                    studentId: state.user.id,
                     localScheduleService: localScheduleService,
                     localNotificationService: localNotificationService,
                   ),
