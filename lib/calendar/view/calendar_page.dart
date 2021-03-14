@@ -1,3 +1,4 @@
+import 'package:app_qldt/topbar/topbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -26,9 +27,10 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final schedulesData = UserDataModel.of(context)!.localScheduleService.eventsData;
+    final schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
 
     return SharedUI(
+      topRightWidget: RefreshButton(context),
       child: FutureBuilder(
         builder: (_, AsyncSnapshot<Map<DateTime, List<dynamic>>> snapshot) {
           return Container(
@@ -68,7 +70,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
                   BottomNote(calendarController: _calendarController),
                 ],
               ),
@@ -78,4 +79,15 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
+}
+
+class RefreshButton extends TopBarItem {
+  final BuildContext context;
+
+  RefreshButton(this.context)
+      : super(
+          onTap: () async => UserDataModel.of(context)!.localEventService.refresh(),
+          alignment: Alignment(0.95, 0),
+          icon: Icons.refresh,
+        );
 }
