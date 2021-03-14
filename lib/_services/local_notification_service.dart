@@ -8,7 +8,7 @@ class LocalNotificationService {
   late List<dynamic> notificationData;
 
   LocalNotificationService(this.studentId) {
-    _notificationService = new NotificationService(studentId);
+    _notificationService = NotificationService(studentId);
   }
 
 

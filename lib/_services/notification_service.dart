@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_qldt/_models/notification.dart';
 
 class NotificationService {
-  static final _timeout = 5;
+  static final _timeout = 10;
   static final _baseUrl =
       'http://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/notification.php?ID_Student=';
 
@@ -36,8 +36,7 @@ class NotificationService {
     String url = _baseUrl + studentId;
 
     try {
-      final responseData =
-          await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
+      final responseData = await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
 
       if (responseData.statusCode == 200) {
         List data = jsonDecode(responseData.body) as List;
@@ -53,11 +52,11 @@ class NotificationService {
         return null;
       }
     } on TimeoutException catch (e) {
-      print('Timeout error: $e');
+      print('Timeout error: $e at Notification service');
     } on SocketException catch (e) {
-      print('Socket error: $e');
+      print('Socket error: $e at Notification service');
     } on Error catch (e) {
-      print('General Error: $e');
+      print('General Error: $e at Notification service');
     }
 
     return null;

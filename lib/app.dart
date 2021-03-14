@@ -10,7 +10,7 @@ import '_repositories/authentication_repository/authentication_repository.dart';
 import '_repositories/user_repository/user_repository.dart';
 
 import '_services/local_notification_service.dart';
-import '_services/local_schedule_service.dart';
+import '_services/local_event_service.dart';
 import '_services/token_service.dart';
 
 import 'app_view/app_view.dart';
@@ -113,19 +113,19 @@ class _AppViewState extends State<AppView> {
 
                 /// Khởi động các service
                 final tokenService = TokenService();
-                tokenService.init();
-                tokenService.upsert(state.user.id);
+                await tokenService.init();
+                await tokenService.upsert(state.user.id);
 
+                final localEventService = LocalEventService(state.user.id);
                 final localNotificationService = LocalNotificationService(state.user.id);
-                final localScheduleService = LocalScheduleService(state.user.id);
 
+                await localEventService.refresh();
                 await localNotificationService.refresh();
-                await localScheduleService.refresh();
 
                 /// Vào route
                 _navigator!.pushAndRemoveUntil<void>(
                   App.route(
-                    localScheduleService: localScheduleService,
+                    localScheduleService: localEventService,
                     localNotificationService: localNotificationService,
                   ),
                   (route) => false,

@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_models/schedule.dart';
 
-class ScheduleService {
-  static final _timeout = 5;
+class EventService {
+  static final _timeout = 10;
   static final _baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
 
   final String studentId;
 
-  ScheduleService(this.studentId);
+  EventService(this.studentId);
 
   Future<List<Schedule>?> getRawScheduleData() async {
     try {
@@ -50,11 +50,11 @@ class ScheduleService {
         return null;
       }
     } on TimeoutException catch (e) {
-      print('Timeout error: $e');
+      print('Timeout error: $e at Event service');
     } on SocketException catch (e) {
-      print('Socket error: $e');
+      print('Socket error: $e at Event service');
     } on Error catch (e) {
-      print('General Error: $e');
+      print('General Error: $e at Event service');
     }
 
     return null;

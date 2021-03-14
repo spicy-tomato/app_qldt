@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app_qldt/_models/screen.dart';
 import 'package:app_qldt/_services/local_notification_service.dart';
-import 'package:app_qldt/_services/local_schedule_service.dart';
+import 'package:app_qldt/_services/local_event_service.dart';
 import 'package:app_qldt/_widgets/user_data_model.dart';
 
 import 'package:app_qldt/calendar/calendar.dart';
@@ -15,12 +15,12 @@ import 'package:app_qldt/sidebar/sidebar.dart';
 class App extends StatelessWidget {
   static Route route({
     required LocalNotificationService localNotificationService,
-    required LocalScheduleService localScheduleService,
+    required LocalEventService localScheduleService,
   }) {
     return MaterialPageRoute<void>(
       builder: (_) => UserDataModel(
         localNotificationService: localNotificationService,
-        localScheduleService: localScheduleService,
+        localEventService: localScheduleService,
         child: App(),
       ),
     );
@@ -36,7 +36,7 @@ class App extends StatelessWidget {
           return ScreenBloc();
         },
         child: BlocBuilder<ScreenBloc, ScreenState>(
-          builder: (context, state) {
+          builder: (_, state) {
             return _getScreen(state.screenPage);
           },
         ),

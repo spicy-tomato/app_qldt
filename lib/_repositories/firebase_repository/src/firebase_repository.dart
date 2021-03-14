@@ -28,7 +28,7 @@ class FirebaseRepository {
     try {
       return await FirebaseMessaging.instance.getToken();
     } on Exception catch (e) {
-      print(e);
+      print('Get token error: $e');
     }
   }
 }

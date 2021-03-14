@@ -18,32 +18,37 @@ class EventList extends StatelessWidget {
       return Container(color: Colors.transparent);
     }
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-      width: MediaQuery.of(context).size.width * 0.95,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: Colors.white,
-      ),
-      child: ScrollConfiguration(
-        behavior: _EventListScrollBehavior(),
-        child: ListView.separated(
-          padding: const EdgeInsets.only(),
-          itemCount: min(event!.length, 3),
-          separatorBuilder: (_, __) {
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 5),
-              child: Divider(
-                color: Color(0xff694A85),
-                indent: 45,
-                endIndent: 45,
-                thickness: 2,
-              ),
-            );
-          },
-          itemBuilder: (_, index) => _EventListItem(event: event![index]),
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          width: MediaQuery.of(context).size.width * 0.95,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Colors.white,
+          ),
+          child: ScrollConfiguration(
+            behavior: _EventListScrollBehavior(),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: min(event!.length, 3),
+              separatorBuilder: (_, __) {
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: Divider(
+                    color: Color(0xff694A85),
+                    indent: 45,
+                    endIndent: 45,
+                    thickness: 2,
+                  ),
+                );
+              },
+              itemBuilder: (_, index) => _EventListItem(event: event![index]),
+            ),
+          ),
         ),
-      ),
+        Spacer(),
+      ],
     );
   }
 }

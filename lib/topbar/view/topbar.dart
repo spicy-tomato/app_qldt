@@ -22,7 +22,7 @@ class TopBar extends StatelessWidget {
         builder: (context, state) {
           return Stack(
             children: <Widget>[
-              _TopBarItem(
+              TopBarItem(
                 icon: Icons.menu,
                 onTap: () => Scaffold.of(context)..openDrawer(),
                 alignment: const Alignment(-0.95, 0),
@@ -36,12 +36,12 @@ class TopBar extends StatelessWidget {
   }
 }
 
-class _TopBarItem extends StatelessWidget {
+class TopBarItem extends StatelessWidget {
   final GestureTapCallback onTap;
   final Alignment alignment;
   final IconData icon;
 
-  const _TopBarItem({
+  const TopBarItem({
     Key? key,
     required this.icon,
     required this.onTap,

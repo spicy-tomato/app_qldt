@@ -43,8 +43,8 @@ class Sidebar extends StatelessWidget {
                     return IconButton(
                       icon: const Icon(Icons.close_rounded),
                       color: Const.primaryColor,
-                      onPressed: () {
-                        Navigator.maybePop(context);
+                      onPressed: () async {
+                        await Navigator.maybePop(context);
                       },
                     );
                   },
@@ -192,8 +192,8 @@ class _CurrentScreenPageTile extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
         ),
-        onTap: () {
-          Navigator.maybePop(context);
+        onTap: () async {
+          await Navigator.maybePop(context);
           context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
         },
       ),
@@ -219,8 +219,8 @@ class _NextToAboveScreenPageTile extends StatelessWidget {
             screenPage.string,
             style: tileTextStyle(),
           ),
-          onTap: () {
-            Navigator.maybePop(context);
+          onTap: () async {
+            await Navigator.maybePop(context);
             context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
           },
         ),
@@ -247,9 +247,10 @@ class _NextToBelowScreenPageTile extends StatelessWidget {
             screenPage.string,
             style: tileTextStyle(),
           ),
-          onTap: () {
-            Navigator.maybePop(context);
+          onTap: () async {
+            await Navigator.of(context).maybePop();
             context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
+            // await Future.delayed(Duration(seconds: 2));
           },
         ),
       ),
@@ -272,8 +273,8 @@ class _NormalScreenPageTile extends StatelessWidget {
         screenPage.string,
         style: tileTextStyle(),
       ),
-      onTap: () {
-        Navigator.maybePop(context);
+      onTap: () async {
+        await Navigator.maybePop(context);
         context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
       },
     );

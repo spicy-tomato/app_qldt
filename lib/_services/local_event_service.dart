@@ -1,20 +1,19 @@
 import 'package:app_qldt/_models/event.dart';
 import 'package:app_qldt/_models/schedule.dart';
 import 'database_provider.dart';
-import 'schedule_service.dart';
+import 'event_service.dart';
 
-class LocalScheduleService {
+class LocalEventService {
   final String studentId;
-  late final ScheduleService _scheduleService;
+  late final EventService _eventService;
   late Map<DateTime, List<UserEvent>> eventsData;
 
-  LocalScheduleService(this.studentId) {
-    _scheduleService = new ScheduleService(studentId);
+  LocalEventService(this.studentId) {
+    _eventService = EventService(studentId);
   }
 
-
   Future<Map<DateTime, List<UserEvent>>> refresh() async {
-    List<Schedule>? rawData = await _scheduleService.getRawScheduleData();
+    List<Schedule>? rawData = await _eventService.getRawScheduleData();
 
     if (rawData != null) {
       await remove();
@@ -22,6 +21,7 @@ class LocalScheduleService {
     }
 
     eventsData = await getFromDb();
+
     return eventsData;
   }
 
