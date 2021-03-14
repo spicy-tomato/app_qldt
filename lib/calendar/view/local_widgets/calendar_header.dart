@@ -9,53 +9,52 @@ import 'package:intl/intl.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:table_calendar/table_calendar.dart';
 
-class CalendarHeaderBuilder extends StatelessWidget {
+class CalendarHeader extends StatelessWidget {
   final CalendarController calendarController;
 
-  const CalendarHeaderBuilder({
+  const CalendarHeader({
     Key? key,
     required this.calendarController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalendarBloc, CalendarState>(
-      buildWhen: (previous, current) {
-        return previous.visibleDay != null && previous.visibleDay != current.visibleDay;
-      },
-      builder: (context, state) {
-        String date = DateFormat.yMMMM('vi_VI').format(calendarController.focusedDay);
-        return Container(
-          child: Padding(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                _CustomIconButton(
-                  iconData: Icons.chevron_left,
-                  onTap: _selectPrevious,
-                ),
-                Container(
-                  // margin: EdgeInsets.symmetric(horizontal: 30),
-                  child: Text(
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 15),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _CustomIconButton(
+              iconData: Icons.chevron_left,
+              onTap: _selectPrevious,
+            ),
+            Container(
+              child: BlocBuilder<CalendarBloc, CalendarState>(
+                buildWhen: (previous, current) {
+                  return previous.visibleDay != null && previous.visibleDay!.month != current.visibleDay!.month;
+                },
+                builder: (_, __) {
+                  String date = DateFormat.yMMMM('vi_VI').format(calendarController.focusedDay);
+                  return Text(
                     date[0].toUpperCase() + date.substring(1),
                     style: TextStyle(
                       fontSize: 27,
                       fontWeight: FontWeight.w300,
                     ),
                     textAlign: TextAlign.center,
-                  ),
-                ),
-                _CustomIconButton(
-                  iconData: Icons.chevron_right,
-                  onTap: _selectNext,
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          ),
-        );
-      },
+            _CustomIconButton(
+              iconData: Icons.chevron_right,
+              onTap: _selectNext,
+            ),
+          ],
+        ),
+      ),
     );
   }
 

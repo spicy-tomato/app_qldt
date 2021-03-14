@@ -1,9 +1,11 @@
-import 'package:app_qldt/_widgets/item.dart';
+import 'package:app_qldt/_widgets/shared_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:app_qldt/app/app.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'package:app_qldt/_widgets/item.dart';
+import 'package:app_qldt/_widgets/user_data_model.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -22,37 +24,39 @@ class _NotificationPageState extends State<NotificationPage> {
     List<dynamic> notificationData =
         UserDataModel.of(context)!.localNotificationService.notificationData;
 
-    return Item(
-      child: SmartRefresher(
-        enablePullDown: true,
-        header: ClassicHeader(),
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _onLoading,
-        child: ListView.separated(
-          separatorBuilder: (_, __) => const Divider(
-            height: 10,
-            thickness: 2,
-            indent: 20,
-            endIndent: 20,
-          ),
-          itemCount: notificationData.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: ListTile(
-                  title: Text(
-                    notificationData[index].title,
+    return SharedUI(
+      child: Item(
+        child: SmartRefresher(
+          enablePullDown: true,
+          header: ClassicHeader(),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          onLoading: _onLoading,
+          child: ListView.separated(
+            separatorBuilder: (_, __) => const Divider(
+              height: 10,
+              thickness: 2,
+              indent: 20,
+              endIndent: 20,
+            ),
+            itemCount: notificationData.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: ListTile(
+                    title: Text(
+                      notificationData[index].title,
+                    ),
+                    subtitle: Text(
+                      notificationData[index].content,
+                    ),
+                    // onTap: () => print(notificationData[index]),
                   ),
-                  subtitle: Text(
-                    notificationData[index].content,
-                  ),
-                  // onTap: () => print(notificationData[index]),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

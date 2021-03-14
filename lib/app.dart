@@ -1,22 +1,22 @@
-import 'dart:math';
-
-import 'package:app_qldt/_services/local_notification_service.dart';
-import 'package:app_qldt/_services/local_schedule_service.dart';
-import 'package:app_qldt/_services/token_service.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
-import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
+import '_authentication/authentication.dart';
 
-import 'package:app_qldt/_authentication/authentication.dart';
-import 'package:app_qldt/app/app.dart';
-import 'package:app_qldt/login/login.dart';
-import 'package:app_qldt/splash/splash.dart';
-import 'app/transition_route_observer.dart';
+import '_repositories/authentication_repository/authentication_repository.dart';
+import '_repositories/user_repository/user_repository.dart';
+
+import '_services/local_notification_service.dart';
+import '_services/local_schedule_service.dart';
+import '_services/token_service.dart';
+
+import 'app_view/app_view.dart';
+import 'app_view/transition_route_observer.dart';
+import 'login/login.dart';
+import 'splash/splash.dart';
 
 class Application extends StatelessWidget {
   final AuthenticationRepository authenticationRepository;
@@ -40,13 +40,6 @@ class Application extends StatelessWidget {
         child: AppView(),
       ),
     );
-  }
-
-  static int getRandomTime() {
-    final rng = new Random();
-    int minTime = 2550;
-    int maxTime = 5000;
-    return rng.nextInt(maxTime - minTime) + minTime;
   }
 }
 
@@ -99,13 +92,15 @@ class _AppViewState extends State<AppView> {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) async {
             switch (state.status) {
+
+              /// Khi chưa đăng nhập
               case AuthenticationStatus.unauthenticated:
                 _navigator!.pushAndRemoveUntil<void>(
                   SplashPage.route(),
                   (route) => false,
                 );
 
-                Future.delayed(const Duration(seconds: 2), () {
+                Future.delayed(const Duration(seconds: 0), () {
                   _navigator!.pushAndRemoveUntil<void>(
                     LoginPage.route(),
                     (route) => false,
@@ -113,7 +108,10 @@ class _AppViewState extends State<AppView> {
                 });
                 break;
 
+              /// Khi đã đăng nhập
               case AuthenticationStatus.authenticated:
+
+                /// Khởi động các service
                 final tokenService = TokenService();
                 tokenService.init();
                 tokenService.upsert(state.user.id);
@@ -124,6 +122,7 @@ class _AppViewState extends State<AppView> {
                 await localNotificationService.refresh();
                 await localScheduleService.refresh();
 
+                /// Vào route
                 _navigator!.pushAndRemoveUntil<void>(
                   App.route(
                     localScheduleService: localScheduleService,

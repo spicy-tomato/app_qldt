@@ -7,13 +7,11 @@ import 'package:app_qldt/sidebar/bloc/sidebar_bloc.dart';
 import 'package:app_qldt/sidebar/sidebar.dart';
 
 class TopBar extends StatelessWidget {
-  final IconData? rightButtonIcon;
-  final GestureTapCallback? rightButtonOnTap;
+  final Widget? topRightWidget;
 
   const TopBar({
     Key? key,
-    this.rightButtonIcon,
-    this.rightButtonOnTap,
+    this.topRightWidget,
   }) : super(key: key);
 
   @override
@@ -29,13 +27,7 @@ class TopBar extends StatelessWidget {
                 onTap: () => Scaffold.of(context)..openDrawer(),
                 alignment: const Alignment(-0.95, 0),
               ),
-              rightButtonOnTap != null
-                  ? _TopBarItem(
-                      icon: rightButtonIcon!,
-                      onTap: rightButtonOnTap!,
-                      alignment: const Alignment(0.95, 0),
-                    )
-                  : Container(),
+              topRightWidget ?? Container(),
             ],
           );
         },

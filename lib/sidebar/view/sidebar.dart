@@ -28,7 +28,6 @@ class Sidebar extends StatelessWidget {
               Theme.of(context).backgroundColor,
               Color(0xff7579e7),
               Color(0xff9ab3f5),
-              Color(0xffbedcfa),
             ],
           ),
         ),
