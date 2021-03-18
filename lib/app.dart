@@ -9,15 +9,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '_authentication/authentication.dart';
-
 import '_repositories/authentication_repository/authentication_repository.dart';
 import '_repositories/user_repository/user_repository.dart';
-
 import '_services/local_notification_service.dart';
 import '_services/local_event_service.dart';
 import '_services/token_service.dart';
 
-import 'transition_route_observer.dart';
 import 'login/login.dart';
 import 'splash/splash.dart';
 
@@ -84,8 +81,6 @@ class _ApplicationState extends State<Application> {
           supportedLocales: [
             const Locale('vi', ''),
           ],
-          // initialRoute: '/',
-          navigatorObservers: [TransitionRouteObserver()],
           builder: (context, child) {
             return BlocListener<AuthenticationBloc, AuthenticationState>(
               listener: (context, state) async {
@@ -93,7 +88,9 @@ class _ApplicationState extends State<Application> {
 
                   /// Khi chưa đăng nhập
                   case AuthenticationStatus.unauthenticated:
-                    _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    if (ModalRoute.of(context)?.settings.name != '/') {
+                      _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    }
 
                     await Future.delayed(const Duration(milliseconds: 1500), () {
                       _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
@@ -103,7 +100,9 @@ class _ApplicationState extends State<Application> {
 
                   /// Khi đã đăng nhập
                   case AuthenticationStatus.authenticated:
-                    _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    if (ModalRoute.of(context)?.settings.name != '/') {
+                      _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    }
 
                     Stopwatch stopwatch = Stopwatch()..start();
                     final maxTurnAroundTime = const Duration(seconds: 2);
@@ -131,7 +130,9 @@ class _ApplicationState extends State<Application> {
                     break;
 
                   default:
-                    _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    if (ModalRoute.of(context)?.settings.name != '/') {
+                      _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    }
                     break;
                 }
               },
@@ -143,9 +144,6 @@ class _ApplicationState extends State<Application> {
             '/login': (_) => LoginPage(),
             '/calendar': (_) => userData(CalendarPage()),
             '/notification': (_) => userData(NotificationPage()),
-          },
-          onGenerateRoute: (_) {
-            return SplashPage.route();
           },
         ),
       ),
