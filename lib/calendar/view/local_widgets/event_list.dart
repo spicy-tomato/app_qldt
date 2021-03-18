@@ -30,6 +30,7 @@ class EventList extends StatelessWidget {
           child: ScrollConfiguration(
             behavior: _EventListScrollBehavior(),
             child: ListView.separated(
+              padding: EdgeInsets.zero,
               shrinkWrap: true,
               itemCount: min(event!.length, 3),
               separatorBuilder: (_, __) {

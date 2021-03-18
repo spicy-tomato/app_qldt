@@ -29,8 +29,7 @@ class LoginPage extends StatelessWidget {
           color: Colors.white,
           child: BlocProvider(
             create: (context) => LoginBloc(
-              authenticationRepository:
-                  RepositoryProvider.of<AuthenticationRepository>(context),
+              authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
             ),
             child: LoginForm(),
           ),

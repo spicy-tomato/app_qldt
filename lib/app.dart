@@ -1,3 +1,7 @@
+import 'package:app_qldt/_widgets/user_data_model.dart';
+import 'package:app_qldt/calendar/calendar.dart';
+import 'package:app_qldt/notification/notification.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -13,12 +17,11 @@ import '_services/local_notification_service.dart';
 import '_services/local_event_service.dart';
 import '_services/token_service.dart';
 
-import 'app_view/app_view.dart';
-import 'app_view/transition_route_observer.dart';
+import 'transition_route_observer.dart';
 import 'login/login.dart';
 import 'splash/splash.dart';
 
-class Application extends StatelessWidget {
+class Application extends StatefulWidget {
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
 
@@ -29,123 +32,131 @@ class Application extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
-        ),
-        child: AppView(),
-      ),
-    );
-  }
+  _ApplicationState createState() => _ApplicationState();
 }
 
-class AppView extends StatefulWidget {
-  @override
-  _AppViewState createState() => _AppViewState();
-}
-
-class _AppViewState extends State<AppView> {
+class _ApplicationState extends State<Application> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
+  late LocalNotificationService localNotificationService;
+  late LocalEventService localEventService;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        //  Brightness and colors
-        brightness: Brightness.light,
-        primaryColor: Color(0xff4A2A73),
-        accentColor: Color(0xffF46781),
-        backgroundColor: Color(0xff4A2A73),
+    return RepositoryProvider.value(
+      value: widget.authenticationRepository,
+      child: BlocProvider<AuthenticationBloc>(
+        create: (BuildContext context) => AuthenticationBloc(
+          authenticationRepository: widget.authenticationRepository,
+          userRepository: widget.userRepository,
+        ),
+        child: MaterialApp(
+          theme: ThemeData(
+            //  Brightness and colors
+            brightness: Brightness.light,
+            primaryColor: Color(0xff4A2A73),
+            accentColor: Color(0xffF46781),
+            backgroundColor: Color(0xff4A2A73),
 
-        //  Font family
-        fontFamily: 'Montserrat',
+            //  Font family
+            fontFamily: 'Montserrat',
 
-        //  Text theme
-        textTheme: TextTheme(
-          //  https://api.flutter.dev/flutter/material/TextTheme-class.html
-          //  Headline
-          headline5: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
-          headline6: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+            //  Text theme
+            textTheme: TextTheme(
+              //  https://api.flutter.dev/flutter/material/TextTheme-class.html
+              //  Headline
+              headline5: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
+              headline6: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
 
-          //  Body text
-          bodyText1: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
-          bodyText2: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+              //  Body text
+              bodyText1: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+              bodyText2: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+            ),
+          ),
+          navigatorKey: _navigatorKey,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('vi', ''),
+          ],
+          // initialRoute: '/',
+          navigatorObservers: [TransitionRouteObserver()],
+          builder: (context, child) {
+            return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) async {
+                switch (state.status) {
+
+                  /// Khi chưa đăng nhập
+                  case AuthenticationStatus.unauthenticated:
+                    _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+
+                    await Future.delayed(const Duration(milliseconds: 1500), () {
+                      _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
+                    });
+
+                    break;
+
+                  /// Khi đã đăng nhập
+                  case AuthenticationStatus.authenticated:
+                    _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+
+                    Stopwatch stopwatch = Stopwatch()..start();
+                    final maxTurnAroundTime = const Duration(seconds: 2);
+
+                    /// Khởi động các service
+                    final tokenService = TokenService();
+                    await tokenService.init();
+                    await tokenService.upsert(state.user.id);
+
+                    localEventService = LocalEventService(state.user.id);
+                    localNotificationService = LocalNotificationService(state.user.id);
+
+                    await localEventService.refresh();
+                    await localNotificationService.refresh();
+
+                    final timeEnded = stopwatch.elapsed;
+
+                    await Future.delayed(
+                        timeEnded < maxTurnAroundTime
+                            ? maxTurnAroundTime - timeEnded
+                            : const Duration(seconds: 1), () {
+                      _navigator!.pushNamedAndRemoveUntil('/calendar', (_) => false);
+                    });
+
+                    break;
+
+                  default:
+                    _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    break;
+                }
+              },
+              child: child,
+            );
+          },
+          routes: {
+            '/': (_) => SplashPage(),
+            '/login': (_) => LoginPage(),
+            '/calendar': (_) => userData(CalendarPage()),
+            '/notification': (_) => userData(NotificationPage()),
+          },
+          onGenerateRoute: (_) {
+            return SplashPage.route();
+          },
         ),
       ),
-      navigatorKey: _navigatorKey,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('vi', ''),
-      ],
-      navigatorObservers: [TransitionRouteObserver()],
-      builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) async {
-            switch (state.status) {
+    );
+  }
 
-              /// Khi chưa đăng nhập
-              case AuthenticationStatus.unauthenticated:
-                _navigator!.pushAndRemoveUntil<void>(
-                  SplashPage.route(),
-                  (route) => false,
-                );
-
-                Future.delayed(const Duration(seconds: 0), () {
-                  _navigator!.pushAndRemoveUntil<void>(
-                    LoginPage.route(),
-                    (route) => false,
-                  );
-                });
-                break;
-
-              /// Khi đã đăng nhập
-              case AuthenticationStatus.authenticated:
-
-                /// Khởi động các service
-                final tokenService = TokenService();
-                await tokenService.init();
-                await tokenService.upsert(state.user.id);
-
-                final localEventService = LocalEventService(state.user.id);
-                final localNotificationService = LocalNotificationService(state.user.id);
-
-                await localEventService.refresh();
-                await localNotificationService.refresh();
-
-                /// Vào route
-                _navigator!.pushAndRemoveUntil<void>(
-                  App.route(
-                    localScheduleService: localEventService,
-                    localNotificationService: localNotificationService,
-                  ),
-                  (route) => false,
-                );
-                break;
-
-              default:
-                _navigator!.pushAndRemoveUntil<void>(
-                  SplashPage.route(),
-                  (route) => false,
-                );
-                break;
-            }
-          },
-          child: child,
-        );
-      },
-      onGenerateRoute: (_) {
-        return SplashPage.route();
-      },
+  Widget userData(Widget child) {
+    return UserDataModel(
+      localEventService: localEventService,
+      localNotificationService: localNotificationService,
+      child: child,
     );
   }
 }

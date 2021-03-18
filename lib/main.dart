@@ -10,6 +10,7 @@ import 'app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   Paint.enableDithering = true;
 
   runApp(Application(

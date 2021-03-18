@@ -37,10 +37,7 @@ class LoginForm extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
             child: const Text(
               " LOGIN\n",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 30),
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
             ),
           ),
           Padding(

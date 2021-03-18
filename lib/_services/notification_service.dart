@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_qldt/_models/notification.dart';
 
 class NotificationService {
-  static final _timeout = 10;
+  static final _timeout = 5;
   static final _baseUrl =
       'http://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/notification.php?ID_Student=';
 

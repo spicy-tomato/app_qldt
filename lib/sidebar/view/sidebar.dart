@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app_qldt/_authentication/bloc/authentication_bloc.dart';
 import 'package:app_qldt/sidebar/view/style/style.dart';
-import 'package:app_qldt/sidebar/sidebar.dart';
 import 'package:app_qldt/_utils/const.dart';
 
 class Sidebar extends StatelessWidget {
@@ -16,111 +15,108 @@ class Sidebar extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      width: screenWidth,
-      height: screenHeight,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).backgroundColor,
-              Color(0xff7579e7),
-              Color(0xff9ab3f5),
-            ],
-          ),
-        ),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: screenWidth * 0.1,
-              right: screenWidth * 0.1,
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: BlocBuilder<ScreenBloc, ScreenState>(
-                  builder: (context, state) {
-                    return IconButton(
-                      icon: const Icon(Icons.close_rounded),
-                      color: Const.primaryColor,
-                      onPressed: () async {
-                        await Navigator.maybePop(context);
-                      },
-                    );
-                  },
-                ),
-              ),
+    return SafeArea(
+      child: SizedBox(
+        width: screenWidth,
+        height: screenHeight,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Theme.of(context).backgroundColor,
+                Color(0xff7579e7),
+                Color(0xff9ab3f5),
+              ],
             ),
-            Container(
-              margin: EdgeInsets.only(top: 15),
-              width: screenWidth * 0.5,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 60),
-                    child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                      builder: (context, state) {
-                        return Column(
-                          children: <Widget>[
-                            Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.red,
-                                  width: 4,
-                                ),
-                                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                image: const DecorationImage(
-                                  image: ExactAssetImage('images/avatar.jpg'),
-                                  fit: BoxFit.cover,
+          ),
+          child: Stack(
+            children: <Widget>[
+              CloseButton(),
+              Container(
+                margin: EdgeInsets.only(top: 15),
+                width: screenWidth * 0.5,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 60),
+                      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                        builder: (context, state) {
+                          return Column(
+                            children: <Widget>[
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.red,
+                                    width: 4,
+                                  ),
+                                  borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                  image: const DecorationImage(
+                                    image: ExactAssetImage('images/avatar.jpg'),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(state.user.name.toString()),
-                            const SizedBox(height: 10),
-                            Text(state.user.id.toString()),
-                          ],
-                        );
-                      },
+                              const SizedBox(height: 10),
+                              Text(state.user.name.toString()),
+                              const SizedBox(height: 10),
+                              Text(state.user.id.toString()),
+                            ],
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    child: BlocBuilder<ScreenBloc, ScreenState>(
-                      builder: (context, state) {
-                        return ListView(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 7,
-                            // horizontal: 20,
-                          ),
-                          children: _getSidebarItems(context, state),
-                        );
-                      },
+                    Flexible(
+                      child:
+                          // BlocBuilder<ScreenBloc, ScreenState>(
+                          //   builder: (context, state) {
+                          //     return
+                          ListView(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 7,
+                          // horizontal: 20,
+                        ),
+                        children: _getSidebarItems(context),
+                      ),
+                      //   },
+                      // ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  List<Widget> _getSidebarItems(BuildContext context, ScreenState state) {
-    List<Widget> _items = _getScreenPagesList(context, state);
-    _items.add(_logoutTile(context, state));
+  List<Widget> _getSidebarItems(BuildContext context) {
+    ScreenPage currentScreenPage = ScreenPage.login;
+    String? currentRoute = ModalRoute.of(context)!.settings.name;
+
+    for (var value in ScreenPage.values) {
+      if (value.string == currentRoute) {
+        currentScreenPage = value;
+        break;
+      }
+    }
+
+    List<Widget> _items = _getScreenPagesList(context, currentScreenPage);
+    _items.add(_logoutTile(context, currentScreenPage));
 
     return _items;
   }
 
-  List<Widget> _getScreenPagesList(BuildContext context, ScreenState state) {
+  List<Widget> _getScreenPagesList(BuildContext context, ScreenPage currentScreenPage) {
     Widget _firstListItem;
 
-    if (state.screenPage.index == 0) {
+    if (currentScreenPage.index == 1) {
       _firstListItem = CustomPaint(
         painter: _PainterForAbove(context),
         child: Container(
@@ -142,22 +138,25 @@ class Sidebar extends StatelessWidget {
     List<Widget> _list = [_firstListItem];
 
     for (var screenPage in ScreenPage.values) {
-      if (screenPage.index == state.screenPage.index) {
-        _list.add(_CurrentScreenPageTile(screenPage: screenPage));
-      } else if (screenPage.index == state.screenPage.index - 1) {
-        _list.add(_NextToAboveScreenPageTile(screenPage: screenPage));
-      } else if (screenPage.index == state.screenPage.index + 1) {
-        _list.add(_NextToBelowScreenPageTile(screenPage: screenPage));
-      } else {
-        _list.add(_NormalScreenPageTile(screenPage: screenPage));
+      ///  Chỉ số 0 là trang đăng nhập, vì thế bỏ qua trang này
+      if (screenPage.index != 0) {
+        if (screenPage.index == currentScreenPage.index) {
+          _list.add(_CurrentScreenPageTile(screenPage: screenPage));
+        } else if (screenPage.index == currentScreenPage.index - 1) {
+          _list.add(_NextToAboveScreenPageTile(screenPage: screenPage));
+        } else if (screenPage.index == currentScreenPage.index + 1) {
+          _list.add(_NextToBelowScreenPageTile(screenPage: screenPage));
+        } else {
+          _list.add(_NormalScreenPageTile(screenPage: screenPage));
+        }
       }
     }
 
     return _list;
   }
 
-  Widget _logoutTile(BuildContext context, ScreenState state) {
-    if (state.screenPage.index == ScreenPage.values.length - 1) {
+  Widget _logoutTile(BuildContext context, ScreenPage currentScreenPage) {
+    if (currentScreenPage.index == ScreenPage.values.length - 1) {
       return _NextToLogoutTile();
     }
 
@@ -185,7 +184,7 @@ class _CurrentScreenPageTile extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          screenPage.string,
+          screenPage.name,
           style: TextStyle(
             fontSize: 18,
             color: Theme.of(context).backgroundColor,
@@ -194,7 +193,7 @@ class _CurrentScreenPageTile extends StatelessWidget {
         ),
         onTap: () async {
           await Navigator.maybePop(context);
-          context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
+          // context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
         },
       ),
     );
@@ -216,12 +215,15 @@ class _NextToAboveScreenPageTile extends StatelessWidget {
       child: Container(
         child: ListTile(
           title: Text(
-            screenPage.string,
+            screenPage.name,
             style: tileTextStyle(),
           ),
           onTap: () async {
             await Navigator.maybePop(context);
-            context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
+
+            Navigator.of(context).pushNamedAndRemoveUntil(screenPage.string, (route) => false);
+
+            // context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
           },
         ),
       ),
@@ -244,12 +246,15 @@ class _NextToBelowScreenPageTile extends StatelessWidget {
       child: Container(
         child: ListTile(
           title: Text(
-            screenPage.string,
+            screenPage.name,
             style: tileTextStyle(),
           ),
           onTap: () async {
             await Navigator.of(context).maybePop();
-            context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
+
+            Navigator.of(context).pushNamedAndRemoveUntil(screenPage.string, (route) => false);
+
+            // context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
             // await Future.delayed(Duration(seconds: 2));
           },
         ),
@@ -270,12 +275,15 @@ class _NormalScreenPageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        screenPage.string,
+        screenPage.name,
         style: tileTextStyle(),
       ),
       onTap: () async {
         await Navigator.maybePop(context);
-        context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
+
+        Navigator.of(context).pushNamedAndRemoveUntil(screenPage.string, (route) => false);
+
+        // context.read<ScreenBloc>().add(ScreenPageChange(screenPage));
       },
     );
   }
@@ -323,8 +331,6 @@ class _NormalLogoutTile extends StatelessWidget {
             style: tileTextStyle(),
           ),
           onTap: () async {
-            print(state.status);
-            print(state.user);
             context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
           },
         );
@@ -371,4 +377,24 @@ class _PainterForBelow extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class CloseButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment(0.9, -0.95),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: () async => await Navigator.maybePop(context),
+        child: CircleAvatar(
+          backgroundColor: Colors.white,
+          child: Icon(
+            Icons.close_rounded,
+            color: Const.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
 }

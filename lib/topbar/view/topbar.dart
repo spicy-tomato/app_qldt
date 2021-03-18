@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:app_qldt/sidebar/bloc/sidebar_bloc.dart';
-import 'package:app_qldt/sidebar/sidebar.dart';
-
 class TopBar extends StatelessWidget {
   final Widget? topRightWidget;
 
@@ -18,19 +12,15 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      child: BlocBuilder<ScreenBloc, ScreenState>(
-        builder: (context, state) {
-          return Stack(
-            children: <Widget>[
-              TopBarItem(
-                icon: Icons.menu,
-                onTap: () => Scaffold.of(context)..openDrawer(),
-                alignment: const Alignment(-0.95, 0),
-              ),
-              topRightWidget ?? Container(),
-            ],
-          );
-        },
+      child: Stack(
+        children: <Widget>[
+          TopBarItem(
+            icon: Icons.menu,
+            onTap: () => Scaffold.of(context)..openDrawer(),
+            alignment: const Alignment(-0.95, 0),
+          ),
+          topRightWidget ?? Container(),
+        ],
       ),
     );
   }

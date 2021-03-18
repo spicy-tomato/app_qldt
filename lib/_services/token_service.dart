@@ -7,7 +7,7 @@ class TokenService {
   late final FirebaseRepository _firebaseRepository = FirebaseRepository();
   static final _baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/upsert_token.php';
-  static final _timeout = 10;
+  static final _timeout = 5;
 
   Future<void> init() async {
     await _firebaseRepository.initialise();
@@ -15,6 +15,8 @@ class TokenService {
 
   Future<void> upsert(String studentId) async {
     String? token = await _firebaseRepository.getToken();
+
+    print('token: $token');
 
     final json = <String, String?>{
       'student_id': studentId,
