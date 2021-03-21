@@ -6,7 +6,7 @@ import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 
 import 'app.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseRepository.setupFirebaseMessagingBackground();
 

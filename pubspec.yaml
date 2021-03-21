@@ -1,3 +1,4 @@
+
 name: app_qldt
 description: A new Flutter application.
 
@@ -48,6 +49,8 @@ dependencies:
   flutter_native_splash: ^1.0.1+1
   transformer_page_view: ^0.1.6
 
+  keyboard_visibility: ^0.5.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -63,10 +66,14 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/LogoUTC.jpg
-    - images/avatar.jpg
+    - images/
+
+
+
+
   #    - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -80,14 +87,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
 
-  #  fonts:
-  #    - family: Montserrat
-  #      fonts:
-  #        - asset: fonts/Montserrat-Regular.ttf
-  #        - asset: fonts/Montserrat-Medium.ttf
-  #          weight: 500
-  #        - asset: fonts/Montserrat-Semibold.ttf
-  #          weight: 600
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: fonts/Nunito-Bold.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
