@@ -11,6 +11,7 @@ class TopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.transparent,
       height: 60,
       child: Stack(
         children: <Widget>[

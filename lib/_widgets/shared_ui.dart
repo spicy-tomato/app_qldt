@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/sidebar/sidebar.dart';
@@ -6,10 +7,12 @@ import 'package:app_qldt/topbar/topbar.dart';
 class SharedUI extends StatelessWidget {
   final Widget child;
   final Widget? topRightWidget;
+  final BoxDecoration? decoration;
 
   const SharedUI({
     Key? key,
     required this.child,
+    this.decoration,
     this.topRightWidget,
   }) : super(key: key);
 
@@ -21,13 +24,14 @@ class SharedUI extends StatelessWidget {
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
+          child: Stack(
             children: <Widget>[
-              TopBar(topRightWidget: topRightWidget),
-              Expanded(
+              Container(
+                padding: EdgeInsets.only(top: 60),
+                decoration: decoration ?? BoxDecoration(),
                 child: child,
               ),
+              TopBar(topRightWidget: topRightWidget),
             ],
           ),
         ),
