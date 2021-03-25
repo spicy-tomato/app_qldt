@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:table_calendar/table_calendar.dart';
-
 class BottomNote extends StatelessWidget {
-  final CalendarController calendarController;
-
-  const BottomNote({
-    Key? key,
-    required this.calendarController,
-  }) : super(key: key);
+  const BottomNote({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

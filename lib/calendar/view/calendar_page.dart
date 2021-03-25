@@ -1,3 +1,4 @@
+import 'package:app_qldt/bottom_note/bottom_note.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -57,6 +58,7 @@ class _CalendarPageState extends State<CalendarPage> {
               /// (CalendarController.init() chỉ được gọi khi TableCalendar được khởi tạo)
               ///
               Column(
+                mainAxisSize: MainAxisSize.max,
                 verticalDirection: VerticalDirection.up,
                 children: <Widget>[
                   Stack(
@@ -89,7 +91,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   },
                 ),
               ),
-              BottomNote(calendarController: widget.calendarController),
+              BottomNote(),
             ],
           ),
         ),
