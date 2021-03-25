@@ -15,6 +15,7 @@ import '_services/local_notification_service.dart';
 import '_services/local_event_service.dart';
 import '_services/token_service.dart';
 
+import 'home/home.dart';
 import 'login/login.dart';
 import 'splash/splash.dart';
 
@@ -123,8 +124,8 @@ class _ApplicationState extends State<Application> {
                     await Future.delayed(
                         timeEnded < maxTurnAroundTime
                             ? maxTurnAroundTime - timeEnded
-                            : const Duration(seconds: 1), () {
-                      _navigator!.pushNamedAndRemoveUntil('/calendar', (_) => false);
+                            : const Duration(seconds: 0), () {
+                      _navigator!.pushNamedAndRemoveUntil('/home', (_) => false);
                     });
 
                     break;
@@ -142,6 +143,7 @@ class _ApplicationState extends State<Application> {
           routes: {
             '/': (_) => SplashPage(),
             '/login': (_) => LoginPage(),
+            '/home': (_) => userData(HomePage()),
             '/calendar': (_) => userData(CalendarPage()),
             '/notification': (_) => userData(NotificationPage()),
           },

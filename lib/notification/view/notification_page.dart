@@ -1,5 +1,8 @@
+import 'package:app_qldt/_models/notification.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -21,8 +24,9 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> notificationData =
-        UserDataModel.of(context)!.localNotificationService.notificationData;
+    List<dynamic> notificationData = UserDataModel.of(context)!
+        .localNotificationService
+        .notificationData as List<UserNotification>;
 
     return SharedUI(
       child: Item(
@@ -41,20 +45,7 @@ class _NotificationPageState extends State<NotificationPage> {
             ),
             itemCount: notificationData.length,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: ListTile(
-                    title: Text(
-                      notificationData[index].title,
-                    ),
-                    subtitle: Text(
-                      notificationData[index].content,
-                    ),
-                    // onTap: () => print(notificationData[index]),
-                  ),
-                ),
-              );
+              return ListItem(notification: notificationData[index]);
             },
           ),
         ),
@@ -75,5 +66,85 @@ class _NotificationPageState extends State<NotificationPage> {
       setState(() {});
       _refreshController.loadComplete();
     }
+  }
+}
+
+class ListItem extends StatelessWidget {
+  final UserNotification notification;
+
+  const ListItem({
+    Key? key,
+    required this.notification,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 10,
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Center(
+                  child: Text(
+                    'Q',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    notification.sender,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Theme.of(context).backgroundColor,
+                    ),
+                  ),
+                  Text(
+                    notification.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).backgroundColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Text(
+            DateFormat.Md().format(DateTime.now()),
+            style: TextStyle(
+              color: Theme.of(context).backgroundColor,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
