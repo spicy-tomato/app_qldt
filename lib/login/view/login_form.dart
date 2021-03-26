@@ -1,135 +1,9 @@
-// // import 'package:app_qldt/login/view/local_widgets/style/fotter.dart';
-// import 'package:flutter/material.dart';
-//
-// // ignore: import_of_legacy_library_into_null_safe
-// import 'package:formz/formz.dart';
-//
-// // ignore: import_of_legacy_library_into_null_safe
-// import 'package:flutter_bloc/flutter_bloc.dart';
-//
-// import 'package:app_qldt/login/login.dart';
-//
-// import 'local_widgets/local_widgets.dart';
-// // import 'local_widgets/style/footer.dart';
-//
-// class LoginForm extends StatelessWidget {
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     return BlocListener<LoginBloc, LoginState>(
-//       listener: (context, state) {
-//         if (state.status.isSubmissionFailure) {
-//           // Scaffold.of(context)
-//           //   ..hideCurrentSnackBar()
-//           //   ..showSnackBar(
-//           //     const SnackBar(
-//           //       content: Text('Authentication Failure'),
-//           //     ),
-//           //   );
-//         }
-//       },
-//       child: Column(
-//         // mainAxisAlignment: MainAxisAlignment.end,
-//         // crossAxisAlignment: CrossAxisAlignment.center,
-//         children: <Widget>[
-//           Container(
-//             child: Padding(
-//           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-//               child: SchoolLogo(),
-//             ),
-//           ),
-//           Container(
-//             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-//             margin: EdgeInsets.only(bottom: 20),
-//             child: Text(
-//               "UTC STUDENTS",
-//               style:
-//               TextStyle(color: Colors.blue , fontSize: 28,fontWeight: FontWeight.normal),
-//             ),
-//           ),
-//           Container(
-//             padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-//             // padding: EdgeInsets.symmetric(horizontal: 32),
-//             child: Center(
-//               child: Image.asset("images/q.jpg", width: 150,
-//                 height: 150,),
-//             ),
-//           ),
-//
-//           Container(
-//             padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-//             margin: EdgeInsets.only(bottom: 20),
-//             child: Text(
-//               "university of transport and communications",
-//               textAlign: TextAlign.center,
-//               style:
-//               TextStyle(  fontSize: 26,fontWeight: FontWeight.w600),
-//             ),
-//           ),
-//
-//           Container(
-//             padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-//             child: GestureDetector(
-//               onTap: () {
-//
-//               },
-//               child: Container(
-//                 margin: EdgeInsets.all(32),
-//                 padding: EdgeInsets.all(20),
-//                 width: double.infinity,
-//                 decoration: BoxDecoration(
-//                     color: Color(0xFFB40284A),
-//                     borderRadius: BorderRadius.circular(50)),
-//                 child: Center(
-//                   child: Text(
-//                     "Get Started",
-//                     style: TextStyle(color: Colors.white, fontSize: 16),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           )
-//
-//           // Padding(
-//           //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-//           //   child: const Text(
-//           //     " UTC LOGIN\n",
-//           //     style: TextStyle(
-//           //         fontWeight: FontWeight.bold,
-//           //         color: Colors.blue,
-//           //         fontSize: 30),
-//           //   ),
-//           // ),
-//
-//         ],
-//       ),
-//     );
-//   }
-//
-//
-// }
-// import 'package:app_qldt/login/view/local_widgets/style/fotter.dart';
+import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-// import 'package:formz/formz.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-// import 'package:flutter_bloc/flutter_bloc.dart';
-
-// import 'package:app_qldt/login/login.dart';
-// import 'package:keyboard_visibility/keyboard_visibility.dart';
-
-// import '../login_button.dart';
-// import '../password_input.dart';
-// import '../school_logo.dart';
-// import '../username_input.dart';
-
-
-
+import 'local_widgets/style/form_text_style.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -167,8 +41,7 @@ class _LoginPageState extends State<HomeScreen> {
 
   double _loginYOffset = 0;
   double _loginXOffset = 0;
-  double _registerYOffset = 0;
-  double _registerHeight = 0;
+  // double _registerHeight = 0;
 
   double windowWidth = 0;
   double windowHeight = 0;
@@ -195,7 +68,7 @@ class _LoginPageState extends State<HomeScreen> {
     windowWidth = MediaQuery.of(context).size.width;
 
     _loginHeight = windowHeight - 270;
-    _registerHeight = windowHeight - 270;
+    // _registerHeight = windowHeight - 270;
 
     switch (_pageState) {
       case 0:
@@ -211,7 +84,6 @@ class _LoginPageState extends State<HomeScreen> {
         _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
-        _registerYOffset = windowHeight;
         break;
       case 1:
         _backgroundColor = Colors.deepPurple;
@@ -226,7 +98,6 @@ class _LoginPageState extends State<HomeScreen> {
         _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
-        _registerYOffset = windowHeight;
         break;
     // case 2:
     //   _backgroundColor = Color(0xFFBD34C59);
@@ -376,9 +247,6 @@ class _LoginPageState extends State<HomeScreen> {
                         _pageState = 2;
                       });
                     },
-                    child: OutlineBtn(
-                      btnText: "Forgot password",
-                    ),
                   )
                 ],
               ),
@@ -401,34 +269,28 @@ class InputWithIcon extends StatefulWidget {
 }
 
 class _InputWithIconState extends State<InputWithIcon> {
-  int a = 1;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.red, width: 2),
-          borderRadius: BorderRadius.circular(50)),
-      child: Row(
-        children: <Widget>[
-          Container(
-              width: 60,
-              child: Icon(
-                widget.icon,
-                size: 20,
-                color: Color(0xFFBB9B9B9),
-              )),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) => previous.username != current.username,
+      builder: (context, state) {
+        return SizedBox(
+          height: 80,
+          child: TextField(
+            key: const Key('loginForm_usernameInput_textField'),
+            onChanged: (username) =>
+                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
+            style: const FormTextStyle(),
+            decoration: InputDecoration(
 
-                labelText:  'Mã sinh viên',
-                errorText:
-                a<0 ? 'Hãy nhập mã sinh viên' : null,
-              ),
+              labelText:  'Mã sinh viên',
+              errorText:
+              state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
-          )
-        ],
-      ),
+
+          ),
+        );
+      },
     );
   }
 }
@@ -454,33 +316,8 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
       ),
-    );
-  }
-}
-
-class OutlineBtn extends StatefulWidget {
-  final String btnText;
-  OutlineBtn({required this.btnText});
-
-  @override
-  _OutlineBtnState createState() => _OutlineBtnState();
-}
-
-class _OutlineBtnState extends State<OutlineBtn> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFB40284A), width: 2),
-          borderRadius: BorderRadius.circular(50)),
-      padding: EdgeInsets.all(20),
-      child: Center(
-        child: Text(
-          widget.btnText,
-          style: TextStyle(color: Color(0xFFB40284A), fontSize: 16),
-        ),
-      ),
 
     );
   }
 }
+
