@@ -111,6 +111,7 @@
 // }
 // import 'package:app_qldt/login/view/local_widgets/style/fotter.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -198,7 +199,7 @@ class _LoginPageState extends State<HomeScreen> {
 
     switch (_pageState) {
       case 0:
-        _backgroundColor = Colors.white;
+        _backgroundColor = Colors.blueAccent;
         _headingColor = Color(0xFFB40284A);
 
         _headingTop = 100;
@@ -213,15 +214,15 @@ class _LoginPageState extends State<HomeScreen> {
         _registerYOffset = windowHeight;
         break;
       case 1:
-        _backgroundColor = Colors.white;
-        _headingColor = Color(0xFFB40284A);
+        _backgroundColor = Colors.deepPurple;
+        _headingColor = Colors.white;
 
         _headingTop = 90;
 
         _loginWidth = windowWidth;
         _loginOpacity = 1;
 
-        _loginYOffset = _keyboardVisible ? 120 : 270;
+        _loginYOffset = _keyboardVisible ? 150 : 270;
         _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
 
         _loginXOffset = 0;
@@ -282,7 +283,7 @@ class _LoginPageState extends State<HomeScreen> {
                             "university of transport and communications",
                             textAlign: TextAlign.center,
                             style:
-                            TextStyle(color: _headingColor, fontSize: 16),
+                            TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.w500),
                           ),
                         )
                       ],
@@ -292,8 +293,8 @@ class _LoginPageState extends State<HomeScreen> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 32),
                   child: Center(
-                    child: Image.asset("images/q.jpg", width: 150,
-                      height: 150,),
+                    child: Image.asset("images/splash_bg.png", width: 300,
+                      height: 300,),
                   ),
                 ),
                 Container(
@@ -312,7 +313,7 @@ class _LoginPageState extends State<HomeScreen> {
                       padding: EdgeInsets.all(20),
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: Colors.redAccent,
+                          color: Color(0xFFB40284A),
                           borderRadius: BorderRadius.circular(50)),
                       child: Center(
                         child: Text(
@@ -483,4 +484,3 @@ class _OutlineBtnState extends State<OutlineBtn> {
     );
   }
 }
-
