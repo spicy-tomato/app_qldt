@@ -26,14 +26,16 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  firebase_messaging: ^9.0.0
-  flutter_local_notifications: ^5.0.0-nullsafety.0
+  firebase_messaging: ^9.0.1
+  firebase_analytics: ^5.0.2
+  firebase_core: ^1.0.2
   http: ^0.13.0
   intl: ^0.17.0
   path: ^1.7.0
   path_provider: ^2.0.0
   shared_preferences: ^2.0.0
   sqflite: ^2.0.0+2
+  flutter_local_notifications: ^5.0.0
 
   equatable: ^2.0.0
   flutter_bloc: ^6.1.2
