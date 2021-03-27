@@ -128,6 +128,6 @@ class DatabaseProvider {
   }
 
   Future<String> _getPath() async {
-    return join((await getDatabasesPath())!, 'core.db');
+    return join(await getDatabasesPath(), 'core.db');
   }
 }

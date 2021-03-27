@@ -10,15 +10,15 @@ class BottomNote extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.07,
       child: Stack(
         children: <Widget>[
-          _BottomText(),
-          _AddNoteButton(),
+          BottomText(),
+          AddNoteButton(),
         ],
       ),
     );
   }
 }
 
-class _BottomText extends StatelessWidget {
+class BottomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
@@ -26,15 +26,20 @@ class _BottomText extends StatelessWidget {
         decoration: BoxDecoration(
           color: Color(0xff26153B),
         ),
-        child: Padding(
-          padding: EdgeInsets.only(left: 15),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Bạn có dự định gì không?',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xff85749C),
+        child: TextButton(
+          onPressed: () {
+            print("Text pressed!");
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Bạn có dự định gì không?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff85749C),
+                ),
               ),
             ),
           ),
@@ -44,41 +49,54 @@ class _BottomText extends StatelessWidget {
   }
 }
 
-class _AddNoteButton extends StatelessWidget {
+class AddNoteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment(1, 0),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.25,
-        decoration: BoxDecoration(
+        child: Material(
+          shape: addNoteButtonShape(),
           color: Color(0xff694A85),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(50),
-            bottomLeft: Radius.circular(50),
+          child: InkWell(
+            customBorder: addNoteButtonShape(),
+            onTap: () {
+              print("Button pressed!");
+            },
+            child: Align(
+              alignment: Alignment(-0.7, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.add,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    'Thêm',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-        child: Align(
-          alignment: Alignment(-0.7, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                Icons.add,
-                size: 16,
-                color: Colors.white,
-              ),
-              SizedBox(width: 5),
-              Text(
-                'Thêm',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
+      ),
+    );
+  }
+
+  RoundedRectangleBorder addNoteButtonShape() {
+    return const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(50),
+        bottomLeft: Radius.circular(50),
       ),
     );
   }

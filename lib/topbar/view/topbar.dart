@@ -43,15 +43,20 @@ class TopBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: alignment,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(50),
-        onTap: onTap,
-        child: Padding(
-          padding: EdgeInsets.all(7.5),
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.white,
+      child: Container(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(50),
+            onTap: onTap,
+            child: Padding(
+              padding: EdgeInsets.all(7.5),
+              child: Icon(
+                icon,
+                size: 30,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),

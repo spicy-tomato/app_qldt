@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class SplashPage extends StatelessWidget {
   static Route route() {
@@ -13,8 +12,6 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 1.5;
-
     return Scaffold(
       body: Center(
         child: Column(

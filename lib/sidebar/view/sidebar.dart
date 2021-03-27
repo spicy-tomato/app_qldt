@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app_qldt/_authentication/bloc/authentication_bloc.dart';
 import 'package:app_qldt/sidebar/view/style/style.dart';
-import 'package:app_qldt/_utils/const.dart';
 
 class Sidebar extends StatelessWidget {
   @override
@@ -33,7 +32,10 @@ class Sidebar extends StatelessWidget {
           ),
           child: Stack(
             children: <Widget>[
-              CloseButton(),
+              Align(
+                alignment: Alignment(0.9, -0.95),
+                child: CloseButton(),
+              ),
               Container(
                 margin: EdgeInsets.only(top: 15),
                 width: screenWidth * 0.5,
@@ -382,16 +384,19 @@ class _PainterForBelow extends CustomPainter {
 class CloseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment(0.9, -0.95),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(50),
-        onTap: () async => await Navigator.maybePop(context),
-        child: CircleAvatar(
-          backgroundColor: Colors.white,
+    return Container(
+      width: 45,
+      height: 45,
+      child: Material(
+        shape: CircleBorder(),
+        color: Colors.white,
+        child: InkWell(
+          customBorder: CircleBorder(),
+          onTap: () async => await Navigator.maybePop(context),
           child: Icon(
-            Icons.close_rounded,
-            color: Const.primaryColor,
+            Icons.close,
+            color: Theme.of(context).backgroundColor,
+            size: 25,
           ),
         ),
       ),
