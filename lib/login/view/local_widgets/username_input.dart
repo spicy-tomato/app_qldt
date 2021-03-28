@@ -9,12 +9,11 @@ class UsernameInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return BlocBuilder<LoginBloc, LoginState>(
       buildWhen: (previous, current) => previous.username != current.username,
       builder: (context, state) {
         return SizedBox(
-          height: 80,
+          height: 60,
           child: TextField(
             key: const Key('loginForm_usernameInput_textField'),
             onChanged: (username) =>
@@ -22,9 +21,9 @@ class UsernameInput extends StatelessWidget {
             style: const FormTextStyle(),
             decoration: InputDecoration(
 
-              labelText:  'Mã sinh viên',
+              labelText: 'Mã sinh viên',
               errorText:
-                  state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
+              state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
 
           ),
@@ -32,10 +31,4 @@ class UsernameInput extends StatelessWidget {
       },
     );
   }
-  // @override
-  // void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  //   super.debugFillProperties(properties);
-  //   Object? icon;
-  //   properties.add(DiagnosticsProperty('icon', icon));
-  // }
 }

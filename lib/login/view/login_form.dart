@@ -1,9 +1,12 @@
-import 'package:app_qldt/login/bloc/login_bloc.dart';
+// import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
-import 'local_widgets/style/form_text_style.dart';
+import 'local_widgets/login_button.dart';
+import 'local_widgets/password_input.dart';
+// import 'local_widgets/style/form_text_style.dart';
+import 'local_widgets/username_input.dart';
 
 class LoginForm extends StatelessWidget {
   @override
@@ -81,7 +84,7 @@ class _LoginPageState extends State<HomeScreen> {
         _loginOpacity = 1;
 
         _loginYOffset = windowHeight;
-        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
+        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 220;
 
         _loginXOffset = 0;
         break;
@@ -91,11 +94,11 @@ class _LoginPageState extends State<HomeScreen> {
 
         _headingTop = 90;
 
-        _loginWidth = windowWidth;
+        _loginWidth = windowWidth ;
         _loginOpacity = 1;
 
         _loginYOffset = _keyboardVisible ? 150 : 270;
-        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
+        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 220;
 
         _loginXOffset = 0;
         break;
@@ -220,24 +223,27 @@ class _LoginPageState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
-                  InputWithIcon(
-                    icon: Icons.lock,
-                    hint: "MSV.....",
-                  ),
+                  UsernameInput(),
                   SizedBox(
                     height: 20,
                   ),
-                  InputWithIcon(
-                    icon: Icons.vpn_key,
-                    hint: " Password...",
-                  )
+                  PasswordInput(),
                 ],
               ),
+             Column(
+              children: <Widget>[
+                Container(
+                  padding:  const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                  child: LoginButton(),
+                  ),
+
+
+
+
+               ],
+                ),
               Column(
                 children: <Widget>[
-                  PrimaryButton(
-                    btnText: "Login",
-                  ),
                   SizedBox(
                     height: 20,
                   ),
@@ -259,65 +265,5 @@ class _LoginPageState extends State<HomeScreen> {
   }
 }
 
-class InputWithIcon extends StatefulWidget {
-  final IconData icon;
-  final String hint;
-  InputWithIcon({required this.icon, required this.hint});
 
-  @override
-  _InputWithIconState createState() => _InputWithIconState();
-}
-
-class _InputWithIconState extends State<InputWithIcon> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.username != current.username,
-      builder: (context, state) {
-        return SizedBox(
-          height: 80,
-          child: TextField(
-            key: const Key('loginForm_usernameInput_textField'),
-            onChanged: (username) =>
-                context.read<LoginBloc>().add(LoginUsernameChanged(username)),
-            style: const FormTextStyle(),
-            decoration: InputDecoration(
-
-              labelText:  'Mã sinh viên',
-              errorText:
-              state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
-            ),
-
-          ),
-        );
-      },
-    );
-  }
-}
-
-class PrimaryButton extends StatefulWidget {
-  final String btnText;
-  PrimaryButton({required this.btnText});
-
-  @override
-  _PrimaryButtonState createState() => _PrimaryButtonState();
-}
-
-class _PrimaryButtonState extends State<PrimaryButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Color(0xFFB40284A), borderRadius: BorderRadius.circular(50)),
-      padding: EdgeInsets.all(20),
-      child: Center(
-        child: Text(
-          widget.btnText,
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-      ),
-
-    );
-  }
-}
 
