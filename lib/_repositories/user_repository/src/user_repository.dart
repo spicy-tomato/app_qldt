@@ -13,7 +13,16 @@ class UserRepository {
 
     if (loginInfo.isEmpty) return null;
 
-    _user = User.fromJson(loginInfo);
+    print(loginInfo);
+
+    try {
+      _user = User.fromJson(loginInfo);
+    } on Exception catch (e){
+      print(e.toString());
+    }
+
+    print('User: $_user');
+
     return _user;
   }
 

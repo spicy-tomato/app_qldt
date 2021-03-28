@@ -45,7 +45,8 @@ class LocalEventService {
     await DatabaseProvider.db.deleteSchedule();
   }
 
-  static Map<DateTime, List<UserEvent>> _parseToStandardStructure(List<Map<String, dynamic>>? maps) {
+  static Map<DateTime, List<UserEvent>> _parseToStandardStructure(
+      List<Map<String, dynamic>>? maps) {
     if (maps == null) {
       return new Map();
     }

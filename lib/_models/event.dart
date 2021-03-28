@@ -43,4 +43,9 @@ class UserEvent {
       location: schedule.idRoom,
     );
   }
+
+  @override
+  String toString() {
+    return 'UserEvent{time: $time, name: $name, location: $location}';
+  }
 }

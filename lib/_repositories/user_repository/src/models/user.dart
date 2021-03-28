@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 class User extends Equatable {
   const User({
@@ -27,7 +28,7 @@ class User extends Equatable {
     return User(
       id: json['ID_Student'],
       name: json['Student_Name'],
-      dob: json['DoB_Student'],
+      dob: DateFormat('yyyy-M-d').parse(json['DoB_Student']),
       idClass: json['ID_Class'],
       idCardNumber: json['ID_Card_Number'],
       phoneNumberStudent: json['Phone_Number_Student'],
