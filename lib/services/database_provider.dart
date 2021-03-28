@@ -29,7 +29,7 @@ class DatabaseProvider {
       'Day_Schedules TEXT);';
 
   Future<Database> initDb() async {
-    String path = join((await getDatabasesPath())!, 'core.db');
+    String path = join((await getDatabasesPath()), 'core.db');
     // print('Initializing database');
 
     bool dbExisted = await databaseExists(path);
@@ -48,7 +48,7 @@ class DatabaseProvider {
   }
 
   Future<void> deleteDb() async {
-    String path = join((await getDatabasesPath())!, 'core.db');
+    String path = join((await getDatabasesPath()), 'core.db');
 
     await _database?.close();
     await deleteDatabase(path);
@@ -59,7 +59,7 @@ class DatabaseProvider {
       return;
     }
 
-    String path = join((await getDatabasesPath())!, 'core.db');
+    String path = join((await getDatabasesPath()), 'core.db');
 
     _database = await openDatabase(
       path,

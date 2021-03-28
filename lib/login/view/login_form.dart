@@ -228,34 +228,14 @@ class _LoginPageState extends State<HomeScreen> {
                     height: 20,
                   ),
                   PasswordInput(),
-                ],
-              ),
-             Column(
-              children: <Widget>[
-                Container(
-                  padding:  const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                  child: LoginButton(),
-                  ),
-
-
-
-
-               ],
-                ),
-              Column(
-                children: <Widget>[
                   SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _pageState = 2;
-                      });
-                    },
-                  )
+                  LoginButton(),
                 ],
               ),
+
+
             ],
           ),
         ),
