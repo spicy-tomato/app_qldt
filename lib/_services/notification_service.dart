@@ -19,12 +19,12 @@ class NotificationService {
     String studentId,
   ) async {
     try {
-      List? data = await _fetchData();
-
-      if (data != null) {
-        List<UserNotification> list = data as List<UserNotification>;
-        return list;
-      }
+      // List? data = await _fetchData();
+      //
+      // if (data != null) {
+      //   List<UserNotification> list = data as List<UserNotification>;
+      //   return list;
+      // }
 
       return null;
     } on Exception catch (_) {

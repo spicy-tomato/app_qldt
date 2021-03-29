@@ -21,8 +21,6 @@ class UserRepository {
       print(e.toString());
     }
 
-    print('User: $_user');
-
     return _user;
   }
 

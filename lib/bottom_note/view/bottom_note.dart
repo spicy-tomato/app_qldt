@@ -1,3 +1,4 @@
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
 class BottomNote extends StatelessWidget {
@@ -28,7 +29,24 @@ class BottomText extends StatelessWidget {
         ),
         child: TextButton(
           onPressed: () {
-            print("Text pressed!");
+            showGeneralDialog(
+              barrierDismissible: false,
+              barrierColor: Colors.black.withOpacity(0.5),
+              transitionDuration: Duration(milliseconds: 200),
+              context: context,
+              pageBuilder: (_, __, ___) {
+                return PlanPage();
+              },
+              transitionBuilder: (_, anim1, __, child) {
+                return SlideTransition(
+                  position: Tween(
+                    begin: Offset(0, 1),
+                    end: Offset(0, 0),
+                  ).animate(anim1),
+                  child: child,
+                );
+              },
+            );
           },
           child: Padding(
             padding: EdgeInsets.only(left: 15),

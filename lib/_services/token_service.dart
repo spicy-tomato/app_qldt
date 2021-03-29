@@ -24,17 +24,17 @@ class TokenService {
     };
 
     Response response;
+    //
+    // try {
+    //   response = await post(
+    //     Uri.parse(_baseUrl),
+    //     body: jsonEncode(json),
+    //   ).timeout(Duration(seconds: _timeout));
+    // } on Exception catch (e) {
+    //   print('Error: $e in Token service');
+    //   return;
+    // }
 
-    try {
-      response = await post(
-        Uri.parse(_baseUrl),
-        body: jsonEncode(json),
-      ).timeout(Duration(seconds: _timeout));
-    } on Exception catch (e) {
-      print('Error: $e in Token service');
-      return;
-    }
-
-    print('Upsert token status: ${response.body}');
+    // print('Upsert token status: ${response.body}');
   }
 }
