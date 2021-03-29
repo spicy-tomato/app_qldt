@@ -14,12 +14,18 @@ class LoginService {
 
     String body = jsonEncode(loginUser);
 
-    Response response = await post(
-      Uri.parse(baseUrl),
-      // headers: headers,
-      body: body,
-    );
+    Response response;
 
-    return response.body;
+    try {
+      response = await post(
+        Uri.parse(baseUrl),
+        // headers: headers,
+        body: body,
+      );
+      return response.body;
+    } on Exception catch (e) {
+      print(e);
+      return "";
+    }
   }
 }

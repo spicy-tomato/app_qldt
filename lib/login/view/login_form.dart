@@ -17,7 +17,7 @@ class LoginForm extends StatelessWidget {
       home: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-          child:HomeScreen() ,
+          child: HomeScreen() ,
         ),
       ),
     );
