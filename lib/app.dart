@@ -77,6 +77,7 @@ class _AppViewState extends State<AppView> {
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) async {
+            print('----------------- ${state.status}');
             switch (state.status) {
               case AuthenticationStatus.unauthenticated:
                 //  Display splash page in 2 seconds, then display login page
@@ -94,8 +95,7 @@ class _AppViewState extends State<AppView> {
                 break;
 
               case AuthenticationStatus.authenticated:
-                Map<DateTime, List<dynamic>> schedulesData =
-                    await _setupAuthenticated(state);
+                Map<DateTime, List<dynamic>> schedulesData = await _setupAuthenticated(state);
 
                 _navigator!.pushAndRemoveUntil<void>(
                   App.route(schedulesData),
@@ -120,14 +120,12 @@ class _AppViewState extends State<AppView> {
     );
   }
 
-  Future<Map<DateTime, List<dynamic>>> _setupAuthenticated(
-      AuthenticationState state) async {
+  Future<Map<DateTime, List<dynamic>>> _setupAuthenticated(AuthenticationState state) async {
     //  Upsert token
     await TokenService.upsert(state.user.id);
 
     //  Get schedules
-    List<Schedule>? rawData =
-        await CalenderService.getRawCalendarData(state.user.id);
+    List<Schedule>? rawData = await CalenderService.getRawCalendarData(state.user.id);
 
     if (rawData != null) {
       await OfflineCalendarService.removeSavedCalendar();

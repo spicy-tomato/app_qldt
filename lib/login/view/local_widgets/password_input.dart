@@ -19,8 +19,6 @@ class PasswordInput extends StatelessWidget {
             decoration: InputDecoration(
               // Icons(Icons.lock              // ),
                 labelText: 'Mật khẩu',
-
-
                 errorText: state.password.invalid ? 'Invalid password' : null),
           ),
         );

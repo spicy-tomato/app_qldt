@@ -13,7 +13,14 @@ class UserRepository {
 
     if (loginInfo.isEmpty) return null;
 
-    _user = User.fromJson(loginInfo);
+    print(loginInfo);
+
+    try {
+      _user = User.fromJson(loginInfo);
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+
     return _user;
   }
 
@@ -21,7 +28,7 @@ class UserRepository {
     final prefs = await SharedPreferences.getInstance();
     String? infoStr = prefs.getString('user_info');
 
-    if (infoStr == null){
+    if (infoStr == null) {
       return new Map();
     }
 
