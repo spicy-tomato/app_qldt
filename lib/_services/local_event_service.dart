@@ -13,12 +13,12 @@ class LocalEventService {
   }
 
   Future<Map<DateTime, List<UserEvent>>> refresh() async {
-    // List<Schedule>? rawData = await _eventService.getRawScheduleData();
-    //
-    // if (rawData != null) {
-    //   await remove();
-    //   await save(rawData);
-    // }
+    List<Schedule>? rawData = await _eventService.getRawScheduleData();
+
+    if (rawData != null) {
+      await remove();
+      await save(rawData);
+    }
 
     eventsData = await getFromDb();
 

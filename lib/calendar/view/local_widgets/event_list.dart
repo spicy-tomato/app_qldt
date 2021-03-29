@@ -79,11 +79,16 @@ class _EventListItem extends StatelessWidget {
     return Container(
       child: Row(
         children: <Widget>[
-          Text(
-            hour + ':' + minute,
-            style: TextStyle(
-              color: Color(0xff694A85),
-              fontSize: 25,
+          Flexible(
+            child: Container(
+              child: Text(
+                hour + ':' + minute,
+                style: TextStyle(
+                  color: Color(0xff694A85),
+                  fontSize: 25,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           SizedBox(
