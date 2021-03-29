@@ -4,14 +4,15 @@ class SchoolLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
-      height: 150,
-      padding: const EdgeInsets.all(15),
+      width: 625,
+      height: 170,
+
       child: Hero(
-        tag: 'loginLogo',
+        tag: 'login',
         child: Image.asset(
-          'images/LogoUTC.jpg',
+          'images/bia.jpg',
         ),
+
       ),
     );
   }

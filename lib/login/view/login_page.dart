@@ -24,12 +24,13 @@ class LoginPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           constraints: const BoxConstraints.expand(),
-          color: Colors.white,
+          color: Colors.deepPurple,
           child: BlocProvider(
             create: (context) => LoginBloc(
-              authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
+              authenticationRepository:
+                  RepositoryProvider.of<AuthenticationRepository>(context),
             ),
             child: LoginForm(),
           ),

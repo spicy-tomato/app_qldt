@@ -26,14 +26,14 @@ class LoginButton extends StatelessWidget {
                     key: const Key('loginForm_continue_raisedButton'),
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                          MaterialStateProperty.all<Color>(Color(0xFFB40284A)),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                         RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(50),
                         ),
                       ),
                     ),
-                    child: const Text('Đăng nhập'),
+                    child: const Text('Login'),
                     onPressed: () {
                       context.read<LoginBloc>().add(const LoginSubmitted());
                     },

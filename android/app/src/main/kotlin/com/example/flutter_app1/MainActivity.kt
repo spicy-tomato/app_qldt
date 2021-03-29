@@ -1,4 +1,4 @@
-package com.example.app_qldt
+package com.example.flutter_app1
 
 import android.content.ContentResolver
 import android.content.Context
