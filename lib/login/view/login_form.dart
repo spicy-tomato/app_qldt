@@ -16,13 +16,13 @@ class LoginForm extends StatelessWidget {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          // Scaffold.of(context)
-          //   ..hideCurrentSnackBar()
-          //   ..showSnackBar(
-          //     const SnackBar(
-          //       content: Text('Authentication Failure'),
-          //     ),
-          //   );
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Authentication Failure'),
+              ),
+            );
         }
       },
       child: Column(
@@ -37,10 +37,7 @@ class LoginForm extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
             child: const Text(
               " LOGIN\n",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 30),
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
             ),
           ),
           Padding(

@@ -1,8 +1,10 @@
-import 'package:app_qldt/login/bloc/login_bloc.dart';
-import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/login/bloc/login_bloc.dart';
+import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
 
 import 'login_form.dart';
 
@@ -27,8 +29,7 @@ class LoginPage extends StatelessWidget {
           color: Colors.white,
           child: BlocProvider(
             create: (context) => LoginBloc(
-              authenticationRepository:
-                  RepositoryProvider.of<AuthenticationRepository>(context),
+              authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
             ),
             child: LoginForm(),
           ),
