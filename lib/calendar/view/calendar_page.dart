@@ -1,18 +1,16 @@
-import 'package:app_qldt/bottom_note/bottom_note.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:table_calendar/table_calendar.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:app_qldt/_models/event.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
 import 'package:app_qldt/_widgets/user_data_model.dart';
 
+import 'package:app_qldt/bottom_note/bottom_note.dart';
 import 'package:app_qldt/topbar/topbar.dart';
 
 import '../bloc/calendar_bloc.dart';
