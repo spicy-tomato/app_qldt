@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
@@ -18,7 +20,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({
     required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  })   : _authenticationRepository = authenticationRepository,
         super(const LoginState());
 
   @override

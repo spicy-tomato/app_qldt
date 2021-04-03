@@ -26,8 +26,16 @@ class AuthenticationRepository {
     final _loginUser = LoginUser(id!, password!);
     final _loginService = LoginService(_loginUser);
 
-    String response = await _loginService.login();
-    LoginResponse loginResponse = LoginResponse.fromJson(jsonDecode(response));
+    String? response = await _loginService.login();
+    LoginResponse loginResponse;
+
+    if (response != null) {
+       loginResponse = LoginResponse.fromJson(jsonDecode(response));
+    }
+    else {
+      _controller.add(AuthenticationStatus.unauthenticated);
+      return false;
+    }
 
     if (loginResponse.message == 'success') {
       await _saveUserInfo(jsonEncode(loginResponse.info));
@@ -45,7 +53,6 @@ class AuthenticationRepository {
   }
 
   void dispose() {
-    print('----- Disposed ------');
     _controller.close();
   }
 
@@ -54,7 +61,6 @@ class AuthenticationRepository {
     // print(info);
     prefs.setString('user_info', info);
   }
-
 
   Future<void> _removeUserInfo() async {
     final prefs = await SharedPreferences.getInstance();

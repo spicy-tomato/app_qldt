@@ -41,7 +41,6 @@ class LocalEventService {
   }
 
   Future<void> remove() async {
-    // print('Trying to remove saved calendar');
     await DatabaseProvider.db.deleteSchedule();
   }
 

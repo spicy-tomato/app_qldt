@@ -9,7 +9,7 @@ import 'package:app_qldt/_models/schedule.dart';
 class EventService {
   static final _timeout = 5;
   static final _baseUrl =
-      'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?id=';
+      'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?';
 
   final String studentId;
 
@@ -30,7 +30,7 @@ class EventService {
   }
 
   Future<List?> _fetchData() async {
-    String url = _baseUrl + studentId;
+    String url = _baseUrl + 'id=' + studentId + '&pass=0';
 
     try {
       final responseData =

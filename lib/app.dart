@@ -1,7 +1,3 @@
-import 'package:app_qldt/_widgets/user_data_model.dart';
-import 'package:app_qldt/calendar/calendar.dart';
-import 'package:app_qldt/notification/notification.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -14,9 +10,12 @@ import '_repositories/user_repository/user_repository.dart';
 import '_services/local_notification_service.dart';
 import '_services/local_event_service.dart';
 import '_services/token_service.dart';
+import '_widgets/user_data_model.dart';
 
+import 'calendar/calendar.dart';
 import 'home/home.dart';
 import 'login/login.dart';
+import 'notification/notification.dart';
 import 'splash/splash.dart';
 
 class Application extends StatefulWidget {

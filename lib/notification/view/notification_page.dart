@@ -1,13 +1,13 @@
-import 'package:app_qldt/_models/notification.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'package:app_qldt/_models/user_notification.dart';
 import 'package:app_qldt/_widgets/item.dart';
+import 'package:app_qldt/_widgets/shared_ui.dart';
 import 'package:app_qldt/_widgets/user_data_model.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -98,8 +98,8 @@ class ListItem extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Q',
-                    style: TextStyle(
+                    notification.senderName[0].toUpperCase(),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
@@ -116,7 +116,7 @@ class ListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    notification.sender,
+                    notification.senderName,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,

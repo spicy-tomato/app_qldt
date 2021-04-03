@@ -25,12 +25,12 @@ class Schedule {
 
   factory Schedule.fromMap(Map<String, dynamic> map) {
     return Schedule(
-      idModuleClass: map['Id_Module_Class'],
-      moduleName: map['Module_Name'],
-      idRoom: map['Id_Room'],
-      shiftSchedules: map['Shift_Schedules'],
+      idModuleClass: map['id_module_class'],
+      moduleName: map['module_name'],
+      idRoom: map['id_room'],
+      shiftSchedules: map['shift_schedules'],
       daySchedules: DateTime.parse(
-        map['Day_Schedules'],
+        map['day_schedules'],
       ),
     );
   }

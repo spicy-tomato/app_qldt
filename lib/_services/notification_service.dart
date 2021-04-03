@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_qldt/_models/app_notification.dart';
+import 'package:app_qldt/_models/sender.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:app_qldt/_models/notification.dart';
+import 'package:app_qldt/_models/receive_notification.dart';
 
 class NotificationService {
   static final _timeout = 5;
@@ -15,15 +17,17 @@ class NotificationService {
 
   NotificationService(this.studentId);
 
-  Future<List<UserNotification>?> getNotification(
+  Future<AppNotification?> getNotification(
     String studentId,
   ) async {
     try {
-      List? data = await _fetchData();
+      Map<String, dynamic>? data = await _fetchData();
 
       if (data != null) {
-        List<UserNotification> list = data as List<UserNotification>;
-        return list;
+        List<Sender> senderList = Sender.fromList(data['sender']);
+        List<ReceiveNotification> notificationList = ReceiveNotification.fromList(data['notification']);
+
+        return AppNotification(notificationList, senderList);
       }
 
       return null;
@@ -32,21 +36,14 @@ class NotificationService {
     }
   }
 
-  Future<List?> _fetchData() async {
+  Future<Map<String, dynamic>?> _fetchData() async {
     String url = _baseUrl + studentId;
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
 
       if (responseData.statusCode == 200) {
-        List data = jsonDecode(responseData.body) as List;
-        List<UserNotification> listModel = [];
-
-        for (var element in data) {
-          listModel.add(UserNotification.fromJson(element));
-        }
-
-        return listModel;
+        return jsonDecode(responseData.body);
       } else {
         print("Cannot GET. Response status code: ${responseData.statusCode}");
         return null;

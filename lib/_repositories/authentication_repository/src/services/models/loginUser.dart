@@ -5,7 +5,7 @@ class LoginUser {
   const LoginUser(this.id, this.password);
 
   Map<String, String> toJson() => {
-        'ID_Student': id,
+        'ID': id,
         'Password': password,
       };
 }
