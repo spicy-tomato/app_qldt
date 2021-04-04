@@ -1,280 +1,162 @@
-import 'package:app_qldt/authentication/authentication.dart';
-import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
-import 'package:app_qldt/calendar/view/local_widgets/outsideWeekendDayBuilder.dart';
+import 'package:app_qldt/bottom_note/bottom_note.dart';
 import 'package:flutter/material.dart';
+
+import 'package:collection/collection.dart';
+
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:table_calendar/table_calendar.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:table_calendar/table_calendar.dart';
-import 'package:app_qldt/widgets/interface.dart';
-import 'package:app_qldt/widgets/item.dart';
+import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/_widgets/user_data_model.dart';
 
-import 'package:app_qldt/calendar/view/local_widgets/local_widgets.dart';
-import 'package:app_qldt/calendar/view/style/style.dart';
+import 'package:app_qldt/topbar/topbar.dart';
 
-extension DateTimeExtexsion on DateTime {
-  DateTime get toStandard => DateTime(this.year, this.month, this.day);
-
-  bool isBetween(DateTime before, DateTime after) {
-    return this.isAfter(before) && this.isBefore(after);
-  }
-
-  bool isTheSameMonth(DateTime dateTime) {
-    return this.month == dateTime.month;
-  }
-}
+import '../bloc/calendar_bloc.dart';
+import '../view/local_widgets/local_widgets.dart';
 
 class CalendarPage extends StatefulWidget {
-  final Map<DateTime, List<dynamic>> schedulesData;
+  final CalendarController calendarController = CalendarController();
+  final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
-  CalendarPage({
-    Key? key,
-    required this.schedulesData,
-  }) : super(key: key);
+  CalendarPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CalendarPageState(schedulesData);
+  State<StatefulWidget> createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  late Map<DateTime, List<dynamic>> data;
-  late Future<Map<DateTime, List<dynamic>>> refreshData;
-
-  _CalendarPageState(this.data);
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        return FutureBuilder(
-          // future: data,
-          builder: (BuildContext context,
-              AsyncSnapshot<Map<DateTime, List<dynamic>>> snapshot) {
-            // if (!snapshot.hasData) {
-            //   return const Center(
-            //     child: CircularProgressIndicator(),
-            //   );
-            // }
+    Map<DateTime, List<UserEvent>> schedulesData =
+        UserDataModel.of(context)!.localEventService.eventsData;
 
-            return BlocProvider(
-              create: (context) {
-                return CalendarBloc();
-              },
-              child: Column(
+    return SharedUI(
+      topRightWidget: RefreshButton(
+        context,
+        () async {
+          widget.isLoading.value = true;
+          schedulesData = await UserDataModel.of(context)!.localEventService.refresh();
+          widget.isLoading.value = false;
+        },
+      ),
+      child: Container(
+        child: BlocProvider(
+          create: (_) {
+            return CalendarBloc();
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              ///
+              /// Không sửa, vì ở đây cần build từ dưới lên trên (theo hướng màn hình
+              /// điện thoại) để _calendarController có thể được khởi tạo
+              ///
+              /// (CalendarController.init() chỉ được gọi khi TableCalendar được khởi tạo)
+              ///
+              Column(
                 mainAxisSize: MainAxisSize.max,
+                verticalDirection: VerticalDirection.up,
                 children: <Widget>[
-                  Item(
-                    child: Calendar(events: data),
+                  Stack(
+                    children: <Widget>[
+                      /// _calendarController được khởi tạo ở đây
+                      Calendar(
+                        events: schedulesData,
+                        calendarController: widget.calendarController,
+                      ),
+                      ValueListenableBuilder(
+                        builder: (_, bool value, Widget? child) {
+                          return value ? Loading() : Container();
+                        },
+                        valueListenable: widget.isLoading,
+                      ),
+                    ],
                   ),
-                  Interface.mediumBox(),
-                  Expanded(
-                    child: EventList(),
-                  ),
+                  CalendarDow(),
+                  CalendarHeader(calendarController: widget.calendarController),
                 ],
               ),
-            );
-          },
-        );
-      },
+              Expanded(
+                child: BlocBuilder<CalendarBloc, CalendarState>(
+                  buildWhen: (previous, current) =>
+                      current.buildFirstTime &&
+                      !DeepCollectionEquality()
+                          .equals(previous.selectedEvents, current.selectedEvents),
+                  builder: (_, state) {
+                    return EventList(event: state.selectedEvents);
+                  },
+                ),
+              ),
+              BottomNote(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-class Calendar extends StatefulWidget {
-  final Map<DateTime, List> events;
+class RefreshButton extends TopBarItem {
+  final GestureTapCallback onTap;
+  final BuildContext context;
 
-  Calendar({
-    Key? key,
-    required this.events,
-  }) : super(key: key);
-
-  @override
-  _CalendarState createState() => _CalendarState();
+  RefreshButton(this.context, this.onTap)
+      : super(
+          onTap: onTap,
+          alignment: Alignment(0.95, 0),
+          icon: Icons.refresh,
+        );
 }
 
-class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
-  late AnimationController _animationController;
-  late CalendarController _calendarController;
-  late HeaderStyle _headerStyle;
-  late DaysOfWeekStyle _daysOfWeekStyle;
+class Loading extends StatefulWidget {
+  @override
+  _LoadingState createState() => _LoadingState();
+}
+
+class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation<Color?> animation;
+  late bool shouldClose = false;
 
   @override
   void initState() {
     super.initState();
 
-    _headerStyle = headerStyle();
-    _daysOfWeekStyle = daysOfWeekStyle();
-
-    _calendarController = CalendarController();
-
-    _animationController = AnimationController(
+    controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 350),
+      duration: const Duration(milliseconds: 300),
     );
 
-    _animationController.forward();
+    animation = ColorTween(
+      begin: Colors.transparent,
+      end: Colors.white.withOpacity(0.3),
+    ).animate(controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    controller.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-    _calendarController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CalendarBloc, CalendarState>(
-      buildWhen: (previous, current) {
-        return previous.visibleDay != null &&
-            previous.visibleDay != current.visibleDay;
-      },
-      builder: (context, state) {
-        return _buildCalendar();
-      },
-    );
-  }
-
-  Widget _buildCalendar() {
-    return TableCalendar(
-      locale: 'vi_VI',
-      events: widget.events,
-      weekendDays: [DateTime.sunday],
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      initialCalendarFormat: CalendarFormat.month,
-      formatAnimation: FormatAnimation.slide,
-      availableGestures: AvailableGestures.all,
-      availableCalendarFormats: const {
-        CalendarFormat.month: 'Month',
-        CalendarFormat.week: 'Week',
-      },
-      headerStyle: _headerStyle,
-      daysOfWeekStyle: _daysOfWeekStyle,
-      builders: CalendarBuilders(
-        outsideDayBuilder: (context, date, _) {
-          return outsideDayWidget(date);
-        },
-        dayBuilder: (context, date, _) {
-          return dayWidget(date);
-        },
-        selectedDayBuilder: (context, date, _) {
-          return selectedDayWidget(date, _animationController);
-        },
-        todayDayBuilder: (context, date, _) {
-          return date.isTheSameMonth(_calendarController.focusedDay)
-              ? todayInNowVisibleWidget(date)
-              : todayOutNowVisibleWidget(date);
-        },
-        weekendDayBuilder: (context, date, _) {
-          return weekendWidget(date);
-        },
-        outsideWeekendDayBuilder: (context, date, _) {
-          return outsideWeekendWidget(date);
-        },
-        markersBuilder: (context, date, events, holidays) {
-          return date.month == _calendarController.focusedDay.month
-              ? dayInNowVisibleMonthMarker(date, events)
-              : dayOutNowVisibleMonthMarker(date, events);
-        },
+    return Positioned.fill(
+      child: Container(
+        color: animation.value,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
-      calendarController: _calendarController,
-      onCalendarCreated: _onCalendarCreated,
-      onDaySelected: (date, events, holidays) {
-        _onDaySelected(date, events, holidays);
-        _animationController.forward(from: 0.0);
-      },
-      onVisibleDaysChanged: (first, last, format) {
-        _onVisibleDaysChanged(first, last, format);
-      },
     );
-  }
-
-  void _onCalendarCreated(_, __, ___) {
-    DateTime today = DateTime.now().toStandard;
-    context
-        .read<CalendarBloc>()
-        .add(CalendarDaySelected(today, widget.events[today] ?? []));
-  }
-
-  void _onDaySelected(DateTime day, List events, List holidays) {
-    DateTime _selectedDay = day.toStandard;
-
-    context.read<CalendarBloc>().add(CalendarDaySelected(_selectedDay, events));
-    _calendarController.setSelectedDay(_selectedDay);
-  }
-
-  void _onVisibleDaysChanged(
-      DateTime first, DateTime last, CalendarFormat format) {
-    DateTime _lastSelectedDay =
-        context.read<CalendarBloc>().state.lastSelectedDay!;
-
-    if (_lastSelectedDay.isBetween(first, last)) {
-      DateTime _dayWillBeSelected =
-          _lastSelectedDay.month == _calendarController.focusedDay.month
-              ? _lastSelectedDay.toStandard
-              : DateTime(_calendarController.focusedDay.year,
-                  _calendarController.focusedDay.month, 1);
-
-      _calendarController.setSelectedDay(_dayWillBeSelected);
-
-      context.read<CalendarBloc>().add(CalendarVisibleDayChanged(
-          _dayWillBeSelected.toStandard,
-          widget.events[_dayWillBeSelected.toStandard] ?? []));
-    } else {
-      DateTime _dayWillBeSelected = _calendarController.focusedDay.toStandard;
-
-      context.read<CalendarBloc>().add(CalendarVisibleDayChanged(
-          _dayWillBeSelected, widget.events[_dayWillBeSelected] ?? []));
-
-      _calendarController.setSelectedDay(_dayWillBeSelected);
-    }
-  }
-}
-
-class EventList extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _EventListState();
-}
-
-class _EventListState extends State<EventList> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CalendarBloc, CalendarState>(
-      buildWhen: (previous, current) => current.buildFirstTime,
-      builder: (context, state) {
-        return ListView(
-          padding: const EdgeInsets.only(),
-          children: getList(state.selectedEvents),
-        );
-      },
-    );
-  }
-
-  List<Widget> getList(List? selectedEvents) {
-    if (selectedEvents == null) {
-      return <Widget>[Container()];
-    }
-
-    return selectedEvents
-        .map(
-          (event) => Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: Item(
-              child: ListTile(
-                title: Text('Ca : ' +
-                    event.shiftSchedules.toString() +
-                    '\n' +
-                    'Phòng: ' +
-                    event.idRoom +
-                    '\n' +
-                    event.moduleName),
-                // onTap: () => print('$event tapped!'),
-              ),
-            ),
-          ),
-        )
-        .toList();
   }
 }

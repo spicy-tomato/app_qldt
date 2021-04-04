@@ -7,7 +7,6 @@ abstract class CalendarEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// ignore: todo
 //  TODO: Remove CalendarInit
 class CalendarInit extends CalendarEvent {
   final DateTime today;

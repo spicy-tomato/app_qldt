@@ -1,25 +1,25 @@
-import 'dart:math';
-
-import 'package:app_qldt/services/calendar_service.dart';
-import 'package:app_qldt/services/offline_calendar_service.dart';
-import 'package:app_qldt/services/token_service.dart';
+import 'package:app_qldt/_widgets/user_data_model.dart';
+import 'package:app_qldt/calendar/calendar.dart';
+import 'package:app_qldt/notification/notification.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
-import 'package:app_qldt/repositories/user_repository/user_repository.dart';
+import '_authentication/authentication.dart';
+import '_repositories/authentication_repository/authentication_repository.dart';
+import '_repositories/user_repository/user_repository.dart';
+import '_services/local_notification_service.dart';
+import '_services/local_event_service.dart';
+import '_services/token_service.dart';
 
-import 'package:app_qldt/authentication/authentication.dart';
-import 'package:app_qldt/app/app.dart';
-import 'package:app_qldt/login/login.dart';
-import 'package:app_qldt/splash/splash.dart';
-import 'app/transition_route_observer.dart';
-import 'models/schedule.dart';
+import 'home/home.dart';
+import 'login/login.dart';
+import 'splash/splash.dart';
 
-class Application extends StatelessWidget {
+class Application extends StatefulWidget {
   final AuthenticationRepository authenticationRepository;
   final UserRepository userRepository;
 
@@ -30,108 +30,133 @@ class Application extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-          userRepository: userRepository,
-        ),
-        child: AppView(),
-      ),
-    );
-  }
-
-  static int getRandomTime() {
-    final rng = new Random();
-    int minTime = 2550;
-    int maxTime = 5000;
-    return rng.nextInt(maxTime - minTime) + minTime;
-  }
+  _ApplicationState createState() => _ApplicationState();
 }
 
-class AppView extends StatefulWidget {
-  @override
-  _AppViewState createState() => _AppViewState();
-}
-
-class _AppViewState extends State<AppView> {
+class _ApplicationState extends State<Application> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
+  late LocalNotificationService localNotificationService;
+  late LocalEventService localEventService;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: _navigatorKey,
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('vi', ''),
-      ],
-      navigatorObservers: [TransitionRouteObserver()],
-      builder: (context, child) {
-        return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) async {
-            print('----------------- ${state.status}');
-            switch (state.status) {
-              case AuthenticationStatus.unauthenticated:
-                //  Display splash page in 2 seconds, then display login page
-                _navigator!.pushAndRemoveUntil<void>(
-                  SplashPage.route(),
-                  (route) => false,
-                );
+    return RepositoryProvider.value(
+      value: widget.authenticationRepository,
+      child: BlocProvider<AuthenticationBloc>(
+        create: (BuildContext context) => AuthenticationBloc(
+          authenticationRepository: widget.authenticationRepository,
+          userRepository: widget.userRepository,
+        ),
+        child: MaterialApp(
+          theme: ThemeData(
+            //  Brightness and colors
+            brightness: Brightness.light,
+            primaryColor: Color(0xff4A2A73),
+            accentColor: Color(0xffF46781),
+            backgroundColor: Color(0xff4A2A73),
 
-                Future.delayed(const Duration(seconds: 2), () {
-                  _navigator!.pushAndRemoveUntil<void>(
-                    LoginPage.route(),
-                    (route) => false,
-                  );
-                });
-                break;
+            //  Font family
+            fontFamily: 'Montserrat',
 
-              case AuthenticationStatus.authenticated:
-                Map<DateTime, List<dynamic>> schedulesData = await _setupAuthenticated(state);
+            //  Text theme
+            textTheme: TextTheme(
+              //  https://api.flutter.dev/flutter/material/TextTheme-class.html
+              //  Headline
+              headline5: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
+              headline6: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
 
-                _navigator!.pushAndRemoveUntil<void>(
-                  App.route(schedulesData),
-                  (route) => false,
-                );
-                break;
+              //  Body text
+              bodyText1: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+              bodyText2: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+            ),
+          ),
+          navigatorKey: _navigatorKey,
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('vi', ''),
+          ],
+          builder: (context, child) {
+            return BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) async {
+                switch (state.status) {
 
-              default:
-                _navigator!.pushAndRemoveUntil<void>(
-                  SplashPage.route(),
-                  (route) => false,
-                );
-                break;
-            }
+                  /// Khi chưa đăng nhập
+                  case AuthenticationStatus.unauthenticated:
+                    if (ModalRoute.of(context)?.settings.name != '/') {
+                      _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    }
+
+                    await Future.delayed(const Duration(milliseconds: 1500), () {
+                      _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
+                    });
+
+                    break;
+
+                  /// Khi đã đăng nhập
+                  case AuthenticationStatus.authenticated:
+                    if (ModalRoute.of(context)?.settings.name != '/') {
+                      _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    }
+
+                    Stopwatch stopwatch = Stopwatch()..start();
+                    final maxTurnAroundTime = const Duration(seconds: 2);
+
+                    /// Khởi động các service
+                    final tokenService = TokenService();
+                    await tokenService.init();
+                    await tokenService.upsert(state.user.id);
+
+                    localEventService = LocalEventService(state.user.id);
+                    localNotificationService = LocalNotificationService(state.user.id);
+
+                    await localEventService.refresh();
+                    await localNotificationService.refresh();
+
+                    final timeEnded = stopwatch.elapsed;
+
+                    await Future.delayed(
+                        timeEnded < maxTurnAroundTime
+                            ? maxTurnAroundTime - timeEnded
+                            : const Duration(seconds: 0), () {
+                      _navigator!.pushNamedAndRemoveUntil('/home', (_) => false);
+                    });
+
+                    break;
+
+                  default:
+                    if (ModalRoute.of(context)?.settings.name != '/') {
+                      _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+                    }
+                    break;
+                }
+              },
+              child: child,
+            );
           },
-          child: child,
-        );
-      },
-      onGenerateRoute: (_) {
-        return SplashPage.route();
-      },
+          routes: {
+            '/': (_) => SplashPage(),
+            '/login': (_) => LoginPage(),
+            '/home': (_) => userData(HomePage()),
+            '/calendar': (_) => userData(CalendarPage()),
+            '/notification': (_) => userData(NotificationPage()),
+          },
+        ),
+      ),
     );
   }
 
-  Future<Map<DateTime, List<dynamic>>> _setupAuthenticated(AuthenticationState state) async {
-    //  Upsert token
-    await TokenService.upsert(state.user.id);
-
-    //  Get schedules
-    List<Schedule>? rawData = await CalenderService.getRawCalendarData(state.user.id);
-
-    if (rawData != null) {
-      await OfflineCalendarService.removeSavedCalendar();
-      await OfflineCalendarService.saveCalendar(rawData);
-    }
-
-    return await OfflineCalendarService.getCalendar();
+  Widget userData(Widget child) {
+    return UserDataModel(
+      localEventService: localEventService,
+      localNotificationService: localNotificationService,
+      child: child,
+    );
   }
 }
