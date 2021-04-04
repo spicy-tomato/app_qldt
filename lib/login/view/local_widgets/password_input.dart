@@ -17,6 +17,7 @@ class PasswordInput extends StatelessWidget {
                 context.read<LoginBloc>().add(LoginPasswordChanged(password)),
             style: const FormTextStyle(),
             decoration: InputDecoration(
+              // Icons(Icons.lock              // ),
                 labelText: 'Mật khẩu',
                 errorText: state.password.invalid ? 'Invalid password' : null),
           ),

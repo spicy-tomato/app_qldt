@@ -1,4 +1,4 @@
-import 'package:app_qldt/_utils/const.dart';
+import 'package:app_qldt/utils/const.dart';
 import 'package:flutter/material.dart';
 
 List<Widget> dayInNowVisibleMonthMarker(DateTime date, List events) {

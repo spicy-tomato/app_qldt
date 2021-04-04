@@ -7,7 +7,7 @@ import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
 
 import 'package:app_qldt/login/models/models.dart';
-import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
 
 part 'login_event.dart';
 

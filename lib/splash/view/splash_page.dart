@@ -7,6 +7,9 @@ class SplashPage extends StatelessWidget {
       transitionsBuilder: (context, animation, _, child) =>
           FadeTransition(opacity: animation, child: child),
       transitionDuration: Duration(milliseconds: 1500),
+      // splashTransition:SplashTransition.fadeTransition,
+      // backgroundColor: Colors.lightBlueAccent,
+
     );
   }
 
@@ -24,7 +27,23 @@ class SplashPage extends StatelessWidget {
               child: Hero(
                 tag: 'loginLogo',
                 child: Image.asset(
-                  'images/LogoUTC.jpg',
+                  'images/splash.jpg',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Container(
+                height: 30,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      "UCT APPS",
+                      style: TextStyle(fontSize: 30, color:Colors.blue,),
+                    ),
+                  ],
                 ),
               ),
             ),
