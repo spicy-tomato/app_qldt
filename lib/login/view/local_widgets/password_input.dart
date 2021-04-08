@@ -13,12 +13,12 @@ class PasswordInput extends StatelessWidget {
         return Container(
           child: TextField(
             key: const Key('loginForm_passwordInput_textField'),
-            onChanged: (password) =>
-                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+            onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
             style: const FormTextStyle(),
             decoration: InputDecoration(
-                labelText: 'Mật khẩu',
-                errorText: state.password.invalid ? 'Invalid password' : null),
+              labelText: 'Mật khẩu',
+              errorText: state.password.invalid ? 'Invalid password' : null,
+            ),
           ),
         );
       },

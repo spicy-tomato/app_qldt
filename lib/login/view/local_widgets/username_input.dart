@@ -25,7 +25,7 @@ class UsernameInput extends StatelessWidget {
               errorText:
               state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
-
+            textInputAction: TextInputAction.next,
           ),
         );
       },

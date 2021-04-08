@@ -1,5 +1,5 @@
+import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
-import 'package:app_qldt/bottom_note/bottom_note.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

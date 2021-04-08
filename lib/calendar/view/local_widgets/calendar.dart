@@ -73,7 +73,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
             initialCalendarFormat: CalendarFormat.month,
             formatAnimation: FormatAnimation.slide,
             availableGestures: AvailableGestures.all,
-            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+            availableCalendarFormats: const {CalendarFormat.month: ''},
             headerVisible: false,
             calendarStyle: CalendarStyle(
               contentPadding: EdgeInsets.symmetric(horizontal: 25),
@@ -107,14 +107,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
               },
             ),
             calendarController: widget.calendarController,
-            onCalendarCreated: _onCalendarCreated,
-            onDaySelected: (date, events, holidays) {
-              // _animationController.reverse();
-              _onDaySelected(date, events, holidays);
+            onCalendarCreated: (_, __, ___) {
+              _onCalendarCreated();
+            },
+            onDaySelected: (date, events, _) {
+              _onDaySelected(date, events);
               _animationController.forward(from: 0.0);
             },
-            onVisibleDaysChanged: (first, last, format) {
-              _onVisibleDaysChanged(first, last, format);
+            onVisibleDaysChanged: (first, last, _) {
+              _onVisibleDaysChanged(first, last);
             },
           ),
         );
@@ -122,20 +123,25 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     );
   }
 
-  void _onCalendarCreated(_, __, ___) {
-    DateTime today = DateTime.now().toStandard;
+  void _onCalendarCreated() {
+    DateTime today = DateTime
+        .now()
+        .toStandard;
     context.read<CalendarBloc>().add(CalendarDaySelected(today, widget.events[today] ?? []));
   }
 
-  void _onDaySelected(DateTime day, List events, _) {
+  void _onDaySelected(DateTime day, List events) {
     DateTime _selectedDay = day.toStandard;
 
     context.read<CalendarBloc>().add(CalendarDaySelected(_selectedDay, events));
     widget.calendarController.setSelectedDay(_selectedDay);
   }
 
-  void _onVisibleDaysChanged(DateTime first, DateTime last, _) {
-    DateTime _lastSelectedDay = context.read<CalendarBloc>().state.lastSelectedDay!;
+  void _onVisibleDaysChanged(DateTime first, DateTime last) {
+    DateTime _lastSelectedDay = context
+        .read<CalendarBloc>()
+        .state
+        .lastSelectedDay!;
 
     if (_lastSelectedDay.isBetween(first, last)) {
       DateTime _dayWillBeSelected =

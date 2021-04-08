@@ -20,20 +20,19 @@ class PlanPage extends StatelessWidget {
                   color: Theme.of(context).backgroundColor,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 20),
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: <Widget>[
-                    PlanPageTopbar(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 60),
-                      child: Title(),
-                    ),
-                    PlanPageDivider(context: context),
-                    Time(),
-                  ],
-                ),
+              SizedBox(height: 20),
+              ListView(
+                physics: NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                children: <Widget>[
+                  PlanPageTopbar(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: Title(),
+                  ),
+                  PlanPageDivider(context: context),
+                  Time(),
+                ],
               ),
             ],
           ),
@@ -134,10 +133,7 @@ class Time extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.access_time_rounded),
             title: Text('Cả ngày'),
-            trailing: Switch(
-              value: false,
-              onChanged: (bool value) {},
-            ),
+            trailing: Switcher(),
           ),
           ListTile(
             title: Text(DateFormat.yMMMd().format(DateTime.now())),
@@ -160,5 +156,36 @@ class Time extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class Switcher extends StatefulWidget {
+  final bool? initState;
+
+  Switcher({this.initState});
+
+  @override
+  _SwitcherState createState() => _SwitcherState(initState);
+}
+
+class _SwitcherState extends State<Switcher> {
+  late bool isOn;
+
+  _SwitcherState(bool? isOn) {
+    this.isOn = isOn ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Switch(
+      value: isOn,
+      onChanged: toggleSwitch,
+    );
+  }
+
+  void toggleSwitch(_) {
+    setState(() {
+      isOn = !isOn;
+    });
   }
 }

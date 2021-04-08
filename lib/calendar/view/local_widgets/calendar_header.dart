@@ -33,10 +33,10 @@ class CalendarHeader extends StatelessWidget {
             Container(
               child: BlocBuilder<CalendarBloc, CalendarState>(
                 buildWhen: (previous, current) {
-                  return previous.visibleDay != null && previous.visibleDay!.month != current.visibleDay!.month;
+                  return previous.visibleDay != null && current.visibleDay != null && previous.visibleDay!.month != current.visibleDay!.month;
                 },
                 builder: (_, __) {
-                  String date = DateFormat.yMMMM('vi_VI').format(calendarController.focusedDay);
+                  String date = DateFormat.yMMMM('vi_VI').format(calendarController.focusedDay ?? DateTime.now());
                   return Text(
                     date[0].toUpperCase() + date.substring(1),
                     style: TextStyle(

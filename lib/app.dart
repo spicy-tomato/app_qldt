@@ -9,13 +9,13 @@ import '_repositories/user_repository/user_repository.dart';
 import '_services/local_notification_service.dart';
 import '_services/local_event_service.dart';
 import '_services/token_service.dart';
+import '_widgets/splash/splash.dart';
 import '_widgets/user_data_model.dart';
 
 import 'calendar/calendar.dart';
 import 'home/home.dart';
 import 'login/login.dart';
 import 'notification/notification.dart';
-import 'splash/splash.dart';
 
 class Application extends StatefulWidget {
   final AuthenticationRepository authenticationRepository;

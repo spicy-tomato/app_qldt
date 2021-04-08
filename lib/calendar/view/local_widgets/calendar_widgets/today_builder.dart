@@ -50,19 +50,21 @@ class TodayOutNowVisibleWidget extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          Container(
-            width: 5,
-            height: 5,
-            decoration: BoxDecoration(
-              color: Color(0xffD55C7D),
-              borderRadius: BorderRadius.circular(50),
+          Center(
+            child: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                color: Color(0xffD55C7D),
+                borderRadius: BorderRadius.circular(50),
+              ),
             ),
           ),
           Center(
             child: Text(
               '${date.day}',
               style: const TextStyle(
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w300
               ),
             ),
           ),

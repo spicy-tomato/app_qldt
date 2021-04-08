@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:app_qldt/sidebar/sidebar.dart';
-import 'package:app_qldt/topbar/topbar.dart';
+import 'package:app_qldt/_widgets/sidebar/sidebar.dart';
+import 'package:app_qldt/_widgets/topbar/topbar.dart';
 
 class SharedUI extends StatelessWidget {
   final Widget child;

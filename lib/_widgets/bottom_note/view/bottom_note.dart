@@ -1,5 +1,5 @@
-import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
+import 'package:app_qldt/plan/plan.dart';
 
 class BottomNote extends StatelessWidget {
   const BottomNote({Key? key}) : super(key: key);

@@ -7,11 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/_widgets/topbar/topbar.dart';
 import 'package:app_qldt/_widgets/user_data_model.dart';
-
-import 'package:app_qldt/bottom_note/bottom_note.dart';
-import 'package:app_qldt/topbar/topbar.dart';
 
 import '../bloc/calendar_bloc.dart';
 import '../view/local_widgets/local_widgets.dart';

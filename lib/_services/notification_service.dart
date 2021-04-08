@@ -11,7 +11,7 @@ import 'package:app_qldt/_models/sender.dart';
 class NotificationService {
   static final _timeout = 5;
   static final _baseUrl =
-      'http://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/notification.php?ID_Student=';
+      'http://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/notification.php?ID=';
 
   final String studentId;
 
@@ -24,6 +24,8 @@ class NotificationService {
       Map<String, dynamic>? data = await _fetchData();
 
       if (data != null) {
+        print(data);
+
         List<Sender> senderList = Sender.fromList(data['sender']);
         List<ReceiveNotification> notificationList = ReceiveNotification.fromList(data['notification']);
 
