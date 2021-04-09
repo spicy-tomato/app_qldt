@@ -24,7 +24,7 @@ class NotificationService {
       Map<String, dynamic>? data = await _fetchData();
 
       if (data != null) {
-        print(data);
+        // print(data);
 
         List<Sender> senderList = Sender.fromList(data['sender']);
         List<ReceiveNotification> notificationList = ReceiveNotification.fromList(data['notification']);
