@@ -215,6 +215,7 @@ class _LoginPageState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+
               Column(
                 children: <Widget>[
                   Container(
@@ -224,7 +225,9 @@ class _LoginPageState extends State<HomeScreen> {
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
-                  UsernameInput(),
+                  UsernameInput(
+
+                  ),
                   SizedBox(
                     height: 20,
                   ),

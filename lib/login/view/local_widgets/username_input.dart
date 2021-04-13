@@ -21,10 +21,12 @@ class UsernameInput extends StatelessWidget {
             style: const FormTextStyle(),
             decoration: InputDecoration(
 
+
               labelText: 'Mã sinh viên',
               errorText:
               state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
+            textInputAction: TextInputAction.next,
 
           ),
         );
