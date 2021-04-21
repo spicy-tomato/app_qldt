@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_qldt/_services/local_event_service.dart';
+import 'package:app_qldt/_services/local_notification_service.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,8 +49,17 @@ class AuthenticationRepository {
     return false;
   }
 
+  Future<void> _saveUserInfo(String info) async {
+    final prefs = await SharedPreferences.getInstance();
+    // print(info);
+    prefs.setString('user_info', info);
+  }
+
   Future<void> logOut() async {
+    await _removeLocalEvent();
+    await _removeLocalNotification();
     await _removeUserInfo();
+
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
@@ -56,14 +67,17 @@ class AuthenticationRepository {
     _controller.close();
   }
 
-  Future<void> _saveUserInfo(String info) async {
-    final prefs = await SharedPreferences.getInstance();
-    // print(info);
-    prefs.setString('user_info', info);
+  Future<void> _removeLocalEvent() async {
+    await LocalEventService.delete();
+  }
+
+  Future<void> _removeLocalNotification() async {
+    await LocalNotificationService.delete();
   }
 
   Future<void> _removeUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('user_info');
   }
+
 }

@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "854891110074",
-    "project_id": "utc-notification",
-    "storage_bucket": "utc-notification.appspot.com"
+    "project_number": "227524919974",
+    "project_id": "utc-mobile-application",
+    "storage_bucket": "utc-mobile-application.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:854891110074:android:8bfab3b3ac6a893182ec83",
+        "mobilesdk_app_id": "1:227524919974:android:ea92b528a3bcc9a5682a67",
         "android_client_info": {
           "package_name": "com.example.app_qldt"
         }
       },
       "oauth_client": [
         {
-          "client_id": "854891110074-4ptq8c42ve5jbq97sbhf9vj5m1km5fol.apps.googleusercontent.com",
+          "client_id": "227524919974-l7k1lalb1f3mj6cd3apsejlvqpni566u.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAzWX7Y-Zpquxvf8nrioWbvNv2G2YIu3uM"
+          "current_key": "AIzaSyDGaoi6CYGW0f6qNqs9Wel4dh8Ddxwpgaw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "854891110074-4ptq8c42ve5jbq97sbhf9vj5m1km5fol.apps.googleusercontent.com",
+              "client_id": "227524919974-l7k1lalb1f3mj6cd3apsejlvqpni566u.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
