@@ -29,19 +29,18 @@ class EventService {
     }
   }
 
-
   /// [responseData] has structure:
   /// [
   ///     {
-  ///         "Module_Name":     [String],
-  ///         "ID_Module_Class": [String],
-  ///         "ID_Room":         [String],
-  ///         "Shift_Schedules": [int],
-  ///         "Day_Schedules":   [String]
+  ///         "Module_Class_Name":  [String],
+  ///         "ID_Module_Class":    [String],
+  ///         "ID_Room":            [String],
+  ///         "Shift_Schedules":    [int],
+  ///         "Day_Schedules":      [String]
   ///     },
   ///     ...
   /// ]
-  Future<List?> _fetchData() async {
+  Future<List<Schedule>?> _fetchData() async {
     String url = _baseUrl + 'id=' + userId;
 
     try {

@@ -58,10 +58,24 @@ class UserEvent {
 
     return UserEvent(
       from: curr,
-      name: schedule.moduleName,
+      name: getModuleClassName(schedule.moduleClassName),
       location: schedule.idRoom,
       backgroundColor: Color(color ?? 0xff0f8644),
     );
+  }
+
+  static String getModuleClassName(String string) {
+    List<String> listSplitByWhiteSpace = string.split(' ');
+    String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
+    List<String> strArr = oldStr.split('-');
+
+    strArr.removeLast();
+    strArr.removeLast();
+
+    String newStr = strArr.join('-');
+    newStr = string.replaceAll(oldStr, newStr);
+
+    return newStr;
   }
 
   @override

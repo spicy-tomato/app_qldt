@@ -58,7 +58,7 @@ class LocalEventService {
 
   /// Save schedule data to local database
   ///
-  Future<void> _save(List<Schedule> rawData) async {
+  static Future<void> _save(List<Schedule> rawData) async {
     for (var row in rawData) {
       await DatabaseProvider.db.insertSchedule(row.toMap());
     }
@@ -99,7 +99,6 @@ class LocalEventService {
   ///
   Future<Map<DateTime, List<UserEvent>>> _getFromDb() async {
     List<Map<String, dynamic>> rawData = await DatabaseProvider.db.schedule;
-
     Map<DateTime, List<UserEvent>> data = _parseToStandardStructure(rawData);
 
     return data;
@@ -145,7 +144,7 @@ class LocalEventService {
     return events;
   }
 
-  void refreshUserEventList(){
+  void refreshUserEventList() {
     userEventList.clear();
 
     eventsData.forEach((_, mapValue) {

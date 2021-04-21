@@ -79,5 +79,4 @@ class AuthenticationRepository {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('user_info');
   }
-
 }

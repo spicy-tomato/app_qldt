@@ -20,7 +20,7 @@ class DatabaseProvider {
       return await _db.rawQuery(
         'SELECT '
         'schedule.id_module_class,'
-        'schedule.module_name,'
+        'schedule.module_class_name,'
         'schedule.id_room,'
         'schedule.shift_schedules,'
         'schedule.day_schedules,'
@@ -94,7 +94,7 @@ class DatabaseProvider {
       'CREATE TABLE IF NOT EXISTS schedule('
       'id INTEGER PRIMARY KEY AUTOINCREMENT,'
       'id_module_class TEXT,'
-      'module_name TEXT,'
+      'module_class_name TEXT,'
       'id_room TEXT,'
       'shift_schedules INTEGER,'
       'day_schedules TEXT);';
