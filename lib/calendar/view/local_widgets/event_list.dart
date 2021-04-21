@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_models/user_event.dart';
 
 class EventList extends StatelessWidget {
   final List? event;
@@ -70,36 +70,40 @@ class _EventListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String minute = '0' + event.time.minute.toString();
-    minute = minute.substring(minute.length - 2);
+    String? minute = event.from?.minute.toString();
 
-    String hour = event.time.hour.toString();
+    if (minute != null) {
+      minute = '0' + minute;
+      minute = minute.substring(minute.length - 2);
+    }
+
+    String? hour = event.from?.hour.toString();
 
     return Container(
       child: Row(
         children: <Widget>[
-          Text(
-            hour + ':' + minute,
-            style: TextStyle(
-              color: Color(0xff694A85),
-              fontSize: 25,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-            width: 10,
-          ),
+          hour != null && minute != null
+              ? Text(
+                  hour + ':' + minute,
+                  style: TextStyle(
+                    color: Color(0xff694A85),
+                    fontSize: 25,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                )
+              : Container(),
+          SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               // Flexible(
               //   child:
-                Container(
-                  child: Text(
-                    event.name,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff694A85),
+              Container(
+                child: Text(
+                  event.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff694A85),
                     // ),
                   ),
                 ),

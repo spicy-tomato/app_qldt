@@ -14,26 +14,74 @@ class DatabaseProvider {
   }
 
   Future<List<Map<String, dynamic>>> get schedule async {
-    final _db = _database ?? await database;
-    return await _db.query('schedule');
-  }
+    final _db = await database;
 
-  Future<List<Map<String, dynamic>>> get notification async {
-    final _db = _database ?? await database;
     try {
       return await _db.rawQuery(
         'SELECT '
-            'notification.id_notification,'
-            'notification.title,'
-            'notification.content,'
-            'notification.typez,'
-            'notification.time_start,'
-            'notification.time_end,'
-            'notification.expired,'
-            'sender.sender_name '
+        'schedule.id_module_class,'
+        'schedule.module_name,'
+        'schedule.id_room,'
+        'schedule.shift_schedules,'
+        'schedule.day_schedules,'
+        'color_event.color '
         'FROM '
-            'notification JOIN sender '
-            'ON notification.id_sender = sender.id_sender '
+        'schedule JOIN color_event '
+        'ON schedule.id_module_class = color_event.id_module_class;',
+      );
+    } on Exception catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> get moduleClassesId async {
+    final _db = await database;
+    try {
+      return await _db.rawQuery(
+        'SELECT '
+        'schedule.id_module_class '
+        'FROM '
+        'schedule;',
+      );
+    } on Exception catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> get colorMap async {
+    final _db = await database;
+    try {
+      return await _db.rawQuery(
+        'SELECT '
+        'id_module_class,'
+        'color '
+        'FROM '
+        'color_event;',
+      );
+    } on Exception catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> get notification async {
+    final _db = await database;
+    try {
+      return await _db.rawQuery(
+        'SELECT '
+        'notification.id_notification,'
+        'notification.title,'
+        'notification.content,'
+        'notification.typez,'
+        'notification.time_start,'
+        'notification.time_end,'
+        'notification.expired,'
+        'sender.sender_name '
+        'FROM '
+        'notification JOIN sender '
+        'ON notification.id_sender = sender.id_sender '
         'ORDER BY notification.id_notification DESC;',
       );
     } on Exception catch (_) {
@@ -68,6 +116,12 @@ class DatabaseProvider {
       'id_sender TEXT,'
       'sender_name TEXT,'
       'permission INTEGER);';
+
+  static const colorEventTable = ''
+      'CREATE TABLE IF NOT EXISTS color_event('
+      'id_module_class TEXT,'
+      'color TEXT,'
+      'PRIMARY KEY (id_module_class, color));';
 
   Future<Database> initDb() async {
     String path = await _getPath();
@@ -115,14 +169,14 @@ class DatabaseProvider {
       await db.execute(scheduleTable);
       await db.execute(notificationTable);
       await db.execute(senderTable);
+      await db.execute(colorEventTable);
     } on Exception catch (e) {
       print(e);
     }
   }
 
   void _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    try {
-    } on Exception catch (e) {
+    try {} on Exception catch (e) {
       print(e);
     }
   }
@@ -136,12 +190,38 @@ class DatabaseProvider {
   Future<void> deleteSchedule() async {
     try {
       _database = await database;
-
       await _database!.delete('schedule');
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
   }
+
+  Future<void> addColorToNewModuleClass() async {
+    try {
+      _database = await database;
+
+      List<Map<String, dynamic>> moduleClassIdList = await moduleClassesId;
+
+      moduleClassIdList.forEach((element) async {
+        await _database!.rawQuery(''
+            'INSERT OR IGNORE '
+            'INTO color_event(id_module_class, color) '
+            'VALUES("${element['id_module_class']}", "0xff007bff");');
+      });
+    } on Exception catch (e) {
+      print('Error: ${e.toString()}');
+    }
+  }
+
+  Future<void> updateColor(Map<String, dynamic> map) async {
+    try {
+      _database = await database;
+      await _database!.update('color_event', map);
+    } on Exception catch (e) {
+      print('Error: ${e.toString()}');
+    }
+  }
+
   //#endregion
 
   //#region notification
@@ -150,7 +230,7 @@ class DatabaseProvider {
 
     try {
       await _database!.insert('notification', notification);
-    } on Exception catch(e){
+    } on Exception catch (e) {
       print(e);
     }
   }
@@ -163,6 +243,7 @@ class DatabaseProvider {
       print('Error: ${e.toString()}');
     }
   }
+
   //#endregion
 
   //#region sender
@@ -180,6 +261,7 @@ class DatabaseProvider {
       print('Error: ${e.toString()}');
     }
   }
+
   //#endregion
 
   Future<String> _getPath() async {

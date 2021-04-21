@@ -18,7 +18,7 @@ class Schedule {
       idModuleClass: json['ID_Module_Class'],
       moduleName: json['Module_Name'],
       idRoom: json['ID_Room'],
-      shiftSchedules: int.parse(json['Shift_Schedules']),
+      shiftSchedules: json['Shift_Schedules'],
       daySchedules: DateTime.parse(json['Day_Schedules']),
     );
   }

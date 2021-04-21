@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_models/user_event.dart';
 import 'package:flutter/material.dart';
 
 class _RowMarker extends StatelessWidget {

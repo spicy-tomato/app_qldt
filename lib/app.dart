@@ -16,6 +16,7 @@ import 'calendar/calendar.dart';
 import 'home/home.dart';
 import 'login/login.dart';
 import 'notification/notification.dart';
+import 'schedule/view/schedule_page.dart';
 
 class Application extends StatefulWidget {
   final AuthenticationRepository authenticationRepository;
@@ -115,6 +116,9 @@ class _ApplicationState extends State<Application> {
                     localNotificationService = LocalNotificationService(state.user.id);
 
                     await localEventService.refresh();
+
+                    // print(localEventService.colorMap);
+
                     await localNotificationService.refresh();
 
                     final timeEnded = stopwatch.elapsed;
@@ -143,6 +147,7 @@ class _ApplicationState extends State<Application> {
             '/login': (_) => LoginPage(),
             '/home': (_) => userData(HomePage()),
             '/calendar': (_) => userData(CalendarPage()),
+            '/schedule': (_) => userData(SchedulePage()),
             '/notification': (_) => userData(NotificationPage()),
           },
         ),

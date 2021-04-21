@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_models/user_event.dart';
 import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 
 import 'calendar_widgets/calendar_widgets.dart';
@@ -162,10 +162,6 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
-    print('$selectedDay -- $_selectedDay');
-    print('$focusedDay -- $_focusedDay');
-    print('--------------------');
-
     if (!isSameDay(_selectedDay, selectedDay)) {
       selectedDay = selectedDay.toStandard;
 

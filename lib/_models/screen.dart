@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum ScreenPage { login, home, calendar, notification }
+enum ScreenPage { login, home, calendar, schedule, notification }
 
 extension ScreenPageExtension on ScreenPage {
   String get string {
@@ -13,6 +13,9 @@ extension ScreenPageExtension on ScreenPage {
 
       case ScreenPage.calendar:
         return '/calendar';
+
+      case ScreenPage.schedule:
+        return '/schedule';
 
       default:
         return '/notification';
@@ -29,6 +32,9 @@ extension ScreenPageExtension on ScreenPage {
 
       case ScreenPage.calendar:
         return 'Lịch';
+
+      case ScreenPage.schedule:
+        return 'Thời gian biểu';
 
       case ScreenPage.notification:
       default:

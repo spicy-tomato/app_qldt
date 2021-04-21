@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_models/user_event.dart';
 import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
 import 'package:app_qldt/_widgets/topbar/topbar.dart';
@@ -32,7 +32,10 @@ class _CalendarPageState extends State<CalendarPage> {
         context,
         () async {
           widget.isLoading.value = true;
-          schedulesData = await UserDataModel.of(context)!.localEventService.refresh();
+
+          await UserDataModel.of(context)!.localEventService.refresh();
+          schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
+
           widget.isLoading.value = false;
         },
       ),

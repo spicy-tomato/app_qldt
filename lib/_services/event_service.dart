@@ -11,9 +11,9 @@ class EventService {
   static final _baseUrl =
       'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?';
 
-  final String studentId;
+  final String userId;
 
-  EventService(this.studentId);
+  EventService(this.userId);
 
   Future<List<Schedule>?> getRawScheduleData() async {
     try {
@@ -29,8 +29,20 @@ class EventService {
     }
   }
 
+
+  /// [responseData] has structure:
+  /// [
+  ///     {
+  ///         "Module_Name":     [String],
+  ///         "ID_Module_Class": [String],
+  ///         "ID_Room":         [String],
+  ///         "Shift_Schedules": [int],
+  ///         "Day_Schedules":   [String]
+  ///     },
+  ///     ...
+  /// ]
   Future<List?> _fetchData() async {
-    String url = _baseUrl + 'id=' + studentId + '&pass=0';
+    String url = _baseUrl + 'id=' + userId;
 
     try {
       final responseData =

@@ -64,4 +64,9 @@ class LocalNotificationService {
       return UserNotification.fromMap(data);
     }).toList();
   }
+
+  static Future<void> delete() async {
+    await removeNotification();
+    await removeSender();
+  }
 }

@@ -1,13 +1,32 @@
+import 'dart:ui';
+
 import 'package:app_qldt/_models/schedule.dart';
 
 class UserEvent {
-  final DateTime time;
   final String name;
+  late final DateTime? from;
+  late final DateTime? to;
   final String? location;
+  final Color backgroundColor;
+  late final bool isAllDay;
 
-  UserEvent({required this.time, required this.name, this.location});
+  UserEvent({
+    required this.name,
+    DateTime? from,
+    DateTime? to,
+    this.location,
+    required this.backgroundColor,
+    bool? isAllDay,
+  }) {
+    if (from != null) {
+      this.from = from;
+      this.to = to ?? from.add(Duration(hours: 2, minutes: 25));
+    }
 
-  factory UserEvent.fromSchedule(Schedule schedule) {
+    this.isAllDay = isAllDay == null ? false : true;
+  }
+
+  factory UserEvent.fromSchedule(Schedule schedule, [int? color]) {
     DateTime curr = schedule.daySchedules;
     int hour, minute = 0;
 
@@ -38,14 +57,15 @@ class UserEvent {
     curr = DateTime(curr.year, curr.month, curr.day, hour, minute);
 
     return UserEvent(
-      time: curr,
+      from: curr,
       name: schedule.moduleName,
       location: schedule.idRoom,
+      backgroundColor: Color(color ?? 0xff0f8644),
     );
   }
 
   @override
   String toString() {
-    return 'UserEvent{time: $time, name: $name, location: $location}';
+    return 'UserEvent{time: $from, name: $name, location: $location}';
   }
 }
