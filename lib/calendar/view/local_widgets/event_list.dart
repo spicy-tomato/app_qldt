@@ -100,7 +100,7 @@ class _EventListItem extends StatelessWidget {
               //   child:
               Container(
                 child: Text(
-                  event.name,
+                  event.visualizeName,
                   style: TextStyle(
                     fontSize: 16,
                     color: Color(0xff694A85),

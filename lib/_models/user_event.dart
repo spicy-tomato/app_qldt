@@ -3,15 +3,17 @@ import 'dart:ui';
 import 'package:app_qldt/_models/schedule.dart';
 
 class UserEvent {
-  final String name;
-  late final DateTime? from;
-  late final DateTime? to;
+  final String eventName;
   final String? location;
   final Color backgroundColor;
+
+  late final String visualizeName;
+  late final DateTime? from;
+  late final DateTime? to;
   late final bool isAllDay;
 
   UserEvent({
-    required this.name,
+    required this.eventName,
     DateTime? from,
     DateTime? to,
     this.location,
@@ -24,6 +26,8 @@ class UserEvent {
     }
 
     this.isAllDay = isAllDay == null ? false : true;
+
+    visualizeName = _getShortenClassName(this.eventName);
   }
 
   factory UserEvent.fromSchedule(Schedule schedule, [int? color]) {
@@ -58,13 +62,13 @@ class UserEvent {
 
     return UserEvent(
       from: curr,
-      name: getModuleClassName(schedule.moduleClassName),
+      eventName: schedule.moduleClassName,
       location: schedule.idRoom,
       backgroundColor: Color(color ?? 0xff0f8644),
     );
   }
 
-  static String getModuleClassName(String string) {
+  static String _getShortenClassName(String string) {
     List<String> listSplitByWhiteSpace = string.split(' ');
     String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
     List<String> strArr = oldStr.split('-');
@@ -75,11 +79,16 @@ class UserEvent {
     String newStr = strArr.join('-');
     newStr = string.replaceAll(oldStr, newStr);
 
+    int indexOfOpenBrace = newStr.lastIndexOf('(');
+    int indexOfCloseBrace = newStr.lastIndexOf(')');
+
+    newStr = newStr.substring(0, indexOfOpenBrace) + newStr.substring(indexOfOpenBrace+1, indexOfCloseBrace);
+
     return newStr;
   }
 
   @override
   String toString() {
-    return 'UserEvent{time: $from, name: $name, location: $location}';
+    return 'UserEvent{time: $from, name: $eventName, location: $location}';
   }
 }

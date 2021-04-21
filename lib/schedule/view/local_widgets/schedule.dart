@@ -1,8 +1,9 @@
+import 'package:app_qldt/_models/meeting_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Schedule extends StatefulWidget {
-  final CalendarDataSource dataSource;
+  final UserDataSource dataSource;
 
   const Schedule(
     this.dataSource, {
@@ -57,14 +58,15 @@ class _ScheduleState extends State<Schedule> {
   void _calendarTapped(CalendarTapDetails calendarTapDetails) {}
 
   Widget _scheduleViewBuilder(_, details) {
-    final String monthName = _getMonthDate(details.date.month);
+    final String monthName = "Tháng ${details.date.month}";
     return Stack(
       children: [
         Image(
-            image: ExactAssetImage('images/' + monthName + '.png'),
-            fit: BoxFit.cover,
-            width: details.bounds.width,
-            height: details.bounds.height),
+          image: ExactAssetImage('images/' + monthName + '.png'),
+          fit: BoxFit.cover,
+          width: details.bounds.width,
+          height: details.bounds.height,
+        ),
         Positioned(
           left: 55,
           right: 0,
@@ -77,33 +79,5 @@ class _ScheduleState extends State<Schedule> {
         )
       ],
     );
-  }
-
-  String _getMonthDate(int month) {
-    if (month == 01) {
-      return 'January';
-    } else if (month == 02) {
-      return 'February';
-    } else if (month == 03) {
-      return 'March';
-    } else if (month == 04) {
-      return 'April';
-    } else if (month == 05) {
-      return 'May';
-    } else if (month == 06) {
-      return 'June';
-    } else if (month == 07) {
-      return 'July';
-    } else if (month == 08) {
-      return 'August';
-    } else if (month == 09) {
-      return 'September';
-    } else if (month == 10) {
-      return 'October';
-    } else if (month == 11) {
-      return 'November';
-    } else {
-      return 'December';
-    }
   }
 }
