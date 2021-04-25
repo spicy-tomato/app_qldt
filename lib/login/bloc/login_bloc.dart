@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:bloc/bloc.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
-import 'package:app_qldt/login/models/models.dart';
 import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/login/models/models.dart';
 
 part 'login_event.dart';
 
@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({
     required AuthenticationRepository authenticationRepository,
-  })  : _authenticationRepository = authenticationRepository,
+  })   : _authenticationRepository = authenticationRepository,
         super(const LoginState());
 
   @override

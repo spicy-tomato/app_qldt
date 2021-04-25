@@ -1,8 +1,8 @@
-import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'style/style.dart';
 
 class UsernameInput extends StatelessWidget {
@@ -21,13 +21,11 @@ class UsernameInput extends StatelessWidget {
             style: const FormTextStyle(),
             decoration: InputDecoration(
 
-
               labelText: 'Mã sinh viên',
               errorText:
               state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
             textInputAction: TextInputAction.next,
-
           ),
         );
       },

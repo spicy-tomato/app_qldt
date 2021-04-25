@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class TodayInNowVisibleWidget extends StatelessWidget {
+class TodayInFocusedMonthWidget extends StatelessWidget {
   final DateTime date;
 
-  const TodayInNowVisibleWidget({
+  const TodayInFocusedMonthWidget({
     Key? key,
     required this.date,
   }) : super(key: key);
@@ -27,7 +27,7 @@ class TodayInNowVisibleWidget extends StatelessWidget {
             child: Text(
               '${date.day}',
               style: const TextStyle(
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w600
               ),
             ),
           ),
@@ -37,10 +37,10 @@ class TodayInNowVisibleWidget extends StatelessWidget {
   }
 }
 
-class TodayOutNowVisibleWidget extends StatelessWidget {
+class TodayOutFocusedMonthWidget extends StatelessWidget {
   final DateTime date;
 
-  const TodayOutNowVisibleWidget({
+  const TodayOutFocusedMonthWidget({
     Key? key,
     required this.date,
   }) : super(key: key);
@@ -50,19 +50,21 @@ class TodayOutNowVisibleWidget extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          Container(
-            width: 5,
-            height: 5,
-            decoration: BoxDecoration(
-              color: Color(0xffD55C7D),
-              borderRadius: BorderRadius.circular(50),
+          Center(
+            child: Container(
+              width: 45,
+              height: 45,
+              decoration: BoxDecoration(
+                color: Color(0xffD55C7D),
+                borderRadius: BorderRadius.circular(50),
+              ),
             ),
           ),
           Center(
             child: Text(
               '${date.day}',
               style: const TextStyle(
-                fontWeight: FontWeight.w500
+                fontWeight: FontWeight.w400
               ),
             ),
           ),

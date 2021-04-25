@@ -1,7 +1,7 @@
-import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'style/style.dart';
 
 class PasswordInput extends StatelessWidget {
@@ -13,13 +13,12 @@ class PasswordInput extends StatelessWidget {
         return Container(
           child: TextField(
             key: const Key('loginForm_passwordInput_textField'),
-            onChanged: (password) =>
-                context.read<LoginBloc>().add(LoginPasswordChanged(password)),
+            onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
             style: const FormTextStyle(),
             decoration: InputDecoration(
-                labelText: 'Password',
-                errorText: state.password.invalid ? 'Invalid password' : null),
-            // textInputAction: TextInputAction.next,
+              labelText: 'Mật khẩu',
+              errorText: state.password.invalid ? 'Invalid password' : null,
+            ),
           ),
         );
       },

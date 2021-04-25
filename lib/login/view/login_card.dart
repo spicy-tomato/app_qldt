@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
 
 import 'package:app_qldt/login/view/local_widgets/local_widgets.dart';
-import 'package:flutter/material.dart';
 
 class LoginCard extends StatefulWidget {
   @override
@@ -9,8 +9,6 @@ class LoginCard extends StatefulWidget {
 }
 
 class _LoginCardState extends State<LoginCard> with TickerProviderStateMixin {
-  // final GlobalKey<FormState> _formKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     final cardPadding = 16.0;

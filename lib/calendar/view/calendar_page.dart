@@ -1,25 +1,18 @@
-import 'package:app_qldt/bottom_note/bottom_note.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:table_calendar/table_calendar.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/_models/event.dart';
+import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/_widgets/topbar/topbar.dart';
 import 'package:app_qldt/_widgets/user_data_model.dart';
-
-import 'package:app_qldt/topbar/topbar.dart';
 
 import '../bloc/calendar_bloc.dart';
 import '../view/local_widgets/local_widgets.dart';
 
 class CalendarPage extends StatefulWidget {
-  final CalendarController calendarController = CalendarController();
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
   CalendarPage({Key? key}) : super(key: key);
@@ -39,7 +32,10 @@ class _CalendarPageState extends State<CalendarPage> {
         context,
         () async {
           widget.isLoading.value = true;
-          schedulesData = await UserDataModel.of(context)!.localEventService.refresh();
+
+          await UserDataModel.of(context)!.localEventService.refresh();
+          schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
+
           widget.isLoading.value = false;
         },
       ),
@@ -51,33 +47,15 @@ class _CalendarPageState extends State<CalendarPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              ///
-              /// Không sửa, vì ở đây cần build từ dưới lên trên (theo hướng màn hình
-              /// điện thoại) để _calendarController có thể được khởi tạo
-              ///
-              /// (CalendarController.init() chỉ được gọi khi TableCalendar được khởi tạo)
-              ///
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                verticalDirection: VerticalDirection.up,
+              Stack(
                 children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      /// _calendarController được khởi tạo ở đây
-                      Calendar(
-                        events: schedulesData,
-                        calendarController: widget.calendarController,
-                      ),
-                      ValueListenableBuilder(
-                        builder: (_, bool value, Widget? child) {
-                          return value ? Loading() : Container();
-                        },
-                        valueListenable: widget.isLoading,
-                      ),
-                    ],
+                  Calendar(events: schedulesData),
+                  ValueListenableBuilder(
+                    builder: (_, bool value, Widget? child) {
+                      return value ? Loading() : Container();
+                    },
+                    valueListenable: widget.isLoading,
                   ),
-                  CalendarDow(),
-                  CalendarHeader(calendarController: widget.calendarController),
                 ],
               ),
               Expanded(
@@ -87,6 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       !DeepCollectionEquality()
                           .equals(previous.selectedEvents, current.selectedEvents),
                   builder: (_, state) {
+                    // print(state.selectedEvents);
                     return EventList(event: state.selectedEvents);
                   },
                 ),

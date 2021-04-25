@@ -1,4 +1,8 @@
-import 'package:app_qldt/_models/notification.dart';
+import 'package:app_qldt/_models/app_notification.dart';
+import 'package:app_qldt/_models/receive_notification.dart';
+import 'package:app_qldt/_models/sender.dart';
+import 'package:app_qldt/_models/user_notification.dart';
+
 import 'database_provider.dart';
 import 'notification_service.dart';
 
@@ -11,38 +15,58 @@ class LocalNotificationService {
     _notificationService = NotificationService(studentId);
   }
 
-
   Future<List<dynamic>> refresh() async {
-    List<UserNotification>? rawData = await _notificationService.getNotification(studentId);
+    AppNotification? data = await _notificationService.getNotification(studentId);
 
-    if (rawData != null) {
-      await remove();
-      await save(rawData);
+    if (data != null) {
+      List<ReceiveNotification> notifications = data.notification;
+      List<Sender> senders = data.sender;
+
+      await removeNotification();
+      await saveNotification(notifications);
+
+      await removeSender();
+      await saveSender(senders);
     }
 
-    // print('Refreshing notification');
-
     notificationData = await getFromDb();
-
-    // print(notificationData);
 
     return this.notificationData;
   }
 
-  static Future<void> save(List<UserNotification> rawData) async {
-    // print('Trying to save notification');
-
+  //#region notification
+  static Future<void> saveNotification(List<ReceiveNotification> rawData) async {
     for (var row in rawData) {
       await DatabaseProvider.db.insertNotification(row.toMap());
     }
   }
 
-  static Future<List<dynamic>> getFromDb() async {
-    final rawData = await DatabaseProvider.db.notification;
-    return rawData.map((data) => UserNotification.fromJson(data)).toList();
+  static Future<void> removeNotification() async {
+    await DatabaseProvider.db.deleteNotification();
+  }
+  //#endregion
+
+  //#region sender
+  static Future<void> saveSender(List<Sender> rawData) async {
+    for (var row in rawData) {
+      await DatabaseProvider.db.insertSender(row.toMap());
+    }
   }
 
-  static Future<void> remove() async {
-    await DatabaseProvider.db.deleteNotification();
+  static Future<void> removeSender() async {
+    await DatabaseProvider.db.deleteSender();
+  }
+  //#endregion
+
+  static Future<List<dynamic>> getFromDb() async {
+    final rawData = await DatabaseProvider.db.notification;
+    return rawData.map((data) {
+      return UserNotification.fromMap(data);
+    }).toList();
+  }
+
+  static Future<void> delete() async {
+    await removeNotification();
+    await removeSender();
   }
 }
