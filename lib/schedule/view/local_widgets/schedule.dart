@@ -55,7 +55,11 @@ class _ScheduleState extends State<Schedule> {
     );
   }
 
-  void _calendarTapped(CalendarTapDetails calendarTapDetails) {}
+  void _calendarTapped(CalendarTapDetails details) {
+    if (details.targetElement == CalendarElement.calendarCell){
+
+    }
+  }
 
   Widget _scheduleViewBuilder(_, details) {
     final String monthName = "Tháng ${details.date.month}";

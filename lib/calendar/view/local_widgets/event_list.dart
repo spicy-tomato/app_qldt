@@ -89,33 +89,33 @@ class _EventListItem extends StatelessWidget {
                     color: Color(0xff694A85),
                     fontSize: 25,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 )
               : Container(),
           SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // Flexible(
-              //   child:
-              Container(
-                child: Text(
-                  event.visualizeName,
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Text(
+                    event.visualizeName,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff694A85),
+                      // ),
+                    ),
+                  ),
+                ),
+                Text(
+                  event.location ?? '',
                   style: TextStyle(
                     fontSize: 16,
                     color: Color(0xff694A85),
-                    // ),
                   ),
                 ),
-              ),
-              Text(
-                event.location ?? '',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Color(0xff694A85),
-                ),
-              ),
-            ],
+              ],
+            ),
           )
         ],
       ),
