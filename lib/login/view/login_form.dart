@@ -13,7 +13,8 @@ class LoginForm extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: "Nunito"),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
+      home:Scaffold(
+
         resizeToAvoidBottomInset: false,
         body: Container(
           child: HomeScreen(),
@@ -30,9 +31,6 @@ class HomeScreen extends StatefulWidget {
 
 class _LoginPageState extends State<HomeScreen> {
   int _pageState = 0;
-
-  var _backgroundColor = Colors.white;
-  var _headingColor = Color(0xFFB40284A);
 
   double _headingTop = 100;
 
@@ -71,9 +69,6 @@ class _LoginPageState extends State<HomeScreen> {
 
     switch (_pageState) {
       case 0:
-        _backgroundColor = Colors.blueAccent;
-        _headingColor = Color(0xFFB40284A);
-
         _headingTop = 100;
 
         _loginWidth = windowWidth;
@@ -86,8 +81,6 @@ class _LoginPageState extends State<HomeScreen> {
         break;
 
       case 1:
-        _backgroundColor = Colors.deepPurple;
-        _headingColor = Colors.white;
 
         _headingTop = 90;
 
@@ -100,7 +93,6 @@ class _LoginPageState extends State<HomeScreen> {
         _loginXOffset = 0;
         break;
       // case 2:
-      //   _backgroundColor = Color(0xFFBD34C59);
       //   _headingColor = Colors.white;
       //
       //   _headingTop = 80;
@@ -122,8 +114,13 @@ class _LoginPageState extends State<HomeScreen> {
         AnimatedContainer(
             curve: Curves.fastLinearToSlowEaseIn,
             duration: Duration(milliseconds: 1000),
-            color: _backgroundColor,
-            child: Column(
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+              image: new AssetImage("images/backgr.gif"),
+              fit: BoxFit.fill,
+            ),
+          ),
+             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 GestureDetector(
@@ -141,20 +138,10 @@ class _LoginPageState extends State<HomeScreen> {
                           margin: EdgeInsets.only(
                             top: _headingTop,
                           ),
-                          child: Text(
-                            "UTC STUDENTS",
-                            style: TextStyle(color: _headingColor, fontSize: 28),
-                          ),
                         ),
                         Container(
                           margin: EdgeInsets.all(20),
                           padding: EdgeInsets.symmetric(horizontal: 32),
-                          child: Text(
-                            "university of transport and communications",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
                         )
                       ],
                     ),
@@ -162,13 +149,6 @@ class _LoginPageState extends State<HomeScreen> {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: Center(
-                    child: Image.asset(
-                      "images/splash_bg.png",
-                      width: 300,
-                      height: 300,
-                    ),
-                  ),
                 ),
                 Container(
                   child: GestureDetector(

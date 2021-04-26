@@ -24,7 +24,7 @@ class SplashPage extends StatelessWidget {
               child: Hero(
                 tag: 'loginLogo',
                 child: Image.asset(
-                  'images/LogoUTC.jpg',
+                  'images/logo.png',
                 ),
               ),
             ),
