@@ -1,6 +1,7 @@
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
@@ -17,8 +18,7 @@ class LoginForm extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(fontFamily: "Nunito"),
       debugShowCheckedModeBanner: false,
-      home:Scaffold(
-
+      home: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
           child: HomeScreen(),
@@ -85,7 +85,6 @@ class _LoginPageState extends State<HomeScreen> {
         break;
 
       case 1:
-
         _headingTop = 90;
 
         _loginWidth = windowWidth;
@@ -116,8 +115,8 @@ class _LoginPageState extends State<HomeScreen> {
     return Stack(
       children: <Widget>[
         AnimatedContainer(
-            curve: Curves.fastLinearToSlowEaseIn,
-            duration: Duration(milliseconds: 1000),
+          curve: Curves.fastLinearToSlowEaseIn,
+          duration: Duration(milliseconds: 1000),
           decoration: new BoxDecoration(
             image: new DecorationImage(
               image: new AssetImage("images/backgr.gif"),
@@ -210,9 +209,12 @@ class _LoginPageState extends State<HomeScreen> {
             duration: Duration(milliseconds: 1000),
             transform: Matrix4.translationValues(_loginXOffset, _loginYOffset, 1),
             decoration: BoxDecoration(
-                color: Colors.white.withOpacity(_loginOpacity),
-                borderRadius:
-                    BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+              color: Colors.white.withOpacity(_loginOpacity),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

@@ -19,13 +19,12 @@ class UsernameInput extends StatelessWidget {
             onChanged: (username) =>
                 context.read<LoginBloc>().add(LoginUsernameChanged(username)),
             style: const FormTextStyle(),
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-
               labelText: 'Mã sinh viên',
               errorText:
               state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
-            textInputAction: TextInputAction.next,
           ),
         );
       },
