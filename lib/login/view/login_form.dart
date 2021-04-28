@@ -1,4 +1,8 @@
+import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:formz/formz.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:keyboard_visibility/keyboard_visibility.dart';
@@ -120,99 +124,120 @@ class _LoginPageState extends State<HomeScreen> {
               fit: BoxFit.fill,
             ),
           ),
-             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _pageState = 0;
-                    });
-                  },
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        AnimatedContainer(
-                          curve: Curves.fastLinearToSlowEaseIn,
-                          duration: Duration(milliseconds: 1000),
-                          margin: EdgeInsets.only(
-                            top: _headingTop,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          padding: EdgeInsets.symmetric(horizontal: 32),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (_pageState != 0) {
-                          _pageState = 0;
-                        } else {
-                          _pageState = 1;
-                        }
-                      });
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(32),
-                      padding: EdgeInsets.all(20),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFB40284A), borderRadius: BorderRadius.circular(50)),
-                      child: Center(
-                        child: Text(
-                          "Get Started",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )),
-        AnimatedContainer(
-          padding: EdgeInsets.all(32),
-          width: _loginWidth,
-          height: _loginHeight,
-          curve: Curves.fastLinearToSlowEaseIn,
-          duration: Duration(milliseconds: 1000),
-          transform: Matrix4.translationValues(_loginXOffset, _loginYOffset, 1),
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(_loginOpacity),
-              borderRadius:
-                  BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      "Login To Continue",
-                      style: TextStyle(fontSize: 20),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _pageState = 0;
+                  });
+                },
+                child: Container(
+                  child: Column(
+                    children: <Widget>[
+                      AnimatedContainer(
+                        curve: Curves.fastLinearToSlowEaseIn,
+                        duration: Duration(milliseconds: 1000),
+                        margin: EdgeInsets.only(
+                          top: _headingTop,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20),
+                        padding: EdgeInsets.symmetric(horizontal: 32),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 32),
+              ),
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_pageState != 0) {
+                        _pageState = 0;
+                      } else {
+                        _pageState = 1;
+                      }
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(32),
+                    padding: EdgeInsets.all(20),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xFFB40284A), borderRadius: BorderRadius.circular(50)),
+                    child: Center(
+                      child: Text(
+                        "Bắt đầu",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
                     ),
                   ),
-                  UsernameInput(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PasswordInput(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  LoginButton(),
-                ],
-              ),
+                ),
+              )
             ],
+          ),
+        ),
+        BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state.status.isSubmissionFailure) {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text("Thông tin"),
+                  content: Text("Đăng nhập thất bại"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),
+                      child: Text("Đồng ý"),
+                    )
+                  ],
+                ),
+              );
+            }
+          },
+          child: AnimatedContainer(
+            padding: EdgeInsets.all(32),
+            width: _loginWidth,
+            height: _loginHeight,
+            curve: Curves.fastLinearToSlowEaseIn,
+            duration: Duration(milliseconds: 1000),
+            transform: Matrix4.translationValues(_loginXOffset, _loginYOffset, 1),
+            decoration: BoxDecoration(
+                color: Colors.white.withOpacity(_loginOpacity),
+                borderRadius:
+                    BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        "Đăng nhập để tiếp tục",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    UsernameInput(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    PasswordInput(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    LoginButton(),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],

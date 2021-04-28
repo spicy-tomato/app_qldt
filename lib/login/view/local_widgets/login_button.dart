@@ -32,7 +32,7 @@ class LoginButton extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text('Login'),
+                    child: const Text('Đăng nhập'),
                     onPressed: () {
                       context.read<LoginBloc>().add(const LoginSubmitted());
                     },
