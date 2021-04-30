@@ -68,7 +68,11 @@ class UserEvent {
     );
   }
 
-  static String _getShortenClassName(String string) {
+  static String _getShortenClassName(String? string) {
+    if (string == null){
+      return '';
+    }
+
     List<String> listSplitByWhiteSpace = string.split(' ');
     String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
     List<String> strArr = oldStr.split('-');

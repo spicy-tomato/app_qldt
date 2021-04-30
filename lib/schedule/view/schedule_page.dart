@@ -48,7 +48,7 @@ class _SchedulePageState extends State<SchedulePage> {
   void _addData() {
     final List<UserEvent> appointment = _getDataSource(schedulesData);
 
-    print('_addData() called');
+    // print('_addData() called');
     _events.appointments!.clear();
 
     appointment.forEach((element) {
