@@ -29,9 +29,7 @@ class Schedule {
       moduleClassName: map['module_class_name'],
       idRoom: map['id_room'],
       shiftSchedules: map['shift_schedules'],
-      daySchedules: DateTime.parse(
-        map['day_schedules'],
-      ),
+      daySchedules: DateTime.parse(map['day_schedules']),
     );
   }
 

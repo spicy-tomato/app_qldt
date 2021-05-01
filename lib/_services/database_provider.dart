@@ -77,7 +77,7 @@ class DatabaseProvider {
         'notification.typez,'
         'notification.time_start,'
         'notification.time_end,'
-        'notification.expired,'
+        'notification.time_created,'
         'sender.sender_name '
         'FROM '
         'notification JOIN sender '
@@ -107,9 +107,9 @@ class DatabaseProvider {
       'content TEXT,'
       'typez TEXT,'
       'id_sender INTEGER,'
+      'time_created TEXT,'
       'time_start TEXT,'
-      'time_end TEXT,'
-      'expired TEXT);';
+      'time_end TEXT);';
 
   static const senderTable = ''
       'CREATE TABLE IF NOT EXISTS sender('

@@ -161,7 +161,7 @@ class ListItem extends StatelessWidget {
               ),
             ),
             Text(
-              DateFormat.Md().format(DateTime.now()),
+              DateFormat('d/M').format(notification.timeCreated),
               style: TextStyle(
                 color: Theme.of(context).backgroundColor,
               ),

@@ -4,9 +4,9 @@ class UserNotification {
   final String content;
   final String typez;
   final String senderName;
+  final DateTime timeCreated;
   final DateTime? timeStart;
   final DateTime? timeEnd;
-  final DateTime? expired;
 
   UserNotification({
     required this.idNotification,
@@ -16,7 +16,7 @@ class UserNotification {
     required this.senderName,
     required this.timeStart,
     required this.timeEnd,
-    required this.expired,
+    required this.timeCreated,
   });
 
   factory UserNotification.fromMap(Map<String, dynamic> map) {
@@ -26,9 +26,9 @@ class UserNotification {
       content: map['content'],
       typez: map['typez'],
       senderName: map['sender_name'],
+      timeCreated: DateTime.parse(map['time_created']),
       timeStart: map['time_start'] == null ? null : DateTime.tryParse(map['time_start']),
       timeEnd: map['time_end'] == null ? null : DateTime.tryParse(map['time_end']),
-      expired: map['expired'] == null ? null : DateTime.tryParse(map['expired']),
     );
   }
 
@@ -39,9 +39,9 @@ class UserNotification {
       "content": content,
       "typez": typez,
       "id_sender": senderName,
+      "time_created": timeCreated,
       "time_start": timeStart,
       "time_end": timeEnd,
-      "expired": expired,
     };
   }
 
