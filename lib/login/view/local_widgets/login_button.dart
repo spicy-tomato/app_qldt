@@ -16,30 +16,39 @@ class LoginButton extends StatelessWidget {
         height: 56,
         child: BlocBuilder<LoginBloc, LoginState>(
           buildWhen: (previous, current) => previous.status != current.status,
-          builder: (context, state) {
-            return state.status.isSubmissionInProgress
-                ? const Center(
-                    child: const CircularProgressIndicator(),
-                  )
-                : ElevatedButton(
-                    key: const Key('loginForm_continue_raisedButton'),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFFB40284A)),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                      ),
-                    ),
-                    child: const Text('Đăng nhập'),
-                    onPressed: () {
-                      context.read<LoginBloc>().add(const LoginSubmitted());
-                    },
-                  );
+          builder: (_, state) {
+            return state.status.isSubmissionInProgress ? ProcessingWidget() : Button();
           },
         ),
       ),
+    );
+  }
+}
+
+class ProcessingWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: const CircularProgressIndicator(),
+    );
+  }
+}
+
+class Button extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      key: const Key('loginForm_continue_raisedButton'),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFB40284A)),
+        shape: MaterialStateProperty.all<OutlinedBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+        ),
+      ),
+      child: const Text('Đăng nhập'),
+      onPressed: () => context.read<LoginBloc>().add(const LoginSubmitted()),
     );
   }
 }

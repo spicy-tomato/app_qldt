@@ -8,34 +8,32 @@ class PlanPage extends StatelessWidget {
       key: const Key('Plan_page'),
       direction: DismissDirection.down,
       onDismissed: (_) => Navigator.of(context).pop(),
-      child: SafeArea(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topCenter,
-                child: Icon(
-                  Icons.keyboard_arrow_down,
-                  size: 40,
-                  color: Theme.of(context).backgroundColor,
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: Icon(
+                Icons.keyboard_arrow_down,
+                size: 40,
+                color: Theme.of(context).backgroundColor,
+              ),
+            ),
+            SizedBox(height: 20),
+            ListView(
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                PlanPageTopbar(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 60),
+                  child: Title(),
                 ),
-              ),
-              SizedBox(height: 20),
-              ListView(
-                physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  PlanPageTopbar(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Title(),
-                  ),
-                  PlanPageDivider(context: context),
-                  Time(),
-                ],
-              ),
-            ],
-          ),
+                PlanPageDivider(context: context),
+                Time(),
+              ],
+            ),
+          ],
         ),
       ),
     );

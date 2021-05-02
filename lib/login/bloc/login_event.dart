@@ -7,6 +7,24 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class HideLoginDialog extends LoginEvent {
+  final bool hide;
+
+  const HideLoginDialog(this.hide);
+
+  @override
+  List<Object> get props => [hide];
+}
+
+class HideKeyboard extends LoginEvent {
+  final bool hide;
+
+  const HideKeyboard(this.hide);
+
+  @override
+  List<Object> get props => [hide];
+}
+
 class LoginUsernameChanged extends LoginEvent {
   final String username;
 

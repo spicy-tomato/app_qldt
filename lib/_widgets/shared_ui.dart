@@ -20,19 +20,17 @@ class SharedUI extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: Sidebar(),
-      body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(top: 60),
-                decoration: decoration ?? BoxDecoration(),
-                child: child,
-              ),
-              TopBar(topRightWidget: topRightWidget),
-            ],
-          ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(top: 60),
+              decoration: decoration ?? BoxDecoration(),
+              child: child,
+            ),
+            TopBar(topRightWidget: topRightWidget),
+          ],
         ),
       ),
     );

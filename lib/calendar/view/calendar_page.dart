@@ -60,12 +60,14 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               Expanded(
                 child: BlocBuilder<CalendarBloc, CalendarState>(
-                  buildWhen: (previous, current) =>
-                      current.buildFirstTime &&
-                      !DeepCollectionEquality()
-                          .equals(previous.selectedEvents, current.selectedEvents),
+                  buildWhen: (previous, current) {
+                    return current.buildFirstTime &&
+                        !DeepCollectionEquality().equals(
+                          previous.selectedEvents,
+                          current.selectedEvents,
+                        );
+                  },
                   builder: (_, state) {
-                    // print(state.selectedEvents);
                     return EventList(event: state.selectedEvents);
                   },
                 ),

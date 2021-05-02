@@ -13,85 +13,83 @@ class Sidebar extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return SafeArea(
-      child: SizedBox(
-        width: screenWidth,
-        height: screenHeight,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Theme.of(context).backgroundColor,
-                Color(0xff7579e7),
-                Color(0xff9ab3f5),
-              ],
-            ),
-          ),
-          child: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment(0.9, -0.95),
-                child: CloseButton(),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15),
-                width: screenWidth * 0.5,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 60),
-                      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                        builder: (context, state) {
-                          return Column(
-                            children: <Widget>[
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.red,
-                                    width: 4,
-                                  ),
-                                  borderRadius: const BorderRadius.all(Radius.circular(50)),
-                                  image: const DecorationImage(
-                                    image: ExactAssetImage('images/avatar.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(state.user.name.toString()),
-                              const SizedBox(height: 10),
-                              Text(state.user.id.toString()),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                    Flexible(
-                      child:
-                          // BlocBuilder<ScreenBloc, ScreenState>(
-                          //   builder: (context, state) {
-                          //     return
-                          ListView(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 7,
-                          // horizontal: 20,
-                        ),
-                        children: _getSidebarItems(context),
-                      ),
-                      //   },
-                      // ),
-                    ),
-                  ],
-                ),
-              ),
+    return SizedBox(
+      width: screenWidth,
+      height: screenHeight,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Theme.of(context).backgroundColor,
+              Color(0xff7579e7),
+              Color(0xff9ab3f5),
             ],
           ),
+        ),
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment(0.9, -0.95),
+              child: CloseButton(),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 15),
+              width: screenWidth * 0.5,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 60),
+                    child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                      builder: (context, state) {
+                        return Column(
+                          children: <Widget>[
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.red,
+                                  width: 4,
+                                ),
+                                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                image: const DecorationImage(
+                                  image: ExactAssetImage('images/avatar.jpg'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(state.user.name.toString()),
+                            const SizedBox(height: 10),
+                            Text(state.user.id.toString()),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                  Flexible(
+                    child:
+                        // BlocBuilder<ScreenBloc, ScreenState>(
+                        //   builder: (context, state) {
+                        //     return
+                        ListView(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 7,
+                        // horizontal: 20,
+                      ),
+                      children: _getSidebarItems(context),
+                    ),
+                    //   },
+                    // ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

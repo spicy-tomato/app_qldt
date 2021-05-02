@@ -13,12 +13,10 @@ class NotificationPostPage extends StatelessWidget {
       key: const Key('Plan_page'),
       direction: DismissDirection.down,
       onDismissed: (_) => Navigator.of(context).pop(),
-      child: SafeArea(
-        child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: ScrollView(notification: notification),
-          ),
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: ScrollView(notification: notification),
         ),
       ),
     );
