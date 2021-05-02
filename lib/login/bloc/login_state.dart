@@ -5,12 +5,16 @@ class LoginState extends Equatable {
   final Username username;
   final Password password;
   final bool hidePassword;
+  final bool hideKeyboard;
+  final bool hideLoginDialog;
 
   const LoginState({
     this.status = FormzStatus.pure,
     this.username = const Username.pure(),
     this.password = const Password.pure(),
     this.hidePassword = true,
+    this.hideKeyboard = true,
+    this.hideLoginDialog = true,
   });
 
   LoginState copyWith({
@@ -18,15 +22,20 @@ class LoginState extends Equatable {
     Username? username,
     Password? password,
     bool? hidePassword,
-  }){
+    bool? hideKeyboard,
+    bool? hideLoginDialog,
+  }) {
     return LoginState(
-      status: status ?? this.status,
-      username: username ?? this.username,
-      password: password ?? this.password,
-      hidePassword: hidePassword ?? this.hidePassword,
+        status: status ?? this.status,
+        username: username ?? this.username,
+        password: password ?? this.password,
+        hidePassword: hidePassword ?? this.hidePassword,
+        hideKeyboard: hideKeyboard ?? this.hideKeyboard,
+        hideLoginDialog: hideLoginDialog ?? this.hideLoginDialog,
     );
   }
 
   @override
-  List<Object> get props => [status, username, password, hidePassword];
+  List<Object> get props =>
+      [status, username, password, hidePassword, hideKeyboard, hideLoginDialog];
 }

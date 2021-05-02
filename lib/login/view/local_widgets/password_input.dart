@@ -25,7 +25,7 @@ class PasswordInput extends StatelessWidget {
                 obscureText: state.hidePassword,
                 decoration: InputDecoration(
                   labelText: 'Mật khẩu',
-                  errorText: state.password.invalid ? 'Invalid password' : null,
+                  errorText: state.password.invalid ? 'Hãy nhập mật khẩu' : null,
                   contentPadding: const EdgeInsets.only(right: 48),
                 ),
               );
@@ -33,7 +33,7 @@ class PasswordInput extends StatelessWidget {
           ),
           IconButton(
             iconSize: 20,
-            icon: Icon(Icons.remove_red_eye),
+            icon: const Icon(Icons.remove_red_eye),
             onPressed: () => context.read<LoginBloc>().add(PasswordVisibleChanged()),
           )
         ],
