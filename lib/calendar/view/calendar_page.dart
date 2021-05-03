@@ -1,3 +1,4 @@
+import 'package:app_qldt/_widgets/bottom_note/view/bottom_note.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';

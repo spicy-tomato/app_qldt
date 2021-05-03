@@ -31,6 +31,12 @@ class PlanPage extends StatelessWidget {
                 ),
                 PlanPageDivider(context: context),
                 Time(),
+                // Container(
+                //   height: 50,
+                //   padding: EdgeInsets.symmetric(horizontal: 60),
+                //   width: 200,
+                //   child: repeat(),
+                // ),
               ],
             ),
           ],
@@ -122,11 +128,31 @@ class Title extends StatelessWidget {
   }
 }
 
-class Time extends StatelessWidget {
+class Time extends StatefulWidget {
+  @override
+  _TimeState createState() => _TimeState();
+}
+
+class _TimeState extends State<Time> {
+  late DateTime pickedDatef;
+  late DateTime pickedDatel;
+  late TimeOfDay timef;
+  late TimeOfDay timel;
+
+  @override
+  void initState() {
+    super.initState();
+    pickedDatef = DateTime.now();
+    pickedDatel = DateTime.now();
+    timef = TimeOfDay.now();
+    timel = TimeOfDay.now();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CommonPadding(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ListTile(
             leading: Icon(Icons.access_time_rounded),
@@ -134,23 +160,73 @@ class Time extends StatelessWidget {
             trailing: Switcher(),
           ),
           ListTile(
-            title: Text(DateFormat.yMMMd().format(DateTime.now())),
-            trailing: Text(
-              '20:00',
-              style: TextStyle(
-                color: Theme.of(context).backgroundColor,
-              ),
-            ),
+            // ignore: deprecated_member_use
+            title: RaisedButton(
+                child: Text(
+                    "Stuff  ${pickedDatef.weekday + 1}, ${DateFormat.yMMMd().format(pickedDatef)}"),
+                onPressed: () async {
+                  DateTime datef = (await showDatePicker(
+                    context: context,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2100),
+                    initialDate: pickedDatef,
+                  ))!;
+                  if (datef != null) {
+                    setState(() {
+                      pickedDatef = datef;
+                    });
+                  }
+                }),
+            // ignore: deprecated_member_use
+            trailing: RaisedButton(
+                child: Text(" ${timef.hour}:${timef.minute}"),
+                onPressed: () async {
+                  TimeOfDay timefi = (await showTimePicker(
+                    context: context,
+                    initialTime: timef,
+                  ))!;
+
+                  if (timefi != null) {
+                    setState(() {
+                      timef = timefi;
+                    });
+                  }
+                }),
           ),
           ListTile(
-            title: Text(DateFormat.yMMMd().format(DateTime.now())),
-            trailing: Text(
-              '20:00',
-              style: TextStyle(
-                color: Theme.of(context).backgroundColor,
-              ),
-            ),
-          )
+            // ignore: deprecated_member_use
+            title: RaisedButton(
+                child: Text(
+                    "Stuff  ${pickedDatel.weekday + 1}, ${DateFormat.yMMMd().format(pickedDatel)}"),
+                onPressed: () async {
+                  DateTime datel = (await showDatePicker(
+                    context: context,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2100),
+                    initialDate: pickedDatef,
+                  ))!;
+                  if (datel != null) {
+                    setState(() {
+                      pickedDatel = datel;
+                    });
+                  }
+                }),
+            // ignore: deprecated_member_use
+            trailing: RaisedButton(
+                child: Text(" ${timel.hour}:${timel.minute}"),
+                onPressed: () async {
+                  TimeOfDay timela = (await showTimePicker(
+                    context: context,
+                    initialTime: timef,
+                  ))!;
+
+                  if (timela != null) {
+                    setState(() {
+                      timel = timela;
+                    });
+                  }
+                }),
+          ),
         ],
       ),
     );
@@ -187,3 +263,37 @@ class _SwitcherState extends State<Switcher> {
     });
   }
 }
+// class repeat extends StatefulWidget {
+//   @override
+//   _repeatState createState() => _repeatState();
+// }
+//
+// // ignore: camel_case_types
+// class _repeatState  extends State<repeat> {
+//   late String value;
+//   List _listitem = [
+//     'không Lặp Lại',
+//     'hàng Ngày','Hàng tuần'
+//
+//   ];
+//   @override
+//   Widget build(BuildContext context) {
+//     return CommonPadding(
+//       child: DropdownButton(
+//         value: value,
+//         onChanged:(newValue){
+//           setState(() {
+//             value= newValue.toString();
+//           });
+//         },
+//         items: _listitem.map((newValue){
+//           return DropdownMenuItem(
+//                value: newValue,
+//               child: Text(newValue),
+//           );
+//         }).toList()
+//       )
+//
+//     );
+//   }
+// }
