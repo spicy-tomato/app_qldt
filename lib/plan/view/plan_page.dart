@@ -32,12 +32,34 @@ class PlanPage extends StatelessWidget {
                   ),
                   PlanPageDivider(context: context),
                   Time(),
-                  // Container(
-                  //   height: 50,
-                  //   padding: EdgeInsets.symmetric(horizontal: 60),
-                  //   width: 200,
-                  //   child: repeat(),
-                  // ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0,30,0,0),
+                    padding: EdgeInsets.symmetric(horizontal: 32),
+                    child : repeat(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: Morepeople(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: location(),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: describe(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0,30,0,0),
+                    padding: EdgeInsets.symmetric(horizontal: 32),
+                    child : Display(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(0,30,0,0),
+                    padding: EdgeInsets.symmetric(horizontal: 32),
+                    child : status(),
+                  ),
                 ],
               ),
             ],
@@ -52,6 +74,11 @@ class PlanPage extends StatelessWidget {
 TextStyle addTitleTextStyle() {
   return TextStyle(
     fontSize: 25,
+  );
+}
+TextStyle addTitleTextStyle1() {
+  return TextStyle(
+    fontSize: 20.0,
   );
 }
 
@@ -126,6 +153,52 @@ class Title extends StatelessWidget {
         border: InputBorder.none,
         hintText: 'Thêm tiêu đề',
         hintStyle: addTitleTextStyle(),
+      ),
+    );
+  }
+}
+class Morepeople extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: addTitleTextStyle(),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+
+        icon: new Icon(Icons.people),
+        hintText: 'Thêm người...',
+        hintStyle: addTitleTextStyle1(),
+      ),
+    );
+  }
+}
+
+class location extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: addTitleTextStyle(),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+
+        icon: new Icon(Icons.location_on_rounded),
+        hintText: 'Vị trí...',
+        hintStyle: addTitleTextStyle1(),
+      ),
+    );
+  }
+}
+class describe extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      style: addTitleTextStyle(),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+
+        icon: new Icon(Icons.dehaze_outlined),
+        hintText: 'Mô tả ...',
+        hintStyle: addTitleTextStyle1(),
       ),
     );
   }
@@ -267,38 +340,118 @@ class _SwitcherState extends State<Switcher> {
     });
   }
 }
-// class repeat extends StatefulWidget {
-//   @override
-//   _repeatState createState() => _repeatState();
-// }
-//
-// // ignore: camel_case_types
-// class _repeatState  extends State<repeat> {
-//   late String value;
-//   List _listitem = [
-//     'không Lặp Lại',
-//     'hàng Ngày','Hàng tuần'
-//
-//   ];
-//   @override
-//   Widget build(BuildContext context) {
-//     return CommonPadding(
-//       child: DropdownButton(
-//         value: value,
-//         onChanged:(newValue){
-//           setState(() {
-//             value= newValue.toString();
-//           });
-//         },
-//         items: _listitem.map((newValue){
-//           return DropdownMenuItem(
-//                value: newValue,
-//               child: Text(newValue),
-//           );
-//         }).toList()
-//       )
-//
-//     );
-//   }
-// }
+class repeat extends StatefulWidget {
+  @override
+  _repeatState createState() => _repeatState();
+}
+
+// ignore: camel_case_types
+class _repeatState  extends State<repeat> {
+  late String value = 'Không lặp lại';
+  List _listitem =  ['Không lặp lại', 'Hàng ngày', 'Hàng tuần', 'Hàng tháng','Hàng năm','Tuỳ chỉnh...'];
+  @override
+  Widget build(BuildContext context) {
+
+    return CommonPadding(
+      child: DropdownButton(
+            dropdownColor: Colors.grey,
+          style: TextStyle(color: Colors.black,fontSize: 22.0),
+          elevation: 5,
+          icon: new Icon(Icons.arrow_drop_down),
+          iconSize: 36.0,
+          isExpanded: true,
+          value: value,
+        onChanged:(newValue){
+          setState(() {
+            value= newValue.toString();
+          });
+        },
+        items: _listitem.map((newValue){
+          return DropdownMenuItem(
+
+               value: newValue,
+              child: Text(newValue),
+          );
+        }).toList()
+      )
+
+    );
+  }
+}
+class Display extends StatefulWidget {
+  @override
+  _DisplayState createState() => _DisplayState();
+}
+
+// ignore: camel_case_types
+class _DisplayState  extends State<Display> {
+  late String Display = 'Mặc định';
+  List _listitem =  ['Công khai', 'Mặc định', 'Riêng tư'];
+  @override
+  Widget build(BuildContext context) {
+
+    return CommonPadding(
+        child: DropdownButton(
+            dropdownColor: Colors.grey,
+            style: TextStyle(color: Colors.black,fontSize: 22.0),
+            elevation: 5,
+            icon: new Icon(Icons.arrow_drop_down),
+            iconSize: 36.0,
+            isExpanded: true,
+            value: Display,
+            onChanged:(newValue){
+              setState(() {
+                Display= newValue.toString();
+              });
+            },
+            items: _listitem.map((newValue){
+              return DropdownMenuItem(
+
+                value: newValue,
+                child: Text(newValue),
+              );
+            }).toList()
+        )
+
+    );
+  }
+}
+class status extends StatefulWidget {
+  @override
+  statusState createState() => statusState();
+}
+
+// ignore: camel_case_types
+class statusState  extends State<status> {
+  late String status = 'Rảnh';
+  List _listitem =  ['Rảnh', 'Bận'];
+  @override
+  Widget build(BuildContext context) {
+
+    return CommonPadding(
+        child: DropdownButton(
+            dropdownColor: Colors.grey,
+            style: TextStyle(color: Colors.black,fontSize: 22.0),
+            elevation: 5,
+            icon: new Icon(Icons.arrow_drop_down),
+            iconSize: 36.0,
+            isExpanded: true,
+            value: status,
+            onChanged:(newValue){
+              setState(() {
+                status= newValue.toString();
+              });
+            },
+            items: _listitem.map((newValue){
+              return DropdownMenuItem(
+
+                value: newValue,
+                child: Text(newValue),
+              );
+            }).toList()
+        )
+
+    );
+  }
+}
 
