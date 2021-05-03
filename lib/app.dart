@@ -16,7 +16,7 @@ import 'calendar/calendar.dart';
 import 'home/home.dart';
 import 'login/login.dart';
 import 'notification/notification.dart';
-import 'schedule/view/schedule_page.dart';
+import 'schedule/schedule_page.dart';
 
 class Application extends StatefulWidget {
   final AuthenticationRepository authenticationRepository;

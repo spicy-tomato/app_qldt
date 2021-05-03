@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
-import 'local_widgets/login_button.dart';
-import 'local_widgets/password_input.dart';
-import 'local_widgets/username_input.dart';
+import 'local_widgets/local_widgets.dart';
 
 class LoginForm extends StatelessWidget {
   @override

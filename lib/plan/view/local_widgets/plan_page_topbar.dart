@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+
+class PlanPageTopbar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 10, right: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+            ),
+            child: Icon(
+              Icons.close,
+              color: Theme.of(context).backgroundColor,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          Container(
+            width: 80,
+            height: 40,
+            child: Material(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              color: Theme.of(context).backgroundColor,
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                onTap: () {
+                  print('Save button pressed!');
+                },
+                child: Center(
+                  child: Text('Lưu'),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
