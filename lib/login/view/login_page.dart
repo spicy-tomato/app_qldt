@@ -35,9 +35,7 @@ class LoginPage extends StatelessWidget {
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return WillPopScope(
-              onWillPop: () async {
-                return await _onWillPop(context, state);
-              },
+              onWillPop: () => _onWillPop(context, state),
               child: Scaffold(
                 resizeToAvoidBottomInset: false,
                 body: Container(
@@ -52,11 +50,11 @@ class LoginPage extends StatelessWidget {
   }
 
   Future<bool> _onWillPop(BuildContext context, LoginState state) async {
-    if (!state.hideLoginDialog){
+    if (!state.hideLoginDialog) {
       context.read<LoginBloc>().add(HideLoginDialog(true));
     }
 
-    return state.hideLoginDialog;
+    return Future.value(state.hideLoginDialog);
   }
 }
 

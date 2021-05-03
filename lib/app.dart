@@ -144,7 +144,7 @@ class _ApplicationState extends State<Application> {
     }
 
     Stopwatch stopwatch = Stopwatch()..start();
-    final maxTurnAroundTime = const Duration(seconds: 2);
+    final minTurnAroundTime = const Duration(milliseconds: 1000);
 
     /// Khởi động các service
     final tokenService = TokenService();
@@ -160,7 +160,7 @@ class _ApplicationState extends State<Application> {
     final timeEnded = stopwatch.elapsed;
 
     await Future.delayed(
-        timeEnded < maxTurnAroundTime ? maxTurnAroundTime - timeEnded : const Duration(seconds: 0),
+        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0),
         () {
       _navigator!.pushNamedAndRemoveUntil('/home', (_) => false);
     });

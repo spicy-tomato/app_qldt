@@ -27,12 +27,46 @@ class SharedUI extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(top: 60),
               decoration: decoration ?? BoxDecoration(),
-              child: child,
+              child: WillPopScope(
+                child: child,
+                onWillPop: () => _onWillPop(context),
+              ),
             ),
             TopBar(topRightWidget: topRightWidget),
           ],
         ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop(BuildContext context) async {
+    if (Navigator.of(context).canPop()) {
+      return Future.value(true);
+    }
+
+    return await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text(
+                'Bạn có chắc chắn muốn thoát ứng dụng không?',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Có"),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Không"),
+                ),
+              ],
+            );
+          },
+        ) ??
+        Future.value(false);
   }
 }
