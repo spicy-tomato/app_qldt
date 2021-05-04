@@ -15,7 +15,7 @@ class PasswordInput extends StatelessWidget {
     return Container(
       child: Stack(
         alignment: Alignment.centerRight,
-        children: [
+        children: <Widget>[
           BlocBuilder<LoginBloc, LoginState>(
             buildWhen: (previous, current) {
               return previous.password != current.password ||

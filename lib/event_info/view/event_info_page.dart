@@ -19,17 +19,17 @@ class _EventInfoPageState extends State<EventInfoPage> {
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: <Widget>[
                       IconButton(
                         icon: Icon(Icons.edit_outlined),
                         onPressed: () {

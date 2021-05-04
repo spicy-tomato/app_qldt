@@ -98,7 +98,7 @@ class BackScreen extends StatelessWidget {
         ),
       ),
       child: Stack(
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: () {
               context.read<LoginBloc>().add(HideLoginDialog(true));
