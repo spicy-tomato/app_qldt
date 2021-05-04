@@ -4,16 +4,14 @@ import 'shared/shared.dart';
 class Location extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CommonPadding(
-      child: PlanPageCustomListTile(
-        leading: const Icon(Icons.location_on_outlined),
-        title: TextField(
-          style: PlanPageConstant.of(context).textFieldStyle,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Vị trí',
-            hintStyle: PlanPageConstant.of(context).hintTextFieldStyle,
-          ),
+    return PlanPageCustomListTile(
+      leading: const Icon(Icons.location_on_outlined),
+      title: TextField(
+        style: PlanPageConstant.of(context).textFieldStyle,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Vị trí',
+          hintStyle: PlanPageConstant.of(context).hintTextFieldStyle,
         ),
       ),
     );

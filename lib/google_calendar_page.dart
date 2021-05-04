@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import '_models/calendar_client.dart';

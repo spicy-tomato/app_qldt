@@ -9,12 +9,12 @@ class UserDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].from;
+    return appointments![index].fromDay;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments![index].to;
+    return appointments![index].toDay;
   }
 
   @override

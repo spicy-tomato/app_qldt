@@ -9,33 +9,26 @@ class PlanPageTopbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           TextButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-            ),
+            onPressed: () => Navigator.of(context).pop(),
+            style:
+                ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)),
             child: Icon(
               Icons.close,
               color: Theme.of(context).backgroundColor,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           ),
           Container(
             width: 80,
             height: 40,
             child: Material(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
               color: Theme.of(context).backgroundColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               child: InkWell(
-                customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
+                customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                 onTap: () {
                   print('Save button pressed!');
                 },
-                child: Center(
+                child: const Center(
                   child: Text('Lưu'),
                 ),
               ),

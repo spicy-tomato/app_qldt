@@ -24,9 +24,9 @@ class UsernameInput extends StatelessWidget {
               labelText: 'Mã sinh viên',
               errorText: state.username.invalid ? 'Hãy nhập mã sinh viên' : null,
             ),
-            onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
             textInputAction: TextInputAction.next,
             onEditingComplete: () => focusNode.nextFocus(),
+            onChanged: (username) => context.read<LoginBloc>().add(LoginUsernameChanged(username)),
           );
         },
       ),

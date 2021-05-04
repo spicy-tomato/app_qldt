@@ -1,10 +1,8 @@
-import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
+import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'local_widgets/local_widgets.dart';
 
 class LoginForm extends StatelessWidget {
@@ -14,9 +12,9 @@ class LoginForm extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocConsumer<LoginBloc, LoginState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state.status.isSubmissionFailure) {
-          showDialog(
+          await showDialog(
             barrierDismissible: false,
             context: context,
             builder: (_) {

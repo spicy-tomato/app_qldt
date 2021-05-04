@@ -41,7 +41,7 @@ class PasswordInput extends StatelessWidget {
           IconButton(
             iconSize: 20,
             icon: const Icon(Icons.remove_red_eye),
-            onPressed: () => context.read<LoginBloc>().add(PasswordVisibleChanged()),
+            onPressed: () => context.read<LoginBloc>().add(LoginPasswordVisibleChanged()),
           )
         ],
       ),

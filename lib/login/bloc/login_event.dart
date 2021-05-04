@@ -16,10 +16,10 @@ class HideLoginDialog extends LoginEvent {
   List<Object> get props => [hide];
 }
 
-class HideKeyboard extends LoginEvent {
+class LoginHideKeyboard extends LoginEvent {
   final bool hide;
 
-  const HideKeyboard(this.hide);
+  const LoginHideKeyboard(this.hide);
 
   @override
   List<Object> get props => [hide];
@@ -43,8 +43,8 @@ class LoginPasswordChanged extends LoginEvent {
   List<Object> get props => [password];
 }
 
-class PasswordVisibleChanged extends LoginEvent {
-  const PasswordVisibleChanged();
+class LoginPasswordVisibleChanged extends LoginEvent {
+  const LoginPasswordVisibleChanged();
 }
 
 class LoginSubmitted extends LoginEvent {

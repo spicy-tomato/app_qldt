@@ -26,12 +26,9 @@ class LoginPage extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       constraints: const BoxConstraints.expand(),
       color: Colors.deepPurple,
-      child: BlocProvider(
-        create: (context) {
-          return LoginBloc(
-            authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context),
-          );
-        },
+      child: BlocProvider<LoginBloc>(
+        create: (context) => LoginBloc(
+            authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return WillPopScope(
@@ -69,7 +66,7 @@ class _LoginPageState extends State<HomeScreen> {
     super.initState();
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
-        context.read<LoginBloc>().add(HideKeyboard(!visible));
+        context.read<LoginBloc>().add(LoginHideKeyboard(!visible));
       },
     );
   }

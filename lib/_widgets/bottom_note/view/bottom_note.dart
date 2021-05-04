@@ -40,7 +40,7 @@ class BottomText extends StatelessWidget {
               transitionBuilder: (_, anim1, __, child) {
                 return SlideTransition(
                   position: Tween(
-                    begin: Offset(0, 1),
+                    begin: Offset(0, 0.4),
                     end: Offset(0, 0),
                   ).animate(anim1),
                   child: child,

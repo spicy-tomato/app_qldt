@@ -1,8 +1,8 @@
 export 'shared/shared.dart';
 
-export 'add_people.dart';
+export 'add_guest.dart';
 export 'describe.dart';
-export 'display.dart';
+export 'accessibility.dart';
 export 'location.dart';
 export 'status.dart';
 export 'title.dart';

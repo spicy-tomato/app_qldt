@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:formz/formz.dart';
 
 import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
@@ -24,7 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is HideLoginDialog) {
       yield _mapLoginDialogVisibleChangedToState(event, state);
-    } else if (event is HideKeyboard) {
+    } else if (event is LoginHideKeyboard) {
       yield _mapKeyboardVisibleChangedToState(state);
     } else if (event is LoginUsernameChanged) {
       yield _mapUsernameChangedToState(event, state);
@@ -32,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield _mapPasswordChangedToState(event, state);
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmitToState(state);
-    } else if (event is PasswordVisibleChanged) {
+    } else if (event is LoginPasswordVisibleChanged) {
       yield _mapToPasswordVisibleChangedToState(state);
     }
   }

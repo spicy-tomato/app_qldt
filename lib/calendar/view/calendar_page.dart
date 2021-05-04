@@ -41,7 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
         },
       ),
       child: Container(
-        child: BlocProvider(
+        child: BlocProvider<CalendarBloc>(
           create: (_) {
             return CalendarBloc();
           },

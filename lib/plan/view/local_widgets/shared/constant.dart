@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PlanPageConstant extends InheritedWidget {
   static final _textStyle = TextStyle(
     color: Color(0xff000000),
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: FontWeight.w400,
   );
 
