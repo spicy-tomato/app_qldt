@@ -21,18 +21,17 @@ class SharedUI extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       drawer: Sidebar(),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Stack(
+        decoration: decoration,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 60),
-              decoration: decoration ?? BoxDecoration(),
+            TopBar(topRightWidget: topRightWidget),
+            Expanded(
               child: WillPopScope(
-                child: child,
                 onWillPop: () => _onWillPop(context),
+                child: child,
               ),
             ),
-            TopBar(topRightWidget: topRightWidget),
           ],
         ),
       ),

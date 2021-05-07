@@ -6,32 +6,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'local_widgets/local_widgets.dart';
 
 class PlanPage extends StatefulWidget {
-  late final DateTime? from;
-  late final DateTime? to;
+  final DateTime? from;
+  final DateTime? to;
+  final ScrollController? controller;
 
-  PlanPage({Key? key, this.from, this.to}) : super(key: key);
+  PlanPage({Key? key, this.from, this.to, this.controller}) : super(key: key);
 
   @override
   _PlanPageState createState() => _PlanPageState();
 
+  //  TODO: Remove this
   static void showPlanPage(BuildContext context, {Offset? offsetBegin}) {
-    showGeneralDialog(
-      barrierDismissible: false,
-      transitionDuration: Duration(milliseconds: 300),
-      context: context,
-      pageBuilder: (_, __, ___) {
-        return PlanPage();
-      },
-      transitionBuilder: (_, anim1, __, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: offsetBegin ?? Offset(0, 1),
-            end: Offset(0, 0),
-          ).animate(anim1),
-          child: child,
-        );
-      },
-    );
+    Scaffold.of(context).showBottomSheet<void>((_) {
+      return PlanPage();
+    });
   }
 
   static void showApartPlanPage(BuildContext context, DateTime from, DateTime to) {
@@ -63,61 +51,55 @@ class _PlanPageState extends State<PlanPage> {
     DateTime from = widget.from ?? DateTime.now();
     DateTime to = widget.to ?? from.add(Duration(hours: 3));
 
-    return Dismissible(
-      key: const Key('Plan_page'),
-      direction: DismissDirection.down,
-      onDismissed: (_) => Navigator.of(context).pop(),
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
+    return Scaffold(
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Image.asset(
-                      'images/icon/swipe-down-icon.png',
-                      width: 40,
-                    ),
-                  ),
-                  PlanPageTopbar(),
-                ],
-              ),
-              Expanded(
-                child: BlocProvider<PlanBloc>(
-                  create: (BuildContext context) {
-                    return PlanBloc(from: from, to: to);
-                  },
-                  child: BlocBuilder<PlanBloc, PlanState>(
-                    builder: (context, state) {
-                      return ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        children: <Widget>[
-                          PlanPageTime(),
-                          PlanPageDivider(context: context),
-                          AddGuest(),
-                          PlanPageDivider(context: context),
-                          Location(),
-                          PlanPageDivider(context: context),
-                          Describe(),
-                          PlanPageDivider(context: context),
-                          Accessibility(),
-                          PlanPageDivider(context: context),
-                          Status(),
-                          PlanPageDivider(context: context),
-                          PlanColor(),
-                        ],
-                      );
-                    },
-                  ),
+              Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Image.asset(
+                  'images/icon/swipe-down-icon.png',
+                  width: 40,
                 ),
               ),
+              PlanPageTopbar(),
             ],
           ),
-        ),
+          Expanded(
+            child: BlocProvider<PlanBloc>(
+              create: (BuildContext context) {
+                return PlanBloc(from: from, to: to);
+              },
+              child: BlocBuilder<PlanBloc, PlanState>(
+                builder: (context, state) {
+                  return ListView(
+                    controller: widget.controller,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: <Widget>[
+                      PlanPageTime(),
+                      PlanPageDivider(context: context),
+                      AddGuest(),
+                      PlanPageDivider(context: context),
+                      Location(),
+                      PlanPageDivider(context: context),
+                      Describe(),
+                      PlanPageDivider(context: context),
+                      Accessibility(),
+                      PlanPageDivider(context: context),
+                      Status(),
+                      PlanPageDivider(context: context),
+                      PlanColor(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

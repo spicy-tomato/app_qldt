@@ -90,5 +90,4 @@ class PlanColorChanged extends PlanEvent {
 
   @override
   List<Object> get props => [color];
-
 }

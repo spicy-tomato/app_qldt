@@ -67,6 +67,6 @@ class PlanState extends Equatable {
         description,
         accessibility,
         status,
-        color
+        color,
       ];
 }

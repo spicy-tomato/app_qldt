@@ -1,4 +1,6 @@
 import 'package:app_qldt/_widgets/bottom_note/view/bottom_note.dart';
+import 'package:app_qldt/_widgets/inherited_scroll_to_plan_page.dart';
+import 'package:app_qldt/plan/view/plan_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -9,6 +11,7 @@ import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
 import 'package:app_qldt/_widgets/topbar/topbar.dart';
 import 'package:app_qldt/_widgets/user_data_model.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../bloc/calendar_bloc.dart';
 import '../view/local_widgets/local_widgets.dart';
@@ -23,60 +26,76 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  final PanelController _panelController = PanelController();
+
   @override
   Widget build(BuildContext context) {
     Map<DateTime, List<UserEvent>> schedulesData =
         UserDataModel.of(context)!.localEventService.eventsData;
 
-    return SharedUI(
-      topRightWidget: RefreshButton(
-        context,
-        () async {
-          widget.isLoading.value = true;
+    return InheritedScrollToPlanPage(
+      panelController: _panelController,
+      child: Stack(
+        children: <Widget>[
+          SharedUI(
+            topRightWidget: RefreshButton(
+              context,
+              () async {
+                widget.isLoading.value = true;
 
-          await UserDataModel.of(context)!.localEventService.refresh();
-          schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
+                await UserDataModel.of(context)!.localEventService.refresh();
+                schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
 
-          widget.isLoading.value = false;
-        },
-      ),
-      child: Container(
-        child: BlocProvider<CalendarBloc>(
-          create: (_) {
-            return CalendarBloc();
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Calendar(events: schedulesData),
-                  ValueListenableBuilder(
-                    builder: (_, bool value, Widget? child) {
-                      return value ? Loading() : Container();
-                    },
-                    valueListenable: widget.isLoading,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: BlocBuilder<CalendarBloc, CalendarState>(
-                  buildWhen: (previous, current) {
-                    return current.buildFirstTime &&
-                        !DeepCollectionEquality().equals(
-                          previous.selectedEvents,
-                          current.selectedEvents,
-                        );
-                  },
-                  builder: (_, state) {
-                    return EventList(event: state.selectedEvents);
-                  },
+                widget.isLoading.value = false;
+              },
+            ),
+            child: Container(
+              child: BlocProvider<CalendarBloc>(
+                create: (_) {
+                  return CalendarBloc();
+                },
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Calendar(events: schedulesData),
+                        ValueListenableBuilder(
+                          builder: (_, bool value, Widget? child) {
+                            return value ? Loading() : Container();
+                          },
+                          valueListenable: widget.isLoading,
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: BlocBuilder<CalendarBloc, CalendarState>(
+                        buildWhen: (previous, current) {
+                          return current.buildFirstTime &&
+                              !DeepCollectionEquality().equals(
+                                previous.selectedEvents,
+                                current.selectedEvents,
+                              );
+                        },
+                        builder: (_, state) {
+                          return EventList(event: state.selectedEvents);
+                        },
+                      ),
+                    ),
+                    BottomNote(),
+                  ],
                 ),
               ),
-              BottomNote(),
-            ],
+            ),
           ),
-        ),
+          SlidingUpPanel(
+            minHeight: 0,
+            maxHeight: MediaQuery.of(context).size.height,
+            controller: _panelController,
+            panelBuilder: (scrollController) {
+              return PlanPage(controller: scrollController);
+            },
+          ),
+        ],
       ),
     );
   }

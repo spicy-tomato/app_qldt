@@ -84,7 +84,7 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
               titleCentered: true,
               titleTextFormatter: _titleTextFormatter,
               titleTextStyle: TextStyle(
-                fontSize: 27,
+                fontSize: 24,
                 fontWeight: FontWeight.w300,
               ),
             ),

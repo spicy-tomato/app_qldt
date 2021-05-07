@@ -1,5 +1,5 @@
+import 'package:app_qldt/_widgets/inherited_scroll_to_plan_page.dart';
 import 'package:flutter/material.dart';
-import 'package:app_qldt/plan/plan.dart';
 
 class BottomNote extends StatelessWidget {
   const BottomNote({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class BottomText extends StatelessWidget {
           color: Color(0xff26153B),
         ),
         child: TextButton(
-          onPressed: () => PlanPage.showPlanPage(context),
+          onPressed: () => InheritedScrollToPlanPage.of(context).panelController.open(),
           child: Padding(
             padding: EdgeInsets.only(left: 15),
             child: Align(

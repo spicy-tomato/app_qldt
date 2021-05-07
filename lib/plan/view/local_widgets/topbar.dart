@@ -1,3 +1,4 @@
+import 'package:app_qldt/_widgets/inherited_scroll_to_plan_page.dart';
 import 'package:flutter/material.dart';
 
 class PlanPageTopbar extends StatelessWidget {
@@ -9,9 +10,10 @@ class PlanPageTopbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            style:
-                ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)),
+            onPressed: () => InheritedScrollToPlanPage.of(context).panelController.close(),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+            ),
             child: Icon(
               Icons.close,
               color: Theme.of(context).backgroundColor,

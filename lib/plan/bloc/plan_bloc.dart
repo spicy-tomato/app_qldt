@@ -10,7 +10,15 @@ part 'plan_event.dart';
 part 'plan_state.dart';
 
 class PlanBloc extends Bloc<PlanEvent, PlanState> {
-  PlanBloc({required from, required to}) : super(PlanState(fromDay: from, toDay: to));
+  // TODO: Do we need this?
+  PlanBloc({DateTime? from, DateTime? to})
+      : super(
+          PlanState(
+              fromDay: from ?? DateTime.now(),
+              toDay: from != null
+                  ? from.add(Duration(hours: 3))
+                  : DateTime.now().add(Duration(hours: 3))),
+        );
 
   @override
   Stream<PlanState> mapEventToState(
@@ -34,7 +42,7 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield (_mapPlanAccessibilityChangedToState(event, state));
     } else if (event is PlanStatusChanged) {
       yield (_mapPlanStatusChangedToState(event, state));
-    } else if (event is PlanColorChanged){
+    } else if (event is PlanColorChanged) {
       yield (_mapPlanColorChangedToState(event, state));
     }
   }
