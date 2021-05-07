@@ -69,29 +69,33 @@ class _PlanPageState extends State<PlanPage> {
       onDismissed: (_) => Navigator.of(context).pop(),
       child: SafeArea(
         child: Scaffold(
-          body: Stack(
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Align(
-                alignment: Alignment.topCenter,
-                child: Image.asset(
-                  'images/icon/swipe-down-icon.png',
-                  width: 40,
-                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Image.asset(
+                      'images/icon/swipe-down-icon.png',
+                      width: 40,
+                    ),
+                  ),
+                  PlanPageTopbar(),
+                ],
               ),
-              BlocProvider<PlanBloc>(
-                create: (BuildContext context) {
-                  return PlanBloc(from: from, to: to);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20),
+              Expanded(
+                child: BlocProvider<PlanBloc>(
+                  create: (BuildContext context) {
+                    return PlanBloc(from: from, to: to);
+                  },
                   child: BlocBuilder<PlanBloc, PlanState>(
                     builder: (context, state) {
                       return ListView(
+                        shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         children: <Widget>[
-                          PlanPageTopbar(),
-                          PlanPageTitle(),
-                          PlanPageDivider(context: context),
                           PlanPageTime(),
                           PlanPageDivider(context: context),
                           AddGuest(),

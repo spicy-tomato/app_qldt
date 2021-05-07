@@ -53,8 +53,6 @@ class _PlanColorState extends State<PlanColor> {
   List<Widget> listRadioItem(PlanColors currentColor) {
     List<Widget> widgets = [];
 
-    print(currentColor);
-
     PlanColors.values.forEach((color) {
       widgets.add(
         Container(
