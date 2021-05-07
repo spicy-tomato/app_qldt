@@ -28,26 +28,7 @@ class BottomText extends StatelessWidget {
           color: Color(0xff26153B),
         ),
         child: TextButton(
-          onPressed: () {
-            showGeneralDialog(
-              barrierDismissible: false,
-              barrierColor: Colors.black.withOpacity(0.5),
-              transitionDuration: Duration(milliseconds: 200),
-              context: context,
-              pageBuilder: (_, __, ___) {
-                return PlanPage();
-              },
-              transitionBuilder: (_, anim1, __, child) {
-                return SlideTransition(
-                  position: Tween(
-                    begin: Offset(0, 0.4),
-                    end: Offset(0, 0),
-                  ).animate(anim1),
-                  child: child,
-                );
-              },
-            );
-          },
+          onPressed: () => PlanPage.showPlanPage(context),
           child: Padding(
             padding: EdgeInsets.only(left: 15),
             child: Align(

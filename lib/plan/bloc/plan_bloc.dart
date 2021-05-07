@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import 'enum/enum.dart';
+
 part 'plan_event.dart';
 
 part 'plan_state.dart';
@@ -32,6 +34,8 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield (_mapPlanAccessibilityChangedToState(event, state));
     } else if (event is PlanStatusChanged) {
       yield (_mapPlanStatusChangedToState(event, state));
+    } else if (event is PlanColorChanged){
+      yield (_mapPlanColorChangedToState(event, state));
     }
   }
 
@@ -90,5 +94,12 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     PlanState state,
   ) {
     return state.copyWith(status: event.status);
+  }
+
+  PlanState _mapPlanColorChangedToState(
+    PlanColorChanged event,
+    PlanState state,
+  ) {
+    return state.copyWith(color: event.color);
   }
 }

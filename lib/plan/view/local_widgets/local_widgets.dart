@@ -8,3 +8,4 @@ export 'status.dart';
 export 'title.dart';
 export 'topbar.dart';
 export 'time.dart';
+export 'color.dart';

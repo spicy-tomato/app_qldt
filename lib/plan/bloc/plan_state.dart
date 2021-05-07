@@ -1,35 +1,5 @@
 part of 'plan_bloc.dart';
 
-enum PlanAccessibility { defaultAccess, private, public }
-
-enum PlanStatus { free, busy }
-
-enum PlanRepeat { noRepeat, daily, weekly, monthly, yearly, custom }
-
-extension PlanRepeatExtension on PlanRepeat {
-  String get string {
-    switch (this){
-      case PlanRepeat.noRepeat:
-        return 'Không lặp lại';
-
-      case PlanRepeat.daily:
-        return 'Hàng ngày';
-
-      case PlanRepeat.weekly:
-        return 'Hàng tuần';
-
-      case PlanRepeat.monthly:
-        return 'Hàng tháng';
-
-      case PlanRepeat.yearly:
-        return 'Hàng năm';
-
-      default:
-        return 'Tuỳ chỉnh...';
-    }
-  }
-}
-
 class PlanState extends Equatable {
   final String title;
   final bool isAllDay;
@@ -41,6 +11,7 @@ class PlanState extends Equatable {
   final String description;
   final PlanAccessibility accessibility;
   final PlanStatus status;
+  final PlanColors color;
 
   const PlanState({
     this.title = '',
@@ -53,6 +24,7 @@ class PlanState extends Equatable {
     this.description = '',
     this.accessibility = PlanAccessibility.defaultAccess,
     this.status = PlanStatus.free,
+    this.color = PlanColors.defaultColor,
   });
 
   PlanState copyWith({
@@ -66,6 +38,7 @@ class PlanState extends Equatable {
     String? description,
     PlanAccessibility? accessibility,
     PlanStatus? status,
+    PlanColors? color,
   }) {
     return PlanState(
       title: title ?? this.title,
@@ -78,6 +51,7 @@ class PlanState extends Equatable {
       description: description ?? this.description,
       accessibility: accessibility ?? this.accessibility,
       status: status ?? this.status,
+      color: color ?? this.color,
     );
   }
 
@@ -92,6 +66,7 @@ class PlanState extends Equatable {
         location,
         description,
         accessibility,
-        status
+        status,
+        color
       ];
 }

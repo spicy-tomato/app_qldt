@@ -82,3 +82,13 @@ class PlanStatusChanged extends PlanEvent {
   @override
   List<Object> get props => [status];
 }
+
+class PlanColorChanged extends PlanEvent {
+  final PlanColors color;
+
+  const PlanColorChanged(this.color);
+
+  @override
+  List<Object> get props => [color];
+
+}
