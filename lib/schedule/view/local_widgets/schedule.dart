@@ -1,5 +1,6 @@
 import 'package:app_qldt/_models/meeting_data_source.dart';
 import 'package:app_qldt/event_info/event_info_page.dart';
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -36,10 +37,11 @@ class _ScheduleState extends State<Schedule> {
           CalendarView.schedule,
         ],
         scheduleViewSettings: ScheduleViewSettings(
-            weekHeaderSettings: WeekHeaderSettings(
-          startDateFormat: 'd MMMM ',
-          endDateFormat: 'd MMMM',
-        )),
+          weekHeaderSettings: WeekHeaderSettings(
+            startDateFormat: 'd MMMM ',
+            endDateFormat: 'd MMMM',
+          ),
+        ),
         scheduleViewMonthHeaderBuilder: _scheduleViewMonthHeaderBuilder,
         showNavigationArrow: false,
         showDatePickerButton: true,
@@ -62,10 +64,8 @@ class _ScheduleState extends State<Schedule> {
   }
 
   void _calendarTapped(CalendarTapDetails details) {
-    print(details.targetElement);
-
     if (details.targetElement == CalendarElement.calendarCell) {
-      // text = DateFormat('MMMM yyyy').format(details.date!).toString();
+      PlanPage.showApartPlanPage(context, details.date!, details.date!.add(Duration(hours: 1)));
     } else if (details.targetElement == CalendarElement.appointment) {
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
