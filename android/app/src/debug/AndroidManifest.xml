@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application
-        android:label="app_qldt"
+        android:label="UTConnect"
         android:usesCleartextTraffic="true">
     </application>
 </manifest>
