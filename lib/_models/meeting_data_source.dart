@@ -1,20 +1,21 @@
 import 'dart:ui';
 
+import 'package:app_qldt/_models/user_event.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class UserDataSource extends CalendarDataSource {
-  UserDataSource(List<dynamic>? source) {
+  UserDataSource(List<UserEvent> source) {
     appointments = source;
   }
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].fromDay;
+    return appointments![index].from;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments![index].toDay;
+    return appointments![index].to;
   }
 
   @override

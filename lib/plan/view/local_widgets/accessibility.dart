@@ -33,7 +33,7 @@ class _AccessibilityState extends State<Accessibility> {
             value: item,
             child: Text(
               item,
-              style: PlanPageConstant.of(context).textFieldStyle,
+              style: PlanPageConstant.textFieldStyle,
             ),
           );
         }).toList(),

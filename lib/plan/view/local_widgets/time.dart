@@ -41,7 +41,7 @@ class _SwitcherTileState extends State<SwitcherTile> {
       builder: (context, state) {
         return PlanPageCustomListTile(
           leading: const Icon(Icons.access_time_rounded),
-          title: Text('Cả ngày', style: PlanPageConstant.of(context).textFieldStyle),
+          title: Text('Cả ngày', style: PlanPageConstant.textFieldStyle),
           trailing: Switch(
             value: state.isAllDay,
             onChanged: (_) => context.read<PlanBloc>().add(PlanIsAllDayChanged()),
@@ -78,7 +78,7 @@ class FromDatePicker extends StatelessWidget {
               onPressed: () => _chooseDay(context, state),
               child: Text(
                   "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.fromDay)}",
-                  style: PlanPageConstant.of(context).textFieldStyle),
+                  style: PlanPageConstant.textFieldStyle),
             );
           },
         ),
@@ -92,7 +92,7 @@ class FromDatePicker extends StatelessWidget {
               onPressed: () => _chooseTime(context, state),
               child: Text(
                 "${DateFormat.Hm().format(state.fromDay)}",
-                style: PlanPageConstant.of(context).textFieldStyle,
+                style: PlanPageConstant.textFieldStyle,
               ),
             );
           },
@@ -156,7 +156,7 @@ class ToDatePicker extends StatelessWidget {
               onPressed: () => _chooseDay(context, state),
               child: Text(
                   "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.toDay)}",
-                  style: PlanPageConstant.of(context).textFieldStyle),
+                  style: PlanPageConstant.textFieldStyle),
             );
           },
         ),
@@ -170,7 +170,7 @@ class ToDatePicker extends StatelessWidget {
               onPressed: () => _chooseTime(context, state),
               child: Text(
                 "${DateFormat.Hm().format(state.toDay)}",
-                style: PlanPageConstant.of(context).textFieldStyle,
+                style: PlanPageConstant.textFieldStyle,
               ),
             );
           },
@@ -243,7 +243,7 @@ class _RepeatState extends State<Repeat> {
           leading: Icon(Icons.refresh),
           title: Text(
             state.repeat.string,
-            style: PlanPageConstant.of(context).textFieldStyle,
+            style: PlanPageConstant.textFieldStyle,
           ),
           onTap: () async {
             await showDialog(
@@ -282,7 +282,7 @@ class _RepeatState extends State<Repeat> {
               SizedBox(width: 5),
               Text(
                 _listItem[i].string,
-                style: PlanPageConstant.of(context).textFieldStyle,
+                style: PlanPageConstant.textFieldStyle,
               )
             ],
           ),

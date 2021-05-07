@@ -4,6 +4,7 @@ class PlanPageCustomListTile extends StatelessWidget {
   final Widget? leading;
   final Widget title;
   final Widget? trailing;
+  final bool? defaultHeight;
   final Function()? onTap;
 
   const PlanPageCustomListTile({
@@ -12,12 +13,13 @@ class PlanPageCustomListTile extends StatelessWidget {
     required this.title,
     this.trailing,
     this.onTap,
+    this.defaultHeight,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget listTile = Container(
-      height: 48,
+      height: defaultHeight == null || defaultHeight == true ? 48 : null,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Row(

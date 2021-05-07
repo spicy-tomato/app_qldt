@@ -33,7 +33,7 @@ class StatusState extends State<Status> {
             value: item,
             child: Text(
               item,
-              style: PlanPageConstant.of(context).textFieldStyle,
+              style: PlanPageConstant.textFieldStyle,
             ),
           );
         }).toList(),

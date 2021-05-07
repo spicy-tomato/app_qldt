@@ -7,19 +7,19 @@ class PlanPageConstant extends InheritedWidget {
     fontWeight: FontWeight.w400,
   );
 
-  final TextStyle hintTextFieldStyle = _textStyle.copyWith(
+  static final TextStyle hintTextFieldStyle = _textStyle.copyWith(
     color: Color(0xff616161),
   );
 
-  final TextStyle textFieldStyle = _textStyle;
+  static final TextStyle textFieldStyle = _textStyle;
 
   PlanPageConstant({
     Key? key,
     required Widget child,
   }) : super(key: key, child: child);
 
-  static PlanPageConstant of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<PlanPageConstant>()!;
+  static PlanPageConstant? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<PlanPageConstant>();
 
   @override
   bool updateShouldNotify(_) => false;

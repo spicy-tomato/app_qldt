@@ -8,11 +8,11 @@ class Describe extends StatelessWidget {
     return PlanPageCustomListTile(
       leading: const Icon(Icons.dehaze_outlined),
       title: TextField(
-        style: PlanPageConstant.of(context).textFieldStyle,
+        style: PlanPageConstant.textFieldStyle,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: 'Mô tả ...',
-          hintStyle: PlanPageConstant.of(context).hintTextFieldStyle,
+          hintText: 'Mô tả',
+          hintStyle: PlanPageConstant.hintTextFieldStyle,
         ),
       ),
     );

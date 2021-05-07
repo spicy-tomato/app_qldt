@@ -17,10 +17,10 @@ class AddGuestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlanPageCustomListTile(
-      leading: const Icon(Icons.people),
+      leading: const Icon(Icons.people_alt_outlined),
       title: Text(
         'Thêm người',
-        style: PlanPageConstant.of(context).hintTextFieldStyle,
+        style: PlanPageConstant.hintTextFieldStyle,
       ),
       onTap: () {
         showGeneralDialog(

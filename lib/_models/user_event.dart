@@ -6,7 +6,6 @@ class UserEvent {
   final String eventName;
   final String? location;
   final Color backgroundColor;
-
   late final String visualizeName;
   late final DateTime? from;
   late final DateTime? to;

@@ -7,11 +7,11 @@ class Location extends StatelessWidget {
     return PlanPageCustomListTile(
       leading: const Icon(Icons.location_on_outlined),
       title: TextField(
-        style: PlanPageConstant.of(context).textFieldStyle,
+        style: PlanPageConstant.textFieldStyle,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Vị trí',
-          hintStyle: PlanPageConstant.of(context).hintTextFieldStyle,
+          hintStyle: PlanPageConstant.hintTextFieldStyle,
         ),
       ),
     );
