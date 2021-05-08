@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:app_qldt/_models/user_event.dart';
 import 'package:app_qldt/_models/schedule.dart';
-import 'package:app_qldt/_utils/database_provider.dart';
+import 'package:app_qldt/_utils/database/database_provider.dart';
 
 import '../web/event_service.dart';
 

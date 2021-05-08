@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_qldt/_models/app_notification.dart';
 import 'package:app_qldt/_models/receive_notification.dart';
 import 'package:app_qldt/_models/sender.dart';
-import 'package:app_qldt/_utils/secret.dart';
+import 'package:app_qldt/_utils/secret/secret.dart';
 
 class NotificationService {
   static final _timeout = 10;

@@ -9,6 +9,7 @@ import '_repositories/user_repository/user_repository.dart';
 import '_services/local/local_event_service.dart';
 import '_services/local/local_notification_service.dart';
 import '_services/web/token_service.dart';
+import '_utils/helper/SfLocalizationVnDelegate.dart';
 import '_widgets/splash/splash.dart';
 import '_widgets/user_data_model.dart';
 
@@ -66,7 +67,7 @@ class _ApplicationState extends State<Application> {
   final _localizationsDelegates = [
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
+    SfLocalizationsVnDelegate(),
   ];
 
   final _supportedLocales = [const Locale('vi', '')];
@@ -84,6 +85,7 @@ class _ApplicationState extends State<Application> {
           theme: _themeData,
           navigatorKey: _navigatorKey,
           localizationsDelegates: _localizationsDelegates,
+          locale: const Locale('vi', ''),
           supportedLocales: _supportedLocales,
           builder: (context, child) {
             return SafeArea(

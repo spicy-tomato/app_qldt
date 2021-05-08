@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_models/schedule.dart';
-import 'package:app_qldt/_utils/secret.dart';
+import 'package:app_qldt/_utils/secret/secret.dart';
 
 class EventService {
   static final _timeout = 10;

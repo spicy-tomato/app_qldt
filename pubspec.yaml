@@ -52,6 +52,8 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   table_calendar: ^3.0.0
   syncfusion_flutter_calendar: ^19.1.58
+  syncfusion_localizations: ^19.1.59
+  syncfusion_flutter_core: ^19.1.59
 
   animations: ^2.0.0
   cupertino_icons: ^1.0.0

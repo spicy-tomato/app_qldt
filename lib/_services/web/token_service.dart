@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:app_qldt/_utils/secret.dart';
+import 'package:app_qldt/_utils/secret/secret.dart';
 import 'package:http/http.dart';
 
 import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.dart';

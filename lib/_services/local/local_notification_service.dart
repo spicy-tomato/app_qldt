@@ -3,7 +3,7 @@ import 'package:app_qldt/_models/receive_notification.dart';
 import 'package:app_qldt/_models/sender.dart';
 import 'package:app_qldt/_models/user_notification.dart';
 import 'package:app_qldt/_services/web/notification_service.dart';
-import 'package:app_qldt/_utils/database_provider.dart';
+import 'package:app_qldt/_utils/database/database_provider.dart';
 
 class LocalNotificationService {
   final String studentId;
