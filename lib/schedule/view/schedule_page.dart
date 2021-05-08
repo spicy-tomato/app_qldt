@@ -1,25 +1,27 @@
-import 'package:app_qldt/_widgets/user_data_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/_models/meeting_data_source.dart';
 import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_widgets/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/_widgets/user_data_model.dart';
 
 import 'local_widgets/schedule.dart';
 
 class SchedulePage extends StatefulWidget {
+  final void Function()? onClose;
+
+  const SchedulePage({Key? key, this.onClose}) : super(key: key);
+
   @override
   _SchedulePageState createState() => _SchedulePageState();
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  _SchedulePageState();
-
-  late var model;
+  final GlobalKey _globalKey = GlobalKey();
   final UserDataSource _events = UserDataSource(<UserEvent>[]);
 
-  final GlobalKey _globalKey = GlobalKey();
+  late ThemeData model;
   late Map<DateTime, List<UserEvent>> schedulesData;
 
   @override
@@ -34,12 +36,14 @@ class _SchedulePageState extends State<SchedulePage> {
 
     model = Theme.of(context);
 
-    return SharedUI(
-      child: Container(
-        child: Theme(
-          key: _globalKey,
-          data: model.copyWith(accentColor: model.backgroundColor),
-          child: Schedule(_events),
+    return NavigablePlanPage(
+      child: SharedUI(
+        child: Container(
+          child: Theme(
+            key: _globalKey,
+            data: model.copyWith(accentColor: model.backgroundColor),
+            child: Schedule(_events),
+          ),
         ),
       ),
     );
@@ -48,7 +52,6 @@ class _SchedulePageState extends State<SchedulePage> {
   void _addData() {
     final List<UserEvent> appointment = _getDataSource(schedulesData);
 
-    // print('_addData() called');
     _events.appointments!.clear();
 
     appointment.forEach((element) {

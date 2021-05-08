@@ -5,20 +5,14 @@ import 'package:equatable/equatable.dart';
 
 import 'enum/enum.dart';
 
+export 'enum/enum.dart';
+
 part 'plan_event.dart';
 
 part 'plan_state.dart';
 
 class PlanBloc extends Bloc<PlanEvent, PlanState> {
-  // TODO: Do we need this?
-  PlanBloc({DateTime? from, DateTime? to})
-      : super(
-          PlanState(
-              fromDay: from ?? DateTime.now(),
-              toDay: from != null
-                  ? from.add(Duration(hours: 3))
-                  : DateTime.now().add(Duration(hours: 3))),
-        );
+  PlanBloc() : super(PlanState(fromDay: DateTime.now(), toDay: DateTime.now()));
 
   @override
   Stream<PlanState> mapEventToState(
@@ -44,6 +38,10 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield (_mapPlanStatusChangedToState(event, state));
     } else if (event is PlanColorChanged) {
       yield (_mapPlanColorChangedToState(event, state));
+    } else if (event is PlanPageVisibilityChanged) {
+      yield (_mapPlanPageVisibilityChangedToState(event, state));
+    } else if (event is PlanTimeChangedToCurrentTime) {
+      yield _mapPlanChangedToCurrentTimeToState(event, state);
     }
   }
 
@@ -109,5 +107,19 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     PlanState state,
   ) {
     return state.copyWith(color: event.color);
+  }
+
+  PlanState _mapPlanPageVisibilityChangedToState(
+    PlanPageVisibilityChanged event,
+    PlanState state,
+  ) {
+    return state.copyWith(visibility: event.visibility);
+  }
+
+  PlanState _mapPlanChangedToCurrentTimeToState(
+    PlanTimeChangedToCurrentTime event,
+    PlanState state,
+  ) {
+    return state.copyWith(from: event.current, to: event.current.add(Duration(hours: 1)));
   }
 }

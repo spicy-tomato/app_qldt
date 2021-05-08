@@ -1,8 +1,11 @@
-import 'package:app_qldt/_models/meeting_data_source.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 import 'package:app_qldt/event_info/event_info_page.dart';
 import 'package:app_qldt/plan/plan.dart';
-import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:app_qldt/_models/meeting_data_source.dart';
 
 class Schedule extends StatefulWidget {
   final UserDataSource dataSource;
@@ -18,6 +21,7 @@ class Schedule extends StatefulWidget {
 
 class _ScheduleState extends State<Schedule> {
   late CalendarController _controller = CalendarController();
+  late DateTime? _previousSelectedDay;
 
   @override
   void initState() {
@@ -28,44 +32,55 @@ class _ScheduleState extends State<Schedule> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SfCalendar(
-        controller: _controller,
-        dataSource: widget.dataSource,
-        allowedViews: [
-          CalendarView.day,
-          CalendarView.week,
-          CalendarView.schedule,
-        ],
-        scheduleViewSettings: ScheduleViewSettings(
-          weekHeaderSettings: WeekHeaderSettings(
-            startDateFormat: 'd MMMM ',
-            endDateFormat: 'd MMMM',
+      body: BlocBuilder<PlanBloc, PlanState>(builder: (context, state) {
+        return SfCalendar(
+          controller: _controller,
+          dataSource: widget.dataSource,
+          allowedViews: [
+            CalendarView.day,
+            CalendarView.week,
+            CalendarView.schedule,
+          ],
+          scheduleViewSettings: ScheduleViewSettings(
+            weekHeaderSettings: WeekHeaderSettings(
+              startDateFormat: 'd MMMM ',
+              endDateFormat: 'd MMMM',
+            ),
           ),
-        ),
-        scheduleViewMonthHeaderBuilder: _scheduleViewMonthHeaderBuilder,
-        showNavigationArrow: false,
-        showDatePickerButton: true,
-        allowViewNavigation: true,
-        showCurrentTimeIndicator: true,
-        view: CalendarView.week,
-        minDate: DateTime(2020, 8, 1),
-        maxDate: DateTime(2024, 8, 31),
-        firstDayOfWeek: 1,
-        timeSlotViewSettings: TimeSlotViewSettings(
-          timeInterval: Duration(hours: 1),
-          timeFormat: 'H:mm',
-          timeIntervalHeight: 30,
-        ),
-        initialDisplayDate: DateTime.now(),
-        onTap: _calendarTapped,
-        // onViewChanged: _onViewChanged,
-      ),
+          scheduleViewMonthHeaderBuilder: _scheduleViewMonthHeaderBuilder,
+          showNavigationArrow: false,
+          showDatePickerButton: true,
+          allowViewNavigation: true,
+          showCurrentTimeIndicator: true,
+          view: CalendarView.week,
+          minDate: DateTime(2020, 8, 1),
+          maxDate: DateTime(2024, 8, 31),
+          firstDayOfWeek: 1,
+          timeSlotViewSettings: TimeSlotViewSettings(
+            timeInterval: Duration(hours: 1),
+            timeFormat: 'H:mm',
+            timeIntervalHeight: 30,
+          ),
+          initialDisplayDate: DateTime.now(),
+          onTap: (details) => _calendarTapped(details, state),
+        );
+      }),
     );
   }
 
-  void _calendarTapped(CalendarTapDetails details) {
+  void _calendarTapped(CalendarTapDetails details, PlanState state) async {
     if (details.targetElement == CalendarElement.calendarCell) {
-      PlanPage.showApartPlanPage(context, details.date!, details.date!.add(Duration(hours: 1)));
+      if (state.visibility == PlanPageVisibility.close) {
+        context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
+        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.apart));
+      } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
+        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+      } else if (_previousSelectedDay != null && details.date != _previousSelectedDay) {
+        _controller.selectedDate = null;
+        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+      }
+
+      _previousSelectedDay = details.date!;
     } else if (details.targetElement == CalendarElement.appointment) {
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));

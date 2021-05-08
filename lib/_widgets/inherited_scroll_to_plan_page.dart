@@ -1,5 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import 'package:app_qldt/plan/plan.dart';
 
 class InheritedScrollToPlanPage extends InheritedWidget {
   final PanelController panelController;
@@ -8,7 +12,9 @@ class InheritedScrollToPlanPage extends InheritedWidget {
     Key? key,
     required this.panelController,
     required Widget child,
-  }) : super(key: key, child: child);
+  })   : assert(child is BlocProvider<PlanBloc>,
+            'Child of InheritedScrollToPlanPage should be BlocProvider<PlanBloc>'),
+        super(key: key, child: child);
 
   static InheritedScrollToPlanPage of(BuildContext context) {
     final InheritedScrollToPlanPage? result =

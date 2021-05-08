@@ -1,5 +1,6 @@
-import 'package:app_qldt/plan/view/local_widgets/local_widgets.dart';
 import 'package:flutter/material.dart';
+
+import 'package:app_qldt/plan/view/local_widgets/local_widgets.dart';
 
 class AddGuest extends StatelessWidget {
   @override
@@ -65,13 +66,13 @@ class ViewScheduleButton extends StatelessWidget {
               ),
             ),
             style: ButtonStyle(
-              padding: MaterialStateProperty.all(
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                 EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
               ),
-              side: MaterialStateProperty.all(BorderSide(color: Colors.grey)),
-              shape: MaterialStateProperty.all(
+              side: MaterialStateProperty.all<BorderSide>(BorderSide(color: Colors.grey)),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
             ),
           ),

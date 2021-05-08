@@ -91,3 +91,21 @@ class PlanColorChanged extends PlanEvent {
   @override
   List<Object> get props => [color];
 }
+
+class PlanPageVisibilityChanged extends PlanEvent {
+  final PlanPageVisibility visibility;
+
+  const PlanPageVisibilityChanged(this.visibility);
+
+  @override
+  List<Object> get props => [visibility];
+}
+
+class PlanTimeChangedToCurrentTime extends PlanEvent {
+  final DateTime current = DateTime.now();
+
+  PlanTimeChangedToCurrentTime();
+
+  @override
+  List<Object> get props => [current];
+}

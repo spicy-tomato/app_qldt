@@ -1,7 +1,13 @@
-import 'package:app_qldt/_widgets/inherited_scroll_to_plan_page.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/plan/bloc/enum/enum.dart';
+import 'package:app_qldt/plan/bloc/plan_bloc.dart';
+
 class PlanPageTopbar extends StatelessWidget {
+  const PlanPageTopbar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -10,8 +16,10 @@ class PlanPageTopbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           TextButton(
-            onPressed: () => InheritedScrollToPlanPage.of(context).panelController.close(),
+            onPressed: () =>
+                context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close)),
             style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
               backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
             ),
             child: Icon(
@@ -25,13 +33,20 @@ class PlanPageTopbar extends StatelessWidget {
             child: Material(
               color: Theme.of(context).backgroundColor,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-              child: InkWell(
-                customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                onTap: () {
+              child: TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                ),
+                onPressed: () {
                   print('Save button pressed!');
                 },
                 child: const Center(
-                  child: Text('Lưu'),
+                  child: Text(
+                    'Lưu',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),

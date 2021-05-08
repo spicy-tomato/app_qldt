@@ -13,6 +13,7 @@ class _HomeState extends State<Home> {
   DateTime startTime = DateTime.now();
   DateTime endTime = DateTime.now().add(Duration(days: 1));
   TextEditingController _eventName = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,18 +28,18 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     DatePicker.showDateTimePicker(context,
                         showTitleActions: true,
                         minTime: DateTime(2019, 3, 5),
                         maxTime: DateTime(2200, 6, 7), onChanged: (date) {
-                          print('change $date');
-                        }, onConfirm: (date) {
-                          setState(() {
-                            this.startTime = date;
-                          });
-                        }, currentTime: DateTime.now(), locale: LocaleType.en);
+                      print('change $date');
+                    }, onConfirm: (date) {
+                      setState(() {
+                        this.startTime = date;
+                      });
+                    }, currentTime: DateTime.now(), locale: LocaleType.en);
                   },
                   child: Text(
                     'Event Start Time',
@@ -49,18 +50,18 @@ class _HomeState extends State<Home> {
           ),
           Row(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     DatePicker.showDateTimePicker(context,
                         showTitleActions: true,
                         minTime: DateTime(2019, 3, 5),
                         maxTime: DateTime(2200, 6, 7), onChanged: (date) {
-                          print('change $date');
-                        }, onConfirm: (date) {
-                          setState(() {
-                            this.endTime = date;
-                          });
-                        }, currentTime: DateTime.now(), locale: LocaleType.en);
+                      print('change $date');
+                    }, onConfirm: (date) {
+                      setState(() {
+                        this.endTime = date;
+                      });
+                    }, currentTime: DateTime.now(), locale: LocaleType.en);
                   },
                   child: Text(
                     'Event End Time',
@@ -76,11 +77,13 @@ class _HomeState extends State<Home> {
               decoration: InputDecoration(hintText: 'Enter Event name'),
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
               child: Text(
                 'Insert Event',
               ),
-              color: Colors.grey,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.grey),
+              ),
               onPressed: () {
                 //log('add event pressed');
                 calendarClient.insert(

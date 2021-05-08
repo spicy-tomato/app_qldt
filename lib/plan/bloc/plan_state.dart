@@ -12,6 +12,7 @@ class PlanState extends Equatable {
   final PlanAccessibility accessibility;
   final PlanStatus status;
   final PlanColors color;
+  final PlanPageVisibility visibility;
 
   const PlanState({
     this.title = '',
@@ -25,6 +26,7 @@ class PlanState extends Equatable {
     this.accessibility = PlanAccessibility.defaultAccess,
     this.status = PlanStatus.free,
     this.color = PlanColors.defaultColor,
+    this.visibility = PlanPageVisibility.close,
   });
 
   PlanState copyWith({
@@ -39,6 +41,7 @@ class PlanState extends Equatable {
     PlanAccessibility? accessibility,
     PlanStatus? status,
     PlanColors? color,
+    PlanPageVisibility? visibility,
   }) {
     return PlanState(
       title: title ?? this.title,
@@ -52,6 +55,7 @@ class PlanState extends Equatable {
       accessibility: accessibility ?? this.accessibility,
       status: status ?? this.status,
       color: color ?? this.color,
+      visibility: visibility ?? this.visibility,
     );
   }
 
@@ -68,5 +72,6 @@ class PlanState extends Equatable {
         accessibility,
         status,
         color,
+        visibility,
       ];
 }

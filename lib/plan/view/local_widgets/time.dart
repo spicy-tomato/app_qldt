@@ -12,9 +12,6 @@ class PlanPageTime extends StatefulWidget {
 }
 
 class _PlanPageTimeState extends State<PlanPageTime> {
-  late DateTime from = DateTime.now();
-  late DateTime to = from.add(Duration(hours: 3));
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -75,7 +72,8 @@ class FromDatePicker extends StatelessWidget {
           buildWhen: (previous, current) => !previous.fromDay.isSameDay(current.fromDay),
           builder: (context, state) {
             return TextButton(
-              style: ButtonStyle(padding: MaterialStateProperty.all(const EdgeInsets.all(0))),
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(0))),
               onPressed: () => _chooseDay(context, state),
               child: Text(
                   "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.fromDay)}",
@@ -153,7 +151,8 @@ class ToDatePicker extends StatelessWidget {
           buildWhen: (previous, current) => !previous.toDay.isSameDay(current.toDay),
           builder: (context, state) {
             return TextButton(
-              style: ButtonStyle(padding: MaterialStateProperty.all(EdgeInsets.all(0))),
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(0))),
               onPressed: () => _chooseDay(context, state),
               child: Text(
                   "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.toDay)}",
