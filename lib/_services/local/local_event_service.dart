@@ -39,7 +39,7 @@ class LocalEventService {
   /// 4. Return data.
   ///
   Future<void> refresh() async {
-    List<Schedule>? rawData = await _eventService!.getRawScheduleData();
+    List<Schedule>? rawData = await _eventService!.getRawData();
 
     if (rawData != null) {
       await _remove();
@@ -56,7 +56,7 @@ class LocalEventService {
     Map<String, dynamic> dataMap = new Map();
     dataMap[idModuleClass] = color.toString();
 
-    await databaseProvider.colorEvent.updateColor(dataMap);
+    await databaseProvider.colorEvent.update(dataMap);
   }
 
   /// Save schedule data to local database

@@ -55,7 +55,7 @@ class LocalNotificationService {
   //#region sender
   Future<void> saveSender(List<Sender> rawData) async {
     for (var row in rawData) {
-      await databaseProvider.sender.insertSender(row.toMap());
+      await databaseProvider.sender.insert(row.toMap());
     }
   }
 

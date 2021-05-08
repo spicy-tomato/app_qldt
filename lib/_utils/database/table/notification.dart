@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'table_model.dart';
 
 class DbNotification extends TableModel {
-  DbNotification(Database database) : super(database);
+  DbNotification([Database? database]) : super(database);
 
   @override
   String get createScript => ''
@@ -19,8 +19,10 @@ class DbNotification extends TableModel {
       'time_end TEXT);';
 
   Future<List<Map<String, dynamic>>> get all async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      return await database.rawQuery(
+      return await database!.rawQuery(
         'SELECT '
         'notification.id_notification,'
         'notification.title,'
@@ -36,22 +38,26 @@ class DbNotification extends TableModel {
         'ORDER BY notification.id_notification DESC;',
       );
     } on Exception catch (_) {
-      await database.execute(createScript);
-      return await database.query('notification');
+      await database!.execute(createScript);
+      return await database!.query('notification');
     }
   }
 
   Future<void> insert(Map<String, dynamic> notification) async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      await database.insert('notification', notification);
+      await database!.insert('notification', notification);
     } on Exception catch (e) {
       print(e);
     }
   }
 
   Future<void> delete() async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      await database.delete('notification');
+      await database!.delete('notification');
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

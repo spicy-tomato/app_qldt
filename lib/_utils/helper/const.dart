@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Const {
+  static get requestTimeout => Duration(seconds: 10);
+
   static const Color primaryColor = Color(0xff0779e4);
 
   // Interface
@@ -28,8 +30,7 @@ class Const {
   );
 
   // Items
-  static const BorderRadius itemBorderRadius =
-      BorderRadius.all(Radius.circular(15));
+  static const BorderRadius itemBorderRadius = BorderRadius.all(Radius.circular(15));
   static const Color itemBackgroundColor = Colors.white;
 
   // Calendar
@@ -38,8 +39,7 @@ class Const {
   static const Color calendarSelectedBackgroundColor = Color(0xffff5722);
   static const Color calendarOutsideDayBackgroundColor =
       Color(0xff9cc9f4); // calendarTextColor.withOpacity(0.4);
-  static const Color calendarWeekendBackgroundColor =
-      calendarSelectedBackgroundColor;
+  static const Color calendarWeekendBackgroundColor = calendarSelectedBackgroundColor;
   static const Color calendarOutsideWeekendBackgroundColor =
       Color(0xffffbca7); // calendarWeekendBackgroundColor.withOpacity(0.4);
   static const Color calendarMarkerColor = Color(0xff4cbbb9);

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_models/app_notification.dart';
@@ -10,21 +11,18 @@ import 'package:app_qldt/_models/sender.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 
 class NotificationService {
-  static final _timeout = 10;
-
   final String studentId;
 
   NotificationService(this.studentId);
 
-  Future<AppNotification?> getNotification(
-    String studentId,
-  ) async {
+  Future<AppNotification?> getNotification(String studentId) async {
     try {
       Map<String, dynamic>? data = await _fetchData();
 
       if (data != null) {
         List<Sender> senderList = Sender.fromList(data['sender']);
-        List<ReceiveNotification> notificationList = ReceiveNotification.fromList(data['notification']);
+        List<ReceiveNotification> notificationList =
+            ReceiveNotification.fromList(data['notification']);
 
         return AppNotification(notificationList, senderList);
       }
@@ -39,7 +37,7 @@ class NotificationService {
     String url = Secret.url.getRequest.notification + '?id=' + studentId;
 
     try {
-      final responseData = await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
+      final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
       if (responseData.statusCode == 200) {
         return jsonDecode(responseData.body);

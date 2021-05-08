@@ -2,26 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_qldt/_models/score.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:app_qldt/_models/schedule.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 
-class EventService {
+class ScoreService {
   final String userId;
 
-  EventService(this.userId);
+  ScoreService(this.userId);
 
-  Future<List<Schedule>?> getRawData() async {
+  Future<List<Score>?> getScore() async {
     try {
-      List? data = await _fetchData();
-
-      if (data != null) {
-        return data as List<Schedule>;
-      }
-
-      return null;
+      return await _fetchData();
     } on Exception catch (_) {
       throw Exception('Cannot parse date');
     }
@@ -38,18 +32,18 @@ class EventService {
   ///     },
   ///     ...
   /// ]
-  Future<List<Schedule>?> _fetchData() async {
-    String url = Secret.url.getRequest.schedule + '?id=' + userId;
+  Future<List<Score>?> _fetchData() async {
+    String url = Secret.url.getRequest.score + '?id=' + userId;
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
       if (responseData.statusCode == 200) {
         List data = jsonDecode(responseData.body) as List;
-        List<Schedule> listModel = [];
+        List<Score> listModel = [];
 
         for (var element in data) {
-          listModel.add(Schedule.fromJson(element));
+          listModel.add(Score.fromJson(element));
         }
 
         return listModel;

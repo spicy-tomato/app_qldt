@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 import 'package:http/http.dart';
 
@@ -7,7 +8,6 @@ import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.d
 
 class TokenService {
   late final FirebaseRepository _firebaseRepository = FirebaseRepository();
-  static final _timeout = 10;
 
   Future<void> init() async {
     await _firebaseRepository.initialise();
@@ -29,7 +29,7 @@ class TokenService {
       response = await post(
         Uri.parse(Secret.url.postRequest.upsertToken),
         body: jsonEncode(json),
-      ).timeout(Duration(seconds: _timeout));
+      ).timeout(Const.requestTimeout);
     } on Exception catch (e) {
       print('Error: $e in Token service');
       return;

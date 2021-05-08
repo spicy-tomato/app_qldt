@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'table_model.dart';
 
 class DbSchedule extends TableModel {
-  DbSchedule(Database database) : super(database);
+  DbSchedule([Database? database]) : super(database);
 
   @override
   String get createScript => ''
@@ -16,8 +16,10 @@ class DbSchedule extends TableModel {
       'day_schedules TEXT);';
 
   Future<List<Map<String, dynamic>>> get all async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      return await database.rawQuery(
+      return await database!.rawQuery(
         'SELECT '
         'schedule.id_module_class,'
         'schedule.module_class_name,'
@@ -36,8 +38,10 @@ class DbSchedule extends TableModel {
   }
 
   Future<List<Map<String, dynamic>>> get moduleClass async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      return await database.rawQuery(
+      return await database!.rawQuery(
         'SELECT '
             'schedule.id_module_class '
             'FROM '
@@ -50,16 +54,20 @@ class DbSchedule extends TableModel {
   }
 
   Future<void> insert(Map<String, dynamic> schedule) async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      await database.insert('schedule', schedule);
+      await database!.insert('schedule', schedule);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
   }
 
   Future<void> delete() async {
+    assert(database != null, 'Database must not be null');
+
     try {
-      await database.delete('schedule');
+      await database!.delete('schedule');
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
