@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:app_qldt/_services/local/local_event_service.dart';
-import 'package:app_qldt/_services/local/local_notification_service.dart';
 
 import 'services/services.dart';
 
@@ -56,8 +54,8 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    await _removeLocalEvent();
-    await _removeLocalNotification();
+    await DatabaseProvider.deleteDb();
+
     await _removeUserInfo();
 
     _controller.add(AuthenticationStatus.unauthenticated);
@@ -65,14 +63,6 @@ class AuthenticationRepository {
 
   void dispose() {
     _controller.close();
-  }
-
-  Future<void> _removeLocalEvent() async {
-    await LocalEventService.delete();
-  }
-
-  Future<void> _removeLocalNotification() async {
-    await LocalNotificationService.delete();
   }
 
   Future<void> _removeUserInfo() async {

@@ -1,3 +1,4 @@
+import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -153,8 +154,13 @@ class _ApplicationState extends State<Application> {
     await tokenService.init();
     await tokenService.upsert(state.user.id);
 
-    localEventService = LocalEventService(state.user.id);
-    localNotificationService = LocalNotificationService(state.user.id);
+    DatabaseProvider databaseProvider = DatabaseProvider();
+    await databaseProvider.init();
+
+    localEventService =
+        LocalEventService(databaseProvider: databaseProvider, userId: state.user.id);
+    localNotificationService =
+        LocalNotificationService(databaseProvider: databaseProvider, userId: state.user.id);
 
     await localEventService.refresh();
     await localNotificationService.refresh();

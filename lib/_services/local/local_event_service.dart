@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:app_qldt/_models/user_event.dart';
 import 'package:app_qldt/_models/schedule.dart';
-import 'package:app_qldt/_utils/database/database_provider.dart';
+import 'package:app_qldt/_utils/database/provider.dart';
 
 import '../web/event_service.dart';
 
@@ -10,17 +10,23 @@ import '../web/event_service.dart';
 /// into local storage
 ///
 class LocalEventService {
-  final String id;
-  Map<String, int> colorMap = new Map();
-  Map<DateTime, List<UserEvent>> eventsData = new Map();
-  List<UserEvent> userEventList = [];
+  final String? userId;
+  late DatabaseProvider databaseProvider;
+  final List<UserEvent> userEventList = [];
 
-  late final EventService _eventService;
+  Map<String, int> colorMap = Map();
+  Map<DateTime, List<UserEvent>> eventsData = Map();
+
+  late final EventService? _eventService;
 
   /// Constructs a [LocalEventService] instance with user's ID account
   ///
-  LocalEventService(this.id) {
-    _eventService = EventService(id);
+  LocalEventService({DatabaseProvider? databaseProvider, this.userId}) {
+    this.databaseProvider = databaseProvider ?? DatabaseProvider();
+
+    if (userId != null) {
+      _eventService = EventService(userId!);
+    }
   }
 
   /// Refresh events data
@@ -33,7 +39,7 @@ class LocalEventService {
   /// 4. Return data.
   ///
   Future<void> refresh() async {
-    List<Schedule>? rawData = await _eventService.getRawScheduleData();
+    List<Schedule>? rawData = await _eventService!.getRawScheduleData();
 
     if (rawData != null) {
       await _remove();
@@ -43,8 +49,6 @@ class LocalEventService {
     await _addColor();
     await _getColorMap();
 
-    // print(colorMap);
-
     eventsData = await _getFromDb();
   }
 
@@ -52,31 +56,31 @@ class LocalEventService {
     Map<String, dynamic> dataMap = new Map();
     dataMap[idModuleClass] = color.toString();
 
-    await DatabaseProvider.db.updateColor(dataMap);
+    await databaseProvider.colorEvent.updateColor(dataMap);
   }
 
   /// Save schedule data to local database
   ///
-  static Future<void> _save(List<Schedule> rawData) async {
+  Future<void> _save(List<Schedule> rawData) async {
     for (var row in rawData) {
-      await DatabaseProvider.db.insertSchedule(row.toMap());
+      await databaseProvider.schedule.insert(row.toMap());
     }
   }
 
   /// Remove schedule data from local database
   ///
-  static Future<void> _remove() async {
-    await DatabaseProvider.db.deleteSchedule();
+  Future<void> _remove() async {
+    await databaseProvider.schedule.delete();
   }
 
   /// Update color of schedule from local database
   ///
   Future<void> _addColor() async {
-    await DatabaseProvider.db.addColorToNewModuleClass();
+    await databaseProvider.colorEvent.insertColorToNew(databaseProvider.schedule);
   }
 
   Future<void> _getColorMap() async {
-    List<Map<String, dynamic>> colorMapList = await DatabaseProvider.db.colorMap;
+    List<Map<String, dynamic>> colorMapList = await databaseProvider.colorEvent.map;
 
     if (colorMapList.isEmpty) {
       colorMap = new Map();
@@ -97,7 +101,7 @@ class LocalEventService {
   /// 3. Return parsed data.
   ///
   Future<Map<DateTime, List<UserEvent>>> _getFromDb() async {
-    List<Map<String, dynamic>> rawData = await DatabaseProvider.db.schedule;
+    List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
     Map<DateTime, List<UserEvent>> data = _parseToStandardStructure(rawData);
 
     return data;
@@ -153,7 +157,9 @@ class LocalEventService {
     });
   }
 
-  static Future<void> delete() async {
+  Future<void> delete() async {
     await _remove();
   }
+
+  static LocalEventService get instance => LocalEventService();
 }

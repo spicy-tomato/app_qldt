@@ -9,7 +9,7 @@ class Sender {
     return Sender(
       idSender: json['ID_Sender'],
       senderName: json['Sender_Name'],
-      permission: json['Permission'],
+      permission: json['permission'],
     );
   }
 
