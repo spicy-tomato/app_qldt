@@ -2,9 +2,8 @@ import 'package:app_qldt/_models/app_notification.dart';
 import 'package:app_qldt/_models/receive_notification.dart';
 import 'package:app_qldt/_models/sender.dart';
 import 'package:app_qldt/_models/user_notification.dart';
-
-import 'database_provider.dart';
-import 'notification_service.dart';
+import 'package:app_qldt/_services/web/notification_service.dart';
+import 'package:app_qldt/_utils/database_provider.dart';
 
 class LocalNotificationService {
   final String studentId;
@@ -44,6 +43,7 @@ class LocalNotificationService {
   static Future<void> removeNotification() async {
     await DatabaseProvider.db.deleteNotification();
   }
+
   //#endregion
 
   //#region sender
@@ -56,6 +56,7 @@ class LocalNotificationService {
   static Future<void> removeSender() async {
     await DatabaseProvider.db.deleteSender();
   }
+
   //#endregion
 
   static Future<List<dynamic>> getFromDb() async {

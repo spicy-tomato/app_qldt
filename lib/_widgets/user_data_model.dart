@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
 
-import 'package:app_qldt/_services/local_event_service.dart';
-import 'package:app_qldt/_services/local_notification_service.dart';
+import 'package:app_qldt/_services/local/local_event_service.dart';
+import 'package:app_qldt/_services/local/local_notification_service.dart';
 
 enum ServiceEnum {
   notification,

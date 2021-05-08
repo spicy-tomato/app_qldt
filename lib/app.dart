@@ -6,9 +6,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '_authentication/authentication.dart';
 import '_repositories/authentication_repository/authentication_repository.dart';
 import '_repositories/user_repository/user_repository.dart';
-import '_services/local_notification_service.dart';
-import '_services/local_event_service.dart';
-import '_services/token_service.dart';
+import '_services/local/local_event_service.dart';
+import '_services/local/local_notification_service.dart';
+import '_services/web/token_service.dart';
 import '_widgets/splash/splash.dart';
 import '_widgets/user_data_model.dart';
 

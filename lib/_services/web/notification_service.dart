@@ -7,11 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:app_qldt/_models/app_notification.dart';
 import 'package:app_qldt/_models/receive_notification.dart';
 import 'package:app_qldt/_models/sender.dart';
+import 'package:app_qldt/_utils/secret.dart';
 
 class NotificationService {
   static final _timeout = 10;
-  static final _baseUrl =
-      'http://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/notification.php?id=';
 
   final String studentId;
 
@@ -37,7 +36,7 @@ class NotificationService {
   }
 
   Future<Map<String, dynamic>?> _fetchData() async {
-    String url = _baseUrl + studentId;
+    String url = Secret.url.getRequest.notification + '?id=' + studentId;
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));

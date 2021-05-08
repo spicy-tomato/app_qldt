@@ -1,13 +1,12 @@
 import 'dart:convert';
 
+import 'package:app_qldt/_utils/secret.dart';
 import 'package:http/http.dart';
 
 import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.dart';
 
 class TokenService {
   late final FirebaseRepository _firebaseRepository = FirebaseRepository();
-  static final _baseUrl =
-      'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/upsert_token.php';
   static final _timeout = 10;
 
   Future<void> init() async {
@@ -28,7 +27,7 @@ class TokenService {
 
     try {
       response = await post(
-        Uri.parse(_baseUrl),
+        Uri.parse(Secret.url.postRequest.upsertToken),
         body: jsonEncode(json),
       ).timeout(Duration(seconds: _timeout));
     } on Exception catch (e) {

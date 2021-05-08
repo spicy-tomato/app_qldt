@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:app_qldt/_services/local_event_service.dart';
-import 'package:app_qldt/_services/local_notification_service.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:app_qldt/_services/local/local_event_service.dart';
+import 'package:app_qldt/_services/local/local_notification_service.dart';
 
 import 'services/services.dart';
 
@@ -32,9 +33,8 @@ class AuthenticationRepository {
     LoginResponse loginResponse;
 
     if (response != null) {
-       loginResponse = LoginResponse.fromJson(jsonDecode(response));
-    }
-    else {
+      loginResponse = LoginResponse.fromJson(jsonDecode(response));
+    } else {
       _controller.add(AuthenticationStatus.unauthenticated);
       return false;
     }

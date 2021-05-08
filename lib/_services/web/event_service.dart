@@ -5,11 +5,10 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_models/schedule.dart';
+import 'package:app_qldt/_utils/secret.dart';
 
 class EventService {
   static final _timeout = 10;
-  static final _baseUrl =
-      'https://utcstudentapp.000webhostapp.com/utcapi/api-v2/client/get_schedule.php?';
 
   final String userId;
 
@@ -41,11 +40,10 @@ class EventService {
   ///     ...
   /// ]
   Future<List<Schedule>?> _fetchData() async {
-    String url = _baseUrl + 'id=' + userId;
+    String url = Secret.url.getRequest.schedule + '?id=' + userId;
 
     try {
-      final responseData =
-          await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
+      final responseData = await http.get(Uri.parse(url)).timeout(Duration(seconds: _timeout));
 
       if (responseData.statusCode == 200) {
         List data = jsonDecode(responseData.body) as List;

@@ -2,10 +2,9 @@ import 'dart:ui';
 
 import 'package:app_qldt/_models/user_event.dart';
 import 'package:app_qldt/_models/schedule.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_qldt/_utils/database_provider.dart';
 
-import 'database_provider.dart';
-import 'event_service.dart';
+import '../web/event_service.dart';
 
 /// This class used for saving data about events (or schedules)
 /// into local storage
