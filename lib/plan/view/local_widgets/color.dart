@@ -39,7 +39,7 @@ class _PlanColorState extends State<PlanColor> {
                   contentPadding: EdgeInsets.symmetric(vertical: 10),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: listRadioItem(state.color),
+                    children: listTiles(state.color),
                   ),
                 );
               },
@@ -50,11 +50,11 @@ class _PlanColorState extends State<PlanColor> {
     );
   }
 
-  List<Widget> listRadioItem(PlanColors currentColor) {
-    List<Widget> widgets = [];
+  List<Widget> listTiles(PlanColors currentColor) {
+    List<Widget> tiles = [];
 
     PlanColors.values.forEach((color) {
-      widgets.add(
+      tiles.add(
         Container(
           width: MediaQuery.of(context).size.width * 0.85,
           child: InkWell(
@@ -80,14 +80,11 @@ class _PlanColorState extends State<PlanColor> {
       );
     });
 
-    return widgets;
+    return tiles;
   }
 
-  void _onTap(PlanColors? color) {
-    if (color != null) {
-      context.read<PlanBloc>().add(PlanColorChanged(color));
-    }
-
+  void _onTap(PlanColors color) {
+    context.read<PlanBloc>().add(PlanColorChanged(color));
     Navigator.of(context).pop();
   }
 }

@@ -52,10 +52,13 @@ class LocalScoreService {
 
   Future<List<String>> _getSemesterFromDb() async {
     final rawData = await _databaseProvider.score.semester;
+    final list = [''];
 
-    return rawData.map((data) {
-      return data['semester'].toString();
-    }).toList();
+    rawData.forEach((data) {
+      list.add(data['semester'].toString());
+    });
+
+    return list;
   }
 
   static LocalScoreService get instance => LocalScoreService();

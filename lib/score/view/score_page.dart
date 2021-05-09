@@ -1,10 +1,12 @@
+import 'package:app_qldt/score/bloc/score_bloc.dart';
+import 'package:app_qldt/score/view/local_widgets/function_button.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/_models/score.dart';
 import 'package:app_qldt/_widgets/element/loading.dart';
-import 'package:app_qldt/_widgets/element/refresh_button.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'local_widgets/local_widgets.dart';
 
@@ -20,36 +22,25 @@ class ScorePage extends StatefulWidget {
 }
 
 class _ScorePageState extends State<ScorePage> {
+  // TODO: Remove scoreData
   late List<Score> scoreData;
 
   @override
   Widget build(BuildContext context) {
     scoreData = UserDataModel.of(context)!.localScoreService.scoreData;
 
-    return SharedUI(
-      topRightWidget: _refreshButton(context),
-      child: Stack(
-        children: <Widget>[
-          ScoreTable(scoreData),
-          _fader(),
-        ],
+    return BlocProvider<ScoreBloc>(
+      create: (_) => ScoreBloc(scoreData),
+      child: SharedUI(
+        stable: false,
+        topRightWidget: FunctionButton(),
+        child: Stack(
+          children: <Widget>[
+            ScoreTable(scoreData),
+            _fader(),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _refreshButton(BuildContext context) {
-    return RefreshButton(
-      context,
-      onTap: () async {
-        widget.isLoading.value = true;
-
-        await UserDataModel.of(context)!.localScoreService.refresh();
-        scoreData = UserDataModel.of(context)!.localScoreService.scoreData;
-
-        widget.isLoading.value = false;
-
-        setState(() {});
-      },
     );
   }
 

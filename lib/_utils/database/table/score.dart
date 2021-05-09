@@ -39,6 +39,7 @@ class DbScore extends TableModel {
       return await database!.rawQuery(
         'SELECT semester '
         'FROM score '
+        'GROUP BY semester '
         'ORDER BY semester;',
       );
     } on Exception catch (_) {

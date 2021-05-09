@@ -30,6 +30,7 @@ class _NotificationPageState extends State<NotificationPage> {
         .notificationData as List<UserNotification>;
 
     return SharedUI(
+      stable: false,
       child: Item(
         child: SmartRefresher(
           enablePullDown: true,
