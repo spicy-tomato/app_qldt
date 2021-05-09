@@ -9,6 +9,7 @@ class SharedUI extends StatelessWidget {
   final BoxDecoration? decoration;
   final Color? topbarColor;
   final Color? topbariconColor;
+  final bool? stable;
 
   const SharedUI({
     Key? key,
@@ -17,6 +18,7 @@ class SharedUI extends StatelessWidget {
     this.topRightWidget,
     this.topbarColor,
     this.topbariconColor,
+    this.stable,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class SharedUI extends StatelessWidget {
               topRightWidget: topRightWidget,
               backgroundColor: topbarColor,
               iconColor: topbariconColor,
+              stable: stable ?? true,
             ),
             Expanded(
               child: WillPopScope(

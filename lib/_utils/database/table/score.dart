@@ -32,6 +32,21 @@ class DbScore extends TableModel {
     }
   }
 
+  Future<List<Map<String, dynamic>>> get semester async {
+    assert(database != null, 'Database must not be null');
+
+    try {
+      return await database!.rawQuery(
+        'SELECT semester '
+        'FROM score '
+        'ORDER BY semester;',
+      );
+    } on Exception catch (_) {
+      await database!.execute(createScript);
+      return await database!.query('score');
+    }
+  }
+
   Future<void> insert(Map<String, dynamic> score) async {
     assert(database != null, 'Database must not be null');
     await database!.insert('score', score);

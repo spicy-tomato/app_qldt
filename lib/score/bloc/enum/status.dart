@@ -1,0 +1,4 @@
+enum ScorePageStatus {
+  done,
+  processing,
+}

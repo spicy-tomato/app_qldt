@@ -12,7 +12,6 @@ class RefreshButton extends TopBarItem {
     required this.onTap,
   }) : super(
           onTap: onTap,
-          alignment: Alignment(0.95, 0),
           icon: Icons.refresh,
           color: color,
         );

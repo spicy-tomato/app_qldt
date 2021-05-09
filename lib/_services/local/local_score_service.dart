@@ -8,6 +8,7 @@ class LocalScoreService {
   late final ScoreService _scoreService;
 
   List<Score> scoreData = [];
+  List<String> semester = [];
 
   LocalScoreService({DatabaseProvider? databaseProvider, this.userId}) {
     this._databaseProvider = databaseProvider ?? DatabaseProvider();
@@ -25,7 +26,8 @@ class LocalScoreService {
       await _saveNew(data);
     }
 
-    scoreData = await _getFromDb();
+    scoreData = await _getScoreDataFromDb();
+    semester = await _getSemesterFromDb();
 
     return this.scoreData;
   }
@@ -40,11 +42,19 @@ class LocalScoreService {
     await _databaseProvider.score.delete();
   }
 
-  Future<List<Score>> _getFromDb() async {
+  Future<List<Score>> _getScoreDataFromDb() async {
     final rawData = await _databaseProvider.score.all;
 
     return rawData.map((data) {
       return Score.fromMap(data);
+    }).toList();
+  }
+
+  Future<List<String>> _getSemesterFromDb() async {
+    final rawData = await _databaseProvider.score.semester;
+
+    return rawData.map((data) {
+      return data['semester'].toString();
     }).toList();
   }
 
