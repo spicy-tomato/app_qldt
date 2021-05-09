@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:app_qldt/_models/user_notification.dart';
-import 'package:app_qldt/_widgets/item.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
-import 'package:app_qldt/_widgets/user_data_model.dart';
+import 'package:app_qldt/_widgets/wrapper/item.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
+import 'package:app_qldt/_widgets/model/user_data_model.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);

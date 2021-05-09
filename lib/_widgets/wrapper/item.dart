@@ -3,12 +3,12 @@ import 'package:app_qldt/_utils/helper/const.dart';
 
 class Item extends StatelessWidget {
   final Widget child;
-  final Color color;
+  final Color? color;
 
   const Item({
     Key? key,
     required this.child,
-    this.color = Const.itemBackgroundColor,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class Item extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: Const.itemBorderRadius,
-        color: color,
+        color: color ?? Const.itemBackgroundColor,
       ),
       child: child,
     );

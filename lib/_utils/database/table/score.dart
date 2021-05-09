@@ -8,13 +8,13 @@ class DbScore extends TableModel {
   @override
   String get createScript => ''
       'CREATE TABLE IF NOT EXISTS score('
-      'id_score INTEGER PRIMARY KEY AUTOCREMENT,'
+      'id_score INTEGER PRIMARY KEY AUTOINCREMENT,'
       'module_name TEXT,'
       'semester TEXT,'
       'credit INTEGER,'
       'evaluation INTEGER,'
-      'process_score TEXT,'
-      'test_score TEXT REAL,'
+      'process_score REAL,'
+      'test_score REAL,'
       'theoretical_score REAL);';
 
   Future<List<Map<String, dynamic>>> get all async {
@@ -24,11 +24,11 @@ class DbScore extends TableModel {
       return await database!.rawQuery(
         'SELECT * '
         'FROM score '
-        'ORDER BY semester;',
+        'ORDER BY semester, module_name COLLATE LOCALIZED;',
       );
     } on Exception catch (_) {
       await database!.execute(createScript);
-      return await database!.query('notification');
+      return await database!.query('score');
     }
   }
 

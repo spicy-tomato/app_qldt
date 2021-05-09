@@ -2,23 +2,28 @@ import 'package:flutter/material.dart';
 
 class TopBar extends StatelessWidget {
   final Widget? topRightWidget;
+  final Color? backgroundColor;
+  final Color? iconColor;
 
   const TopBar({
     Key? key,
     this.topRightWidget,
+    this.backgroundColor,
+    this.iconColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.transparent,
+      color: backgroundColor ?? Colors.transparent,
       height: 60,
       child: Stack(
         children: <Widget>[
           TopBarItem(
             icon: Icons.menu,
-            onTap: () => Scaffold.of(context)..openDrawer(),
+            color: iconColor,
             alignment: const Alignment(-0.95, 0),
+            onTap: () => Scaffold.of(context)..openDrawer(),
           ),
           topRightWidget ?? Container(),
         ],
@@ -28,15 +33,17 @@ class TopBar extends StatelessWidget {
 }
 
 class TopBarItem extends StatelessWidget {
-  final GestureTapCallback onTap;
+  final Function() onTap;
   final Alignment alignment;
   final IconData icon;
+  final Color? color;
 
   const TopBarItem({
     Key? key,
     required this.icon,
     required this.onTap,
     required this.alignment,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -54,7 +61,7 @@ class TopBarItem extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 30,
-                color: Colors.white,
+                color: color ?? Colors.white,
               ),
             ),
           ),

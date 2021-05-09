@@ -7,12 +7,16 @@ class SharedUI extends StatelessWidget {
   final Widget child;
   final Widget? topRightWidget;
   final BoxDecoration? decoration;
+  final Color? topbarColor;
+  final Color? topbariconColor;
 
   const SharedUI({
     Key? key,
     required this.child,
     this.decoration,
     this.topRightWidget,
+    this.topbarColor,
+    this.topbariconColor,
   }) : super(key: key);
 
   @override
@@ -25,7 +29,11 @@ class SharedUI extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            TopBar(topRightWidget: topRightWidget),
+            TopBar(
+              topRightWidget: topRightWidget,
+              backgroundColor: topbarColor,
+              iconColor: topbariconColor,
+            ),
             Expanded(
               child: WillPopScope(
                 onWillPop: () => _onWillPop(context),

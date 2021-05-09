@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
-import 'package:app_qldt/_widgets/navigable_plan_page.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 
 class HomePage extends StatefulWidget {
   @override

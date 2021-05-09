@@ -7,7 +7,7 @@ class LocalScoreService {
   late DatabaseProvider _databaseProvider;
   late final ScoreService _scoreService;
 
-  List<dynamic> scoreData = [];
+  List<Score> scoreData = [];
 
   LocalScoreService({DatabaseProvider? databaseProvider, this.userId}) {
     this._databaseProvider = databaseProvider ?? DatabaseProvider();
@@ -17,7 +17,7 @@ class LocalScoreService {
     }
   }
 
-  Future<List<dynamic>> refresh() async {
+  Future<List<Score>> refresh() async {
     List<Score>? data = await _scoreService.getScore();
 
     if (data != null) {
@@ -32,7 +32,7 @@ class LocalScoreService {
 
   Future<void> _saveNew(List<Score> rawData) async {
     for (var row in rawData) {
-      await _databaseProvider.notification.insert(row.toMap());
+      await _databaseProvider.score.insert(row.toMap());
     }
   }
 
@@ -40,7 +40,7 @@ class LocalScoreService {
     await _databaseProvider.score.delete();
   }
 
-  Future<List<dynamic>> _getFromDb() async {
+  Future<List<Score>> _getFromDb() async {
     final rawData = await _databaseProvider.score.all;
 
     return rawData.map((data) {

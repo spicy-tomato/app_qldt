@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-enum ScreenPage { login, home, calendar, schedule, notification }
+enum ScreenPage { login, home, calendar, schedule, notification, score }
 
 extension ScreenPageExtension on ScreenPage {
   String get string {
@@ -16,6 +14,9 @@ extension ScreenPageExtension on ScreenPage {
 
       case ScreenPage.schedule:
         return '/schedule';
+
+      case ScreenPage.score:
+        return '/score';
 
       default:
         return '/notification';
@@ -36,20 +37,12 @@ extension ScreenPageExtension on ScreenPage {
       case ScreenPage.schedule:
         return 'Thời gian biểu';
 
+      case ScreenPage.score:
+        return 'Điểm';
+
       case ScreenPage.notification:
       default:
         return 'Thông báo';
     }
   }
-}
-
-class Screen extends Equatable {
-  final ScreenPage screenPage;
-
-  const Screen({
-    this.screenPage = ScreenPage.login,
-  });
-
-  @override
-  List<Object> get props => [screenPage];
 }

@@ -47,19 +47,19 @@ class ReceiveNotification {
 
   Map<String, dynamic> toMap() {
     return {
-      "id_notification": idNotification,
-      "title": title,
-      "content": content,
-      "typez": typez,
-      "id_sender": idSender,
-      "time_created": timeCreated.toIso8601String(),
-      "time_start": timeStart == null ? null : timeStart!.toIso8601String(),
-      "time_end": timeEnd == null ? null : timeEnd!.toIso8601String(),
+      'id_notification': idNotification,
+      'title': title,
+      'content': content,
+      'typez': typez,
+      'id_sender': idSender,
+      'time_created': timeCreated.toIso8601String(),
+      'time_start': timeStart == null ? null : timeStart!.toIso8601String(),
+      'time_end': timeEnd == null ? null : timeEnd!.toIso8601String(),
     };
   }
 
   String toString() {
-    return "ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $idSender";
+    return 'ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $idSender';
   }
 
   static List<ReceiveNotification> fromList(List<dynamic> list){

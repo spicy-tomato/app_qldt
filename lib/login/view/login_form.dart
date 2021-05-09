@@ -5,7 +5,14 @@ import 'package:formz/formz.dart';
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'local_widgets/local_widgets.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  bool _isDialogShowing = false;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -13,23 +20,16 @@ class LoginForm extends StatelessWidget {
 
     return BlocConsumer<LoginBloc, LoginState>(
       listener: (context, state) async {
+        /// TODO: Bug here
         if (state.status.isSubmissionFailure) {
-          await showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text("Thông tin"),
-                content: Text("Đăng nhập thất bại"),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),
-                    child: const Text("Đồng ý"),
-                  )
-                ],
-              );
-            },
-          );
+          if (!_isDialogShowing) {
+            _isDialogShowing = true;
+            await showDialog(
+              barrierDismissible: true,
+              context: context,
+              builder: (_) => _loginFailedDialog(context),
+            );
+          }
         }
       },
       buildWhen: (previous, current) {
@@ -79,13 +79,34 @@ class LoginForm extends StatelessWidget {
                   const SizedBox(height: 20),
                   PasswordInput(focusNode: focusNode),
                   const SizedBox(height: 20),
-                  LoginButton(),
+                  LoginButton(focusNode),
                 ],
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  // TODO: Update this to class
+  Widget _loginFailedDialog(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(true);
+      },
+      child: AlertDialog(
+        title: Text("Thông tin"),
+        content: Text("Đăng nhập thất bại"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Đồng ý"),
+          )
+        ],
+      ),
     );
   }
 }

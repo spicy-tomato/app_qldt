@@ -52,11 +52,11 @@ class ScoreService {
         return null;
       }
     } on TimeoutException catch (e) {
-      print('Timeout error: $e at Event service');
+      print('Timeout error: $e at Score service');
     } on SocketException catch (e) {
-      print('Socket error: $e at Event service');
+      print('Socket error: $e at Score service');
     } on Error catch (e) {
-      print('General Error: $e at Event service');
+      print('General Error: $e at Score service');
     }
 
     return null;

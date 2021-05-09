@@ -6,6 +6,10 @@ import 'package:formz/formz.dart';
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 
 class LoginButton extends StatelessWidget {
+  final FocusNode focusNode;
+
+  const LoginButton(this.focusNode, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -15,7 +19,7 @@ class LoginButton extends StatelessWidget {
         child: BlocBuilder<LoginBloc, LoginState>(
           buildWhen: (previous, current) => previous.status != current.status,
           builder: (_, state) {
-            return state.status.isSubmissionInProgress ? ProcessingWidget() : Button();
+            return state.status.isSubmissionInProgress ? ProcessingWidget() : Button(focusNode);
           },
         ),
       ),
@@ -33,6 +37,10 @@ class ProcessingWidget extends StatelessWidget {
 }
 
 class Button extends StatelessWidget {
+  final FocusNode focusNode;
+
+  const Button(this.focusNode, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -46,7 +54,10 @@ class Button extends StatelessWidget {
         ),
       ),
       child: const Text('Đăng nhập'),
-      onPressed: () => context.read<LoginBloc>().add(const LoginSubmitted()),
+      onPressed: () {
+        FocusScope.of(context).unfocus();
+        context.read<LoginBloc>().add(const LoginSubmitted());
+      },
     );
   }
 }

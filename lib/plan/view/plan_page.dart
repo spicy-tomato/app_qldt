@@ -5,7 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:app_qldt/plan/plan.dart';
 import 'package:app_qldt/_utils/helper/day_of_week_vn.dart';
-import 'package:app_qldt/_widgets/inherited_scroll_to_plan_page.dart';
+import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
 
 import 'local_widgets/local_widgets.dart';
 

@@ -1,10 +1,11 @@
+import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/_models/meeting_data_source.dart';
 import 'package:app_qldt/_models/user_event.dart';
-import 'package:app_qldt/_widgets/navigable_plan_page.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
-import 'package:app_qldt/_widgets/user_data_model.dart';
+import 'package:app_qldt/_widgets/model/user_data_model.dart';
+import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 
 import 'local_widgets/schedule.dart';
 
@@ -38,7 +39,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
     return NavigablePlanPage(
       child: SharedUI(
-        child: Container(
+        child: Item(
           child: Theme(
             key: _globalKey,
             data: model.copyWith(accentColor: model.backgroundColor),

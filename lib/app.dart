@@ -1,4 +1,4 @@
-import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,15 +10,18 @@ import '_repositories/user_repository/user_repository.dart';
 import '_services/local/local_event_service.dart';
 import '_services/local/local_notification_service.dart';
 import '_services/web/token_service.dart';
+import '_utils/database/provider.dart';
 import '_utils/helper/SfLocalizationVnDelegate.dart';
+import '_utils/helper/const.dart';
 import '_widgets/splash/splash.dart';
-import '_widgets/user_data_model.dart';
+import '_widgets/model/user_data_model.dart';
 
 import 'calendar/calendar.dart';
 import 'home/home.dart';
 import 'login/login.dart';
 import 'notification/notification.dart';
-import 'schedule/schedule_page.dart';
+import 'schedule/schedule.dart';
+import 'score/score.dart';
 
 class Application extends StatefulWidget {
   final AuthenticationRepository authenticationRepository;
@@ -37,6 +40,7 @@ class Application extends StatefulWidget {
 class _ApplicationState extends State<Application> {
   late LocalNotificationService localNotificationService;
   late LocalEventService localEventService;
+  late LocalScoreService localScoreService;
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
@@ -116,6 +120,7 @@ class _ApplicationState extends State<Application> {
             '/home': (_) => userData(HomePage()),
             '/calendar': (_) => userData(CalendarPage()),
             '/schedule': (_) => userData(SchedulePage()),
+            '/score': (_) => userData(ScorePage()),
             '/notification': (_) => userData(NotificationPage()),
           },
         ),
@@ -127,6 +132,7 @@ class _ApplicationState extends State<Application> {
     return UserDataModel(
       localEventService: localEventService,
       localNotificationService: localNotificationService,
+      localScoreService: localScoreService,
       child: child,
     );
   }
@@ -161,16 +167,19 @@ class _ApplicationState extends State<Application> {
         LocalEventService(databaseProvider: databaseProvider, userId: state.user.id);
     localNotificationService =
         LocalNotificationService(databaseProvider: databaseProvider, userId: state.user.id);
+    localScoreService =
+        LocalScoreService(databaseProvider: databaseProvider, userId: state.user.id);
 
     await localEventService.refresh();
     await localNotificationService.refresh();
+    await localScoreService.refresh();
 
     final timeEnded = stopwatch.elapsed;
 
     await Future.delayed(
         timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0),
         () {
-      _navigator!.pushNamedAndRemoveUntil('/home', (_) => false);
+      _navigator!.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
     });
   }
 
