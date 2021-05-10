@@ -90,13 +90,16 @@ class _FunctionButtonState extends State<FunctionButton> {
   }
 
   List<Widget> _listTiles(
-      BuildContext rootContext, BuildContext dialogContext, String currentSemester) {
+    BuildContext rootContext,
+    BuildContext dialogContext,
+    String currentSemester,
+  ) {
     List<Widget> tiles = [];
 
     semesters.forEach((semester) {
       tiles.add(InkWell(
         onTap: () {
-          rootContext.read<ScoreBloc>().add(ScoreSemesterChanged(semester));
+          rootContext.read<ScoreBloc>().add(ScoreSemesterChanged(rootContext, semester));
           Navigator.of(dialogContext).pop();
         },
         child: Padding(

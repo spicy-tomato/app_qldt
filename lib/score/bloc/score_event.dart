@@ -24,8 +24,9 @@ class ScorePageStatusChanged extends ScoreEvent {
 
 class ScoreSemesterChanged extends ScoreEvent {
   final String semester;
+  final BuildContext context;
 
-  ScoreSemesterChanged(this.semester);
+  ScoreSemesterChanged(this.context, this.semester);
 
   @override
   List<Object?> get props => [semester];

@@ -1,4 +1,4 @@
 enum ScorePageStatus {
   done,
-  processing,
+  loading,
 }
