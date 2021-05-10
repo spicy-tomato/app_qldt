@@ -18,9 +18,9 @@ class _ScoreTableState extends State<ScoreTable> {
   static final List<double> columnWidth = [70, 70, 70, 90, 130, 100];
 
   static final List<String> columnTitle = [
-    'Điểm thành phần',
+    'Điểm quá trình',
     'Điểm thi',
-    'Điểm tổng kết',
+    'Điểm học phần',
     'Số tín chỉ',
     'Học kỳ',
     'Trạng thái',
