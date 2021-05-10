@@ -48,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
           transform: Matrix4.translationValues(
               0,
               state.hideLoginDialog
-                  ? 750
+                  ? screenHeight
                   : state.hideKeyboard
                       ? 270
                       : 170,
