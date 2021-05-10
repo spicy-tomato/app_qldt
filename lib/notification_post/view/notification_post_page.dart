@@ -105,6 +105,7 @@ class _ScrollViewState extends State<ScrollView> {
                         color: Theme.of(context).backgroundColor,
                       ),
                     ),
+                    /// TODO: Change below
                     Text(
                       '3 ngày trước',
                       maxLines: 2,

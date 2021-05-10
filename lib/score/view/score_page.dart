@@ -14,12 +14,12 @@ const columnWidth = <double>[70, 70, 70, 130, 90, 100];
 
 class ScorePage extends StatefulWidget {
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
-
-  final ScrollController _verticalTitleController = ScrollController();
-  final ScrollController _verticalBodyController = ScrollController();
-
-  final ScrollController _horizontalBodyController = ScrollController();
-  final ScrollController _horizontalTitleController = ScrollController();
+  final ScrollControllers _scrollControllers = ScrollControllers(
+    verticalTitleController: ScrollController(),
+    verticalBodyController: ScrollController(),
+    horizontalBodyController: ScrollController(),
+    horizontalTitleController: ScrollController(),
+  );
 
   ScorePage({Key? key}) : super(key: key);
 
@@ -43,12 +43,7 @@ class _ScorePageState extends State<ScorePage> {
               },
               builder: (context, state) {
                 return ScoreTable(
-                  scrollControllers: ScrollControllers(
-                    verticalBodyController: widget._verticalBodyController,
-                    verticalTitleController: widget._verticalTitleController,
-                    horizontalBodyController: widget._horizontalBodyController,
-                    horizontalTitleController: widget._horizontalTitleController,
-                  ),
+                  scrollControllers: widget._scrollControllers
                 );
               },
             ),

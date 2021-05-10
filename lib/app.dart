@@ -1,4 +1,5 @@
 import 'package:app_qldt/_services/local/local_score_service.dart';
+import 'package:app_qldt/_utils/helper/pull_to_fresh_vn_delegate.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ import '_services/local/local_event_service.dart';
 import '_services/local/local_notification_service.dart';
 import '_services/web/token_service.dart';
 import '_utils/database/provider.dart';
-import '_utils/helper/SfLocalizationVnDelegate.dart';
+import '_utils/helper/sf_localization_vn_delegate.dart';
 import '_utils/helper/const.dart';
 import '_widgets/splash/splash.dart';
 import '_widgets/model/user_data_model.dart';
@@ -73,6 +74,7 @@ class _ApplicationState extends State<Application> {
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
     SfLocalizationsVnDelegate(),
+    PullToRefreshVnDelegate(),
   ];
 
   final _supportedLocales = [const Locale('vi', '')];
