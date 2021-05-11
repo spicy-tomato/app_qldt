@@ -25,7 +25,11 @@ class UserInfo extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Text(state.user.name.toString()),
+            Text(
+              state.user.name.toString(),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
             const SizedBox(height: 10),
             Text(state.user.id.toString()),
           ],
