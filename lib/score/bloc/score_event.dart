@@ -23,7 +23,7 @@ class ScorePageStatusChanged extends ScoreEvent {
 }
 
 class ScoreSemesterChanged extends ScoreEvent {
-  final String semester;
+  final Semester semester;
   final BuildContext context;
 
   ScoreSemesterChanged(this.context, this.semester);

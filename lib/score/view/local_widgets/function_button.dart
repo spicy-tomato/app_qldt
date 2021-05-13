@@ -1,5 +1,6 @@
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
+import 'package:app_qldt/score/model/semester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +15,7 @@ class FunctionButton extends StatefulWidget {
 }
 
 class _FunctionButtonState extends State<FunctionButton> {
-  late List<String> semesters;
+  late List<Semester> semesters;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class _FunctionButtonState extends State<FunctionButton> {
   List<Widget> _listTiles(
     BuildContext rootContext,
     BuildContext dialogContext,
-    String currentSemester,
+    Semester currentSemester,
   ) {
     List<Widget> tiles = [];
 
@@ -106,12 +107,12 @@ class _FunctionButtonState extends State<FunctionButton> {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: <Widget>[
-              Radio<String>(
+              Radio<Semester>(
                 value: semester,
                 groupValue: currentSemester,
                 onChanged: (_) => {},
               ),
-              Text(semester == '' ? 'Chọn tất cả' : semester),
+              Text(semester.toString()),
             ],
           ),
         ),

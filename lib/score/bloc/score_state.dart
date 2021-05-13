@@ -3,18 +3,18 @@ part of 'score_bloc.dart';
 class ScoreState extends Equatable {
   final List<Score> scoreData;
   final ScorePageStatus status;
-  final String semester;
+  final Semester semester;
 
   const ScoreState({
     required this.scoreData,
     this.status = ScorePageStatus.done,
-    this.semester = '',
+    this.semester = const Semester(),
   });
 
   ScoreState copyWith({
     List<Score>? scoreData,
     ScorePageStatus? status,
-    String? semester,
+    Semester? semester,
   }) {
     return ScoreState(
       scoreData: scoreData ?? this.scoreData,

@@ -1,6 +1,7 @@
 import 'package:app_qldt/_models/score.dart';
 import 'package:app_qldt/_services/web/score_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/score/model/semester.dart';
 
 class LocalScoreService {
   final String? userId;
@@ -8,7 +9,7 @@ class LocalScoreService {
   late final ScoreService _scoreService;
 
   List<Score> scoreData = [];
-  List<String> semester = [];
+  List<Semester> semester = [];
 
   LocalScoreService({DatabaseProvider? databaseProvider, this.userId}) {
     this._databaseProvider = databaseProvider ?? DatabaseProvider();
@@ -50,12 +51,12 @@ class LocalScoreService {
     }).toList();
   }
 
-  Future<List<String>> _getSemesterFromDb() async {
-    final rawData = await _databaseProvider.score.semester;
-    final list = [''];
+  Future<List<Semester>> _getSemesterFromDb() async {
+    final List<Map<String, dynamic>> rawData = await _databaseProvider.score.semester;
+    final List<Semester> list = [Semester.all];
 
     rawData.forEach((data) {
-      list.add(data['semester'].toString());
+      list.add(Semester(data['semester'].toString()));
     });
 
     return list;

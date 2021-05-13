@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_qldt/_models/score.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
+import 'package:app_qldt/score/model/semester.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -49,13 +50,13 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     if (event.semester != state.semester) {
       List<Score> newScoreData;
 
-      if (event.semester == '') {
+      if (event.semester == Semester.all) {
         newScoreData = UserDataModel.of(event.context)!.localScoreService.scoreData;
       } else {
         newScoreData = UserDataModel.of(event.context)!
             .localScoreService
             .scoreData
-            .where((score) => score.semester == event.semester)
+            .where((score) => score.semester == event.semester.toString())
             .toList();
       }
 
