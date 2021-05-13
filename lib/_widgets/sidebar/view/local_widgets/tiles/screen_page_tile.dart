@@ -39,7 +39,7 @@ class ScreenPageTile extends StatelessWidget {
         child: empty == null || !empty!
             ? ListTile(
                 title: Padding(
-                  padding: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(left: 5),
                   child: Text(
                     screenPage != null ? screenPage!.name : 'Đăng xuất',
                     style: TextStyle(

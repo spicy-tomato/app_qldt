@@ -35,58 +35,60 @@ class _ScoreTableState extends State<ScoreTable> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.white),
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.white),
+          ),
         ),
-      ),
-      child: BlocBuilder<ScoreBloc, ScoreState>(
-        builder: (context, state) {
-          return StickyHeadersTable(
-            scrollControllers: widget.scrollControllers,
-            cellDimensions: _cellDimensions,
-            columnsLength: columnTitle.length,
-            rowsLength: state.scoreData.length,
-            columnsTitleBuilder: (i) => StickyColumn(
-              columnTitle[i],
-              columnIndex: i,
-              isLastColumn: i == 5,
+        child: BlocBuilder<ScoreBloc, ScoreState>(
+          builder: (context, state) {
+            return StickyHeadersTable(
+              scrollControllers: widget.scrollControllers,
               cellDimensions: _cellDimensions,
-              backgroundColor: Theme.of(context).backgroundColor,
-              textColor: Colors.white,
-              verticalBorderColor: Colors.white,
-              horizotalBorderColor: Colors.white,
-            ),
-            rowsTitleBuilder: (i) => StickyRow(
-              state.scoreData[i].moduleName,
-              cellDimensions: _cellDimensions,
-              isLastRow: i == state.scoreData.length - 1,
-              textColor: Colors.white,
-              backgroundColor: Colors.red,
-              verticalBorderColor: Colors.white,
-              horizotalBorderColor: Colors.white,
-            ),
-            contentCellBuilder: (i, j) => ContentCell(
-              state.scoreData[j].toList()[i].toString(),
-              columnIndex: i,
-              isLastColumn: i == 5,
-              isLastRow: j == state.scoreData.length - 1,
-              cellDimensions: _cellDimensions,
-              textColor: Theme.of(context).primaryColor,
-              backgroundColor: Colors.white,
-              verticalBorderColor: Theme.of(context).primaryColor,
-              horizotalBorderColor: Theme.of(context).primaryColor,
-            ),
-            legendCell: LegendCell(
-              'Môn học',
-              cellDimensions: _cellDimensions,
-              backgroundColor: Theme.of(context).backgroundColor,
-              horizotalBorderColor: Colors.white,
-              verticalBorderColor: Colors.white,
-            ),
-          );
-        },
+              columnsLength: columnTitle.length,
+              rowsLength: state.scoreData.length,
+              columnsTitleBuilder: (i) => StickyColumn(
+                columnTitle[i],
+                columnIndex: i,
+                isLastColumn: i == 5,
+                cellDimensions: _cellDimensions,
+                backgroundColor: Theme.of(context).backgroundColor,
+                textColor: Colors.white,
+                verticalBorderColor: Colors.white,
+                horizotalBorderColor: Colors.white,
+              ),
+              rowsTitleBuilder: (i) => StickyRow(
+                state.scoreData[i].moduleName,
+                cellDimensions: _cellDimensions,
+                isLastRow: i == state.scoreData.length - 1,
+                textColor: Colors.white,
+                backgroundColor: Colors.red,
+                verticalBorderColor: Colors.white,
+                horizotalBorderColor: Colors.white,
+              ),
+              contentCellBuilder: (i, j) => ContentCell(
+                state.scoreData[j].toList()[i].toString(),
+                columnIndex: i,
+                isLastColumn: i == 5,
+                isLastRow: j == state.scoreData.length - 1,
+                cellDimensions: _cellDimensions,
+                textColor: Theme.of(context).primaryColor,
+                backgroundColor: Colors.white,
+                verticalBorderColor: Theme.of(context).primaryColor,
+                horizotalBorderColor: Theme.of(context).primaryColor,
+              ),
+              legendCell: LegendCell(
+                'Môn học',
+                cellDimensions: _cellDimensions,
+                backgroundColor: Theme.of(context).backgroundColor,
+                horizotalBorderColor: Colors.white,
+                verticalBorderColor: Colors.white,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

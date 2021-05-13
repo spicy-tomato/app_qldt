@@ -100,7 +100,7 @@ class _FunctionButtonState extends State<FunctionButton> {
     semesters.forEach((semester) {
       tiles.add(InkWell(
         onTap: () {
-          rootContext.read<ScoreBloc>().add(ScoreSemesterChanged(rootContext, semester));
+          // rootContext.read<ScoreBloc>().add(ScoreSemesterChanged(rootContext, semester));
           Navigator.of(dialogContext).pop();
         },
         child: Padding(

@@ -1,6 +1,7 @@
 import 'package:app_qldt/_models/score.dart';
 import 'package:app_qldt/_services/web/score_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/score/model/semester.dart';
 
 class LocalScoreService {
@@ -18,6 +19,8 @@ class LocalScoreService {
       _scoreService = ScoreService(userId!);
     }
   }
+
+  static LocalScoreService get instance => LocalScoreService();
 
   Future<List<Score>> refresh() async {
     List<Score>? data = await _scoreService.getScore();
@@ -62,5 +65,43 @@ class LocalScoreService {
     return list;
   }
 
-  static LocalScoreService get instance => LocalScoreService();
+  List<Score> getScoreDataOfAllEvaluation(Semester semester) {
+    return scoreData.where((score) => score.semester == semester.query).toList();
+  }
+
+  List<Score> getScoreDataOfAllSemester(SubjectEvaluation subjectEvaluation) {
+    if (subjectEvaluation == SubjectEvaluation.pass) {
+      return scoreData.where((score) => score.evaluation == SubjectEvaluation.pass.query).toList();
+    }
+    //  Fail
+    else {
+      List<Score> newScoreData = [];
+      List<Score> passedScoreData =
+          scoreData.where((score) => score.evaluation == SubjectEvaluation.pass.query).toList();
+
+      scoreData.forEach((score) {
+        if (score.evaluation == SubjectEvaluation.fail.query) {
+          bool fail = true;
+
+          passedScoreData.forEach((passedScore) {
+            if (score.moduleName == passedScore.moduleName) {
+              fail = false;
+            }
+          });
+
+          if (fail) {
+            newScoreData.add(score);
+          }
+        }
+      });
+
+      return newScoreData;
+    }
+  }
+
+  List<Score> getSpecificScoreData(Semester semester, SubjectEvaluation subjectEvaluation) {
+    return getScoreDataOfAllSemester(subjectEvaluation)
+        .where((score) => score.semester == semester.query)
+        .toList();
+  }
 }

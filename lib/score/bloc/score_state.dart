@@ -4,22 +4,26 @@ class ScoreState extends Equatable {
   final List<Score> scoreData;
   final ScorePageStatus status;
   final Semester semester;
+  final SubjectEvaluation subjectEvaluation;
 
   const ScoreState({
     required this.scoreData,
     this.status = ScorePageStatus.done,
     this.semester = const Semester(),
+    this.subjectEvaluation = SubjectEvaluation.all,
   });
 
   ScoreState copyWith({
     List<Score>? scoreData,
     ScorePageStatus? status,
     Semester? semester,
+    SubjectEvaluation? subjectEvaluation,
   }) {
     return ScoreState(
       scoreData: scoreData ?? this.scoreData,
       status: status ?? this.status,
       semester: semester ?? this.semester,
+      subjectEvaluation: subjectEvaluation ?? this.subjectEvaluation,
     );
   }
 
@@ -28,6 +32,7 @@ class ScoreState extends Equatable {
         scoreData,
         status,
         semester,
+        subjectEvaluation,
       ];
 }
 

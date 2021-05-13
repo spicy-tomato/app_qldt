@@ -1,7 +1,7 @@
 class Semester {
-  final String semester;
+  final String _string;
 
-  const Semester([String? semester]) : this.semester = semester == null ? '' : semester;
+  const Semester([String? semester]) : this._string = semester == null ? '' : semester;
 
   static Semester get all => Semester();
 
@@ -11,12 +11,12 @@ class Semester {
 
   @override
   bool operator ==(Object other) {
-    return other is Semester && semester == other.semester;
+    return other is Semester && _string == other._string;
   }
 
   @override
-  int get hashCode => semester.hashCode;
+  int get hashCode => _string.hashCode;
 
   @override
-  String toString() => semester == '' ? 'Tất cả' : semester;
+  String toString() => _string == '' ? 'Tất cả' : _string;
 }

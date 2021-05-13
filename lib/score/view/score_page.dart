@@ -1,4 +1,4 @@
-import 'package:app_qldt/score/bloc/enum/status.dart';
+import 'package:app_qldt/score/bloc/enum/page_status.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
 import 'package:app_qldt/score/view/local_widgets/function_button.dart';
 import 'package:flutter/material.dart';
@@ -37,15 +37,14 @@ class _ScorePageState extends State<ScorePage> {
         topRightWidget: FunctionButton(),
         child: Stack(
           children: <Widget>[
-            BlocBuilder<ScoreBloc, ScoreState>(
-              buildWhen: (previous, current) {
-                return previous.semester != current.semester;
-              },
-              builder: (context, state) {
-                return ScoreTable(
-                  scrollControllers: widget._scrollControllers
-                );
-              },
+            Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Filter(),
+                  ScoreTable(scrollControllers: widget._scrollControllers),
+                ],
+              ),
             ),
             BlocBuilder<ScoreBloc, ScoreState>(
               buildWhen: (previous, current) => previous.status != current.status,
