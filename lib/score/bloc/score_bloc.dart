@@ -21,32 +21,25 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreEvent event,
   ) async* {
     if (event is ScoreDataChanged) {
-      yield _mapScoreDataChangedToState(event, state);
+      yield _mapScoreDataChangedToState(event);
     } else if (event is ScorePageStatusChanged) {
-      yield _mapScorePageStatusChangedToState(event, state);
+      yield _mapScorePageStatusChangedToState(event);
     } else if (event is ScoreSemesterChanged) {
-      yield* _mapScoreSemesterChangedToState(event, state);
+      yield* _mapScoreSemesterChangedToState(event);
+    } else if (event is ScoreSubjectStatusChanged) {
+      yield _mapScoreSubjectStatusChangedToState(event);
     }
   }
 
-  ScoreState _mapScoreDataChangedToState(
-    ScoreDataChanged event,
-    ScoreState state,
-  ) {
+  ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     return state.copyWith(scoreData: event.scoreData);
   }
 
-  ScoreState _mapScorePageStatusChangedToState(
-    ScorePageStatusChanged event,
-    ScoreState state,
-  ) {
+  ScoreState _mapScorePageStatusChangedToState(ScorePageStatusChanged event) {
     return state.copyWith(status: event.status);
   }
 
-  Stream<ScoreState> _mapScoreSemesterChangedToState(
-    ScoreSemesterChanged event,
-    ScoreState state,
-  ) async* {
+  Stream<ScoreState> _mapScoreSemesterChangedToState(ScoreSemesterChanged event) async* {
     if (event.semester != state.semester) {
       List<Score> newScoreData;
 

@@ -19,107 +19,77 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     PlanEvent event,
   ) async* {
     if (event is PlanTitleChanged) {
-      yield _mapPlanTitleChangedToState(event, state);
+      yield _mapPlanTitleChangedToState(event);
     } else if (event is PlanIsAllDayChanged) {
-      yield (_mapPlanIsAllDayChangedToState(state));
+      yield (_mapPlanIsAllDayChangedToState());
     } else if (event is PlanFromDateChanged) {
-      yield (_mapPlanFromDateChangedToState(event, state));
+      yield (_mapPlanFromDateChangedToState(event));
     } else if (event is PlanToDateChanged) {
-      yield (_mapPlanToDateChangedToState(event, state));
+      yield (_mapPlanToDateChangedToState(event));
     } else if (event is PlanRepeatChanged) {
-      yield (_mapPlanRepeatChangedToState(event, state));
+      yield (_mapPlanRepeatChangedToState(event));
     } else if (event is PlanPeopleChanged) {
-      yield (_mapPlanPeopleChangedToState(event, state));
+      yield (_mapPlanPeopleChangedToState(event));
     } else if (event is PlanDescriptionChanged) {
-      yield (_mapPlanDescriptionChangedToState(event, state));
+      yield (_mapPlanDescriptionChangedToState(event));
     } else if (event is PlanAccessibilityChanged) {
-      yield (_mapPlanAccessibilityChangedToState(event, state));
+      yield (_mapPlanAccessibilityChangedToState(event));
     } else if (event is PlanStatusChanged) {
-      yield (_mapPlanStatusChangedToState(event, state));
+      yield (_mapPlanStatusChangedToState(event));
     } else if (event is PlanColorChanged) {
-      yield (_mapPlanColorChangedToState(event, state));
+      yield (_mapPlanColorChangedToState(event));
     } else if (event is PlanPageVisibilityChanged) {
-      yield (_mapPlanPageVisibilityChangedToState(event, state));
+      yield (_mapPlanPageVisibilityChangedToState(event));
     } else if (event is PlanTimeChangedToCurrentTime) {
-      yield _mapPlanChangedToCurrentTimeToState(event, state);
+      yield _mapPlanChangedToCurrentTimeToState(event);
     }
   }
 
-  PlanState _mapPlanTitleChangedToState(
-    PlanTitleChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanTitleChangedToState(PlanTitleChanged event) {
     return state.copyWith(title: event.title);
   }
 
-  PlanState _mapPlanIsAllDayChangedToState(PlanState state) {
+  PlanState _mapPlanIsAllDayChangedToState() {
     return state.copyWith(isAllDay: !state.isAllDay);
   }
 
-  PlanState _mapPlanFromDateChangedToState(
-    PlanFromDateChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanFromDateChangedToState(PlanFromDateChanged event) {
     return state.copyWith(from: event.from);
   }
 
-  PlanState _mapPlanToDateChangedToState(
-    PlanToDateChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanToDateChangedToState(PlanToDateChanged event) {
     return state.copyWith(to: event.to);
   }
 
-  PlanState _mapPlanRepeatChangedToState(PlanRepeatChanged event, PlanState state) {
+  PlanState _mapPlanRepeatChangedToState(PlanRepeatChanged event) {
     return state.copyWith(repeat: event.repeat);
   }
 
-  PlanState _mapPlanPeopleChangedToState(
-    PlanPeopleChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanPeopleChangedToState(PlanPeopleChanged event) {
     return state.copyWith(people: event.people);
   }
 
-  PlanState _mapPlanDescriptionChangedToState(
-    PlanDescriptionChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanDescriptionChangedToState(PlanDescriptionChanged event) {
     return state.copyWith(description: event.description);
   }
 
-  PlanState _mapPlanAccessibilityChangedToState(
-    PlanAccessibilityChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanAccessibilityChangedToState(PlanAccessibilityChanged event) {
     return state.copyWith(accessibility: event.accessibility);
   }
 
-  PlanState _mapPlanStatusChangedToState(
-    PlanStatusChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanStatusChangedToState(PlanStatusChanged event) {
     return state.copyWith(status: event.status);
   }
 
-  PlanState _mapPlanColorChangedToState(
-    PlanColorChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanColorChangedToState(PlanColorChanged event) {
     return state.copyWith(color: event.color);
   }
 
-  PlanState _mapPlanPageVisibilityChangedToState(
-    PlanPageVisibilityChanged event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanPageVisibilityChangedToState(PlanPageVisibilityChanged event) {
     return state.copyWith(visibility: event.visibility);
   }
 
-  PlanState _mapPlanChangedToCurrentTimeToState(
-    PlanTimeChangedToCurrentTime event,
-    PlanState state,
-  ) {
+  PlanState _mapPlanChangedToCurrentTimeToState(PlanTimeChangedToCurrentTime event) {
     return state.copyWith(from: event.current, to: event.current.add(Duration(hours: 1)));
   }
 }

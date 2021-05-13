@@ -21,35 +21,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is HideLoginDialog) {
-      yield _mapLoginDialogVisibleChangedToState(event, state);
+      yield _mapLoginDialogVisibleChangedToState(event);
     } else if (event is LoginHideKeyboard) {
-      yield _mapKeyboardVisibleChangedToState(state);
+      yield _mapKeyboardVisibleChangedToState();
     } else if (event is LoginUsernameChanged) {
-      yield _mapUsernameChangedToState(event, state);
+      yield _mapUsernameChangedToState(event);
     } else if (event is LoginPasswordChanged) {
-      yield _mapPasswordChangedToState(event, state);
+      yield _mapPasswordChangedToState(event);
     } else if (event is LoginSubmitted) {
-      yield* _mapLoginSubmitToState(state);
+      yield* _mapLoginSubmitToState();
     } else if (event is LoginPasswordVisibleChanged) {
-      yield _mapToPasswordVisibleChangedToState(state);
+      yield _mapToPasswordVisibleChangedToState();
     }
   }
 
-  LoginState _mapLoginDialogVisibleChangedToState(
-    HideLoginDialog event,
-    LoginState state,
-  ) {
+  LoginState _mapLoginDialogVisibleChangedToState(HideLoginDialog event) {
     return state.copyWith(hideLoginDialog: event.hide);
   }
 
-  LoginState _mapKeyboardVisibleChangedToState(LoginState state) {
+  LoginState _mapKeyboardVisibleChangedToState() {
     return state.copyWith(hideKeyboard: !state.hideKeyboard);
   }
 
-  LoginState _mapUsernameChangedToState(
-    LoginUsernameChanged event,
-    LoginState state,
-  ) {
+  LoginState _mapUsernameChangedToState(LoginUsernameChanged event) {
     final username = Username.dirty(event.username);
     return state.copyWith(
       username: username,
@@ -57,10 +51,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
-  LoginState _mapPasswordChangedToState(
-    LoginPasswordChanged event,
-    LoginState state
-  ) {
+  LoginState _mapPasswordChangedToState(LoginPasswordChanged event) {
     final password = Password.dirty(event.password);
     return state.copyWith(
       password: password,
@@ -68,7 +59,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
-  Stream<LoginState> _mapLoginSubmitToState(LoginState state) async* {
+  Stream<LoginState> _mapLoginSubmitToState() async* {
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
       try {
@@ -93,7 +84,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  LoginState _mapToPasswordVisibleChangedToState(LoginState state) {
+  LoginState _mapToPasswordVisibleChangedToState() {
     return state.copyWith(hidePassword: !state.hidePassword);
   }
 }
