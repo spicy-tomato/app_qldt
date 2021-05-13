@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PlanPageCustomListTile extends StatelessWidget {
+class CustomListTile extends StatelessWidget {
   final Widget? leading;
   final Widget title;
   final Widget? trailing;
   final bool? defaultHeight;
   final Function()? onTap;
 
-  const PlanPageCustomListTile({
+  const CustomListTile({
     Key? key,
     this.leading,
     required this.title,
@@ -45,9 +45,11 @@ class PlanPageCustomListTile extends StatelessWidget {
       return listTile;
     }
 
-    return InkWell(
-      onTap: onTap,
-      child: listTile,
+    return Material(
+      child: InkWell(
+        onTap: onTap,
+        child: listTile,
+      ),
     );
   }
 }

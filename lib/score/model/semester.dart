@@ -5,6 +5,10 @@ class Semester {
 
   static Semester get all => Semester();
 
+  static String getString(Semester semester) => semester.toString();
+
+  String get query => _string;
+
   @override
   bool operator ==(Object other) {
     return other is Semester && semester == other.semester;

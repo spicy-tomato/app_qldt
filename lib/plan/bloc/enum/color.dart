@@ -16,6 +16,14 @@ enum PlanColors {
 }
 
 extension PlanColorsExtension on PlanColors {
+  static String stringFunction(PlanColors color){
+    return color.string;
+  }
+
+  static Color colorFunction(PlanColors color){
+    return color.color;
+  }
+
   String get string {
     switch (this) {
       case PlanColors.tomato:

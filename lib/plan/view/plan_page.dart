@@ -1,3 +1,4 @@
+import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -148,14 +149,14 @@ class _ApartPlanPage extends StatelessWidget {
               ),
             ),
             PlanPageTopbar(),
-            PlanPageCustomListTile(
+            CustomListTile(
               title: Text(
                 'Thêm tiêu đề',
                 style: PlanPageConstant.hintTextFieldStyle.copyWith(fontSize: 25),
               ),
               defaultHeight: false,
             ),
-            PlanPageCustomListTile(
+            CustomListTile(
               title: Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: BlocBuilder<PlanBloc, PlanState>(
@@ -169,7 +170,7 @@ class _ApartPlanPage extends StatelessWidget {
               ),
               defaultHeight: false,
             ),
-            PlanPageCustomListTile(
+            CustomListTile(
               leading: Icon(Icons.people_alt_outlined),
               title: Text(
                 'Thêm người',

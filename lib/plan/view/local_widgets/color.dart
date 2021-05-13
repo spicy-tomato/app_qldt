@@ -1,3 +1,5 @@
+import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
+import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
 import 'package:app_qldt/plan/bloc/enum/color.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class _PlanColorState extends State<PlanColor> {
     return BlocBuilder<PlanBloc, PlanState>(
       buildWhen: (previous, current) => previous.color != current.color,
       builder: (context, state) {
-        return PlanPageCustomListTile(
+        return CustomListTile(
           leading: Container(
             width: 20,
             height: 20,
@@ -34,13 +36,13 @@ class _PlanColorState extends State<PlanColor> {
           onTap: () async {
             await showDialog(
               context: context,
-              builder: (context) {
-                return AlertDialog(
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: listTiles(state.color),
-                  ),
+              builder: (_) {
+                return RadioAlertDialog<PlanColors>(
+                  optionsList: PlanColors.values,
+                  currentOption: state.color,
+                  stringFunction: PlanColorsExtension.stringFunction,
+                  onSelect: _onSelect,
+                  radioColorFunction: PlanColorsExtension.colorFunction,
                 );
               },
             );
@@ -50,73 +52,8 @@ class _PlanColorState extends State<PlanColor> {
     );
   }
 
-  List<Widget> listTiles(PlanColors currentColor) {
-    List<Widget> tiles = [];
-
-    PlanColors.values.forEach((color) {
-      tiles.add(
-        Container(
-          width: MediaQuery.of(context).size.width * 0.85,
-          child: InkWell(
-            onTap: () => _onTap(color),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 12,
-              ),
-              child: Row(
-                children: <Widget>[
-                  RadioItem(RadioModel(color, color == currentColor ? true : false)),
-                  SizedBox(width: 5),
-                  Text(
-                    color.string,
-                    style: PlanPageConstant.textFieldStyle,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    });
-
-    return tiles;
-  }
-
-  void _onTap(PlanColors color) {
+  void _onSelect(PlanColors color) {
     context.read<PlanBloc>().add(PlanColorChanged(color));
     Navigator.of(context).pop();
   }
-}
-
-class RadioItem extends StatelessWidget {
-  final RadioModel _item;
-
-  RadioItem(this._item);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15),
-      child: Container(
-        height: 20,
-        width: 20,
-        decoration: BoxDecoration(
-          color: _item.isSelected ? _item.color.color : null,
-          borderRadius: BorderRadius.circular(50),
-          border: Border.all(
-            width: 4,
-            color: _item.color.color,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class RadioModel {
-  final PlanColors color;
-  final bool isSelected;
-
-  RadioModel(this.color, this.isSelected);
 }

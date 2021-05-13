@@ -1,3 +1,4 @@
+import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/plan/view/local_widgets/local_widgets.dart';
@@ -17,7 +18,7 @@ class AddGuest extends StatelessWidget {
 class AddGuestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlanPageCustomListTile(
+    return CustomListTile(
       leading: const Icon(Icons.people_alt_outlined),
       title: Text(
         'Thêm người',
@@ -50,7 +51,7 @@ class AddGuestTile extends StatelessWidget {
 class ViewScheduleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlanPageCustomListTile(
+    return CustomListTile(
       title: Container(
         child: Align(
           alignment: Alignment.centerLeft,
@@ -94,7 +95,7 @@ class _AddGuestScreen extends State<AddGuestScreen> {
       child: Scaffold(
         body: Column(
           children: [
-            PlanPageCustomListTile(
+            CustomListTile(
               title: TextField(),
 
             ),

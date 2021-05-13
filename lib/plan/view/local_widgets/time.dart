@@ -1,3 +1,4 @@
+import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:app_qldt/plan/bloc/enum/repeat.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _SwitcherTileState extends State<SwitcherTile> {
     return BlocBuilder<PlanBloc, PlanState>(
       buildWhen: (previous, current) => previous.isAllDay != current.isAllDay,
       builder: (context, state) {
-        return PlanPageCustomListTile(
+        return CustomListTile(
           leading: const Icon(Icons.access_time_rounded),
           title: Text('Cả ngày', style: PlanPageConstant.textFieldStyle),
           trailing: Switch(
@@ -65,7 +66,7 @@ extension DateTimeExtesion on DateTime {
 class FromDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlanPageCustomListTile(
+    return CustomListTile(
       title: Align(
         alignment: Alignment.centerLeft,
         child: BlocBuilder<PlanBloc, PlanState>(
@@ -144,7 +145,7 @@ class FromDatePicker extends StatelessWidget {
 class ToDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlanPageCustomListTile(
+    return CustomListTile(
       title: Align(
         alignment: Alignment.centerLeft,
         child: BlocBuilder<PlanBloc, PlanState>(
@@ -239,7 +240,7 @@ class _RepeatState extends State<Repeat> {
     return BlocBuilder<PlanBloc, PlanState>(
       buildWhen: (previous, current) => previous.repeat != current.repeat,
       builder: (context, state) {
-        return PlanPageCustomListTile(
+        return CustomListTile(
           leading: Icon(Icons.refresh),
           title: Text(
             state.repeat.string,
