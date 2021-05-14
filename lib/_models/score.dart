@@ -63,4 +63,9 @@ class Score {
       evaluation,
     ];
   }
+
+  @override
+  String toString() {
+    return moduleName;
+  }
 }

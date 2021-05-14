@@ -27,27 +27,31 @@ class ScorePageStatusChanged extends ScoreEvent {
 
 class ScoreSemesterChanged extends ScoreEvent {
   final Semester semester;
+  final BuildContext context;
 
-  ScoreSemesterChanged(this.semester);
+  ScoreSemesterChanged(this.semester, this.context);
 
   @override
-  List<Object?> get props => [semester];
+  List<Object?> get props => [semester, context];
 }
 
 class ScoreSubjectStatusChanged extends ScoreEvent {
-  final SubjectEvaluation scoreSubjectStatus;
+  final SubjectEvaluation subjectEvaluation;
+  final BuildContext context;
 
-  ScoreSubjectStatusChanged(this.scoreSubjectStatus);
+  ScoreSubjectStatusChanged(this.subjectEvaluation, this.context);
 
   @override
-  List<Object?> get props => [scoreSubjectStatus];
+  List<Object?> get props => [subjectEvaluation, context];
 }
 
 class ScoreFilterButtonSubmited extends ScoreEvent {
   final BuildContext context;
+  final Semester semester;
+  final SubjectEvaluation subjectEvaluation;
 
-  const ScoreFilterButtonSubmited(this.context);
+  const ScoreFilterButtonSubmited(this.context, this.semester, this.subjectEvaluation);
 
   @override
-  List<Object?> get props => [context];
+  List<Object?> get props => [context, semester, subjectEvaluation];
 }

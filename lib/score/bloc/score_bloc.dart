@@ -27,11 +27,11 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     } else if (event is ScorePageStatusChanged) {
       yield _mapScorePageStatusChangedToState(event);
     } else if (event is ScoreSemesterChanged) {
-      yield _mapScoreSemesterChangedToState(event);
+      yield* _mapScoreSemesterChangedToState(event);
     } else if (event is ScoreSubjectStatusChanged) {
-      yield _mapScoreSubjectStatusChangedToState(event);
+      yield* _mapScoreSubjectStatusChangedToState(event);
     } else if (event is ScoreFilterButtonSubmited) {
-      yield* _mapScoreFilterButtonSubmitedToState(event);
+      yield _mapScoreFilterButtonSubmitedToState(event);
     }
   }
 
@@ -43,35 +43,45 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     return state.copyWith(status: event.status);
   }
 
-  Stream<ScoreState> _mapScoreFilterButtonSubmitedToState(ScoreFilterButtonSubmited event) async* {
+  ScoreState _mapScoreFilterButtonSubmitedToState(ScoreFilterButtonSubmited event) {
     List<Score> newScoreData = [];
     LocalScoreService scoreService = UserDataModel.of(event.context)!.localScoreService;
 
     //  Query all
-    if (state.semester == Semester.all && state.subjectEvaluation == SubjectEvaluation.all) {
+    if (event.semester == Semester.all && event.subjectEvaluation == SubjectEvaluation.all) {
       newScoreData = scoreService.scoreData;
     }
     //  Query a specific semester with all subject status
-    else if (state.subjectEvaluation == SubjectEvaluation.all) {
-      newScoreData = scoreService.getScoreDataOfAllEvaluation(state.semester);
+    else if (event.subjectEvaluation == SubjectEvaluation.all) {
+      newScoreData = scoreService.getScoreDataOfAllEvaluation(event.semester);
     }
     //  Query all semester with a specific subject status
-    else if (state.semester == Semester.all) {
-      newScoreData = scoreService.getScoreDataOfAllSemester(state.subjectEvaluation);
+    else if (event.semester == Semester.all) {
+      newScoreData = scoreService.getScoreDataOfAllSemester(event.subjectEvaluation);
     }
     //  Query a specific semester with a specific subject status
     else {
-      newScoreData = scoreService.getSpecificScoreData(state.semester, state.subjectEvaluation);
+      newScoreData = scoreService.getSpecificScoreData(event.semester, event.subjectEvaluation);
     }
 
-    yield state.copyWith(scoreData: newScoreData);
+    return state.copyWith(
+      scoreData: newScoreData,
+      semester: event.semester,
+      subjectEvaluation: event.subjectEvaluation,
+    );
   }
 
-  ScoreState _mapScoreSemesterChangedToState(ScoreSemesterChanged event) {
-    return state.copyWith(semester: event.semester);
+  Stream<ScoreState> _mapScoreSemesterChangedToState(ScoreSemesterChanged event) async* {
+    if (event.semester != state.semester) {
+      yield _mapScoreFilterButtonSubmitedToState(
+          ScoreFilterButtonSubmited(event.context, event.semester, state.subjectEvaluation));
+    }
   }
 
-  ScoreState _mapScoreSubjectStatusChangedToState(ScoreSubjectStatusChanged event) {
-    return state.copyWith(subjectEvaluation: event.scoreSubjectStatus);
+  Stream<ScoreState> _mapScoreSubjectStatusChangedToState(ScoreSubjectStatusChanged event) async* {
+    if (event.subjectEvaluation != state.subjectEvaluation) {
+      yield _mapScoreFilterButtonSubmitedToState(
+          ScoreFilterButtonSubmited(event.context, state.semester, event.subjectEvaluation));
+    }
   }
 }

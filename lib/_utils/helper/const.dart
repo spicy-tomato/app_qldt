@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Const {
   static get requestTimeout => Duration(seconds: 10);
 
-  static get defaultPage => '/home';
+  static get defaultPage => '/score';
 
   static const Color primaryColor = Color(0xff0779e4);
 

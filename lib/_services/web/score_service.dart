@@ -24,11 +24,13 @@ class ScoreService {
   /// [responseData] has structure:
   /// [
   ///     {
-  ///         "Module_Class_Name":  [String],
-  ///         "ID_Module_Class":    [String],
-  ///         "ID_Room":            [String],
-  ///         "Shift_Schedules":    [int],
-  ///         "Day_Schedules":      [String]
+  ///         "Semester":           [String],
+  ///         "Module_Name":        [String],
+  ///         "Credit":             [int],
+  ///         "Evaluation":         [String],
+  ///         "Process_Score":      [double]
+  ///         "Test_Score":         [double]
+  ///         "Theoretical_Score":  [double]
   ///     },
   ///     ...
   /// ]

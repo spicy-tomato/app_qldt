@@ -20,10 +20,51 @@ class Filter extends StatelessWidget {
         textAlign: TextAlign.center,
       ),
       children: <Widget>[
-        StatusFilter(),
         SemesterFilter(),
+        StatusFilter(),
       ],
     );
+  }
+}
+
+class SemesterFilter extends StatefulWidget {
+  @override
+  _SemesterFilterState createState() => _SemesterFilterState();
+}
+
+class _SemesterFilterState extends State<SemesterFilter> {
+  @override
+  Widget build(BuildContext context) {
+    late List<Semester> semesterList = UserDataModel.of(context)!.localScoreService.semester;
+
+    return BlocBuilder<ScoreBloc, ScoreState>(
+      buildWhen: (previous, current) => previous.semester != current.semester,
+      builder: (context, state) {
+        return CustomListTile(
+          title: Text(
+            'Học kỳ: ' + state.semester.toString(),
+            style: TextStyle(color: Theme.of(context).backgroundColor),
+          ),
+          onTap: () async {
+            await showDialog(
+              context: context,
+              builder: (context) {
+                return RadioAlertDialog<Semester>(
+                    onSelect: _onSelect,
+                    stringFunction: Semester.getString,
+                    currentOption: state.semester,
+                    optionsList: semesterList);
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _onSelect(Semester semester) {
+    context.read<ScoreBloc>().add(ScoreSemesterChanged(semester, context));
+    Navigator.of(context).pop();
   }
 }
 
@@ -62,61 +103,7 @@ class _StatusFilterState extends State<StatusFilter> {
   }
 
   void _onSelect(SubjectEvaluation subjectEvaluation) {
-    context.read<ScoreBloc>().add(ScoreSubjectStatusChanged(subjectEvaluation));
+    context.read<ScoreBloc>().add(ScoreSubjectStatusChanged(subjectEvaluation, context));
     Navigator.of(context).pop();
-  }
-}
-
-class SemesterFilter extends StatefulWidget {
-  @override
-  _SemesterFilterState createState() => _SemesterFilterState();
-}
-
-class _SemesterFilterState extends State<SemesterFilter> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ScoreBloc, ScoreState>(
-      builder: (context, state) {
-        List<Semester> semesterList = UserDataModel.of(context)!.localScoreService.semester;
-
-        return CustomListTile(
-          title: Text(
-            'Học kỳ: ' + state.semester.toString(),
-            style: TextStyle(color: Theme.of(context).backgroundColor),
-          ),
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return RadioAlertDialog<Semester>(
-                    onSelect: _onSelect,
-                    stringFunction: Semester.getString,
-                    currentOption: state.semester,
-                    optionsList: semesterList);
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
-  void _onSelect(Semester semester) {
-    context.read<ScoreBloc>().add(ScoreSemesterChanged(semester));
-    Navigator.of(context).pop();
-  }
-}
-
-class FilterButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CustomListTile(
-      title: Center(
-        child: TextButton(
-          onPressed: () {},
-          child: Text('Lọc kết quả'),
-        ),
-      ),
-    );
   }
 }

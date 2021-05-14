@@ -12,10 +12,10 @@ extension SubjectStatusExtension on SubjectEvaluation {
   String get string {
     switch (this) {
       case SubjectEvaluation.pass:
-        return 'DAT';
+        return 'Đạt';
 
       case SubjectEvaluation.fail:
-        return 'HOCLAI';
+        return 'Chưa đạt';
 
       default:
         return 'Tất cả';
