@@ -23,7 +23,7 @@ class LoginService {
             Uri.parse(url),
             body: body,
           )
-          .timeout(Duration(seconds: Const.requestTimeout));
+          .timeout(Const.requestTimeout);
       return response.body;
     } on Exception catch (e) {
       print('Error: $e in Login service');

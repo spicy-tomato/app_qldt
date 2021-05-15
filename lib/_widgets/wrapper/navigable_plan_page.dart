@@ -1,6 +1,6 @@
 import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
 import 'package:app_qldt/plan/plan.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 

@@ -11,7 +11,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  bool _isDialogShowing = false;
+  bool _showedDialog = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +20,14 @@ class _LoginFormState extends State<LoginForm> {
 
     return BlocConsumer<LoginBloc, LoginState>(
       listener: (context, state) async {
-        /// TODO: Bug here
-        if (state.status.isSubmissionFailure) {
-          if (!_isDialogShowing) {
-            _isDialogShowing = true;
-            await showDialog(
-              barrierDismissible: true,
-              context: context,
-              builder: (_) => _loginFailedDialog(context),
-            );
-          }
+        if (state.status.isSubmissionFailure && !_showedDialog) {
+          _showedDialog = true;
+          print('rebuild');
+          await showDialog(
+            barrierDismissible: true,
+            context: context,
+            builder: (_) => _loginFailedDialog(context),
+          );
         }
       },
       buildWhen: (previous, current) {
@@ -89,7 +87,6 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  // TODO: Update this to class
   Widget _loginFailedDialog(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
@@ -101,6 +98,7 @@ class _LoginFormState extends State<LoginForm> {
         actions: [
           TextButton(
             onPressed: () {
+              _showedDialog = false;
               Navigator.of(context).pop();
             },
             child: const Text("Đồng ý"),

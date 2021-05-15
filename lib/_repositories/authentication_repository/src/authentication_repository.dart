@@ -24,10 +24,10 @@ class AuthenticationRepository {
     assert(id != null);
     assert(password != null);
 
-    final _loginUser = LoginUser(id!, password!);
-    final _loginService = LoginService(_loginUser);
+    final loginUser = LoginUser(id!, password!);
+    final loginService = LoginService(loginUser);
 
-    String? response = await _loginService.login();
+    String? response = await loginService.login();
     LoginResponse loginResponse;
 
     if (response != null) {
