@@ -162,7 +162,8 @@ class _ApartPlanPage extends StatelessWidget {
                 child: BlocBuilder<PlanBloc, PlanState>(
                   builder: (context, state) {
                     return Text(
-                      '${DayOfWeekVN.get(state.fromDay.weekday)}, ngày ${state.fromDay.day} tháng ${state.fromDay.month} · ${state.fromDay.hour}:00 - ${state.toDay.hour}:00',
+                      '${DayOfWeekVN.get(state.fromDay.weekday)}, ngày ${state.fromDay.day} '
+                      'tháng ${state.fromDay.month} · ${state.fromDay.hour}:00 - ${state.toDay.hour}:00',
                       style: PlanPageConstant.textFieldStyle,
                     );
                   },

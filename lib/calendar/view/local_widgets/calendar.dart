@@ -1,3 +1,4 @@
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -162,6 +163,9 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
+    context.read<PlanBloc>().add(PlanFromDateChanged(focusedDay));
+    context.read<PlanBloc>().add(PlanToDateChanged(focusedDay.add(Duration(hours: 1))));
+
     if (!isSameDay(_selectedDay, selectedDay)) {
       selectedDay = selectedDay.toStandard;
 

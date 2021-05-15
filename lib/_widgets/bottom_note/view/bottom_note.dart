@@ -5,7 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 
 class BottomNote extends StatelessWidget {
-  const BottomNote({Key? key}) : super(key: key);
+  final bool? useCurrentTime;
+
+  const BottomNote({
+    Key? key,
+    this.useCurrentTime,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class BottomNote extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.07,
       child: Stack(
         children: <Widget>[
-          BottomText(),
+          BottomText(useCurrentTime: useCurrentTime),
           AddNoteButton(),
         ],
       ),
@@ -23,6 +28,13 @@ class BottomNote extends StatelessWidget {
 }
 
 class BottomText extends StatelessWidget {
+  final bool? useCurrentTime;
+
+  const BottomText({
+    Key? key,
+    this.useCurrentTime,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
@@ -32,7 +44,9 @@ class BottomText extends StatelessWidget {
         ),
         child: TextButton(
           onPressed: () {
-            context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
+            if (useCurrentTime == null || useCurrentTime!) {
+              context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
+            }
             context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
           },
           child: Padding(

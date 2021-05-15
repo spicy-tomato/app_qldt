@@ -1,7 +1,6 @@
 import 'package:app_qldt/_widgets/element/loading.dart';
 import 'package:app_qldt/_widgets/element/refresh_button.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,20 +46,11 @@ class _CalendarPageState extends State<CalendarPage> {
                   ],
                 ),
                 Expanded(
-                  child: BlocBuilder<CalendarBloc, CalendarState>(
-                    buildWhen: (previous, current) {
-                      return current.buildFirstTime &&
-                          !DeepCollectionEquality().equals(
-                            previous.selectedEvents,
-                            current.selectedEvents,
-                          );
-                    },
-                    builder: (_, state) {
-                      return EventList(event: state.selectedEvents);
-                    },
-                  ),
+                  child: EventList()
                 ),
-                BottomNote(),
+                BottomNote(
+                  useCurrentTime: false,
+                ),
               ],
             ),
           ),
