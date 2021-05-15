@@ -39,9 +39,9 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
-  late LocalNotificationService localNotificationService;
-  late LocalEventService localEventService;
-  late LocalScoreService localScoreService;
+  LocalNotificationService? localNotificationService;
+  LocalEventService? localEventService;
+  LocalScoreService? localScoreService;
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
@@ -73,6 +73,7 @@ class _ApplicationState extends State<Application> {
   final _localizationsDelegates = [
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
     SfLocalizationsVnDelegate(),
     PullToRefreshVnDelegate(),
   ];
@@ -132,9 +133,9 @@ class _ApplicationState extends State<Application> {
 
   Widget userData(Widget child) {
     return UserDataModel(
-      localEventService: localEventService,
-      localNotificationService: localNotificationService,
-      localScoreService: localScoreService,
+      localEventService: localEventService!,
+      localNotificationService: localNotificationService!,
+      localScoreService: localScoreService!,
       child: child,
     );
   }
@@ -143,6 +144,10 @@ class _ApplicationState extends State<Application> {
     if (ModalRoute.of(context)?.settings.name != '/') {
       _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
     }
+
+    localEventService = null;
+    localNotificationService = null;
+    localScoreService = null;
 
     await Future.delayed(const Duration(milliseconds: 1500), () {
       _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
@@ -172,9 +177,9 @@ class _ApplicationState extends State<Application> {
     localScoreService =
         LocalScoreService(databaseProvider: databaseProvider, userId: state.user.id);
 
-    await localEventService.refresh();
-    await localNotificationService.refresh();
-    await localScoreService.refresh();
+    await localEventService!.refresh();
+    await localNotificationService!.refresh();
+    await localScoreService!.refresh();
 
     final timeEnded = stopwatch.elapsed;
 
