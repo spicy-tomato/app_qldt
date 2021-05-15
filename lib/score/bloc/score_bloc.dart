@@ -5,6 +5,7 @@ import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/score/model/semester.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ part 'score_event.dart';
 part 'score_state.dart';
 
 class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
-  ScoreBloc(BuildContext context) : super(ScoreInitialState(context));
+  final BuildContext context;
+
+  ScoreBloc(this.context)
+      : super(ScoreInitialState(UserDataModel.of(context).localScoreService.scoreData));
 
   @override
   Stream<ScoreState> mapEventToState(
@@ -30,6 +34,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       yield* _mapScoreSubjectStatusChangedToState(event);
     } else if (event is ScoreDataChanged) {
       yield _mapScoreDataChangedToState(event);
+    } else if (event is ScoreDataRefresh) {
+      yield* _mapScoreDataRefreshToState();
     }
   }
 
@@ -76,6 +82,17 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       scoreData: newScoreData,
       semester: event.semester,
       subjectEvaluation: event.subjectEvaluation,
+    );
+  }
+
+  Stream<ScoreState> _mapScoreDataRefreshToState() async* {
+    yield state.copyWith(status: ScorePageStatus.loading);
+
+    List<Score> newScoreData = (await UserDataModel.of(context).localScoreService.refresh())!;
+
+    yield state.copyWith(
+      scoreData: newScoreData,
+      status: ScorePageStatus.done,
     );
   }
 }

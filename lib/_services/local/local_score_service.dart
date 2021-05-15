@@ -1,5 +1,5 @@
 import 'package:app_qldt/_models/score.dart';
-import 'package:app_qldt/_services/web/exception/NoScoreDataException.dart';
+import 'package:app_qldt/_services/web/exception/no_score_data_exception.dart';
 import 'package:app_qldt/_services/web/score_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';

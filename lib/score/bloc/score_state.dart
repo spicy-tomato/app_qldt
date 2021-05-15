@@ -8,9 +8,9 @@ class ScoreState extends Equatable {
 
   const ScoreState({
     required this.scoreData,
-    this.status = ScorePageStatus.done,
-    this.semester = const Semester(),
-    this.subjectEvaluation = SubjectEvaluation.all,
+    required this.status,
+    required this.semester,
+    required this.subjectEvaluation,
   });
 
   ScoreState copyWith({
@@ -37,6 +37,11 @@ class ScoreState extends Equatable {
 }
 
 class ScoreInitialState extends ScoreState {
-  ScoreInitialState(BuildContext context)
-      : super(scoreData: UserDataModel.of(context).localScoreService.scoreData);
+  ScoreInitialState(List<Score> scoreData)
+      : super(
+          scoreData: scoreData,
+          status: ScorePageStatus.done,
+          semester: const Semester(),
+          subjectEvaluation: SubjectEvaluation.all,
+        );
 }

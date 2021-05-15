@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_utils/secret/secret.dart';
 
-import 'exception/NoScoreDataException.dart';
+import 'exception/no_score_data_exception.dart';
 
 class ScoreService {
   final String userId;

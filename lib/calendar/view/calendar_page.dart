@@ -59,7 +59,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget _refreshButton(BuildContext context) {
     return RefreshButton(
-      context,
       onTap: () async {
         widget.isLoading.value = true;
 

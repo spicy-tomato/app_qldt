@@ -10,7 +10,7 @@ abstract class ScoreEvent extends Equatable {
 class ScorePageStatusChanged extends ScoreEvent {
   final ScorePageStatus status;
 
-  ScorePageStatusChanged(this.status);
+  const ScorePageStatusChanged(this.status);
 
   @override
   List<Object?> get props => [status];
@@ -20,7 +20,7 @@ class ScoreSemesterChanged extends ScoreEvent {
   final Semester semester;
   final BuildContext context;
 
-  ScoreSemesterChanged(this.semester, this.context);
+  const ScoreSemesterChanged(this.semester, this.context);
 
   @override
   List<Object?> get props => [semester, context];
@@ -30,7 +30,7 @@ class ScoreSubjectStatusChanged extends ScoreEvent {
   final SubjectEvaluation subjectEvaluation;
   final BuildContext context;
 
-  ScoreSubjectStatusChanged(this.subjectEvaluation, this.context);
+  const ScoreSubjectStatusChanged(this.subjectEvaluation, this.context);
 
   @override
   List<Object?> get props => [subjectEvaluation, context];
@@ -45,4 +45,8 @@ class ScoreDataChanged extends ScoreEvent {
 
   @override
   List<Object?> get props => [context, semester, subjectEvaluation];
+}
+
+class ScoreDataRefresh extends ScoreEvent {
+  const ScoreDataRefresh();
 }

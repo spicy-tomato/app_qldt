@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 
 class RefreshButton extends TopBarItem {
   final Function() onTap;
-  final BuildContext context;
   final Color? color;
 
-  RefreshButton(
-    this.context, {
+  RefreshButton({
     this.color,
     required this.onTap,
   }) : super(

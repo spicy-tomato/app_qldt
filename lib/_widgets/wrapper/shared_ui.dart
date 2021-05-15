@@ -8,7 +8,7 @@ class SharedUI extends StatelessWidget {
   final Widget? topRightWidget;
   final BoxDecoration? decoration;
   final Color? topbarColor;
-  final Color? topbariconColor;
+  final Color? topbarIconColor;
   final bool? stable;
 
   const SharedUI({
@@ -17,7 +17,7 @@ class SharedUI extends StatelessWidget {
     this.decoration,
     this.topRightWidget,
     this.topbarColor,
-    this.topbariconColor,
+    this.topbarIconColor,
     this.stable,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class SharedUI extends StatelessWidget {
             TopBar(
               topRightWidget: topRightWidget,
               backgroundColor: topbarColor,
-              iconColor: topbariconColor,
+              iconColor: topbarIconColor,
               stable: stable ?? true,
             ),
             Expanded(

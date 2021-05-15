@@ -4,7 +4,7 @@ class Const {
   static get requestTimeout => Duration(seconds: 10);
   static get crawlerTimeout => Duration(minutes: 5);
 
-  static get defaultPage => '/score';
+  static get defaultPage => '/home';
 
   static const Color primaryColor = Color(0xff0779e4);
 
