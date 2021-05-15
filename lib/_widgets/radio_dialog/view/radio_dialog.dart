@@ -68,7 +68,7 @@ class _RadioAlertDialogState<T> extends State<RadioAlertDialog<T>> {
       return Radio<T>(
         value: option,
         groupValue: currentOption,
-        onChanged: (_) => {},
+        onChanged: (_) => widget.onSelect(option),
       );
     }
 
