@@ -31,7 +31,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmitToState();
     } else if (event is LoginPasswordVisibleChanged) {
-      yield _mapToPasswordVisibleChangedToState();
+      yield _mapLoginPasswordVisibleChangedToState();
     }
   }
 
@@ -79,12 +79,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else {
       yield state.copyWith(
         status: FormzStatus.invalid,
-        username: Username.dirty(''),
+        username: Username.dirty(state.username.value),
       );
     }
   }
 
-  LoginState _mapToPasswordVisibleChangedToState() {
+  LoginState _mapLoginPasswordVisibleChangedToState() {
     return state.copyWith(hidePassword: !state.hidePassword);
   }
 }
