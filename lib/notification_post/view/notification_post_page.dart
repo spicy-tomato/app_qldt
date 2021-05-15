@@ -105,9 +105,12 @@ class _ScrollViewState extends State<ScrollView> {
                         color: Theme.of(context).backgroundColor,
                       ),
                     ),
-                    /// TODO: Change below
                     Text(
-                      '3 ngày trước',
+                      DateTime.now()
+                              .subtract(Duration(days: 1))
+                              .isAfter(widget.notification.timeCreated)
+                          ? '${DateTime.now().difference(widget.notification.timeCreated).inDays} ngày trước'
+                          : '${DateTime.now().difference(widget.notification.timeCreated).inHours} giờ trước',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -120,7 +123,7 @@ class _ScrollViewState extends State<ScrollView> {
               ),
             ),
             Text(
-              DateFormat.Md().format(DateTime.now()),
+              DateFormat('d/M').format(widget.notification.timeCreated),
               style: TextStyle(
                 color: Theme.of(context).backgroundColor,
               ),
