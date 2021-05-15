@@ -42,21 +42,40 @@ class UserDataModel extends InheritedModel<ServiceEnum> {
 
   @override
   bool updateShouldNotifyDependent(UserDataModel old, Set<ServiceEnum> aspect) {
-    return (aspect.contains(ServiceEnum.notification) &&
-            !DeepCollectionEquality().equals(
-              localNotificationService.notificationData,
-              old.localNotificationService.notificationData,
-            )) ||
-        (aspect.contains(ServiceEnum.schedule) &&
-            !DeepCollectionEquality().equals(
-              localEventService.eventsData,
-              old.localEventService.eventsData,
-            )) ||
-        (aspect.contains(ServiceEnum.score) &&
-            !DeepCollectionEquality().equals(
-              localScoreService.scoreData,
-              old.localScoreService.scoreData,
-            ));
+    //  Local Notification data change
+    if (aspect.contains(ServiceEnum.notification) &&
+        !DeepCollectionEquality().equals(
+          localNotificationService.notificationData,
+          old.localNotificationService.notificationData,
+        )) {
+      return true;
+    }
+
+    //  Local Event data change
+    if (aspect.contains(ServiceEnum.schedule) &&
+        !DeepCollectionEquality().equals(
+          localEventService.eventsData,
+          old.localEventService.eventsData,
+        )) {
+      return true;
+    }
+
+    //  Local Score data change
+    if (aspect.contains(ServiceEnum.score) &&
+        !DeepCollectionEquality().equals(
+          localScoreService.scoreData,
+          old.localScoreService.scoreData,
+        )) {
+      return true;
+    }
+
+    //  Local Score service connected
+    if (aspect.contains(ServiceEnum.score) &&
+        localScoreService.connected != old.localScoreService.connected) {
+      return true;
+    }
+
+    return false;
   }
 
   static UserDataModel? of(BuildContext context, {ServiceEnum? aspect}) {

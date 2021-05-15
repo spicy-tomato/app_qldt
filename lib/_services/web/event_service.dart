@@ -42,7 +42,7 @@ class EventService {
     String url = Secret.url.getRequest.schedule + '?id=' + userId;
 
     try {
-      final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      http.Response responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
       if (responseData.statusCode == 200) {
         List data = jsonDecode(responseData.body) as List;

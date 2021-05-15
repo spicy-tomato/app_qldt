@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.dart';
 
@@ -23,10 +23,10 @@ class TokenService {
       'token': token,
     };
 
-    Response response;
+    http.Response response;
 
     try {
-      response = await post(
+      response = await http.post(
         Uri.parse(Secret.url.postRequest.upsertToken),
         body: jsonEncode(json),
       ).timeout(Const.requestTimeout);
