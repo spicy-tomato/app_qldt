@@ -22,28 +22,36 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   Stream<ScoreState> mapEventToState(
     ScoreEvent event,
   ) async* {
-    if (event is ScoreDataChanged) {
-      yield _mapScoreDataChangedToState(event);
-    } else if (event is ScorePageStatusChanged) {
+    if (event is ScorePageStatusChanged) {
       yield _mapScorePageStatusChangedToState(event);
     } else if (event is ScoreSemesterChanged) {
       yield* _mapScoreSemesterChangedToState(event);
     } else if (event is ScoreSubjectStatusChanged) {
       yield* _mapScoreSubjectStatusChangedToState(event);
-    } else if (event is ScoreFilterButtonSubmited) {
-      yield _mapScoreFilterButtonSubmitedToState(event);
+    } else if (event is ScoreDataChanged) {
+      yield _mapScoreDataChangedToState(event);
     }
-  }
-
-  ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
-    return state.copyWith(scoreData: event.scoreData);
   }
 
   ScoreState _mapScorePageStatusChangedToState(ScorePageStatusChanged event) {
     return state.copyWith(status: event.status);
   }
 
-  ScoreState _mapScoreFilterButtonSubmitedToState(ScoreFilterButtonSubmited event) {
+  Stream<ScoreState> _mapScoreSemesterChangedToState(ScoreSemesterChanged event) async* {
+    if (event.semester != state.semester) {
+      yield _mapScoreDataChangedToState(
+          ScoreDataChanged(event.context, event.semester, state.subjectEvaluation));
+    }
+  }
+
+  Stream<ScoreState> _mapScoreSubjectStatusChangedToState(ScoreSubjectStatusChanged event) async* {
+    if (event.subjectEvaluation != state.subjectEvaluation) {
+      yield _mapScoreDataChangedToState(
+          ScoreDataChanged(event.context, state.semester, event.subjectEvaluation));
+    }
+  }
+
+  ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     List<Score> newScoreData = [];
     LocalScoreService scoreService = UserDataModel.of(event.context)!.localScoreService;
 
@@ -69,19 +77,5 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       semester: event.semester,
       subjectEvaluation: event.subjectEvaluation,
     );
-  }
-
-  Stream<ScoreState> _mapScoreSemesterChangedToState(ScoreSemesterChanged event) async* {
-    if (event.semester != state.semester) {
-      yield _mapScoreFilterButtonSubmitedToState(
-          ScoreFilterButtonSubmited(event.context, event.semester, state.subjectEvaluation));
-    }
-  }
-
-  Stream<ScoreState> _mapScoreSubjectStatusChangedToState(ScoreSubjectStatusChanged event) async* {
-    if (event.subjectEvaluation != state.subjectEvaluation) {
-      yield _mapScoreFilterButtonSubmitedToState(
-          ScoreFilterButtonSubmited(event.context, state.semester, event.subjectEvaluation));
-    }
   }
 }

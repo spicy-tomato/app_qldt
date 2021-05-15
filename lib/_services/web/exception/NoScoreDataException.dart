@@ -1,0 +1,1 @@
+class NoScoreDataException implements Exception {}

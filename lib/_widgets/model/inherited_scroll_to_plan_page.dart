@@ -24,5 +24,5 @@ class InheritedScrollToPlanPage extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
+  bool updateShouldNotify(_) => false;
 }

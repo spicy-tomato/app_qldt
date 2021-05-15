@@ -1,4 +1,5 @@
 import 'package:app_qldt/_models/score.dart';
+import 'package:app_qldt/_services/web/exception/NoScoreDataException.dart';
 import 'package:app_qldt/_services/web/score_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
@@ -8,6 +9,7 @@ class LocalScoreService {
   final String? userId;
   late DatabaseProvider _databaseProvider;
   late final ScoreService _scoreService;
+  late bool connected;
 
   List<Score> scoreData = [];
   List<Semester> semester = [];
@@ -22,18 +24,26 @@ class LocalScoreService {
 
   static LocalScoreService get instance => LocalScoreService();
 
-  Future<List<Score>> refresh() async {
-    List<Score>? data = await _scoreService.getScore();
+  Future<List<Score>?> refresh() async {
+    try {
+      List<Score>? data = await _scoreService.getScore();
 
-    if (data != null) {
-      await removeOld();
-      await _saveNew(data);
+      if (data != null) {
+        await removeOld();
+        await _saveNew(data);
+      }
+
+      scoreData = await _getScoreDataFromDb();
+      semester = await _getSemesterFromDb();
+
+      connected = true;
+
+      return this.scoreData;
+
+    } on NoScoreDataException catch (_) {
+      connected = false;
+      return null;
     }
-
-    scoreData = await _getScoreDataFromDb();
-    semester = await _getSemesterFromDb();
-
-    return this.scoreData;
   }
 
   Future<void> _saveNew(List<Score> rawData) async {

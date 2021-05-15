@@ -33,7 +33,7 @@ class AuthenticationRepository {
     if (response != null) {
       loginResponse = LoginResponse.fromJson(jsonDecode(response));
     } else {
-      _controller.add(AuthenticationStatus.unauthenticated);
+      // _controller.add(AuthenticationStatus.unauthenticated);
       return false;
     }
 

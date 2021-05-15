@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Const {
   static get requestTimeout => Duration(seconds: 10);
+  static get crawlerTimeout => Duration(minutes: 5);
 
   static get defaultPage => '/score';
 

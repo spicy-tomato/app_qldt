@@ -45,8 +45,6 @@ class _ScoreTableState extends State<ScoreTable> {
         child: BlocBuilder<ScoreBloc, ScoreState>(
           buildWhen: (previous, current) => previous.scoreData != current.scoreData,
           builder: (context, state) {
-            print('Rebuild');
-            print(state.scoreData);
 
             return StickyHeadersTable(
               scrollControllers: widget.scrollControllers,

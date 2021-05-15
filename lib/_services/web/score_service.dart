@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_utils/secret/secret.dart';
 
+import 'exception/NoScoreDataException.dart';
+
 class ScoreService {
   final String userId;
 
@@ -16,8 +18,10 @@ class ScoreService {
   Future<List<Score>?> getScore() async {
     try {
       return await _fetchData();
-    } on Exception catch (_) {
-      throw Exception('Cannot parse date');
+    } on NoScoreDataException catch (e) {
+      throw (e);
+    } on Exception catch (e) {
+      print(e);
     }
   }
 
@@ -41,6 +45,10 @@ class ScoreService {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
       if (responseData.statusCode == 200) {
+        if (jsonDecode(responseData.body) is String) {
+          throw NoScoreDataException();
+        }
+
         List data = jsonDecode(responseData.body) as List;
         List<Score> listModel = [];
 

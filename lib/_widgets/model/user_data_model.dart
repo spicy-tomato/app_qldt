@@ -72,6 +72,7 @@ class UserDataModel extends InheritedModel<ServiceEnum> {
     //  Local Score service connected
     if (aspect.contains(ServiceEnum.score) &&
         localScoreService.connected != old.localScoreService.connected) {
+      print('Should update');
       return true;
     }
 
