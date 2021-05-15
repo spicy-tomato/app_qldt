@@ -53,7 +53,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
   ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     List<Score> newScoreData = [];
-    LocalScoreService scoreService = UserDataModel.of(event.context)!.localScoreService;
+    LocalScoreService scoreService = UserDataModel.of(event.context).localScoreService;
 
     //  Query all
     if (event.semester == Semester.all && event.subjectEvaluation == SubjectEvaluation.all) {

@@ -25,7 +25,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> notificationData = UserDataModel.of(context)!
+    List<dynamic> notificationData = UserDataModel.of(context)
         .localNotificationService
         .notificationData as List<UserNotification>;
 
@@ -56,7 +56,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void _onRefresh() async {
-    await UserDataModel.of(context)!.localNotificationService.refresh();
+    await UserDataModel.of(context).localNotificationService.refresh();
     await Future.delayed(Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});

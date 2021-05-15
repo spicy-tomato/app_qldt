@@ -19,7 +19,7 @@ class _FunctionButtonState extends State<FunctionButton> {
 
   @override
   Widget build(BuildContext context) {
-    semesters = UserDataModel.of(context)!.localScoreService.semester;
+    semesters = UserDataModel.of(context).localScoreService.semester;
 
     return Theme(
       //  Hide tooltip

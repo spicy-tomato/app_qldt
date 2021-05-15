@@ -18,8 +18,12 @@ class PlanPageConstant extends InheritedWidget {
     required Widget child,
   }) : super(key: key, child: child);
 
-  static PlanPageConstant? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<PlanPageConstant>();
+  static PlanPageConstant? of(BuildContext context) {
+    final PlanPageConstant? result = context.dependOnInheritedWidgetOfExactType<PlanPageConstant>();
+    assert (result != null, 'No PlanPageConstant found in context');
+
+    return result!;
+  }
 
   @override
   bool updateShouldNotify(_) => false;

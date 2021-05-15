@@ -38,5 +38,5 @@ class ScoreState extends Equatable {
 
 class ScoreInitialState extends ScoreState {
   ScoreInitialState(BuildContext context)
-      : super(scoreData: UserDataModel.of(context)!.localScoreService.scoreData);
+      : super(scoreData: UserDataModel.of(context).localScoreService.scoreData);
 }

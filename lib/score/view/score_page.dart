@@ -39,7 +39,7 @@ class _ScorePageState extends State<ScorePage> {
       child: BlocBuilder<CrawlerBloc, CrawlerState>(
         buildWhen: (previous, current) => !previous.status.isOk || current.status.isOk,
         builder: (context, state) {
-          if (!UserDataModel.of(context)!.localScoreService.connected) {
+          if (!UserDataModel.of(context).localScoreService.connected) {
             return _NotLogin();
           }
 

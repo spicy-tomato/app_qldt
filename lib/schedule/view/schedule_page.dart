@@ -32,7 +32,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
+    schedulesData = UserDataModel.of(context).localEventService.eventsData;
     _addData();
 
     model = Theme.of(context);

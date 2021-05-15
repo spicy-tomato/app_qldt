@@ -83,10 +83,10 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         if (scoreCrawlerStatus.isOk) {
           print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
-          await UserDataModel.of(context)!.localScoreService.refresh();
+          await UserDataModel.of(context).localScoreService.refresh();
 
           yield state.copyWith(status: CrawlerStatus.ok);
-          UserDataModel.of(context)!.localScoreService.connected = true;
+          UserDataModel.of(context).localScoreService.connected = true;
           return;
         }
       }

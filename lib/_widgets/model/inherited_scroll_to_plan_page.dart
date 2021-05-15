@@ -20,6 +20,7 @@ class InheritedScrollToPlanPage extends InheritedWidget {
     final InheritedScrollToPlanPage? result =
         context.dependOnInheritedWidgetOfExactType<InheritedScrollToPlanPage>();
     assert(result != null, 'No InheritedScrollToPlanPage found in context');
+
     return result!;
   }
 
