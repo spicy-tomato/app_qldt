@@ -32,6 +32,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield* _mapLoginSubmitToState();
     } else if (event is LoginPasswordVisibleChanged) {
       yield _mapLoginPasswordVisibleChangedToState();
+    } else if (event is ShowedLoginFailedDialog) {
+      yield _mapShowedLoginFailedDialogToState();
     }
   }
 
@@ -62,6 +64,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _mapLoginSubmitToState() async* {
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
+
       try {
         bool shouldLogin = await _authenticationRepository.logIn(
           id: state.username.value,
@@ -71,10 +74,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (shouldLogin) {
           yield state.copyWith(status: FormzStatus.submissionSuccess);
         } else {
-          yield state.copyWith(status: FormzStatus.submissionFailure);
+          yield state.copyWith(
+            status: FormzStatus.submissionFailure,
+            shouldShowLoginFailedDialog: true,
+          );
         }
       } on Exception catch (_) {
-        yield state.copyWith(status: FormzStatus.submissionFailure);
+        yield state.copyWith(
+          status: FormzStatus.submissionFailure,
+          shouldShowLoginFailedDialog: true,
+        );
       }
     } else {
       yield state.copyWith(
@@ -86,5 +95,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _mapLoginPasswordVisibleChangedToState() {
     return state.copyWith(hidePassword: !state.hidePassword);
+  }
+
+  LoginState _mapShowedLoginFailedDialogToState() {
+    return state.copyWith(shouldShowLoginFailedDialog: false);
   }
 }

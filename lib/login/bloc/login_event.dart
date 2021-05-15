@@ -50,3 +50,7 @@ class LoginPasswordVisibleChanged extends LoginEvent {
 class LoginSubmitted extends LoginEvent {
   const LoginSubmitted();
 }
+
+class ShowedLoginFailedDialog extends LoginEvent {
+  const ShowedLoginFailedDialog();
+}
