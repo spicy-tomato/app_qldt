@@ -28,7 +28,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     if (event is CrawlerPasswordChanged) {
       yield _mapCrawlerPasswordChangedToState(event);
     } else if (event is CrawlerPasswordVisibleChanged) {
-      yield _mapCrawlerPasswordVisibleChangedToState(event);
+      yield _mapCrawlerPasswordVisibleChangedToState();
     } else if (event is CrawlerSubmitted) {
       yield* _mapCrawlerSubmittedToState(event);
     } else if (event is CrawlerResetStatus) {
@@ -47,8 +47,8 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     );
   }
 
-  CrawlerState _mapCrawlerPasswordVisibleChangedToState(CrawlerPasswordVisibleChanged event) {
-    return state.copyWith(hidePassword: event.hidePassword);
+  CrawlerState _mapCrawlerPasswordVisibleChangedToState() {
+    return state.copyWith(hidePassword: !state.hidePassword);
   }
 
   Stream<CrawlerState> _mapCrawlerSubmittedToState(CrawlerSubmitted event) async* {

@@ -17,12 +17,7 @@ class CrawlerPasswordChanged extends CrawlerEvent {
 }
 
 class CrawlerPasswordVisibleChanged extends CrawlerEvent {
-  final bool hidePassword;
-
-  const CrawlerPasswordVisibleChanged(this.hidePassword);
-
-  @override
-  List<Object> get props => [hidePassword];
+  const CrawlerPasswordVisibleChanged();
 }
 
 class CrawlerResetStatus extends CrawlerEvent {
