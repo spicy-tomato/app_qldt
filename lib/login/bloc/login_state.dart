@@ -26,16 +26,28 @@ class LoginState extends Equatable {
     bool? hideLoginDialog,
   }) {
     return LoginState(
-        status: status ?? this.status,
-        username: username ?? this.username,
-        password: password ?? this.password,
-        hidePassword: hidePassword ?? this.hidePassword,
-        hideKeyboard: hideKeyboard ?? this.hideKeyboard,
-        hideLoginDialog: hideLoginDialog ?? this.hideLoginDialog,
+      status: status ?? this.status,
+      username: username ?? this.username,
+      password: password ?? this.password,
+      hidePassword: hidePassword ?? this.hidePassword,
+      hideKeyboard: hideKeyboard ?? this.hideKeyboard,
+      hideLoginDialog: hideLoginDialog ?? this.hideLoginDialog,
     );
   }
 
   @override
   List<Object> get props =>
       [status, username, password, hidePassword, hideKeyboard, hideLoginDialog];
+}
+
+class LoginInitial extends LoginState {
+  const LoginInitial()
+      : super(
+          status: FormzStatus.pure,
+          username: const Username.pure(),
+          password: const Password.pure(),
+          hidePassword: true,
+          hideKeyboard: true,
+          hideLoginDialog: true,
+        );
 }

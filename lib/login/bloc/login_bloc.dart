@@ -16,7 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({required AuthenticationRepository authenticationRepository})
       : _authenticationRepository = authenticationRepository,
-        super(const LoginState());
+        super(const LoginInitial());
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
