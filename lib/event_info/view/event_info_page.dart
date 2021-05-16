@@ -33,12 +33,14 @@ class _EventInfoPageState extends State<EventInfoPage> {
                       IconButton(
                         icon: Icon(Icons.edit_outlined),
                         onPressed: () {
+                          /// TODO
                           print("Edit");
                         },
                       ),
                       IconButton(
                         icon: Icon(Icons.more_vert),
                         onPressed: () {
+                          /// TODO
                           print("Option");
                         },
                       ),

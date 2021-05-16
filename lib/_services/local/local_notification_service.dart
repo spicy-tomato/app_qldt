@@ -72,6 +72,4 @@ class LocalNotificationService {
       return UserNotification.fromMap(data);
     }).toList();
   }
-
-  static LocalNotificationService get instance => LocalNotificationService();
 }

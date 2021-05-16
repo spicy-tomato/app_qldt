@@ -3,7 +3,7 @@ import 'package:app_qldt/_services/web/exception/no_score_data_exception.dart';
 import 'package:app_qldt/_services/web/score_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
-import 'package:app_qldt/score/model/semester.dart';
+import 'package:app_qldt/_models/semester.dart';
 
 class LocalScoreService {
   final String? userId;
@@ -21,8 +21,6 @@ class LocalScoreService {
       _scoreService = ScoreService(userId!);
     }
   }
-
-  static LocalScoreService get instance => LocalScoreService();
 
   Future<List<Score>?> refresh() async {
     try {

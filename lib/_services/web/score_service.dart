@@ -17,7 +17,8 @@ class ScoreService {
 
   Future<List<Score>?> getScore() async {
     try {
-      return await _fetchData();
+      List? rawData = await _fetchData();
+      return _parseData(rawData);
     } on NoScoreDataException catch (e) {
       throw (e);
     } on Exception catch (e) {
@@ -38,7 +39,7 @@ class ScoreService {
   ///     },
   ///     ...
   /// ]
-  Future<List<Score>?> _fetchData() async {
+  Future<List?> _fetchData() async {
     String url = Secret.url.getRequest.score + '?id=' + userId;
 
     try {
@@ -49,14 +50,7 @@ class ScoreService {
           throw NoScoreDataException();
         }
 
-        List data = jsonDecode(responseData.body) as List;
-        List<Score> listModel = [];
-
-        for (var element in data) {
-          listModel.add(Score.fromJson(element));
-        }
-
-        return listModel;
+        return jsonDecode(responseData.body) as List;
       } else {
         print("Cannot GET. Response status code: ${responseData.statusCode}");
         return null;
@@ -70,5 +64,19 @@ class ScoreService {
     }
 
     return null;
+  }
+
+  List<Score>? _parseData(List? rawData) {
+    if (rawData == null) {
+      return null;
+    }
+
+    List<Score> listModel = [];
+
+    for (var element in rawData) {
+      listModel.add(Score.fromJson(element));
+    }
+
+    return listModel;
   }
 }

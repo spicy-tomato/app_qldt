@@ -4,7 +4,7 @@ import 'package:app_qldt/_models/score.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
-import 'package:app_qldt/score/model/semester.dart';
+import 'package:app_qldt/_models/semester.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -26,9 +26,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   Stream<ScoreState> mapEventToState(
     ScoreEvent event,
   ) async* {
-    if (event is ScorePageStatusChanged) {
-      yield _mapScorePageStatusChangedToState(event);
-    } else if (event is ScoreSemesterChanged) {
+    if (event is ScoreSemesterChanged) {
       yield* _mapScoreSemesterChangedToState(event);
     } else if (event is ScoreSubjectStatusChanged) {
       yield* _mapScoreSubjectStatusChangedToState(event);
@@ -39,27 +37,23 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     }
   }
 
-  ScoreState _mapScorePageStatusChangedToState(ScorePageStatusChanged event) {
-    return state.copyWith(status: event.status);
-  }
-
   Stream<ScoreState> _mapScoreSemesterChangedToState(ScoreSemesterChanged event) async* {
     if (event.semester != state.semester) {
       yield _mapScoreDataChangedToState(
-          ScoreDataChanged(event.context, event.semester, state.subjectEvaluation));
+          ScoreDataChanged(event.semester, state.subjectEvaluation));
     }
   }
 
   Stream<ScoreState> _mapScoreSubjectStatusChangedToState(ScoreSubjectStatusChanged event) async* {
     if (event.subjectEvaluation != state.subjectEvaluation) {
       yield _mapScoreDataChangedToState(
-          ScoreDataChanged(event.context, state.semester, event.subjectEvaluation));
+          ScoreDataChanged(state.semester, event.subjectEvaluation));
     }
   }
 
   ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     List<Score> newScoreData = [];
-    LocalScoreService scoreService = UserDataModel.of(event.context).localScoreService;
+    LocalScoreService scoreService = UserDataModel.of(context).localScoreService;
 
     //  Query all
     if (event.semester == Semester.all && event.subjectEvaluation == SubjectEvaluation.all) {

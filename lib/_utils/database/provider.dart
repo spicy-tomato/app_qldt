@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_qldt/_utils/database/table/exam_schedule.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -13,6 +14,7 @@ class DatabaseProvider {
   late DbNotification notification;
   late DbColorEvent colorEvent;
   late DbScore score;
+  late DbExamSchedule examSchedule;
 
   DatabaseProvider();
 
@@ -61,6 +63,7 @@ class DatabaseProvider {
     notification = DbNotification(database);
     colorEvent = DbColorEvent(database);
     score = DbScore(database);
+    examSchedule = DbExamSchedule(database);
   }
 
   Future<String> _getPath() async {
@@ -74,6 +77,7 @@ class DatabaseProvider {
       DbNotification().create(db);
       DbColorEvent().create(db);
       DbScore().create(db);
+      DbExamSchedule().create(db);
     } on Exception catch (e) {
       print(e);
     }

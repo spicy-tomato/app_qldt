@@ -3,11 +3,11 @@ import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
 import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
-import 'package:app_qldt/score/model/semester.dart';
+import 'package:app_qldt/_models/semester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Filter extends StatelessWidget {
+class ScoreFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
@@ -35,7 +35,7 @@ class SemesterFilter extends StatefulWidget {
 class _SemesterFilterState extends State<SemesterFilter> {
   @override
   Widget build(BuildContext context) {
-    late List<Semester> semesterList = UserDataModel.of(context).localScoreService.semester;
+    final List<Semester> semesterList = UserDataModel.of(context).localScoreService.semester;
 
     return BlocBuilder<ScoreBloc, ScoreState>(
       buildWhen: (previous, current) => previous.semester != current.semester,
@@ -63,7 +63,7 @@ class _SemesterFilterState extends State<SemesterFilter> {
   }
 
   void _onSelect(Semester semester) {
-    context.read<ScoreBloc>().add(ScoreSemesterChanged(semester, context));
+    context.read<ScoreBloc>().add(ScoreSemesterChanged(semester));
     Navigator.of(context).pop();
   }
 }
@@ -103,7 +103,7 @@ class _StatusFilterState extends State<StatusFilter> {
   }
 
   void _onSelect(SubjectEvaluation subjectEvaluation) {
-    context.read<ScoreBloc>().add(ScoreSubjectStatusChanged(subjectEvaluation, context));
+    context.read<ScoreBloc>().add(ScoreSubjectStatusChanged(subjectEvaluation));
     Navigator.of(context).pop();
   }
 }

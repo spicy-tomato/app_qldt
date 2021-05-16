@@ -2,16 +2,14 @@ import 'package:app_qldt/_widgets/element/loading.dart';
 import 'package:app_qldt/_widgets/element/refresh_button.dart';
 import 'package:app_qldt/_widgets/wrapper/crawlable_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
-import 'package:app_qldt/score/bloc/enum/page_status.dart';
-import 'package:app_qldt/score/bloc/score_bloc.dart';
-
+import 'package:app_qldt/exam_schedule/bloc/exam_schedule_bloc.dart';
+import 'package:app_qldt/exam_schedule/view/local_widgets/exam_schedule_table.dart';
+import 'package:app_qldt/exam_schedule/view/local_widgets/local_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_sticky_headers/table_sticky_headers.dart';
 
-import 'local_widgets/local_widgets.dart';
-
-class ScorePage extends StatefulWidget {
+class ExamSchedulePage extends StatefulWidget {
   final ScrollControllers _scrollControllers = ScrollControllers(
     verticalTitleController: ScrollController(),
     verticalBodyController: ScrollController(),
@@ -20,15 +18,15 @@ class ScorePage extends StatefulWidget {
   );
 
   @override
-  _ScorePageState createState() => _ScorePageState();
+  _ExamSchedulePageState createState() => _ExamSchedulePageState();
 }
 
-class _ScorePageState extends State<ScorePage> {
+class _ExamSchedulePageState extends State<ExamSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return CrawlablePage(
-      child: BlocProvider<ScoreBloc>(
-        create: (_) => ScoreBloc(context),
+      child: BlocProvider<ExamScheduleBloc>(
+        create: (_) => ExamScheduleBloc(context),
         child: SharedUI(
           stable: false,
           topRightWidget: _refreshButton(),
@@ -38,15 +36,15 @@ class _ScorePageState extends State<ScorePage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    ScoreFilter(),
-                    ScoreTable(scrollControllers: widget._scrollControllers),
+                    ExamScheduleFilter(),
+                    ExamScheduleTable(scrollControllers: widget._scrollControllers),
                   ],
                 ),
               ),
-              BlocBuilder<ScoreBloc, ScoreState>(
+              BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
                 buildWhen: (previous, current) => previous.status != current.status,
                 builder: (context, state) {
-                  return state.status == ScorePageStatus.loading ? Loading() : Container();
+                  return state.status == ExamSchedulePageStatus.loading ? Loading() : Container();
                 },
               ),
             ],
@@ -57,11 +55,11 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   Widget _refreshButton() {
-    return BlocBuilder<ScoreBloc, ScoreState>(
+    return BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
       builder: (context, state) {
         return RefreshButton(
           onTap: () {
-            context.read<ScoreBloc>().add(ScoreDataRefresh());
+            context.read<ExamScheduleBloc>().add(ExamScheduleDataRefresh());
           },
         );
       },

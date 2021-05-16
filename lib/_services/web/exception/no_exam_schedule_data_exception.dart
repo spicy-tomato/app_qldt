@@ -1,0 +1,1 @@
+class NoExamScheduleDataException implements Exception {}

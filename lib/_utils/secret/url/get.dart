@@ -8,4 +8,6 @@ class GetRequest {
   String get notification => Host.base + 'notification.php';
 
   String get score => Host.base + 'get_score.php';
+
+  String get examSchedule => Host.base + 'get_exam_schedule.php';
 }

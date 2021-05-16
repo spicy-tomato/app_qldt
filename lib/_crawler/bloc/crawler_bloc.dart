@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_crawler/model/password.dart';
 import 'package:app_qldt/_models/crawler/score_crawler.dart';
 import 'package:app_qldt/_models/crawler/update_password_crawler.dart';

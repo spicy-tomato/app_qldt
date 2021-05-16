@@ -1,6 +1,6 @@
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
-import 'package:app_qldt/score/model/semester.dart';
+import 'package:app_qldt/_models/semester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

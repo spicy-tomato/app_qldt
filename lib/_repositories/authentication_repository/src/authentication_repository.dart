@@ -49,13 +49,11 @@ class AuthenticationRepository {
 
   Future<void> _saveUserInfo(String info) async {
     final prefs = await SharedPreferences.getInstance();
-    // print(info);
     prefs.setString('user_info', info);
   }
 
   Future<void> logOut() async {
     await DatabaseProvider.deleteDb();
-
     await _removeUserInfo();
 
     _controller.add(AuthenticationStatus.unauthenticated);

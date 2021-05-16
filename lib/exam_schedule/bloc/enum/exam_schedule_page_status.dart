@@ -1,0 +1,4 @@
+enum ExamSchedulePageStatus {
+  done,
+  loading,
+}

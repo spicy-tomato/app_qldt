@@ -34,9 +34,7 @@ class _CalendarPageState extends State<CalendarPage> {
         topRightWidget: _refreshButton(context),
         child: Container(
           child: BlocProvider<CalendarBloc>(
-            create: (_) {
-              return CalendarBloc();
-            },
+            create: (_) => CalendarBloc(),
             child: Column(
               children: <Widget>[
                 Stack(

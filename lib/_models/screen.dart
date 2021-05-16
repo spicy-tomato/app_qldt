@@ -1,4 +1,4 @@
-enum ScreenPage { login, home, calendar, schedule, notification, score }
+enum ScreenPage { login, home, calendar, schedule, notification, score, examSchedule }
 
 extension ScreenPageExtension on ScreenPage {
   String get string {
@@ -17,6 +17,9 @@ extension ScreenPageExtension on ScreenPage {
 
       case ScreenPage.score:
         return '/score';
+
+      case ScreenPage.examSchedule:
+        return '/examSchedule';
 
       default:
         return '/notification';
@@ -39,6 +42,9 @@ extension ScreenPageExtension on ScreenPage {
 
       case ScreenPage.score:
         return 'Điểm';
+
+      case ScreenPage.examSchedule:
+        return 'Lịch thi';
 
       case ScreenPage.notification:
       default:

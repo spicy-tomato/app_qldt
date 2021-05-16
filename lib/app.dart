@@ -1,5 +1,7 @@
+import 'package:app_qldt/_services/local/local_exam_schedule_service.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_utils/helper/pull_to_fresh_vn_delegate.dart';
+import 'package:app_qldt/exam_schedule/exam_schedule.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,9 +41,10 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
-  LocalNotificationService? localNotificationService;
-  LocalEventService? localEventService;
-  LocalScoreService? localScoreService;
+  LocalEventService? _localEventService;
+  LocalScoreService? _localScoreService;
+  LocalNotificationService? _localNotificationService;
+  LocalExamScheduleService? _localExamScheduleService;
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
@@ -85,7 +88,7 @@ class _ApplicationState extends State<Application> {
     return RepositoryProvider.value(
       value: widget.authenticationRepository,
       child: BlocProvider<AuthenticationBloc>(
-        create: (BuildContext context) => AuthenticationBloc(
+        create: (_) => AuthenticationBloc(
           authenticationRepository: widget.authenticationRepository,
           userRepository: widget.userRepository,
         ),
@@ -124,6 +127,7 @@ class _ApplicationState extends State<Application> {
             '/calendar': (_) => userData(CalendarPage()),
             '/schedule': (_) => userData(SchedulePage()),
             '/score': (_) => userData(ScorePage()),
+            '/examSchedule': (_) => userData(ExamSchedulePage()),
             '/notification': (_) => userData(NotificationPage()),
           },
         ),
@@ -133,9 +137,10 @@ class _ApplicationState extends State<Application> {
 
   Widget userData(Widget child) {
     return UserDataModel(
-      localEventService: localEventService!,
-      localNotificationService: localNotificationService!,
-      localScoreService: localScoreService!,
+      localEventService: _localEventService!,
+      localScoreService: _localScoreService!,
+      localNotificationService: _localNotificationService!,
+      localExamScheduleService: _localExamScheduleService!,
       child: child,
     );
   }
@@ -145,9 +150,10 @@ class _ApplicationState extends State<Application> {
       _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
     }
 
-    localEventService = null;
-    localNotificationService = null;
-    localScoreService = null;
+    _localEventService = null;
+    _localScoreService = null;
+    _localNotificationService = null;
+    _localExamScheduleService = null;
 
     await Future.delayed(const Duration(milliseconds: 1500), () {
       _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
@@ -170,16 +176,19 @@ class _ApplicationState extends State<Application> {
     DatabaseProvider databaseProvider = DatabaseProvider();
     await databaseProvider.init();
 
-    localEventService =
+    _localEventService =
         LocalEventService(databaseProvider: databaseProvider, userId: state.user.id);
-    localNotificationService =
-        LocalNotificationService(databaseProvider: databaseProvider, userId: state.user.id);
-    localScoreService =
+    _localScoreService =
         LocalScoreService(databaseProvider: databaseProvider, userId: state.user.id);
+    _localNotificationService =
+        LocalNotificationService(databaseProvider: databaseProvider, userId: state.user.id);
+    _localExamScheduleService =
+        LocalExamScheduleService(databaseProvider: databaseProvider, userId: state.user.id);
 
-    await localEventService!.refresh();
-    await localNotificationService!.refresh();
-    await localScoreService!.refresh();
+    await _localEventService!.refresh();
+    await _localScoreService!.refresh();
+    await _localNotificationService!.refresh();
+    await _localExamScheduleService!.refresh();
 
     final timeEnded = stopwatch.elapsed;
 

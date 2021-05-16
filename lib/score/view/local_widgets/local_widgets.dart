@@ -1,2 +1,2 @@
-export 'table.dart';
-export 'filter.dart';
+export 'score_table.dart';
+export 'score_filter.dart';
