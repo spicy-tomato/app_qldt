@@ -15,7 +15,7 @@ class NotificationService {
 
   NotificationService(this.studentId);
 
-  Future<AppNotification?> getNotification(String studentId) async {
+  Future<AppNotification?> getNotification() async {
     try {
       Map<String, dynamic>? data = await _fetchData();
 

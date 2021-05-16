@@ -96,8 +96,8 @@ class _ApplicationState extends State<Application> {
           theme: _themeData,
           navigatorKey: _navigatorKey,
           localizationsDelegates: _localizationsDelegates,
-          locale: const Locale('vi', ''),
           supportedLocales: _supportedLocales,
+          locale: const Locale('vi', ''),
           builder: (context, child) {
             return SafeArea(
               child: BlocListener<AuthenticationBloc, AuthenticationState>(

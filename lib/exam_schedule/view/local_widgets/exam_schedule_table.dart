@@ -16,7 +16,7 @@ class ExamScheduleTable extends StatefulWidget {
 }
 
 class _ExamScheduleTableState extends State<ExamScheduleTable> {
-  static final List<double> columnWidths = [105, 210, 120, 110, 110, 90];
+  static final List<double> columnWidths = [105, 230, 120, 125, 110, 90];
 
   static final List<String> columnTitles = [
     'Ngày thi',

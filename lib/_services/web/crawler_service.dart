@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_qldt/_crawler/crawler.dart';
+import 'package:app_qldt/_models/crawler/exam_schedule_crawler.dart';
 import 'package:app_qldt/_models/crawler/score_crawler.dart';
 import 'package:app_qldt/_models/crawler/update_password_crawler.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
@@ -32,6 +33,20 @@ class CrawlerService {
       return CrawlerStatusExtension.fromString(jsonDecode(response.body));
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Crawl score');
+      return CrawlerStatus.failed;
+    }
+  }
+
+  static Future<CrawlerStatus> crawlExamSchedule(ExamScheduleCrawler crawler) async {
+    String url = Secret.url.postRequest.examScheduleCrawler;
+    String body = jsonEncode(crawler);
+    http.Response response;
+
+    try {
+      response = await http.post(Uri.parse(url), body: body).timeout(Const.crawlerTimeout);
+      return CrawlerStatusExtension.fromString(jsonDecode(response.body));
+    } on Exception catch (e) {
+      print('Error: $e in Crawler service - Crawl exam schedule');
       return CrawlerStatus.failed;
     }
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_crawler/model/password.dart';
+import 'package:app_qldt/_models/crawler/exam_schedule_crawler.dart';
 import 'package:app_qldt/_models/crawler/score_crawler.dart';
 import 'package:app_qldt/_models/crawler/update_password_crawler.dart';
 import 'package:app_qldt/_services/web/crawler_service.dart';
@@ -74,6 +75,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
       print('crawler_bloc.dart --- Update password: $passwordStatus');
 
       if (passwordStatus.isOk) {
+        //  Crawl score
         CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
           ScoreCrawler(
             idStudent: idStudent,
@@ -85,9 +87,24 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
           print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
           await UserDataModel.of(context).localScoreService.refresh();
+          UserDataModel.of(context).localScoreService.connected = true;
+        }
+
+        //  Crawl exam schedule
+        CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
+          ExamScheduleCrawler(
+            idStudent: idStudent,
+            idAccount: idAccount,
+          ),
+        );
+
+        if (examScheduleCrawlerStatus.isOk) {
+          print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
+
+          await UserDataModel.of(context).localExamScheduleService.refresh();
 
           yield state.copyWith(status: CrawlerStatus.ok);
-          UserDataModel.of(context).localScoreService.connected = true;
+          UserDataModel.of(context).localExamScheduleService.connected = true;
           return;
         }
       }

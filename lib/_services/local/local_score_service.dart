@@ -1,26 +1,20 @@
 import 'package:app_qldt/_models/score.dart';
+import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_services/web/exception/no_score_data_exception.dart';
 import 'package:app_qldt/_services/web/score_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/_models/semester.dart';
 
-class LocalScoreService {
-  final String? userId;
-  late DatabaseProvider _databaseProvider;
+class LocalScoreService extends LocalService {
   late final ScoreService _scoreService;
-  late bool connected;
 
   List<Score> scoreData = [];
   List<Semester> semester = [];
 
-  LocalScoreService({DatabaseProvider? databaseProvider, this.userId}) {
-    this._databaseProvider = databaseProvider ?? DatabaseProvider();
-
-    if (userId != null) {
-      _scoreService = ScoreService(userId!);
-    }
-  }
+  LocalScoreService({DatabaseProvider? databaseProvider, required String userId})
+      : _scoreService = ScoreService(userId),
+        super(databaseProvider);
 
   Future<List<Score>?> refresh() async {
     try {
@@ -37,7 +31,6 @@ class LocalScoreService {
       connected = true;
 
       return this.scoreData;
-
     } on NoScoreDataException catch (_) {
       connected = false;
       return null;
@@ -46,16 +39,16 @@ class LocalScoreService {
 
   Future<void> _saveNew(List<Score> rawData) async {
     for (var row in rawData) {
-      await _databaseProvider.score.insert(row.toMap());
+      await databaseProvider.score.insert(row.toMap());
     }
   }
 
   Future<void> removeOld() async {
-    await _databaseProvider.score.delete();
+    await databaseProvider.score.delete();
   }
 
   Future<List<Score>> _getScoreDataFromDb() async {
-    final rawData = await _databaseProvider.score.all;
+    final rawData = await databaseProvider.score.all;
 
     return rawData.map((data) {
       return Score.fromMap(data);
@@ -63,7 +56,7 @@ class LocalScoreService {
   }
 
   Future<List<Semester>> _getSemesterFromDb() async {
-    final List<Map<String, dynamic>> rawData = await _databaseProvider.score.semester;
+    final List<Map<String, dynamic>> rawData = await databaseProvider.score.semester;
     final List<Semester> list = [Semester.all];
 
     rawData.forEach((data) {

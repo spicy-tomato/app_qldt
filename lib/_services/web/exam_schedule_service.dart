@@ -47,7 +47,7 @@ class ExamScheduleService {
 
       if (responseData.statusCode == 200) {
         if (jsonDecode(responseData.body) is String) {
-          throw NoExamScheduleDataException;
+          throw NoExamScheduleDataException();
         }
 
         return jsonDecode(responseData.body) as List;

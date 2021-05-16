@@ -1,25 +1,19 @@
 import 'package:app_qldt/_models/exam_schedule.dart';
+import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_services/web/exam_schedule_service.dart';
 import 'package:app_qldt/_services/web/exception/no_exam_schedule_data_exception.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_models/semester.dart';
 
-class LocalExamScheduleService {
-  final String? userId;
-  late DatabaseProvider _databaseProvider;
+class LocalExamScheduleService extends LocalService {
   late final ExamScheduleService _examScheduleService;
-  late bool connected;
 
   List<ExamSchedule> examScheduleData = [];
   List<Semester> semester = [];
 
-  LocalExamScheduleService({DatabaseProvider? databaseProvider, this.userId}) {
-    this._databaseProvider = databaseProvider ?? DatabaseProvider();
-
-    if (userId != null) {
-      _examScheduleService = ExamScheduleService(userId!);
-    }
-  }
+  LocalExamScheduleService({DatabaseProvider? databaseProvider, required String userId})
+      : _examScheduleService = ExamScheduleService(userId),
+        super(databaseProvider);
 
   Semester? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
@@ -46,16 +40,16 @@ class LocalExamScheduleService {
 
   Future<void> _saveNew(List<ExamSchedule> rawData) async {
     for (var row in rawData) {
-      await _databaseProvider.examSchedule.insert(row.toMap());
+      await databaseProvider.examSchedule.insert(row.toMap());
     }
   }
 
   Future<void> _removeOld() async {
-    await _databaseProvider.examSchedule.delete();
+    await databaseProvider.examSchedule.delete();
   }
 
   Future<List<ExamSchedule>> _getExamScheduleDataFromDb() async {
-    final rawData = await _databaseProvider.examSchedule.all;
+    final rawData = await databaseProvider.examSchedule.all;
 
     return rawData.map((data) {
       return ExamSchedule.fromMap(data);
@@ -63,7 +57,7 @@ class LocalExamScheduleService {
   }
 
   Future<List<Semester>> _getSemesterFromDb() async {
-    final List<Map<String, dynamic>> rawData = await _databaseProvider.examSchedule.semester;
+    final List<Map<String, dynamic>> rawData = await databaseProvider.examSchedule.semester;
     final List<Semester> list = [];
 
     rawData.forEach((data) {

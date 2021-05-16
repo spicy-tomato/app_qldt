@@ -2,26 +2,21 @@ import 'package:app_qldt/_models/app_notification.dart';
 import 'package:app_qldt/_models/receive_notification.dart';
 import 'package:app_qldt/_models/sender.dart';
 import 'package:app_qldt/_models/user_notification.dart';
+import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_services/web/notification_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 
-class LocalNotificationService {
-  final String? userId;
-  late DatabaseProvider databaseProvider;
+class LocalNotificationService extends LocalService {
   late final NotificationService _notificationService;
 
   List<dynamic> notificationData = [];
 
-  LocalNotificationService({DatabaseProvider? databaseProvider, this.userId}) {
-    this.databaseProvider = databaseProvider ?? DatabaseProvider();
-
-    if (userId != null) {
-      _notificationService = NotificationService(userId!);
-    }
-  }
+  LocalNotificationService({DatabaseProvider? databaseProvider, required String userId})
+      : _notificationService = NotificationService(userId),
+        super(databaseProvider);
 
   Future<List<dynamic>> refresh() async {
-    AppNotification? data = await _notificationService.getNotification(userId!);
+    AppNotification? data = await _notificationService.getNotification();
 
     if (data != null) {
       List<ReceiveNotification> notifications = data.notification;
