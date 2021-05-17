@@ -108,10 +108,6 @@ class _FullPlanPageState extends State<_FullPlanPage> {
                   Status(),
                   PlanPageDivider(context: context),
                   PlanColor(),
-                  PlanPageDivider(context: context),
-                  PlanColor(),
-                  PlanPageDivider(context: context),
-                  PlanColor(),
                 ],
               );
             },

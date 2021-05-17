@@ -9,10 +9,12 @@ import 'package:app_qldt/_models/meeting_data_source.dart';
 
 class Schedule extends StatefulWidget {
   final UserDataSource dataSource;
+  final CalendarController controller;
 
   const Schedule(
     this.dataSource, {
     Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -20,21 +22,20 @@ class Schedule extends StatefulWidget {
 }
 
 class _ScheduleState extends State<Schedule> {
-  late CalendarController _controller = CalendarController();
   late DateTime? _previousSelectedDay;
 
   @override
   void initState() {
-    _controller.view = CalendarView.week;
+    widget.controller.view = CalendarView.week;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<PlanBloc, PlanState>(builder: (context, state) {
+    return BlocBuilder<PlanBloc, PlanState>(
+      builder: (context, state) {
         return SfCalendar(
-          controller: _controller,
+          controller: widget.controller,
           dataSource: widget.dataSource,
           allowedViews: [
             CalendarView.day,
@@ -64,7 +65,7 @@ class _ScheduleState extends State<Schedule> {
           initialDisplayDate: DateTime.now(),
           onTap: (details) => _calendarTapped(details, state),
         );
-      }),
+      },
     );
   }
 
@@ -77,7 +78,7 @@ class _ScheduleState extends State<Schedule> {
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
         context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
       } else if (_previousSelectedDay != null && details.date != _previousSelectedDay) {
-        _controller.selectedDate = null;
+        widget.controller.selectedDate = null;
         context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
       }
 

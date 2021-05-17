@@ -10,6 +10,7 @@ class SharedUI extends StatelessWidget {
   final Color? topbarColor;
   final Color? topbarIconColor;
   final bool? stable;
+  final Future<bool?> Function()? onWillPop;
 
   const SharedUI({
     Key? key,
@@ -19,6 +20,7 @@ class SharedUI extends StatelessWidget {
     this.topbarColor,
     this.topbarIconColor,
     this.stable,
+    this.onWillPop,
   }) : super(key: key);
 
   @override
@@ -40,7 +42,16 @@ class SharedUI extends StatelessWidget {
             ),
             Expanded(
               child: WillPopScope(
-                onWillPop: () => _onWillPop(context),
+                onWillPop: () async {
+                  if (onWillPop != null){
+                    bool? pop = await onWillPop!.call();
+                    if (pop != null){
+                      return Future.value(pop);
+                    }
+                  }
+
+                  return _onWillPop(context);
+                },
                 child: child,
               ),
             ),

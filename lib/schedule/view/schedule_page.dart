@@ -1,4 +1,5 @@
 import 'package:app_qldt/_widgets/wrapper/item.dart';
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/_models/meeting_data_source.dart';
@@ -6,6 +7,8 @@ import 'package:app_qldt/_models/user_event.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'local_widgets/schedule.dart';
 
@@ -24,6 +27,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
   late ThemeData model;
   late Map<DateTime, List<UserEvent>> schedulesData;
+  late CalendarController _controller = CalendarController();
 
   @override
   void initState() {
@@ -38,14 +42,27 @@ class _SchedulePageState extends State<SchedulePage> {
     model = Theme.of(context);
 
     return NavigablePlanPage(
-      child: SharedUI(
-        child: Item(
-          child: Theme(
-            key: _globalKey,
-            data: model.copyWith(accentColor: model.backgroundColor),
-            child: Schedule(_events),
-          ),
-        ),
+      child: BlocBuilder<PlanBloc, PlanState>(
+        builder: (context, state) {
+          return SharedUI(
+            onWillPop: () {
+              if (state.visibility != PlanPageVisibility.close){
+                _controller.selectedDate = null;
+                context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+                return Future.value(false);
+              }
+
+              return Future.value(null);
+            },
+            child: Item(
+              child: Theme(
+                key: _globalKey,
+                data: model.copyWith(accentColor: model.backgroundColor),
+                child: Schedule(_events, controller: _controller),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

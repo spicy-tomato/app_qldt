@@ -1,5 +1,6 @@
 import 'package:app_qldt/_widgets/element/loading.dart';
 import 'package:app_qldt/_widgets/element/refresh_button.dart';
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,27 +31,39 @@ class _CalendarPageState extends State<CalendarPage> {
     schedulesData = UserDataModel.of(context).localEventService.eventsData;
 
     return NavigablePlanPage(
-      child: SharedUI(
-        topRightWidget: _refreshButton(context),
-        child: Container(
-          child: BlocProvider<CalendarBloc>(
-            create: (_) => CalendarBloc(),
-            child: Column(
-              children: <Widget>[
-                Stack(
+      child: BlocBuilder<PlanBloc, PlanState>(
+        builder: (context, state) {
+          return SharedUI(
+            onWillPop: () {
+              if (state.visibility != PlanPageVisibility.close) {
+                context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+                return Future.value(false);
+              }
+
+              return Future.value(null);
+            },
+            topRightWidget: _refreshButton(context),
+            child: Container(
+              child: BlocProvider<CalendarBloc>(
+                create: (_) => CalendarBloc(),
+                child: Column(
                   children: <Widget>[
-                    Calendar(events: schedulesData),
-                    _fader(),
+                    Stack(
+                      children: <Widget>[
+                        Calendar(events: schedulesData),
+                        _fader(),
+                      ],
+                    ),
+                    Expanded(child: EventList()),
+                    BottomNote(
+                      useCurrentTime: false,
+                    ),
                   ],
                 ),
-                Expanded(child: EventList()),
-                BottomNote(
-                  useCurrentTime: false,
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
