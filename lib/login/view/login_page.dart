@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
 import 'package:app_qldt/login/bloc/login_bloc.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 import 'login_form.dart';
 
@@ -64,11 +62,14 @@ class _LoginPageState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
-        context.read<LoginBloc>().add(LoginHideKeyboard(!visible));
-      },
-    );
+    KeyboardVisibilityController().onChange.listen((visible) {
+      context.read<LoginBloc>().add(LoginHideKeyboard(!visible));
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

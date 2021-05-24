@@ -1,15 +1,13 @@
 import 'package:app_qldt/notification_post/notification_post.dart';
-import 'package:flutter/material.dart';
-
-import 'package:intl/intl.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'package:app_qldt/_models/user_notification.dart';
 import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
+
+import 'package:flutter/material.dart';
+
+import 'package:intl/intl.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -19,7 +17,8 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   _NotificationPageState();
 

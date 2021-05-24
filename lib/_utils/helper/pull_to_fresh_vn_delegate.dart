@@ -1,44 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ViRefreshString implements RefreshString {
   var a = 'vi';
 
   @override
-  String canLoadingText = 'Thả để tải thêm';
+  String? canLoadingText = 'Thả để tải thêm';
 
   @override
-  String canRefreshText = 'Thả để làm mới';
+  String? canRefreshText = 'Thả để làm mới';
 
   @override
-  String canTwoLevelText = 'Thả để đến tầng hai';
+  String? canTwoLevelText = 'Thả để đến tầng hai';
 
   @override
-  String idleLoadingText = 'Kéo lên để tải thêm';
+  String? idleLoadingText = 'Kéo lên để tải thêm';
 
   @override
-  String idleRefreshText = 'Kéo xuống để làm mới';
+  String? idleRefreshText = 'Kéo xuống để làm mới';
 
   @override
-  String loadFailedText = 'Tải thất bại';
+  String? loadFailedText = 'Tải thất bại';
 
   @override
-  String loadingText = 'Đang tải...';
+  String? loadingText = 'Đang tải...';
 
   @override
-  String noMoreText = 'Không còn dữ liệu';
+  String? noMoreText = 'Không còn dữ liệu';
 
   @override
-  String refreshCompleteText = 'Làm mới hoàn thành';
+  String? refreshCompleteText = 'Làm mới hoàn thành';
 
   @override
-  String refreshFailedText = 'Làm mới thất bại';
+  String? refreshFailedText = 'Làm mới thất bại';
 
   @override
-  String refreshingText = 'Đang làm mới';
+  String? refreshingText = 'Đang làm mới';
 }
 
 class CustomRefreshLocalizations extends RefreshLocalizations {
