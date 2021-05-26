@@ -38,9 +38,10 @@ class _ScheduleState extends State<Schedule> {
           controller: widget.controller,
           dataSource: widget.dataSource,
           allowedViews: [
+            CalendarView.schedule,
             CalendarView.day,
             CalendarView.week,
-            CalendarView.schedule,
+            CalendarView.month,
           ],
           scheduleViewSettings: ScheduleViewSettings(
             weekHeaderSettings: WeekHeaderSettings(
