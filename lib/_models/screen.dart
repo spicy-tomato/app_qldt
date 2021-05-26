@@ -1,4 +1,12 @@
-enum ScreenPage { login, home, calendar, schedule, notification, score, examSchedule }
+enum ScreenPage {
+  login,
+  home,
+  // calendar,
+  schedule,
+  notification,
+  score,
+  examSchedule,
+}
 
 extension ScreenPageExtension on ScreenPage {
   String get string {
@@ -9,8 +17,8 @@ extension ScreenPageExtension on ScreenPage {
       case ScreenPage.home:
         return '/home';
 
-      case ScreenPage.calendar:
-        return '/calendar';
+      // case ScreenPage.calendar:
+      //   return '/calendar';
 
       case ScreenPage.schedule:
         return '/schedule';
@@ -34,8 +42,8 @@ extension ScreenPageExtension on ScreenPage {
       case ScreenPage.home:
         return 'Trang chủ';
 
-      case ScreenPage.calendar:
-        return 'Lịch';
+      // case ScreenPage.calendar:
+      //   return 'Lịch';
 
       case ScreenPage.schedule:
         return 'Thời gian biểu';
