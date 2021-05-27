@@ -23,6 +23,7 @@ class Schedule extends StatefulWidget {
 
 class _ScheduleState extends State<Schedule> {
   late DateTime? _previousSelectedDay;
+  late CalendarView? _prevView;
 
   @override
   void initState() {
@@ -43,6 +44,9 @@ class _ScheduleState extends State<Schedule> {
             CalendarView.week,
             CalendarView.month,
           ],
+          monthViewSettings: MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
+          ),
           scheduleViewSettings: ScheduleViewSettings(
             weekHeaderSettings: WeekHeaderSettings(
               startDateFormat: 'd MMMM ',
@@ -64,13 +68,19 @@ class _ScheduleState extends State<Schedule> {
             timeIntervalHeight: 30,
           ),
           initialDisplayDate: DateTime.now(),
-          onTap: (details) => _calendarTapped(details, state),
+          onTap: (details) => _onTap(details, state),
+          onViewChanged: (_) => _onViewChanged(),
         );
       },
     );
   }
 
-  void _calendarTapped(CalendarTapDetails details, PlanState state) async {
+  void _onTap(CalendarTapDetails details, PlanState state) async {
+    if (_prevView == CalendarView.month) {
+      widget.controller.selectedDate = null;
+      return;
+    }
+
     if (details.targetElement == CalendarElement.calendarCell) {
       if (state.visibility == PlanPageVisibility.close) {
         context.read<PlanBloc>().add(PlanFromDateChanged(details.date!));
@@ -88,6 +98,10 @@ class _ScheduleState extends State<Schedule> {
       Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
     }
+  }
+
+  void _onViewChanged() {
+    _prevView = widget.controller.view;
   }
 
   Widget _scheduleViewMonthHeaderBuilder(_, details) {
