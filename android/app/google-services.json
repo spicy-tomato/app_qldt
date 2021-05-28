@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:227524919974:android:ea92b528a3bcc9a5682a67",
+        "mobilesdk_app_id": "1:227524919974:android:f0c941c4c9a3c478682a67",
         "android_client_info": {
-          "package_name": "com.example.app_qldt"
+          "package_name": "com.k601.utconnect"
         }
       },
       "oauth_client": [

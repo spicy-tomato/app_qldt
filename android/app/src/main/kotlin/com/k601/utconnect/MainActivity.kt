@@ -1,4 +1,4 @@
-package com.example.app_qldt
+package com.k601.utconnect
 
 import android.content.ContentResolver
 import android.content.Context
