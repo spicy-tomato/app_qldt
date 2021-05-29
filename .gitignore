@@ -41,5 +41,5 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-android/key.properties
-android/app/upload-keystore.jks
+key.properties
+upload-keystore.jks
