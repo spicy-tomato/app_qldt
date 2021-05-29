@@ -55,7 +55,10 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
   Stream<CrawlerState> _mapCrawlerSubmittedToState(CrawlerSubmitted event) async* {
     if (state.formStatus.isValidated) {
-      yield state.copyWith(formStatus: FormzStatus.submissionInProgress);
+      yield state.copyWith(
+        formStatus: FormzStatus.submissionInProgress,
+        status: CrawlerStatus.validatingPassword,
+      );
 
       final Map<String, dynamic> userInfo =
           jsonDecode((await SharedPreferences.getInstance()).getString('user_info')!);
@@ -76,6 +79,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
       if (passwordStatus.isOk) {
         //  Crawl score
+        yield state.copyWith(status: CrawlerStatus.crawlingScore);
         CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
           ScoreCrawler(
             idStudent: idStudent,
@@ -83,14 +87,14 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
           ),
         );
 
+        print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
         if (scoreCrawlerStatus.isOk) {
-          print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
-
           await UserDataModel.of(context).localScoreService.refresh();
           UserDataModel.of(context).localScoreService.connected = true;
         }
 
         //  Crawl exam schedule
+        yield state.copyWith(status: CrawlerStatus.crawlingExamSchedule);
         CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
           ExamScheduleCrawler(
             idStudent: idStudent,

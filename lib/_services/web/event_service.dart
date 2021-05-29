@@ -54,7 +54,7 @@ class EventService {
 
         return listModel;
       } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode}");
+        print("Cannot GET. Response status code: ${responseData.statusCode} at Event Service");
         return null;
       }
     } on TimeoutException catch (e) {

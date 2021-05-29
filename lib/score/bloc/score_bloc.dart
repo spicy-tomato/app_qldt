@@ -39,15 +39,13 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
   Stream<ScoreState> _mapScoreSemesterChangedToState(ScoreSemesterChanged event) async* {
     if (event.semester != state.semester) {
-      yield _mapScoreDataChangedToState(
-          ScoreDataChanged(event.semester, state.subjectEvaluation));
+      yield _mapScoreDataChangedToState(ScoreDataChanged(event.semester, state.subjectEvaluation));
     }
   }
 
   Stream<ScoreState> _mapScoreSubjectStatusChangedToState(ScoreSubjectStatusChanged event) async* {
     if (event.subjectEvaluation != state.subjectEvaluation) {
-      yield _mapScoreDataChangedToState(
-          ScoreDataChanged(state.semester, event.subjectEvaluation));
+      yield _mapScoreDataChangedToState(ScoreDataChanged(state.semester, event.subjectEvaluation));
     }
   }
 
@@ -82,11 +80,16 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   Stream<ScoreState> _mapScoreDataRefreshToState() async* {
     yield state.copyWith(status: ScorePageStatus.loading);
 
-    List<Score> newScoreData = (await UserDataModel.of(context).localScoreService.refresh())!;
 
-    yield state.copyWith(
-      scoreData: newScoreData,
-      status: ScorePageStatus.done,
-    );
+    List<Score>? newScoreData = await UserDataModel.of(context).localScoreService.refresh();
+
+    if (newScoreData != null) {
+      yield state.copyWith(
+        scoreData: newScoreData,
+        status: ScorePageStatus.done,
+      );
+    } else {
+      // TODO: Alert when cannot refresh
+    }
   }
 }

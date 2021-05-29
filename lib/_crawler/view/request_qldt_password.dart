@@ -21,7 +21,7 @@ class _RequestQldtPasswordPageState extends State<RequestQldtPasswordPage> {
           if (state.status.isFailed) {
             showDialog(
               context: context,
-              builder: (_) => _SystemErrorDialog(),
+              builder: (_) => _SystemErrorDialog(rootContext: context),
             );
           }
         },
@@ -50,6 +50,13 @@ class _RequestQldtPasswordPageState extends State<RequestQldtPasswordPage> {
 }
 
 class _SystemErrorDialog extends StatelessWidget {
+  final BuildContext rootContext;
+
+  const _SystemErrorDialog({
+    Key? key,
+    required this.rootContext,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -59,7 +66,7 @@ class _SystemErrorDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            context.read<CrawlerBloc>().add(CrawlerResetStatus());
+            rootContext.read<CrawlerBloc>().add(CrawlerResetStatus());
           },
           child: Text('Đồng ý'),
         ),
@@ -121,6 +128,12 @@ class _PasswordField extends StatelessWidget {
 }
 
 class _Button extends StatelessWidget {
+  final Map<CrawlerStatus, String> textMap = {
+    CrawlerStatus.validatingPassword: 'Đang xác thực',
+    CrawlerStatus.crawlingScore: 'Đang tải dữ liệu điểm',
+    CrawlerStatus.crawlingExamSchedule: 'Đang tải dữ liệu lịch thi',
+  };
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CrawlerBloc, CrawlerState>(
@@ -130,11 +143,16 @@ class _Button extends StatelessWidget {
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(
-                    'Đang tải dữ liệu, vui lòng chờ',
-                    style: TextStyle(
-                      color: Theme.of(context).backgroundColor,
-                    ),
+                  BlocBuilder<CrawlerBloc, CrawlerState>(
+                    buildWhen: (previous, current) => previous.status != current.status,
+                    builder: (context, state) {
+                      return Text(
+                        textMap[state.status] ?? textMap[CrawlerStatus.validatingPassword]!,
+                        style: TextStyle(
+                          color: Theme.of(context).backgroundColor,
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(width: 10),
                   SizedBox(

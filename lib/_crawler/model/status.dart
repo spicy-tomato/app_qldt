@@ -3,9 +3,9 @@ enum CrawlerStatus {
   failed,
   invalidPassword,
   unknown,
-  confirmPassword,
-  crawlScore,
-  crawlExamSchedule
+  validatingPassword,
+  crawlingScore,
+  crawlingExamSchedule
 }
 
 extension CrawlerStatusExtension on CrawlerStatus {

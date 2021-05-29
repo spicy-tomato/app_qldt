@@ -42,7 +42,7 @@ class NotificationService {
       if (responseData.statusCode == 200) {
         return jsonDecode(responseData.body);
       } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode}");
+        print("Cannot GET. Response status code: ${responseData.statusCode} at Notification service");
         return null;
       }
     } on TimeoutException catch (e) {

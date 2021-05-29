@@ -52,7 +52,7 @@ class ExamScheduleService {
 
         return jsonDecode(responseData.body) as List;
       } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode}");
+        print("Cannot GET. Response status code: ${responseData.statusCode} at ExamSchedule service");
         return null;
       }
     } on TimeoutException catch (e) {
