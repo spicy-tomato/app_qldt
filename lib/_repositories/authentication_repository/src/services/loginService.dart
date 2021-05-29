@@ -12,7 +12,6 @@ class LoginService {
 
   Future<String?> login() async {
     String url = Secret.url.postRequest.authentication;
-
     String body = jsonEncode(loginUser);
 
     http.Response? response;

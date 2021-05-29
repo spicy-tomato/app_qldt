@@ -10,9 +10,9 @@ import 'package:http/http.dart' as http;
 
 class CrawlerService {
   static Future<CrawlerStatus> updatePassword(UpdatePasswordCrawler crawler) async {
-    String url = Secret.url.postRequest.updatePasswordCrawler;
-    String body = jsonEncode(crawler);
     http.Response response;
+    String url = Secret.url.postRequest.examScheduleCrawler;
+    String body = jsonEncode(crawler);
 
     try {
       response = await http.post(Uri.parse(url), body: body).timeout(Const.crawlerTimeout);
