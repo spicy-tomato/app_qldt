@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_qldt/_repositories/authentication_repository/src/services/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
@@ -60,10 +61,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
-        bool shouldLogin = await _authenticationRepository.logIn(
-          id: state.username.value,
-          password: state.password.value,
-        );
+        final loginUser = LoginUser(state.username.value, state.password.value);
+        bool shouldLogin = await _authenticationRepository.logIn(loginUser);
 
         if (shouldLogin) {
           yield state.copyWith(status: FormzStatus.submissionSuccess);

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:app_qldt/_utils/database/provider.dart';
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/services.dart';
@@ -17,14 +16,7 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<bool> logIn({
-    @required String? id,
-    @required String? password,
-  }) async {
-    assert(id != null);
-    assert(password != null);
-
-    final loginUser = LoginUser(id!, password!);
+  Future<bool> logIn(LoginUser loginUser) async {
     final loginService = LoginService(loginUser);
 
     String? response = await loginService.login();
