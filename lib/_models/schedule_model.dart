@@ -1,11 +1,11 @@
-class Schedule {
+class ScheduleModel {
   final String idModuleClass;
   final String moduleClassName;
   final String idRoom;
   final int shiftSchedules;
   final DateTime daySchedules;
 
-  Schedule({
+  ScheduleModel({
     required this.idModuleClass,
     required this.moduleClassName,
     required this.idRoom,
@@ -13,8 +13,8 @@ class Schedule {
     required this.daySchedules,
   });
 
-  factory Schedule.fromJson(Map<String, dynamic> json) {
-    return Schedule(
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) {
+    return ScheduleModel(
       idModuleClass: json['ID_Module_Class'],
       moduleClassName: json['Module_Class_Name'],
       idRoom: json['ID_Room'],
@@ -23,8 +23,8 @@ class Schedule {
     );
   }
 
-  factory Schedule.fromMap(Map<String, dynamic> map) {
-    return Schedule(
+  factory ScheduleModel.fromMap(Map<String, dynamic> map) {
+    return ScheduleModel(
       idModuleClass: map['id_module_class'],
       moduleClassName: map['module_class_name'],
       idRoom: map['id_room'],

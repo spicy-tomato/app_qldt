@@ -1,8 +1,8 @@
-class ExamScheduleCrawler {
+class ScoreCrawlerModel {
   final String idStudent;
   final String idAccount;
 
-  ExamScheduleCrawler({
+  ScoreCrawlerModel({
     required this.idStudent,
     required this.idAccount,
   });

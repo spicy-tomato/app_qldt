@@ -3,7 +3,7 @@ import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventList extends StatelessWidget {
@@ -74,7 +74,7 @@ class _EventListScrollBehavior extends ScrollBehavior {
 }
 
 class _EventListItem extends StatelessWidget {
-  final UserEvent event;
+  final UserEventModel event;
 
   const _EventListItem({
     Key? key,

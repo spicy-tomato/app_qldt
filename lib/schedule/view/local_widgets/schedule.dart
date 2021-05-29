@@ -5,10 +5,10 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:app_qldt/event_info/event_info_page.dart';
 import 'package:app_qldt/plan/plan.dart';
-import 'package:app_qldt/_models/meeting_data_source.dart';
+import 'package:app_qldt/_models/meeting_data_source_model.dart';
 
 class Schedule extends StatefulWidget {
-  final UserDataSource dataSource;
+  final UserDataSourceModel dataSource;
   final CalendarController controller;
 
   const Schedule(

@@ -2,8 +2,8 @@ import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app_qldt/_models/meeting_data_source.dart';
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/meeting_data_source_model.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
@@ -23,10 +23,10 @@ class SchedulePage extends StatefulWidget {
 
 class _SchedulePageState extends State<SchedulePage> {
   final GlobalKey _globalKey = GlobalKey();
-  final UserDataSource _events = UserDataSource(<UserEvent>[]);
+  final UserDataSourceModel _events = UserDataSourceModel(<UserEventModel>[]);
 
   late ThemeData model;
-  late Map<DateTime, List<UserEvent>> schedulesData;
+  late Map<DateTime, List<UserEventModel>> schedulesData;
   late CalendarController _controller = CalendarController();
 
   @override
@@ -68,7 +68,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   void _addData() {
-    final List<UserEvent> appointment = _getDataSource(schedulesData);
+    final List<UserEventModel> appointment = _getDataSource(schedulesData);
 
     _events.appointments!.clear();
 
@@ -77,8 +77,8 @@ class _SchedulePageState extends State<SchedulePage> {
     });
   }
 
-  List<UserEvent> _getDataSource(Map<DateTime, List<UserEvent>> schedulesData) {
-    final List<UserEvent> events = <UserEvent>[];
+  List<UserEventModel> _getDataSource(Map<DateTime, List<UserEventModel>> schedulesData) {
+    final List<UserEventModel> events = <UserEventModel>[];
 
     schedulesData.forEach((_, mapValue) {
       mapValue.forEach((element) {

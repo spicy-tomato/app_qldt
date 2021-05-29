@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:app_qldt/_models/user_notification.dart';
+import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:intl/intl.dart';
 
 class NotificationPostPage extends StatelessWidget {
-  final UserNotification notification;
+  final UserNotificationModel notification;
 
   const NotificationPostPage({Key? key, required this.notification}) : super(key: key);
 
@@ -24,7 +24,7 @@ class NotificationPostPage extends StatelessWidget {
 }
 
 class ScrollView extends StatefulWidget {
-  final UserNotification notification;
+  final UserNotificationModel notification;
 
   const ScrollView({
     Key? key,

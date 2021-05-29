@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
@@ -24,7 +24,7 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  late Map<DateTime, List<UserEvent>> schedulesData;
+  late Map<DateTime, List<UserEventModel>> schedulesData;
 
   @override
   Widget build(BuildContext context) {

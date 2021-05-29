@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-import '_models/calendar_client.dart';
+import '_models/calendar_client_model.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  CalendarClient calendarClient = CalendarClient();
+  CalendarClientModel calendarClient = CalendarClientModel();
   DateTime startTime = DateTime.now();
   DateTime endTime = DateTime.now().add(Duration(days: 1));
   TextEditingController _eventName = TextEditingController();

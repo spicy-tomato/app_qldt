@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app_qldt/_models/exam_schedule.dart';
+import 'package:app_qldt/_models/exam_schedule_model.dart';
 import 'package:app_qldt/_services/web/exception/no_exam_schedule_data_exception.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
@@ -14,7 +14,7 @@ class ExamScheduleService {
 
   ExamScheduleService(this.userId);
 
-  Future<List<ExamSchedule>?> getExamSchedule() async {
+  Future<List<ExamScheduleModel>?> getExamSchedule() async {
     try {
       List? rawData = await _fetchData();
       return _parseData(rawData);
@@ -66,15 +66,15 @@ class ExamScheduleService {
     return null;
   }
 
-  List<ExamSchedule>? _parseData(List? rawData) {
+  List<ExamScheduleModel>? _parseData(List? rawData) {
     if (rawData == null) {
       return null;
     }
 
-    List<ExamSchedule> listModel = [];
+    List<ExamScheduleModel> listModel = [];
 
     for (var element in rawData) {
-      listModel.add(ExamSchedule.fromJson(element));
+      listModel.add(ExamScheduleModel.fromJson(element));
     }
 
     return listModel;

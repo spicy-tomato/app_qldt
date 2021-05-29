@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:app_qldt/_models/score.dart';
+import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +15,7 @@ class ScoreService {
 
   ScoreService(this.userId);
 
-  Future<List<Score>?> getScore() async {
+  Future<List<ScoreModel>?> getScore() async {
     try {
       List? rawData = await _fetchData();
       return _parseData(rawData);
@@ -66,15 +66,15 @@ class ScoreService {
     return null;
   }
 
-  List<Score>? _parseData(List? rawData) {
+  List<ScoreModel>? _parseData(List? rawData) {
     if (rawData == null) {
       return null;
     }
 
-    List<Score> listModel = [];
+    List<ScoreModel> listModel = [];
 
     for (var element in rawData) {
-      listModel.add(Score.fromJson(element));
+      listModel.add(ScoreModel.fromJson(element));
     }
 
     return listModel;

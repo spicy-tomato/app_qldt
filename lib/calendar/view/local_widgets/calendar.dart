@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 
 import 'calendar_widgets/calendar_widgets.dart';
@@ -34,7 +34,7 @@ class Calendar<UserEvent> extends StatefulWidget {
   _CalendarState createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderStateMixin {
+class _CalendarState extends State<Calendar<UserEventModel>> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late final PageController _pageController;
 
@@ -117,7 +117,7 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
                     ? TodayInFocusedMonthWidget(date: date)
                     : TodayOutFocusedMonthWidget(date: date);
               },
-              markerBuilder: (_, day, List<UserEvent> events) {
+              markerBuilder: (_, day, List<UserEventModel> events) {
                 return day.month == _focusedDay.month
                     ? DayInFocusMonthMarker(events)
                     : DayOutFocusedMonthMarker(events);
@@ -136,7 +136,7 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
     );
   }
 
-  List<UserEvent?> _eventLoader(DateTime day) {
+  List<UserEventModel?> _eventLoader(DateTime day) {
     day = day.toStandard;
     return widget.events[day] == null ? [] : widget.events[day]!;
   }

@@ -1,9 +1,9 @@
 part of 'score_bloc.dart';
 
 class ScoreState extends Equatable {
-  final List<Score> scoreData;
+  final List<ScoreModel> scoreData;
   final ScorePageStatus status;
-  final Semester semester;
+  final SemesterModel semester;
   final SubjectEvaluation subjectEvaluation;
 
   const ScoreState({
@@ -14,9 +14,9 @@ class ScoreState extends Equatable {
   });
 
   ScoreState copyWith({
-    List<Score>? scoreData,
+    List<ScoreModel>? scoreData,
     ScorePageStatus? status,
-    Semester? semester,
+    SemesterModel? semester,
     SubjectEvaluation? subjectEvaluation,
   }) {
     return ScoreState(
@@ -37,11 +37,11 @@ class ScoreState extends Equatable {
 }
 
 class ScoreInitialState extends ScoreState {
-  ScoreInitialState(List<Score> scoreData)
+  ScoreInitialState(List<ScoreModel> scoreData)
       : super(
           scoreData: scoreData,
           status: ScorePageStatus.done,
-          semester: const Semester(),
+          semester: const SemesterModel(),
           subjectEvaluation: SubjectEvaluation.all,
         );
 }

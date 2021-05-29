@@ -1,7 +1,7 @@
-import 'package:app_qldt/_models/app_notification.dart';
-import 'package:app_qldt/_models/receive_notification.dart';
-import 'package:app_qldt/_models/sender.dart';
-import 'package:app_qldt/_models/user_notification.dart';
+import 'package:app_qldt/_models/app_notification_model.dart';
+import 'package:app_qldt/_models/receive_notification_model.dart';
+import 'package:app_qldt/_models/sender_model.dart';
+import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_services/web/notification_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
@@ -16,11 +16,11 @@ class LocalNotificationService extends LocalService {
         super(databaseProvider);
 
   Future<List<dynamic>> refresh() async {
-    AppNotification? data = await _notificationService.getNotification();
+    AppNotificationModel? data = await _notificationService.getNotification();
 
     if (data != null) {
-      List<ReceiveNotification> notifications = data.notification;
-      List<Sender> senders = data.sender;
+      List<ReceiveNotificationModel> notifications = data.notification;
+      List<SenderModel> senders = data.sender;
 
       await removeNotification();
       await saveNotification(notifications);
@@ -35,7 +35,7 @@ class LocalNotificationService extends LocalService {
   }
 
   //#region notification
-  Future<void> saveNotification(List<ReceiveNotification> rawData) async {
+  Future<void> saveNotification(List<ReceiveNotificationModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.notification.insert(row.toMap());
     }
@@ -48,7 +48,7 @@ class LocalNotificationService extends LocalService {
   //#endregion
 
   //#region sender
-  Future<void> saveSender(List<Sender> rawData) async {
+  Future<void> saveSender(List<SenderModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.sender.insert(row.toMap());
     }
@@ -64,7 +64,7 @@ class LocalNotificationService extends LocalService {
     final rawData = await databaseProvider.notification.all;
 
     return rawData.map((data) {
-      return UserNotification.fromMap(data);
+      return UserNotificationModel.fromMap(data);
     }).toList();
   }
 }

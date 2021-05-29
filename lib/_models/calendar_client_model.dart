@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 const clientId = "227524919974-ogjnrouk4pq2cvsgt7jf19nd0h4fio8a.apps.googleusercontent.com";
 
-class CalendarClient {
+class CalendarClientModel {
   static const _scopes = const [CalendarApi.calendarScope];
 
   insert(title, startTime, endTime) {

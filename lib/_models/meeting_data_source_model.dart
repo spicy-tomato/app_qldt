@@ -1,10 +1,10 @@
 import 'dart:ui';
 
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class UserDataSource extends CalendarDataSource {
-  UserDataSource(List<UserEvent> source) {
+class UserDataSourceModel extends CalendarDataSource {
+  UserDataSourceModel(List<UserEventModel> source) {
     appointments = source;
   }
 

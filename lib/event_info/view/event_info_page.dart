@@ -1,9 +1,9 @@
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EventInfoPage extends StatefulWidget {
-  final UserEvent event;
+  final UserEventModel event;
 
   const EventInfoPage({Key? key, required this.event}) : super(key: key);
 

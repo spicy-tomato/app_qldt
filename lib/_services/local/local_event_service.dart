@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:app_qldt/_models/user_event.dart';
-import 'package:app_qldt/_models/schedule.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
+import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 
@@ -12,10 +12,10 @@ import '../web/event_service.dart';
 ///
 class LocalEventService extends LocalService {
   late final EventService? _eventService;
-  final List<UserEvent> userEventList = [];
+  final List<UserEventModel> userEventList = [];
 
   Map<String, int> colorMap = Map();
-  Map<DateTime, List<UserEvent>> eventsData = Map();
+  Map<DateTime, List<UserEventModel>> eventsData = Map();
 
   /// Constructs a [LocalEventService] instance with user's ID account
   ///
@@ -33,7 +33,7 @@ class LocalEventService extends LocalService {
   /// 4. Return data.
   ///
   Future<void> refresh() async {
-    List<Schedule>? rawData = await _eventService!.getRawData();
+    List<ScheduleModel>? rawData = await _eventService!.getRawData();
 
     if (rawData != null) {
       await _remove();
@@ -55,7 +55,7 @@ class LocalEventService extends LocalService {
 
   /// Save schedule data to local database
   ///
-  Future<void> _save(List<Schedule> rawData) async {
+  Future<void> _save(List<ScheduleModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.schedule.insert(row.toMap());
     }
@@ -94,9 +94,9 @@ class LocalEventService extends LocalService {
   /// 2. Parse raw data to [Map<DateTime, List<UserEvent>>].
   /// 3. Return parsed data.
   ///
-  Future<Map<DateTime, List<UserEvent>>> _getFromDb() async {
+  Future<Map<DateTime, List<UserEventModel>>> _getFromDb() async {
     List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
-    Map<DateTime, List<UserEvent>> data = _parseToStandardStructure(rawData);
+    Map<DateTime, List<UserEventModel>> data = _parseToStandardStructure(rawData);
 
     return data;
   }
@@ -107,30 +107,30 @@ class LocalEventService extends LocalService {
   /// 1. If input data is null, then return new empty map.
   /// 2. Generate [List<Schedule>] from input data, called [rawData].
   /// 3. Create new map to save result data, called [events].
-  /// 4. For each [Schedule] instance, called [schedule] in [rawData]:
+  /// 4. For each [ScheduleModel] instance, called [schedule] in [rawData]:
   ///   4.1. If [events[schedule]] is null, then add new key-value pair, with
   ///        key is [schedule.daySchedules], and value is empty array []
-  ///   4.2. Add new [UserEvent] instance to [events[schedule.daySchedules]].
+  ///   4.2. Add new [UserEventModel] instance to [events[schedule.daySchedules]].
   /// 5. Return [events].
   ///
-  Map<DateTime, List<UserEvent>> _parseToStandardStructure(List<Map<String, dynamic>>? maps) {
+  Map<DateTime, List<UserEventModel>> _parseToStandardStructure(List<Map<String, dynamic>>? maps) {
     if (maps == null) {
       return new Map();
     }
 
-    List<Schedule> rawData = List.generate(
+    List<ScheduleModel> rawData = List.generate(
       maps.length,
-      (index) => Schedule.fromMap(maps[index]),
+      (index) => ScheduleModel.fromMap(maps[index]),
     );
 
-    Map<DateTime, List<UserEvent>> events = new Map();
+    Map<DateTime, List<UserEventModel>> events = new Map();
 
     for (var schedule in rawData) {
       if (events[schedule.daySchedules] == null) {
         events[schedule.daySchedules] = [];
       }
 
-      UserEvent event = UserEvent.fromSchedule(
+      UserEventModel event = UserEventModel.fromSchedule(
         schedule,
         colorMap[schedule.idModuleClass],
       );

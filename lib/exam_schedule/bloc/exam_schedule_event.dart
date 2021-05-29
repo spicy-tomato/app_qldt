@@ -8,7 +8,7 @@ abstract class ExamScheduleEvent extends Equatable {
 }
 
 class ExamScheduleSemesterChanged extends ExamScheduleEvent {
-  final Semester semester;
+  final SemesterModel semester;
 
   const ExamScheduleSemesterChanged(this.semester);
 
@@ -17,7 +17,7 @@ class ExamScheduleSemesterChanged extends ExamScheduleEvent {
 }
 
 class ExamScheduleDataChanged extends ExamScheduleEvent {
-  final Semester semester;
+  final SemesterModel semester;
 
   const ExamScheduleDataChanged(this.semester);
 

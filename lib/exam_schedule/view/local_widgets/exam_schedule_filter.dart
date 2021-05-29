@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/semester.dart';
+import 'package:app_qldt/_models/semester_model.dart';
 import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
@@ -14,7 +14,7 @@ class ExamScheduleFilter extends StatefulWidget {
 class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
   @override
   Widget build(BuildContext context) {
-    final List<Semester> semesterList = UserDataModel.of(context).localExamScheduleService.semester;
+    final List<SemesterModel> semesterList = UserDataModel.of(context).localExamScheduleService.semester;
 
     return BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
       buildWhen: (previous, current) => previous.semester != current.semester,
@@ -28,9 +28,9 @@ class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
             await showDialog(
               context: context,
               builder: (context) {
-                return RadioAlertDialog<Semester>(
+                return RadioAlertDialog<SemesterModel>(
                     onSelect: _onSelect,
-                    stringFunction: Semester.getString,
+                    stringFunction: SemesterModel.getString,
                     currentOption: state.semester,
                     optionsList: semesterList);
               },
@@ -41,7 +41,7 @@ class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
     );
   }
 
-  void _onSelect(Semester semester) {
+  void _onSelect(SemesterModel semester) {
     context.read<ExamScheduleBloc>().add(ExamScheduleSemesterChanged(semester));
     Navigator.of(context).pop();
   }

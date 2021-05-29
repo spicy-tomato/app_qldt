@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:app_qldt/_models/score.dart';
+import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
-import 'package:app_qldt/_models/semester.dart';
+import 'package:app_qldt/_models/semester_model.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -50,11 +50,11 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
-    List<Score> newScoreData = [];
+    List<ScoreModel> newScoreData = [];
     LocalScoreService scoreService = UserDataModel.of(context).localScoreService;
 
     //  Query all
-    if (event.semester == Semester.all && event.subjectEvaluation == SubjectEvaluation.all) {
+    if (event.semester == SemesterModel.all && event.subjectEvaluation == SubjectEvaluation.all) {
       newScoreData = scoreService.scoreData;
     }
     //  Query a specific semester with all subject status
@@ -62,7 +62,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       newScoreData = scoreService.getScoreDataOfAllEvaluation(event.semester);
     }
     //  Query all semester with a specific subject status
-    else if (event.semester == Semester.all) {
+    else if (event.semester == SemesterModel.all) {
       newScoreData = scoreService.getScoreDataOfAllSemester(event.subjectEvaluation);
     }
     //  Query a specific semester with a specific subject status
@@ -81,7 +81,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     yield state.copyWith(status: ScorePageStatus.loading);
 
 
-    List<Score>? newScoreData = await UserDataModel.of(context).localScoreService.refresh();
+    List<ScoreModel>? newScoreData = await UserDataModel.of(context).localScoreService.refresh();
 
     if (newScoreData != null) {
       yield state.copyWith(

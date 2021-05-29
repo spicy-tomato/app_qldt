@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:app_qldt/_models/schedule.dart';
+import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 
 class EventService {
@@ -13,12 +13,12 @@ class EventService {
 
   EventService(this.userId);
 
-  Future<List<Schedule>?> getRawData() async {
+  Future<List<ScheduleModel>?> getRawData() async {
     try {
       List? data = await _fetchData();
 
       if (data != null) {
-        return data as List<Schedule>;
+        return data as List<ScheduleModel>;
       }
 
       return null;
@@ -38,7 +38,7 @@ class EventService {
   ///     },
   ///     ...
   /// ]
-  Future<List<Schedule>?> _fetchData() async {
+  Future<List<ScheduleModel>?> _fetchData() async {
     String url = Secret.url.getRequest.schedule + '?id=' + userId;
 
     try {
@@ -46,10 +46,10 @@ class EventService {
 
       if (responseData.statusCode == 200) {
         List data = jsonDecode(responseData.body) as List;
-        List<Schedule> listModel = [];
+        List<ScheduleModel> listModel = [];
 
         for (var element in data) {
-          listModel.add(Schedule.fromJson(element));
+          listModel.add(ScheduleModel.fromJson(element));
         }
 
         return listModel;

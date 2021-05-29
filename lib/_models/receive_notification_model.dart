@@ -1,4 +1,4 @@
-class ReceiveNotification {
+class ReceiveNotificationModel {
   final int idNotification;
   final String title;
   final String content;
@@ -8,7 +8,7 @@ class ReceiveNotification {
   final DateTime? timeStart;
   final DateTime? timeEnd;
 
-  ReceiveNotification({
+  ReceiveNotificationModel({
     required this.idNotification,
     required this.title,
     required this.content,
@@ -19,8 +19,8 @@ class ReceiveNotification {
     required this.timeCreated,
   });
 
-  factory ReceiveNotification.fromJson(Map<String, dynamic> json) {
-    return ReceiveNotification(
+  factory ReceiveNotificationModel.fromJson(Map<String, dynamic> json) {
+    return ReceiveNotificationModel(
       idNotification: json['ID_Notification'],
       title: json['Title'],
       content: json['Content'],
@@ -32,8 +32,8 @@ class ReceiveNotification {
     );
   }
 
-  factory ReceiveNotification.fromMap(Map<String, dynamic> map) {
-    return ReceiveNotification(
+  factory ReceiveNotificationModel.fromMap(Map<String, dynamic> map) {
+    return ReceiveNotificationModel(
       idNotification: map['id_notification'],
       title: map['title'],
       content: map['content'],
@@ -62,11 +62,11 @@ class ReceiveNotification {
     return 'ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $idSender';
   }
 
-  static List<ReceiveNotification> fromList(List<dynamic> list){
-    List<ReceiveNotification> res = [];
+  static List<ReceiveNotificationModel> fromList(List<dynamic> list){
+    List<ReceiveNotificationModel> res = [];
 
     for (var item in list){
-      res.add(ReceiveNotification.fromJson(item));
+      res.add(ReceiveNotificationModel.fromJson(item));
     }
 
     return res;

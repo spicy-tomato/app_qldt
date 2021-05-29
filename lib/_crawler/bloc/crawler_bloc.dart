@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_crawler/model/password.dart';
-import 'package:app_qldt/_models/crawler/exam_schedule_crawler.dart';
-import 'package:app_qldt/_models/crawler/score_crawler.dart';
-import 'package:app_qldt/_models/crawler/update_password_crawler.dart';
+import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
+import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
+import 'package:app_qldt/_models/crawler/update_password_crawler_model.dart';
 import 'package:app_qldt/_services/web/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:bloc/bloc.dart';
@@ -68,7 +68,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
       final String password = state.password.value;
 
       CrawlerStatus passwordStatus = await CrawlerService.updatePassword(
-        UpdatePasswordCrawler(
+        UpdatePasswordCrawlerModel(
           idStudent: idStudent,
           idAccount: idAccount,
           password: password,
@@ -81,7 +81,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         //  Crawl score
         yield state.copyWith(status: CrawlerStatus.crawlingScore);
         CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
-          ScoreCrawler(
+          ScoreCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
           ),
@@ -96,7 +96,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         //  Crawl exam schedule
         yield state.copyWith(status: CrawlerStatus.crawlingExamSchedule);
         CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
-          ExamScheduleCrawler(
+          ExamScheduleCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
           ),

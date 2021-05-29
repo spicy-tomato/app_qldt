@@ -1,4 +1,4 @@
-class ExamSchedule {
+class ExamScheduleModel {
   final String semester;
   final String moduleName;
   final int credit;
@@ -8,7 +8,7 @@ class ExamSchedule {
   final int identificationNumber;
   final String room;
 
-  ExamSchedule({
+  ExamScheduleModel({
     required this.semester,
     required this.moduleName,
     required this.credit,
@@ -19,8 +19,8 @@ class ExamSchedule {
     required this.room,
   });
 
-  factory ExamSchedule.fromJson(Map<String, dynamic> json) {
-    return ExamSchedule(
+  factory ExamScheduleModel.fromJson(Map<String, dynamic> json) {
+    return ExamScheduleModel(
       semester: json['Semester'],
       moduleName: json['Module_Name'],
       credit: json['Credit'],
@@ -32,8 +32,8 @@ class ExamSchedule {
     );
   }
 
-  factory ExamSchedule.fromMap(Map<String, dynamic> map) {
-    return ExamSchedule(
+  factory ExamScheduleModel.fromMap(Map<String, dynamic> map) {
+    return ExamScheduleModel(
       semester: map['semester'],
       moduleName: map['module_name'],
       credit: map['credit'],

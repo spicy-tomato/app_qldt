@@ -1,4 +1,4 @@
-class Score {
+class ScoreModel {
   final String semester;
   final String moduleName;
   final int credit;
@@ -7,7 +7,7 @@ class Score {
   final double testScore;
   final double theoreticalScore;
 
-  Score({
+  ScoreModel({
     required this.semester,
     required this.moduleName,
     required this.credit,
@@ -17,8 +17,8 @@ class Score {
     required this.theoreticalScore,
   });
 
-  factory Score.fromJson(Map<String, dynamic> json) {
-    return Score(
+  factory ScoreModel.fromJson(Map<String, dynamic> json) {
+    return ScoreModel(
       moduleName: json['Module_Name'],
       semester: json['Semester'],
       credit: json['Credit'],
@@ -29,8 +29,8 @@ class Score {
     );
   }
 
-  factory Score.fromMap(Map<String, dynamic> map) {
-    return Score(
+  factory ScoreModel.fromMap(Map<String, dynamic> map) {
+    return ScoreModel(
       moduleName: map['module_name'],
       semester: map['semester'],
       credit: map['credit'],

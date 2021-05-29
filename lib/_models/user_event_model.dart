@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:app_qldt/_models/schedule.dart';
+import 'package:app_qldt/_models/schedule_model.dart';
 
-class UserEvent {
+class UserEventModel {
   final String eventName;
   final String? location;
   final Color backgroundColor;
@@ -11,7 +11,7 @@ class UserEvent {
   late final DateTime? to;
   late final bool isAllDay;
 
-  UserEvent({
+  UserEventModel({
     required this.eventName,
     DateTime? from,
     DateTime? to,
@@ -29,7 +29,7 @@ class UserEvent {
     visualizeName = _getShortenClassName(this.eventName);
   }
 
-  factory UserEvent.fromSchedule(Schedule schedule, [int? color]) {
+  factory UserEventModel.fromSchedule(ScheduleModel schedule, [int? color]) {
     DateTime curr = schedule.daySchedules;
     int hour, minute = 0;
 
@@ -59,7 +59,7 @@ class UserEvent {
 
     curr = DateTime(curr.year, curr.month, curr.day, hour, minute);
 
-    return UserEvent(
+    return UserEventModel(
       from: curr,
       eventName: schedule.moduleClassName,
       location: schedule.idRoom,

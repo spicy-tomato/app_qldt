@@ -1,9 +1,9 @@
 part of 'exam_schedule_bloc.dart';
 
 class ExamScheduleState extends Equatable {
-  final List<ExamSchedule> examScheduleData;
+  final List<ExamScheduleModel> examScheduleData;
   final ExamSchedulePageStatus status;
-  final Semester semester;
+  final SemesterModel semester;
 
   const ExamScheduleState({
     required this.examScheduleData,
@@ -12,9 +12,9 @@ class ExamScheduleState extends Equatable {
   });
 
   ExamScheduleState copyWith({
-    List<ExamSchedule>? examScheduleData,
+    List<ExamScheduleModel>? examScheduleData,
     ExamSchedulePageStatus? status,
-    Semester? semester,
+    SemesterModel? semester,
   }) {
     return ExamScheduleState(
       examScheduleData: examScheduleData ?? this.examScheduleData,
@@ -33,8 +33,8 @@ class ExamScheduleState extends Equatable {
 
 class ExamScheduleInitial extends ExamScheduleState {
   const ExamScheduleInitial({
-    required List<ExamSchedule> examScheduleData,
-    required Semester semester,
+    required List<ExamScheduleModel> examScheduleData,
+    required SemesterModel semester,
   }) : super(
           examScheduleData: examScheduleData,
           status: ExamSchedulePageStatus.done,

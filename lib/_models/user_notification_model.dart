@@ -1,4 +1,4 @@
-class UserNotification {
+class UserNotificationModel {
   final int idNotification;
   final String title;
   final String content;
@@ -8,7 +8,7 @@ class UserNotification {
   final DateTime? timeStart;
   final DateTime? timeEnd;
 
-  UserNotification({
+  UserNotificationModel({
     required this.idNotification,
     required this.title,
     required this.content,
@@ -19,8 +19,8 @@ class UserNotification {
     required this.timeCreated,
   });
 
-  factory UserNotification.fromMap(Map<String, dynamic> map) {
-    return UserNotification(
+  factory UserNotificationModel.fromMap(Map<String, dynamic> map) {
+    return UserNotificationModel(
       idNotification: map['id_notification'],
       title: map['title'],
       content: map['content'],

@@ -8,7 +8,7 @@ abstract class ScoreEvent extends Equatable {
 }
 
 class ScoreSemesterChanged extends ScoreEvent {
-  final Semester semester;
+  final SemesterModel semester;
 
   const ScoreSemesterChanged(this.semester);
 
@@ -26,7 +26,7 @@ class ScoreSubjectStatusChanged extends ScoreEvent {
 }
 
 class ScoreDataChanged extends ScoreEvent {
-  final Semester semester;
+  final SemesterModel semester;
   final SubjectEvaluation subjectEvaluation;
 
   const ScoreDataChanged(this.semester, this.subjectEvaluation);

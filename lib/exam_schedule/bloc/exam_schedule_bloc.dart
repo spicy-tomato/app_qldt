@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:app_qldt/_models/exam_schedule.dart';
+import 'package:app_qldt/_models/exam_schedule_model.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/exam_schedule/bloc/enum/exam_schedule_page_status.dart';
-import 'package:app_qldt/_models/semester.dart';
+import 'package:app_qldt/_models/semester_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +56,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       ExamScheduleDataRefresh event) async* {
     yield state.copyWith(status: ExamSchedulePageStatus.loading);
 
-    List<ExamSchedule> newScoreData =
+    List<ExamScheduleModel> newScoreData =
         (await UserDataModel.of(context).localExamScheduleService.refresh())!;
 
     yield state.copyWith(

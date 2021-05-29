@@ -5,9 +5,9 @@ import 'dart:io';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:app_qldt/_models/app_notification.dart';
-import 'package:app_qldt/_models/receive_notification.dart';
-import 'package:app_qldt/_models/sender.dart';
+import 'package:app_qldt/_models/app_notification_model.dart';
+import 'package:app_qldt/_models/receive_notification_model.dart';
+import 'package:app_qldt/_models/sender_model.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 
 class NotificationService {
@@ -15,16 +15,16 @@ class NotificationService {
 
   NotificationService(this.studentId);
 
-  Future<AppNotification?> getNotification() async {
+  Future<AppNotificationModel?> getNotification() async {
     try {
       Map<String, dynamic>? data = await _fetchData();
 
       if (data != null) {
-        List<Sender> senderList = Sender.fromList(data['sender']);
-        List<ReceiveNotification> notificationList =
-            ReceiveNotification.fromList(data['notification']);
+        List<SenderModel> senderList = SenderModel.fromList(data['sender']);
+        List<ReceiveNotificationModel> notificationList =
+            ReceiveNotificationModel.fromList(data['notification']);
 
-        return AppNotification(notificationList, senderList);
+        return AppNotificationModel(notificationList, senderList);
       }
 
       return null;

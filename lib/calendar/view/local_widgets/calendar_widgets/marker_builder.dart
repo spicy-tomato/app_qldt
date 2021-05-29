@@ -1,8 +1,8 @@
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:flutter/material.dart';
 
 class _RowMarker extends StatelessWidget {
-  final List<UserEvent?> events;
+  final List<UserEventModel?> events;
   final Color color;
 
   const _RowMarker(
@@ -50,7 +50,7 @@ class Marker extends StatelessWidget {
 }
 
 class DayInFocusMonthMarker extends _RowMarker {
-  final List<UserEvent?> events;
+  final List<UserEventModel?> events;
 
   DayInFocusMonthMarker(
     this.events, {
@@ -59,7 +59,7 @@ class DayInFocusMonthMarker extends _RowMarker {
 }
 
 class DayOutFocusedMonthMarker extends _RowMarker {
-  final List<UserEvent?> events;
+  final List<UserEventModel?> events;
 
   DayOutFocusedMonthMarker(
     this.events, {

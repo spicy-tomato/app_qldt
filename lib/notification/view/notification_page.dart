@@ -1,5 +1,5 @@
 import 'package:app_qldt/notification_post/notification_post.dart';
-import 'package:app_qldt/_models/user_notification.dart';
+import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
@@ -26,7 +26,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     List<dynamic> notificationData = UserDataModel.of(context)
         .localNotificationService
-        .notificationData as List<UserNotification>;
+        .notificationData as List<UserNotificationModel>;
 
     return SharedUI(
       stable: false,
@@ -71,7 +71,7 @@ class _NotificationPageState extends State<NotificationPage> {
 }
 
 class ListItem extends StatelessWidget {
-  final UserNotification notification;
+  final UserNotificationModel notification;
 
   const ListItem({
     Key? key,
