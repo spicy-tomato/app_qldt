@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:app_qldt/_utils/database/table/exam_schedule.dart';
+import 'package:app_qldt/_utils/database/table/db_exam_schedule.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

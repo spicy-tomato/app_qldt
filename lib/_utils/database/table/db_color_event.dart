@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import 'schedule.dart';
+import 'db_schedule.dart';
 import 'table_model.dart';
 
 class DbColorEvent extends TableModel {
