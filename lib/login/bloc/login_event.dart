@@ -16,15 +16,6 @@ class HideLoginDialog extends LoginEvent {
   List<Object> get props => [hide];
 }
 
-class LoginHideKeyboard extends LoginEvent {
-  final bool hide;
-
-  const LoginHideKeyboard(this.hide);
-
-  @override
-  List<Object> get props => [hide];
-}
-
 class LoginUsernameChanged extends LoginEvent {
   final String username;
 

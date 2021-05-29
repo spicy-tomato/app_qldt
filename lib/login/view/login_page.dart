@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
 import 'package:app_qldt/login/bloc/login_bloc.dart';
@@ -53,25 +52,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    KeyboardVisibilityController().onChange.listen((visible) {
-      context.read<LoginBloc>().add(LoginHideKeyboard(!visible));
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(

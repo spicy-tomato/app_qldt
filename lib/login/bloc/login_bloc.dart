@@ -22,8 +22,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is HideLoginDialog) {
       yield _mapLoginDialogVisibleChangedToState(event);
-    } else if (event is LoginHideKeyboard) {
-      yield _mapKeyboardVisibleChangedToState();
     } else if (event is LoginUsernameChanged) {
       yield _mapUsernameChangedToState(event);
     } else if (event is LoginPasswordChanged) {
@@ -39,10 +37,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _mapLoginDialogVisibleChangedToState(HideLoginDialog event) {
     return state.copyWith(hideLoginDialog: event.hide);
-  }
-
-  LoginState _mapKeyboardVisibleChangedToState() {
-    return state.copyWith(hideKeyboard: !state.hideKeyboard);
   }
 
   LoginState _mapUsernameChangedToState(LoginUsernameChanged event) {

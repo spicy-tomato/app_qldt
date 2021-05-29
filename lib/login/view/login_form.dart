@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:formz/formz.dart';
 
 import 'package:app_qldt/login/bloc/login_bloc.dart';
@@ -21,8 +22,9 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final FocusScopeNode focusNode = FocusScope.of(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) async {
@@ -40,57 +42,58 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         buildWhen: (previous, current) {
-          return previous.hideLoginDialog != current.hideLoginDialog ||
-              previous.hideKeyboard != current.hideKeyboard;
+          return previous.hideLoginDialog != current.hideLoginDialog;
         },
         builder: (_, state) {
-          final focusNode = FocusScope.of(context);
-
-          return AnimatedContainer(
-            padding: const EdgeInsets.all(32),
-            width: screenWidth,
-            height: screenHeight,
-            curve: Curves.fastLinearToSlowEaseIn,
-            duration: const Duration(milliseconds: 1000),
-            transform: Matrix4.translationValues(
-                0,
-                state.hideLoginDialog
-                    ? screenHeight
-                    : state.hideKeyboard
-                        ? 270
-                        : 170,
-                1),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
+          return KeyboardVisibilityBuilder(
+            builder: (context, isKeyboardVisible) {
+              return AnimatedContainer(
+                padding: const EdgeInsets.all(32),
+                width: screenWidth,
+                height: screenHeight,
+                curve: Curves.fastLinearToSlowEaseIn,
+                duration: const Duration(milliseconds: 1000),
+                transform: Matrix4.translationValues(
+                    0,
+                    state.hideLoginDialog
+                        ? screenHeight
+                        : isKeyboardVisible
+                            ? 170
+                            : 270,
+                    1),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: const Text(
-                        "Đăng nhập để tiếp tục",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: const Text(
+                            "Đăng nhập để tiếp tục",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
+                        UsernameInput(focusNode: focusNode),
+                        const SizedBox(height: 20),
+                        PasswordInput(focusNode: focusNode),
+                        const SizedBox(height: 20),
+                        LoginButton(focusNode),
+                      ],
                     ),
-                    UsernameInput(focusNode: focusNode),
-                    const SizedBox(height: 20),
-                    PasswordInput(focusNode: focusNode),
-                    const SizedBox(height: 20),
-                    LoginButton(focusNode),
                   ],
                 ),
-              ],
-            ),
+              );
+            },
           );
         },
       ),
