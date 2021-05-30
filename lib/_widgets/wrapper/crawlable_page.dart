@@ -21,38 +21,35 @@ class CrawlablePage extends StatefulWidget {
 }
 
 class _CrawlablePageState extends State<CrawlablePage> {
-  late final String idAccount;
-  late final String idStudent;
-
-  @override
-  Future<void> initState() async {
-    super.initState();
-
-    final Map<String, dynamic> userInfo =
-        jsonDecode((await SharedPreferences.getInstance()).getString('user_info')!);
-
-    idStudent = userInfo['ID_Student'];
-    idAccount = userInfo['ID'];
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CrawlerBloc>(
-      create: (_) => CrawlerBloc(
-        context,
-        idAccount: idAccount,
-        idStudent: idStudent,
-      ),
-      child: BlocBuilder<CrawlerBloc, CrawlerState>(
-        buildWhen: (previous, current) => !previous.status.isOk || current.status.isOk,
-        builder: (context, state) {
-          if (!widget.service.connected) {
-            return RequestQldtPasswordPage();
-          }
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          final Map<String, dynamic> userInfo = jsonDecode(snapshot.data!.getString('user_info')!);
 
-          return widget.child;
-        },
-      ),
+          return BlocProvider<CrawlerBloc>(
+            create: (_) => CrawlerBloc(
+              context,
+              idAccount: userInfo['ID'],
+              idStudent: userInfo['ID_Student'],
+            ),
+            child: BlocBuilder<CrawlerBloc, CrawlerState>(
+              buildWhen: (previous, current) => !previous.status.isOk || current.status.isOk,
+              builder: (context, state) {
+                if (!widget.service.connected) {
+                  return RequestQldtPasswordPage();
+                }
+
+                return widget.child;
+              },
+            ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 }
