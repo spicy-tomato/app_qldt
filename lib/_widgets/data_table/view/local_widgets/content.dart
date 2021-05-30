@@ -8,7 +8,7 @@ class ContentCell extends TableCell {
   ContentCell(
     String text, {
     required Color backgroundColor,
-    required Color horizotalBorderColor,
+    required Color horizontalBorderColor,
     required Color verticalBorderColor,
     required CellDimensions cellDimensions,
     required columnIndex,
@@ -20,7 +20,7 @@ class ContentCell extends TableCell {
           cellWidth: cellDimensions.columnWidths![columnIndex],
           cellHeight: cellDimensions.contentCellHeight!,
           backgroundColor: backgroundColor,
-          horizotalBorderColor: horizotalBorderColor,
+          horizotalBorderColor: horizontalBorderColor,
           verticalBorderColor: verticalBorderColor,
           textColor: textColor,
           isLastColumn: isLastColumn,

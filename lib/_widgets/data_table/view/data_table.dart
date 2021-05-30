@@ -61,7 +61,7 @@ class MyDataTable extends StatelessWidget {
         textColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.white,
         verticalBorderColor: Theme.of(context).primaryColor,
-        horizotalBorderColor: Theme.of(context).primaryColor,
+        horizontalBorderColor: Theme.of(context).primaryColor,
       ),
       legendCell: LegendCell(
         'Môn học',
