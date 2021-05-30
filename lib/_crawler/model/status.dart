@@ -10,20 +10,16 @@ enum CrawlerStatus {
 }
 
 extension CrawlerStatusExtension on CrawlerStatus {
-  static CrawlerStatus fromString(String string) {
-    switch (string) {
-      case 'OK':
-        return CrawlerStatus.ok;
-
-      case 'Unknown':
-        return CrawlerStatus.unknown;
-
-      case 'Invalid Password':
-        return CrawlerStatus.invalidPassword;
-
-      default:
-        return CrawlerStatus.failed;
-    }
+  static CrawlerStatus fromStatusCode(int statusCode) {
+    final Map<int, CrawlerStatus> map = {
+      200: CrawlerStatus.ok,
+      401: CrawlerStatus.invalidPassword,
+      500: CrawlerStatus.serverError,
+    };
+    
+    final CrawlerStatus? status = map[statusCode];
+    
+    return status ?? CrawlerStatus.unknown;
   }
 
   bool get isOk => this == CrawlerStatus.ok;

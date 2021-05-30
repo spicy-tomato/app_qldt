@@ -11,12 +11,12 @@ import 'package:http/http.dart' as http;
 class CrawlerService {
   static Future<CrawlerStatus> updatePassword(UpdatePasswordCrawlerModel crawler) async {
     http.Response response;
-    String url = Secret.url.postRequest.examScheduleCrawler;
+    String url = Secret.url.postRequest.updatePasswordCrawler;
     String body = jsonEncode(crawler);
 
     try {
       response = await http.post(Uri.parse(url), body: body).timeout(Const.crawlerTimeout);
-      return CrawlerStatusExtension.fromString(jsonDecode(response.body));
+      return CrawlerStatusExtension.fromStatusCode(response.statusCode);
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Update password');
       return CrawlerStatus.serverError;
@@ -30,7 +30,7 @@ class CrawlerService {
 
     try {
       response = await http.post(Uri.parse(url), body: body).timeout(Const.crawlerTimeout);
-      return CrawlerStatusExtension.fromString(jsonDecode(response.body));
+      return CrawlerStatusExtension.fromStatusCode(response.statusCode);
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Crawl score');
       return CrawlerStatus.serverError;
@@ -44,7 +44,7 @@ class CrawlerService {
 
     try {
       response = await http.post(Uri.parse(url), body: body).timeout(Const.crawlerTimeout);
-      return CrawlerStatusExtension.fromString(jsonDecode(response.body));
+      return CrawlerStatusExtension.fromStatusCode(response.statusCode);
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Crawl exam schedule');
       return CrawlerStatus.serverError;
