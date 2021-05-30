@@ -6,7 +6,8 @@ import 'local_widgets/local_widgets.dart';
 class MyDataTable extends StatelessWidget {
   final ScrollControllers scrollControllers;
   final CellDimensions _cellDimensions;
-  final List data;
+  final List<dynamic> data;
+  final List<dynamic> dataRow;
   final List<String> columnTitles;
 
   MyDataTable({
@@ -24,6 +25,7 @@ class MyDataTable extends StatelessWidget {
           stickyLegendWidth: stickyLegendWidth,
           stickyLegendHeight: stickyLegendHeight,
         ),
+        dataRow = data.map((item) => item.toList()).toList(),
         super(key: key);
 
   @override
@@ -53,7 +55,7 @@ class MyDataTable extends StatelessWidget {
         horizotalBorderColor: Colors.white,
       ),
       contentCellBuilder: (i, j) => ContentCell(
-        data[j].toList()[i].toString(),
+        dataRow[j][i] == null ? '' : dataRow[j][i].toString(),
         columnIndex: i,
         isLastColumn: i == columnTitles.length - 1,
         isLastRow: j == data.length - 1,
