@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_crawler/model/qldt_password_model.dart';
@@ -12,7 +11,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'crawler_event.dart';
 
@@ -20,8 +18,14 @@ part 'crawler_state.dart';
 
 class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
   final BuildContext context;
+  final String idStudent;
+  final String idAccount;
 
-  CrawlerBloc(this.context) : super(CrawlerInitial());
+  CrawlerBloc(
+    this.context, {
+    required this.idStudent,
+    required this.idAccount,
+  }) : super(CrawlerInitial());
 
   @override
   Stream<CrawlerState> mapEventToState(
@@ -60,11 +64,6 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         status: CrawlerStatus.validatingPassword,
       );
 
-      final Map<String, dynamic> userInfo =
-          jsonDecode((await SharedPreferences.getInstance()).getString('user_info')!);
-
-      final String idStudent = userInfo['ID_Student'];
-      final String idAccount = userInfo['ID'];
       final String password = state.password.value;
 
       CrawlerStatus passwordStatus = await CrawlerService.updatePassword(
