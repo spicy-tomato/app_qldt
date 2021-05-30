@@ -2,7 +2,7 @@ part of 'crawler_bloc.dart';
 
 class CrawlerState extends Equatable {
   final FormzStatus formStatus;
-  final Password password;
+  final QldtPasswordModel password;
   final bool hidePassword;
   final CrawlerStatus status;
 
@@ -15,7 +15,7 @@ class CrawlerState extends Equatable {
 
   CrawlerState copyWith({
     FormzStatus? formStatus,
-    Password? password,
+    QldtPasswordModel? password,
     bool? hidePassword,
     CrawlerStatus? status,
   }) {
@@ -40,7 +40,7 @@ class CrawlerInitial extends CrawlerState {
   const CrawlerInitial()
       : super(
           formStatus: FormzStatus.pure,
-          password: const Password.pure(),
+          password: const QldtPasswordModel.pure(),
           hidePassword: true,
           status: CrawlerStatus.unknown,
         );

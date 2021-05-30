@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:app_qldt/_crawler/crawler.dart';
-import 'package:app_qldt/_crawler/model/password.dart';
+import 'package:app_qldt/_crawler/model/qldt_password_model.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/update_password_crawler_model.dart';
@@ -39,7 +39,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
   }
 
   CrawlerState _mapCrawlerPasswordChangedToState(CrawlerPasswordChanged event) {
-    final password = Password.dirty(event.password);
+    final password = QldtPasswordModel.dirty(event.password);
     return state.copyWith(
       status: CrawlerStatus.unknown,
       password: password,
@@ -117,7 +117,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     } else {
       yield state.copyWith(
         formStatus: FormzStatus.invalid,
-        password: Password.dirty(''),
+        password: QldtPasswordModel.dirty(''),
       );
     }
   }
