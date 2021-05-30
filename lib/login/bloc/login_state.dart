@@ -2,8 +2,8 @@ part of 'login_bloc.dart';
 
 class LoginState extends Equatable {
   final FormzStatus status;
-  final Username username;
-  final Password password;
+  final UsernameModel username;
+  final PasswordModel password;
   final bool hidePassword;
   final bool hideKeyboard;
   final bool hideLoginDialog;
@@ -21,8 +21,8 @@ class LoginState extends Equatable {
 
   LoginState copyWith({
     FormzStatus? status,
-    Username? username,
-    Password? password,
+    UsernameModel? username,
+    PasswordModel? password,
     bool? hidePassword,
     bool? hideKeyboard,
     bool? hideLoginDialog,
@@ -55,8 +55,8 @@ class LoginInitial extends LoginState {
   const LoginInitial()
       : super(
           status: FormzStatus.pure,
-          username: const Username.pure(),
-          password: const Password.pure(),
+          username: const UsernameModel.pure(),
+          password: const PasswordModel.pure(),
           hidePassword: true,
           hideKeyboard: true,
           hideLoginDialog: true,

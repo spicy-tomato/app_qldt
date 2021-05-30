@@ -41,7 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   LoginState _mapUsernameChangedToState(LoginUsernameChanged event) {
-    final username = Username.dirty(event.username);
+    final username = UsernameModel.dirty(event.username);
     return state.copyWith(
       username: username,
       status: Formz.validate([state.password, username]),
@@ -49,7 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   LoginState _mapPasswordChangedToState(LoginPasswordChanged event) {
-    final password = Password.dirty(event.password);
+    final password = PasswordModel.dirty(event.password);
     return state.copyWith(
       password: password,
       status: Formz.validate([state.username, password]),
@@ -81,7 +81,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else {
       yield state.copyWith(
         status: FormzStatus.invalid,
-        username: Username.dirty(state.username.value),
+        username: UsernameModel.dirty(state.username.value),
       );
     }
   }
