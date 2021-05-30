@@ -31,8 +31,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Future<void> dispose() async {
-    await controller.reverse(from: 1.0);
+  void dispose()  {
     controller.dispose();
     super.dispose();
   }

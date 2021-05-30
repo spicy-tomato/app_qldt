@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.dart';
 
 class TokenService {
-  late final FirebaseRepository _firebaseRepository = FirebaseRepository();
+  final FirebaseRepository _firebaseRepository = FirebaseRepository();
 
   Future<void> init() async {
     await _firebaseRepository.initialise();

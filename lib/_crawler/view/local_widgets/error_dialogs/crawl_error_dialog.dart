@@ -18,7 +18,6 @@ class CrawlErrorDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            print('nfjaksdnf');
             Phoenix.rebirth(context);
           },
           child: Text('Đồng ý'),
