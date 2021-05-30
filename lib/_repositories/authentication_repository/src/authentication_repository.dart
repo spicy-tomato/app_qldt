@@ -22,12 +22,12 @@ class AuthenticationRepository {
     String? response = await loginService.login();
     LoginResponse loginResponse;
 
-    if (response != null) {
-      loginResponse = LoginResponse.fromJson(jsonDecode(response));
-    } else {
+    if (response == null) {
       // _controller.add(AuthenticationStatus.unauthenticated);
       return false;
     }
+
+    loginResponse = LoginResponse.fromJson(jsonDecode(response));
 
     if (loginResponse.message == 'success') {
       await _saveUserInfo(jsonEncode(loginResponse.info));

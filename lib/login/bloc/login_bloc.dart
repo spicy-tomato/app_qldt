@@ -30,7 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmitToState();
     } else if (event is LoginPasswordVisibleChanged) {
-      yield _mapLoginPasswordVisibleChangedToState();
+      yield _mapLoginPasswordVisibleChangedToState(event);
     } else if (event is ShowedLoginFailedDialog) {
       yield _mapShowedLoginFailedDialogToState();
     }
@@ -86,8 +86,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  LoginState _mapLoginPasswordVisibleChangedToState() {
-    return state.copyWith(hidePassword: !state.hidePassword);
+  LoginState _mapLoginPasswordVisibleChangedToState(LoginPasswordVisibleChanged event) {
+    return state.copyWith(hidePassword: event.hidePassword ?? !state.hidePassword);
   }
 
   LoginState _mapShowedLoginFailedDialogToState() {

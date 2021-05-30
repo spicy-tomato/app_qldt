@@ -100,6 +100,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  /// TODO: Alert wrong login information, server or no internet
   Widget _loginFailedDialog(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
