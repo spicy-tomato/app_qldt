@@ -77,6 +77,8 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
       print('crawler_bloc.dart --- Update password: $passwordStatus');
 
       if (passwordStatus.isOk) {
+        bool hasError = false;
+
         //  Crawl score
         yield state.copyWith(status: CrawlerStatus.crawlingScore);
         CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
@@ -85,11 +87,13 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
             idAccount: idAccount,
           ),
         );
-
         print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+
         if (scoreCrawlerStatus.isOk) {
           await UserDataModel.of(context).localScoreService.refresh();
           UserDataModel.of(context).localScoreService.connected = true;
+        } else {
+          hasError = true;
         }
 
         //  Crawl exam schedule
@@ -100,15 +104,19 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
             idAccount: idAccount,
           ),
         );
+        print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
 
         if (examScheduleCrawlerStatus.isOk) {
-          print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
-
           await UserDataModel.of(context).localExamScheduleService.refresh();
 
           yield state.copyWith(status: CrawlerStatus.ok);
           UserDataModel.of(context).localExamScheduleService.connected = true;
-          return;
+        } else {
+          hasError = true;
+        }
+
+        if (hasError) {
+          yield state.copyWith(status: CrawlerStatus.errorWhileCrawling);
         }
       }
 

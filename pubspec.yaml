@@ -44,6 +44,7 @@ dependencies:
   equatable: ^2.0.2
   flutter_bloc: ^7.0.0
   flutter_keyboard_visibility: ^5.0.2
+  flutter_phoenix: ^1.0.0
 
   formz: ^0.4.0
   sliding_up_panel: ^2.0.0+1

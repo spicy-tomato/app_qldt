@@ -1,11 +1,12 @@
 enum CrawlerStatus {
   ok,
-  failed,
+  serverError,
   invalidPassword,
   unknown,
   validatingPassword,
   crawlingScore,
-  crawlingExamSchedule
+  crawlingExamSchedule,
+  errorWhileCrawling,
 }
 
 extension CrawlerStatusExtension on CrawlerStatus {
@@ -27,9 +28,11 @@ extension CrawlerStatusExtension on CrawlerStatus {
 
   bool get isOk => this == CrawlerStatus.ok;
 
-  bool get isFailed => this == CrawlerStatus.failed;
+  bool get isFailed => this == CrawlerStatus.serverError;
 
   bool get isInvalidPassword => this == CrawlerStatus.invalidPassword;
 
   bool get isUnknown => this == CrawlerStatus.unknown;
+
+  bool get hasErrorWhileCrawling => this == CrawlerStatus.errorWhileCrawling;
 }

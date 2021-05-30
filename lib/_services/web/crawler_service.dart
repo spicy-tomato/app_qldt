@@ -19,7 +19,7 @@ class CrawlerService {
       return CrawlerStatusExtension.fromString(jsonDecode(response.body));
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Update password');
-      return CrawlerStatus.failed;
+      return CrawlerStatus.serverError;
     }
   }
 
@@ -33,7 +33,7 @@ class CrawlerService {
       return CrawlerStatusExtension.fromString(jsonDecode(response.body));
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Crawl score');
-      return CrawlerStatus.failed;
+      return CrawlerStatus.serverError;
     }
   }
 
@@ -47,7 +47,7 @@ class CrawlerService {
       return CrawlerStatusExtension.fromString(jsonDecode(response.body));
     } on Exception catch (e) {
       print('Error: $e in Crawler service - Crawl exam schedule');
-      return CrawlerStatus.failed;
+      return CrawlerStatus.serverError;
     }
   }
 }

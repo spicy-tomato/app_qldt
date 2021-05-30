@@ -9,7 +9,7 @@ import 'services/services.dart';
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
-  final _controller = StreamController<AuthenticationStatus>();
+  final _controller = StreamController<AuthenticationStatus>.broadcast();
 
   Stream<AuthenticationStatus> get stream async* {
     yield AuthenticationStatus.unauthenticated;

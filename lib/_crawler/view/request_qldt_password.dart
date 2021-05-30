@@ -24,6 +24,11 @@ class _RequestQldtPasswordPageState extends State<RequestQldtPasswordPage> {
               context: context,
               builder: (_) => ServerErrorDialog(rootContext: context),
             );
+          } else if (state.status.hasErrorWhileCrawling){
+            showDialog(
+              context: context,
+              builder: (_) => CrawlErrorDialog(rootContext: context),
+            );
           }
         },
         child: Item(
