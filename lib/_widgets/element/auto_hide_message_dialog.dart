@@ -84,10 +84,6 @@ class _AutoHideMessageDialogState extends State<AutoHideMessageDialog>
       await _controller.reverse();
       widget.onClose?.call();
     });
-
-    print('-------------------');
-    print(context);
-    print('-------------------');
   }
 
   @override

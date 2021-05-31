@@ -17,25 +17,33 @@ class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
     final List<SemesterModel> semesterList = UserDataModel.of(context).localExamScheduleService.semester;
 
     return BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
-      buildWhen: (previous, current) => previous.semester != current.semester,
+      buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return CustomListTile(
-          title: Text(
-            'Học kỳ: ' + state.semester.toString(),
-            style: TextStyle(color: Theme.of(context).backgroundColor),
+        return IgnorePointer(
+          ignoring: state.status.isLoading,
+          child: BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
+            buildWhen: (previous, current) => previous.semester != current.semester,
+            builder: (context, state) {
+              return CustomListTile(
+                title: Text(
+                  'Học kỳ: ' + state.semester.toString(),
+                  style: TextStyle(color: Theme.of(context).backgroundColor),
+                ),
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return RadioAlertDialog<SemesterModel>(
+                          onSelect: _onSelect,
+                          stringFunction: SemesterModel.getString,
+                          currentOption: state.semester,
+                          optionsList: semesterList);
+                    },
+                  );
+                },
+              );
+            },
           ),
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return RadioAlertDialog<SemesterModel>(
-                    onSelect: _onSelect,
-                    stringFunction: SemesterModel.getString,
-                    currentOption: state.semester,
-                    optionsList: semesterList);
-              },
-            );
-          },
         );
       },
     );
