@@ -18,14 +18,8 @@ part 'crawler_state.dart';
 
 class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
   final BuildContext context;
-  final String idStudent;
-  final String idAccount;
 
-  CrawlerBloc(
-    this.context, {
-    required this.idStudent,
-    required this.idAccount,
-  }) : super(CrawlerInitial());
+  CrawlerBloc(this.context) : super(CrawlerInitial());
 
   @override
   Stream<CrawlerState> mapEventToState(
@@ -59,6 +53,9 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
   Stream<CrawlerState> _mapCrawlerSubmittedToState(CrawlerSubmitted event) async* {
     if (state.formStatus.isValidated) {
+      String idStudent = UserDataModel.of(context).idAccount;
+      String idAccount = UserDataModel.of(context).idStudent;
+
       yield state.copyWith(
         formStatus: FormzStatus.submissionInProgress,
         status: CrawlerStatus.validatingPassword,
@@ -68,8 +65,8 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
       CrawlerStatus passwordStatus = await CrawlerService.updatePassword(
         UpdatePasswordCrawlerModel(
-          idStudent: idStudent,
           idAccount: idAccount,
+          idStudent: idStudent,
           password: password,
         ),
       );

@@ -10,12 +10,16 @@ class UserDataModel extends InheritedWidget {
   final LocalScoreService localScoreService;
   final LocalNotificationService localNotificationService;
   final LocalExamScheduleService localExamScheduleService;
+  final String idAccount;
+  final String idStudent;
 
   UserDataModel({
     required this.localEventService,
     required this.localScoreService,
     required this.localNotificationService,
     required this.localExamScheduleService,
+    required this.idAccount,
+    required this.idStudent,
     required Widget child,
   }) : super(child: child);
 
