@@ -4,7 +4,7 @@ import 'package:app_qldt/_widgets/element/refresh_button.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/crawlable_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
-import 'package:app_qldt/score/bloc/enum/page_status.dart';
+import 'package:app_qldt/score/bloc/enum/score_page_status.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
 
 import 'package:flutter/material.dart';

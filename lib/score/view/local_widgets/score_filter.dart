@@ -10,19 +10,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ScoreFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      collapsedBackgroundColor: Colors.white,
-      backgroundColor: Colors.white,
-      expandedCrossAxisAlignment: CrossAxisAlignment.start,
-      maintainState: true,
-      title: Text(
-        'Thông tin',
-        textAlign: TextAlign.center,
-      ),
-      children: <Widget>[
-        SemesterFilter(),
-        StatusFilter(),
-      ],
+    return BlocBuilder<ScoreBloc, ScoreState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return IgnorePointer(
+          ignoring: state.status.isLoading,
+          child: ExpansionTile(
+            collapsedBackgroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+            maintainState: true,
+            title: Text(
+              'Thông tin',
+              textAlign: TextAlign.center,
+            ),
+            children: <Widget>[
+              SemesterFilter(),
+              StatusFilter(),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -13,7 +13,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'enum/page_status.dart';
+import 'enum/score_page_status.dart';
+
+export 'enum/score_page_status.dart';
 
 part 'score_event.dart';
 
