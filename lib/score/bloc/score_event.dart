@@ -38,3 +38,12 @@ class ScoreDataChanged extends ScoreEvent {
 class ScoreDataRefresh extends ScoreEvent {
   const ScoreDataRefresh();
 }
+
+class ScorePageStatusChanged extends ScoreEvent {
+  final ScorePageStatus status;
+
+  const ScorePageStatusChanged(this.status);
+
+  @override
+  List<Object?> get props => [status];
+}

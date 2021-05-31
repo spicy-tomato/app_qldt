@@ -6,33 +6,32 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<Color?> animation;
-  late bool shouldClose = false;
+  late AnimationController _controller;
+  late Animation<Color?> _animation;
 
   @override
   void initState() {
     super.initState();
 
-    controller = AnimationController(
+    _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
 
-    animation = ColorTween(
+    _animation = ColorTween(
       begin: Colors.transparent,
       end: Colors.white.withOpacity(0.3),
-    ).animate(controller)
+    ).animate(_controller)
       ..addListener(() {
         setState(() {});
       });
 
-    controller.forward();
+    _controller.forward();
   }
 
   @override
-  void dispose()  {
-    controller.dispose();
+  void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -41,7 +40,7 @@ class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
     return Positioned.fill(
       child: IgnorePointer(
         child: Container(
-          color: animation.value,
+          color: _animation.value,
           child: Center(
             child: CircularProgressIndicator(),
           ),

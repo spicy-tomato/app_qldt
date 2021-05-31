@@ -40,7 +40,7 @@ class ScoreInitialState extends ScoreState {
   ScoreInitialState(List<ScoreModel> scoreData)
       : super(
           scoreData: scoreData,
-          status: ScorePageStatus.done,
+          status: ScorePageStatus.unknown,
           semester: const SemesterModel(),
           subjectEvaluation: SubjectEvaluation.all,
         );

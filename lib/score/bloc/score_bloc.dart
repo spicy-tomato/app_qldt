@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:app_qldt/_crawler/crawler.dart';
+import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
+import 'package:app_qldt/_services/web/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/_models/semester_model.dart';
@@ -34,6 +37,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       yield _mapScoreDataChangedToState(event);
     } else if (event is ScoreDataRefresh) {
       yield* _mapScoreDataRefreshToState();
+    } else if (event is ScorePageStatusChanged) {
+      yield _mapScorePageStatusChangedToState(event);
     }
   }
 
@@ -78,18 +83,32 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapScoreDataRefreshToState() async* {
+    bool canLoadNewData = false;
+
     yield state.copyWith(status: ScorePageStatus.loading);
 
+    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
+      ScoreCrawlerModel(
+        idStudent: UserDataModel.of(context).idStudent,
+        idAccount: UserDataModel.of(context).idAccount,
+      ),
+    );
+    print('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
-    List<ScoreModel>? newScoreData = await UserDataModel.of(context).localScoreService.refresh();
-
-    if (newScoreData != null) {
+    if (scoreCrawlerStatus.isOk) {
+      canLoadNewData = true;
       yield state.copyWith(
-        scoreData: newScoreData,
-        status: ScorePageStatus.done,
+        scoreData: await UserDataModel.of(context).localScoreService.refresh(),
+        status: ScorePageStatus.successfully,
       );
-    } else {
-      // TODO: Alert when cannot refresh
     }
+
+    if (!canLoadNewData) {
+      yield state.copyWith(status: ScorePageStatus.failed);
+    }
+  }
+
+  ScoreState _mapScorePageStatusChangedToState(ScorePageStatusChanged event) {
+    return state.copyWith(status: event.status);
   }
 }
