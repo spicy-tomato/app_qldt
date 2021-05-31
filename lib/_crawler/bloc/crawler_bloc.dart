@@ -53,8 +53,8 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
   Stream<CrawlerState> _mapCrawlerSubmittedToState(CrawlerSubmitted event) async* {
     if (state.formStatus.isValidated) {
-      String idStudent = UserDataModel.of(context).idAccount;
-      String idAccount = UserDataModel.of(context).idStudent;
+      String idStudent = UserDataModel.of(context).idStudent;
+      String idAccount = UserDataModel.of(context).idAccount;
 
       yield state.copyWith(
         formStatus: FormzStatus.submissionInProgress,
