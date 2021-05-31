@@ -28,3 +28,12 @@ class ExamScheduleDataChanged extends ExamScheduleEvent {
 class ExamScheduleDataRefresh extends ExamScheduleEvent {
   ExamScheduleDataRefresh();
 }
+
+class ExamSchedulePageStatusChanged extends ExamScheduleEvent {
+  final ExamSchedulePageStatus status;
+
+  const ExamSchedulePageStatusChanged(this.status);
+
+  @override
+  List<Object?> get props => [status];
+}

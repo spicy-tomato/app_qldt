@@ -1,3 +1,4 @@
+import 'package:app_qldt/_widgets/element/auto_hide_message_dialog.dart';
 import 'package:app_qldt/_widgets/element/loading.dart';
 import 'package:app_qldt/_widgets/element/refresh_button.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
@@ -47,7 +48,27 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
                 buildWhen: (previous, current) => previous.status != current.status,
                 builder: (context, state) {
-                  return state.status == ExamSchedulePageStatus.loading ? Loading() : Container();
+                  return state.status.isLoading
+                      ? Loading()
+                      : state.status.isFailed
+                          ? AutoHideMessageDialog(
+                              onClose: () => _onClose(context),
+                              message: 'Không thể làm mới do lỗi hệ thống, vui lòng thử lại sau',
+                              icon: Icon(
+                                Icons.error_outline,
+                                color: Colors.red,
+                              ),
+                            )
+                          : state.status.isSuccess
+                              ? AutoHideMessageDialog(
+                                  onClose: () => _onClose(context),
+                                  message: 'Làm mới dữ liệu thành công',
+                                  icon: Icon(
+                                    Icons.done,
+                                    color: Colors.green,
+                                  ),
+                                )
+                              : Container();
                 },
               ),
             ],
@@ -65,5 +86,11 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
         );
       },
     );
+  }
+
+  void _onClose(BuildContext currentContext) {
+    currentContext
+        .read<ExamScheduleBloc>()
+        .add(ExamSchedulePageStatusChanged(ExamSchedulePageStatus.unknown));
   }
 }

@@ -37,7 +37,7 @@ class ExamScheduleInitial extends ExamScheduleState {
     required SemesterModel semester,
   }) : super(
           examScheduleData: examScheduleData,
-          status: ExamSchedulePageStatus.done,
+          status: ExamSchedulePageStatus.unknown,
           semester: semester,
         );
 }

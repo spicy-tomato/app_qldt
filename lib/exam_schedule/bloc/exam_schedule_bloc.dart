@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:app_qldt/_crawler/crawler.dart';
+import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/exam_schedule_model.dart';
+import 'package:app_qldt/_services/web/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/exam_schedule/bloc/enum/exam_schedule_page_status.dart';
 import 'package:app_qldt/_models/semester_model.dart';
@@ -33,6 +36,8 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       yield _mapExamScheduleDataChangedToState(event);
     } else if (event is ExamScheduleDataRefresh) {
       yield* _mapExamScheduleDataRefreshToState(event);
+    } else if (event is ExamSchedulePageStatusChanged){
+      yield _mapScorePageStatusChangedToState(event);
     }
   }
 
@@ -46,22 +51,46 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
   ExamScheduleState _mapExamScheduleDataChangedToState(ExamScheduleDataChanged event) {
     return state.copyWith(
       semester: event.semester,
-      examScheduleData: UserDataModel.of(context)
-          .localExamScheduleService
-          .getExamScheduleOfSemester(event.semester),
+      examScheduleData:
+          UserDataModel.of(context).localExamScheduleService.getExamScheduleOfSemester(event.semester),
     );
   }
 
-  Stream<ExamScheduleState> _mapExamScheduleDataRefreshToState(
-      ExamScheduleDataRefresh event) async* {
+  Stream<ExamScheduleState> _mapExamScheduleDataRefreshToState(ExamScheduleDataRefresh event) async* {
+    bool canLoadNewData = false;
+
     yield state.copyWith(status: ExamSchedulePageStatus.loading);
+
+    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlExamSchedule(
+      ExamScheduleCrawlerModel(
+        idStudent: UserDataModel.of(context).idStudent,
+        idAccount: UserDataModel.of(context).idAccount,
+      ),
+    );
+    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $scoreCrawlerStatus');
 
     List<ExamScheduleModel> newScoreData =
         (await UserDataModel.of(context).localExamScheduleService.refresh())!;
 
     yield state.copyWith(
       examScheduleData: newScoreData,
-      status: ExamSchedulePageStatus.done,
+      status: ExamSchedulePageStatus.unknown,
     );
+
+    if (scoreCrawlerStatus.isOk) {
+      canLoadNewData = true;
+      yield state.copyWith(
+        examScheduleData: await UserDataModel.of(context).localExamScheduleService.refresh(),
+        status: ExamSchedulePageStatus.successfully,
+      );
+    }
+
+    if (!canLoadNewData) {
+      yield state.copyWith(status: ExamSchedulePageStatus.failed);
+    }
+  }
+
+  ExamScheduleState _mapScorePageStatusChangedToState(ExamSchedulePageStatusChanged event) {
+    return state.copyWith(status: event.status);
   }
 }
