@@ -53,7 +53,7 @@ class ScoreModel {
     };
   }
 
-  List<dynamic> toList() {
+  List toList() {
     return [
       processScore,
       testScore,

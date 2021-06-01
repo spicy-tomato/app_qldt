@@ -63,7 +63,7 @@ class ExamScheduleModel {
     return '$moduleName, $dateStart';
   }
 
-  List<dynamic> toList() {
+  List toList() {
     return [
       dateStart,
       timeStart,

@@ -6,8 +6,8 @@ import 'local_widgets/local_widgets.dart';
 class MyDataTable extends StatelessWidget {
   final ScrollControllers scrollControllers;
   final CellDimensions _cellDimensions;
-  final List<dynamic> data;
-  final List<dynamic> dataRow;
+  final List data;
+  final List dataRow;
   final List<String> columnTitles;
   final List<String> rowTitles;
   final String legendContent;

@@ -9,13 +9,13 @@ import 'package:app_qldt/_utils/database/provider.dart';
 class LocalNotificationService extends LocalService {
   late final NotificationService _notificationService;
 
-  List<dynamic> notificationData = [];
+  List notificationData = [];
 
   LocalNotificationService({DatabaseProvider? databaseProvider, required String userId})
       : _notificationService = NotificationService(userId),
         super(databaseProvider);
 
-  Future<List<dynamic>> refresh() async {
+  Future<List> refresh() async {
     AppNotificationModel? data = await _notificationService.getNotification();
 
     if (data != null) {
@@ -60,7 +60,7 @@ class LocalNotificationService extends LocalService {
 
   //#endregion
 
-  Future<List<dynamic>> getFromDb() async {
+  Future<List> getFromDb() async {
     final rawData = await databaseProvider.notification.all;
 
     return rawData.map((data) {
