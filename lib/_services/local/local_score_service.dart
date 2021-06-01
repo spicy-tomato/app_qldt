@@ -105,4 +105,14 @@ class LocalScoreService extends LocalService {
         .where((score) => score.semester == semester.query)
         .toList();
   }
+
+  List<ScoreModel> getGpaModulesData() {
+    return scoreData
+        .where((element) =>
+            element.moduleName.indexOf('Giáo dục thể chất') == -1 &&
+            element.moduleName.indexOf('Giáo dục QP-AN') == -1 &&
+            element.moduleName != 'Tiếng Anh A1' &&
+            element.moduleName != 'Tiếng Anh A2')
+        .toList();
+  }
 }

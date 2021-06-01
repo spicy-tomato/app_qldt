@@ -47,3 +47,12 @@ class ScorePageStatusChanged extends ScoreEvent {
   @override
   List<Object?> get props => [status];
 }
+
+class ScoreTypeChanged extends ScoreEvent {
+  final ScoreType type;
+
+  const ScoreTypeChanged(this.type);
+
+  @override
+  List<Object?> get props => [type];
+}

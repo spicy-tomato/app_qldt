@@ -1,5 +1,4 @@
 import 'package:app_qldt/_widgets/data_table/data_table.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/exam_schedule/bloc/exam_schedule_bloc.dart';
 
 import 'package:flutter/material.dart';
@@ -43,9 +42,9 @@ class _ExamScheduleTableState extends State<ExamScheduleTable> {
               scrollControllers: widget.scrollControllers,
               columnTitles: columnTitles,
               columnWidths: columnWidths,
-              data: UserDataModel.of(context)
-                  .localExamScheduleService
-                  .getExamScheduleOfSemester(state.semester),
+              rowTitles: state.examScheduleData.map((e) => e.moduleName).toList(),
+              data: state.examScheduleData,
+              legendContent: 'Môn học',
             );
           },
         ),

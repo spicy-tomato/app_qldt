@@ -17,6 +17,6 @@ class UpdatePasswordCrawlerModel {
 
   @override
   String toString() {
-    return 'id_studetnt: $idStudent, id: $idAccount, qldt_password: $password';
+    return 'id_student: $idStudent, id: $idAccount, qldt_password: $password';
   }
 }

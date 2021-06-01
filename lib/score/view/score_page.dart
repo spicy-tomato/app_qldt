@@ -31,7 +31,7 @@ class _ScorePageState extends State<ScorePage> {
     return CrawlablePage(
       service: UserDataModel.of(context).localScoreService,
       child: BlocProvider<ScoreBloc>(
-        create: (_) => ScoreBloc(context),
+        create: (_) => ScoreBloc(UserDataModel.of(context)),
         child: SharedUI(
           stable: false,
           topRightWidget: _refreshButton(),
@@ -42,7 +42,7 @@ class _ScorePageState extends State<ScorePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     ScoreFilter(),
-                    ScoreTable(scrollControllers: widget._scrollControllers),
+                    ScorePageTable(scrollControllers: widget._scrollControllers),
                   ],
                 ),
               ),

@@ -6,12 +6,12 @@ import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_services/web/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
+import 'package:app_qldt/score/bloc/enum/score_type.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/_models/semester_model.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 import 'enum/score_page_status.dart';
 
@@ -22,10 +22,10 @@ part 'score_event.dart';
 part 'score_state.dart';
 
 class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
-  final BuildContext context;
+  // final BuildContext context;
+  final UserDataModel userDataModel;
 
-  ScoreBloc(this.context)
-      : super(ScoreInitialState(UserDataModel.of(context).localScoreService.scoreData));
+  ScoreBloc(this.userDataModel) : super(ScoreInitialState(userDataModel.localScoreService.scoreData));
 
   @override
   Stream<ScoreState> mapEventToState(
@@ -41,6 +41,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       yield* _mapScoreDataRefreshToState();
     } else if (event is ScorePageStatusChanged) {
       yield _mapScorePageStatusChangedToState(event);
+    } else if (event is ScoreTypeChanged) {
+      yield* _mapScoreTypeChangedToState(event);
     }
   }
 
@@ -58,7 +60,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
   ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     List<ScoreModel> newScoreData = [];
-    LocalScoreService scoreService = UserDataModel.of(context).localScoreService;
+    LocalScoreService scoreService = userDataModel.localScoreService;
 
     //  Query all
     if (event.semester == SemesterModel.all && event.subjectEvaluation == SubjectEvaluation.all) {
@@ -91,8 +93,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
       ScoreCrawlerModel(
-        idStudent: UserDataModel.of(context).idStudent,
-        idAccount: UserDataModel.of(context).idAccount,
+        idStudent: userDataModel.idStudent,
+        idAccount: userDataModel.idAccount,
       ),
     );
     print('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
@@ -100,7 +102,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     if (scoreCrawlerStatus.isOk) {
       canLoadNewData = true;
       yield state.copyWith(
-        scoreData: await UserDataModel.of(context).localScoreService.refresh(),
+        scoreData: await userDataModel.localScoreService.refresh(),
         status: ScorePageStatus.successfully,
       );
     }
@@ -112,5 +114,21 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
   ScoreState _mapScorePageStatusChangedToState(ScorePageStatusChanged event) {
     return state.copyWith(status: event.status);
+  }
+
+  Stream<ScoreState> _mapScoreTypeChangedToState(ScoreTypeChanged event) async* {
+    if (state.scoreType != event.type) {
+      if (event.type == ScoreType.gpaScore) {
+        yield state.copyWith(
+          scoreData: userDataModel.localScoreService.getGpaModulesData(),
+          scoreType: event.type,
+        );
+      } else {
+        yield state.copyWith(
+          scoreData: userDataModel.localScoreService.scoreData,
+          scoreType: event.type,
+        );
+      }
+    }
   }
 }
