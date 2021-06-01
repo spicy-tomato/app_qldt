@@ -23,8 +23,7 @@ class DbExamSchedule extends TableModel {
     try {
       return await database!.rawQuery(
         'SELECT * '
-        'FROM exam_schedule '
-        'ORDER BY semester, module_name COLLATE LOCALIZED;',
+        'FROM exam_schedule;',
       );
     } on Exception catch (_) {
       await database!.execute(createScript);

@@ -22,7 +22,8 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
 
   ExamScheduleBloc(this.context)
       : super(ExamScheduleInitial(
-          examScheduleData: UserDataModel.of(context).localExamScheduleService.examScheduleData,
+          examScheduleData: UserDataModel.of(context).localExamScheduleService.getExamScheduleOfSemester(
+              UserDataModel.of(context).localExamScheduleService.lastSemester!),
           semester: UserDataModel.of(context).localExamScheduleService.lastSemester!,
         ));
 
@@ -36,7 +37,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       yield _mapExamScheduleDataChangedToState(event);
     } else if (event is ExamScheduleDataRefresh) {
       yield* _mapExamScheduleDataRefreshToState(event);
-    } else if (event is ExamSchedulePageStatusChanged){
+    } else if (event is ExamSchedulePageStatusChanged) {
       yield _mapScorePageStatusChangedToState(event);
     }
   }
