@@ -1,6 +1,7 @@
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
 import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
+import 'package:app_qldt/score/bloc/enum/score_type.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
 import 'package:app_qldt/_models/semester_model.dart';
@@ -27,12 +28,26 @@ class ScoreFilter extends StatelessWidget {
             children: <Widget>[
               SemesterFilter(),
               StatusFilter(),
+              TypeFilter(),
             ],
           ),
         );
       },
     );
   }
+}
+
+class _CommonListTile extends CustomListTile {
+  _CommonListTile({
+    Key? key,
+    required Widget title,
+    Function()? onTap,
+  }) : super(
+          key: key,
+          title: title,
+          onTap: onTap,
+          leading: Container(),
+        );
 }
 
 class SemesterFilter extends StatefulWidget {
@@ -46,26 +61,29 @@ class _SemesterFilterState extends State<SemesterFilter> {
     final List<SemesterModel> semesterList = UserDataModel.of(context).localScoreService.semester;
 
     return BlocBuilder<ScoreBloc, ScoreState>(
-      buildWhen: (previous, current) => previous.semester != current.semester,
+      buildWhen: (previous, current) =>
+          previous.semester != current.semester || previous.scoreType != current.scoreType,
       builder: (context, state) {
-        return CustomListTile(
-          title: Text(
-            'Học kỳ: ' + state.semester.toString(),
-            style: TextStyle(color: Theme.of(context).backgroundColor),
-          ),
-          onTap: () async {
-            await showDialog(
-              context: context,
-              builder: (context) {
-                return RadioAlertDialog<SemesterModel>(
-                    onSelect: _onSelect,
-                    stringFunction: SemesterModel.getString,
-                    currentOption: state.semester,
-                    optionsList: semesterList);
-              },
-            );
-          },
-        );
+        return state.scoreType == ScoreType.gpaScore
+            ? Container()
+            : _CommonListTile(
+                title: Text(
+                  'Học kỳ: ' + state.semester.toString(),
+                  style: TextStyle(color: Theme.of(context).backgroundColor),
+                ),
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return RadioAlertDialog<SemesterModel>(
+                          onSelect: _onSelect,
+                          stringFunction: SemesterModel.getString,
+                          currentOption: state.semester,
+                          optionsList: semesterList);
+                    },
+                  );
+                },
+              );
       },
     );
   }
@@ -85,22 +103,66 @@ class _StatusFilterState extends State<StatusFilter> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ScoreBloc, ScoreState>(
-      buildWhen: (previous, current) => previous.subjectEvaluation != current.subjectEvaluation,
+      buildWhen: (previous, current) =>
+          previous.subjectEvaluation != current.subjectEvaluation ||
+          previous.scoreType != current.scoreType,
       builder: (context, state) {
-        return CustomListTile(
+        return state.scoreType == ScoreType.gpaScore
+            ? Container()
+            : _CommonListTile(
+                title: Text(
+                  'Trạng thái: ' + state.subjectEvaluation.string,
+                  style: TextStyle(color: Theme.of(context).backgroundColor),
+                ),
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return RadioAlertDialog<SubjectEvaluation>(
+                        onSelect: _onSelect,
+                        stringFunction: SubjectStatusExtension.stringFunction,
+                        currentOption: state.subjectEvaluation,
+                        optionsList: SubjectEvaluation.values,
+                      );
+                    },
+                  );
+                },
+              );
+      },
+    );
+  }
+
+  void _onSelect(SubjectEvaluation subjectEvaluation) {
+    context.read<ScoreBloc>().add(ScoreSubjectStatusChanged(subjectEvaluation));
+    Navigator.of(context).pop();
+  }
+}
+
+class TypeFilter extends StatefulWidget {
+  @override
+  _TypeFilterState createState() => _TypeFilterState();
+}
+
+class _TypeFilterState extends State<TypeFilter> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ScoreBloc, ScoreState>(
+      buildWhen: (previous, current) => previous.scoreType != current.scoreType,
+      builder: (context, state) {
+        return _CommonListTile(
           title: Text(
-            'Trạng thái: ' + state.subjectEvaluation.string,
+            'Loại điểm: ' + state.scoreType.string,
             style: TextStyle(color: Theme.of(context).backgroundColor),
           ),
           onTap: () async {
             await showDialog(
               context: context,
               builder: (context) {
-                return RadioAlertDialog<SubjectEvaluation>(
+                return RadioAlertDialog<ScoreType>(
                   onSelect: _onSelect,
-                  stringFunction: SubjectStatusExtension.stringFunction,
-                  currentOption: state.subjectEvaluation,
-                  optionsList: SubjectEvaluation.values,
+                  stringFunction: ScoreTypeExtension.stringFunction,
+                  currentOption: state.scoreType,
+                  optionsList: ScoreType.values,
                 );
               },
             );
@@ -110,8 +172,8 @@ class _StatusFilterState extends State<StatusFilter> {
     );
   }
 
-  void _onSelect(SubjectEvaluation subjectEvaluation) {
-    context.read<ScoreBloc>().add(ScoreSubjectStatusChanged(subjectEvaluation));
+  void _onSelect(ScoreType scoreType) {
+    context.read<ScoreBloc>().add(ScoreTypeChanged(scoreType));
     Navigator.of(context).pop();
   }
 }

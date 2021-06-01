@@ -5,25 +5,28 @@ class ScoreState extends Equatable {
   final ScorePageStatus status;
   final SemesterModel semester;
   final SubjectEvaluation subjectEvaluation;
+  final ScoreType scoreType;
 
   const ScoreState({
     required this.scoreData,
     required this.status,
     required this.semester,
     required this.subjectEvaluation,
+    required this.scoreType,
   });
 
-  ScoreState copyWith({
-    List<ScoreModel>? scoreData,
-    ScorePageStatus? status,
-    SemesterModel? semester,
-    SubjectEvaluation? subjectEvaluation,
-  }) {
+  ScoreState copyWith(
+      {List<ScoreModel>? scoreData,
+      ScorePageStatus? status,
+      SemesterModel? semester,
+      SubjectEvaluation? subjectEvaluation,
+      ScoreType? scoreType}) {
     return ScoreState(
       scoreData: scoreData ?? this.scoreData,
       status: status ?? this.status,
       semester: semester ?? this.semester,
       subjectEvaluation: subjectEvaluation ?? this.subjectEvaluation,
+      scoreType: scoreType ?? this.scoreType,
     );
   }
 
@@ -33,6 +36,7 @@ class ScoreState extends Equatable {
         status,
         semester,
         subjectEvaluation,
+        scoreType,
       ];
 }
 
@@ -43,5 +47,6 @@ class ScoreInitialState extends ScoreState {
           status: ScorePageStatus.unknown,
           semester: const SemesterModel(),
           subjectEvaluation: SubjectEvaluation.all,
+          scoreType: ScoreType.moduleScore,
         );
 }

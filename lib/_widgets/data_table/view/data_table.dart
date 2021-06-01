@@ -9,13 +9,17 @@ class MyDataTable extends StatelessWidget {
   final List<dynamic> data;
   final List<dynamic> dataRow;
   final List<String> columnTitles;
+  final List<String> rowTitles;
+  final String legendContent;
 
   MyDataTable({
     Key? key,
     required this.scrollControllers,
     required this.columnTitles,
+    required this.rowTitles,
     required List<double> columnWidths,
     required this.data,
+    required this.legendContent,
     double contentCellHeight = 50,
     double stickyLegendWidth = 130,
     double stickyLegendHeight = 90,
@@ -46,7 +50,8 @@ class MyDataTable extends StatelessWidget {
         horizotalBorderColor: Colors.white,
       ),
       rowsTitleBuilder: (i) => StickyRow(
-        data[i].moduleName,
+        // data[i].moduleName,
+        rowTitles[i],
         cellDimensions: _cellDimensions,
         isLastRow: i == data.length - 1,
         textColor: Colors.white,
@@ -66,7 +71,7 @@ class MyDataTable extends StatelessWidget {
         horizontalBorderColor: Theme.of(context).primaryColor,
       ),
       legendCell: LegendCell(
-        'Môn học',
+        legendContent,
         cellDimensions: _cellDimensions,
         backgroundColor: Theme.of(context).backgroundColor,
         horizotalBorderColor: Colors.white,
