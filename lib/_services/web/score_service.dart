@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_utils/secret/secret.dart';
@@ -16,14 +17,18 @@ class ScoreService {
   ScoreService(this.userId);
 
   Future<List<ScoreModel>?> getScore() async {
-    try {
-      List? rawData = await _fetchData();
-      return _parseData(rawData);
-    } on NoScoreDataException catch (e) {
-      throw (e);
-    } on Exception catch (e) {
-      print(e);
+    if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+      try {
+        List? rawData = await _fetchData();
+        return _parseData(rawData);
+      } on NoScoreDataException catch (e) {
+        throw (e);
+      } on Exception catch (e) {
+        print(e);
+      }
     }
+
+    return null;
   }
 
   /// [responseData] has structure:

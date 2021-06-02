@@ -6,6 +6,7 @@ import 'package:app_qldt/_models/exam_schedule_model.dart';
 import 'package:app_qldt/_services/web/exception/no_exam_schedule_data_exception.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
+import 'package:connectivity/connectivity.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -15,14 +16,17 @@ class ExamScheduleService {
   ExamScheduleService(this.userId);
 
   Future<List<ExamScheduleModel>?> getExamSchedule() async {
-    try {
-      List? rawData = await _fetchData();
-      return _parseData(rawData);
-    } on NoExamScheduleDataException catch (e) {
-      throw (e);
-    } on Exception catch (e) {
-      print(e);
+    if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+      try {
+        List? rawData = await _fetchData();
+        return _parseData(rawData);
+      } on NoExamScheduleDataException catch (e) {
+        throw (e);
+      } on Exception catch (e) {
+        print(e);
+      }
     }
+    return null;
   }
 
   /// [responseData] has structure:

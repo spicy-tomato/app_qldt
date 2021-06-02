@@ -171,9 +171,8 @@ class _ApplicationState extends State<Application> {
     if (ModalRoute.of(context)?.settings.name != '/') {
       _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
     }
-
     Stopwatch stopwatch = Stopwatch()..start();
-    final minTurnAroundTime = const Duration(milliseconds: 1000);
+    final minTurnAroundTime = const Duration(seconds: 2);
 
     /// Khởi động các service
     final tokenService = TokenService();
@@ -201,6 +200,8 @@ class _ApplicationState extends State<Application> {
     _idStudent = userInfo['ID_Student'];
 
     final timeEnded = stopwatch.elapsed;
+
+    print(timeEnded);
 
     await Future.delayed(
         timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () {

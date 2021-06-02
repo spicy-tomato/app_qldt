@@ -4,6 +4,7 @@ import 'package:app_qldt/_services/web/exam_schedule_service.dart';
 import 'package:app_qldt/_services/web/exception/no_exam_schedule_data_exception.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_models/semester_model.dart';
+import 'package:intl/intl.dart';
 
 class LocalExamScheduleService extends LocalService {
   late final ExamScheduleService _examScheduleService;
@@ -68,8 +69,14 @@ class LocalExamScheduleService extends LocalService {
   }
 
   List<ExamScheduleModel> getExamScheduleOfSemester(SemesterModel semester) {
-    return examScheduleData.where((examSchedule) {
+    List<ExamScheduleModel> res = examScheduleData.where((examSchedule) {
       return examSchedule.semester == semester.query;
     }).toList();
+
+    DateFormat dateFormat = DateFormat('d-M-yyyy');
+
+    res.sort((a, b) => dateFormat.parse(a.dateStart).compareTo(dateFormat.parse(b.dateStart)));
+
+    return res;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
+import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/exam_schedule_model.dart';
 import 'package:app_qldt/_services/web/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
@@ -9,7 +10,6 @@ import 'package:app_qldt/exam_schedule/bloc/enum/exam_schedule_page_status.dart'
 import 'package:app_qldt/_models/semester_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 export 'enum/exam_schedule_page_status.dart';
 
@@ -18,12 +18,13 @@ part 'exam_schedule_event.dart';
 part 'exam_schedule_state.dart';
 
 class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
-  final BuildContext context;
+  final UserDataModel userDataModel;
 
-  ExamScheduleBloc(this.context)
+  ExamScheduleBloc(this.userDataModel)
       : super(ExamScheduleInitial(
-          examScheduleData: UserDataModel.of(context).localExamScheduleService.examScheduleData,
-          semester: UserDataModel.of(context).localExamScheduleService.lastSemester!,
+          examScheduleData: userDataModel.localExamScheduleService
+              .getExamScheduleOfSemester(userDataModel.localExamScheduleService.lastSemester!),
+          semester: userDataModel.localExamScheduleService.lastSemester!,
         ));
 
   @override
@@ -36,7 +37,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       yield _mapExamScheduleDataChangedToState(event);
     } else if (event is ExamScheduleDataRefresh) {
       yield* _mapExamScheduleDataRefreshToState(event);
-    } else if (event is ExamSchedulePageStatusChanged){
+    } else if (event is ExamSchedulePageStatusChanged) {
       yield _mapScorePageStatusChangedToState(event);
     }
   }
@@ -51,8 +52,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
   ExamScheduleState _mapExamScheduleDataChangedToState(ExamScheduleDataChanged event) {
     return state.copyWith(
       semester: event.semester,
-      examScheduleData:
-          UserDataModel.of(context).localExamScheduleService.getExamScheduleOfSemester(event.semester),
+      examScheduleData: userDataModel.localExamScheduleService.getExamScheduleOfSemester(event.semester),
     );
   }
 
@@ -61,26 +61,27 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
 
     yield state.copyWith(status: ExamSchedulePageStatus.loading);
 
-    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlExamSchedule(
+    CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
-        idStudent: UserDataModel.of(context).idStudent,
-        idAccount: UserDataModel.of(context).idAccount,
+        idStudent: userDataModel.idStudent,
+        idAccount: userDataModel.idAccount,
       ),
     );
-    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $scoreCrawlerStatus');
+    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $examScheduleCrawlerStatus');
 
-    List<ExamScheduleModel> newScoreData =
-        (await UserDataModel.of(context).localExamScheduleService.refresh())!;
-
-    yield state.copyWith(
-      examScheduleData: newScoreData,
-      status: ExamSchedulePageStatus.unknown,
+    //  Also request to crawl score
+    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
+      ScoreCrawlerModel(
+        idStudent: userDataModel.idStudent,
+        idAccount: userDataModel.idAccount,
+      ),
     );
+    print('exam_schedule_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
-    if (scoreCrawlerStatus.isOk) {
+    if (examScheduleCrawlerStatus.isOk) {
       canLoadNewData = true;
       yield state.copyWith(
-        examScheduleData: await UserDataModel.of(context).localExamScheduleService.refresh(),
+        examScheduleData: await userDataModel.localExamScheduleService.refresh(),
         status: ExamSchedulePageStatus.successfully,
       );
     }

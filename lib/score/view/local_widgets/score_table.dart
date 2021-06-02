@@ -17,13 +17,14 @@ class ScorePageTable extends StatefulWidget {
 }
 
 class _ScorePageTableState extends State<ScorePageTable> {
-  static final List<double> _moduleColumnWidths = [70, 70, 70, 90, 130, 100];
+  static final List<double> _moduleColumnWidths = [70, 70, 70, 70, 90, 130, 100];
   static final List<double> _gpaColumnWidth = [130, 130];
 
   static final List<String> _moduleColumnTitles = [
     'Điểm quá trình',
     'Điểm thi',
     'Điểm học phần',
+    'Điểm chữ',
     'Số tín chỉ',
     'Học kỳ',
     'Trạng thái',

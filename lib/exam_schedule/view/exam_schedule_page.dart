@@ -30,7 +30,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
     return CrawlablePage(
       service: UserDataModel.of(context).localExamScheduleService,
       child: BlocProvider<ExamScheduleBloc>(
-        create: (_) => ExamScheduleBloc(context),
+        create: (_) => ExamScheduleBloc(UserDataModel.of(context)),
         child: SharedUI(
           stable: false,
           topRightWidget: _refreshButton(),

@@ -21,7 +21,7 @@ class SenderModel {
     };
   }
 
-  static List<SenderModel> fromList(List<dynamic> list){
+  static List<SenderModel> fromList(List list){
     List<SenderModel> res = [];
 
     for (var item in list){

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_models/schedule_model.dart';
@@ -14,17 +15,21 @@ class EventService {
   EventService(this.userId);
 
   Future<List<ScheduleModel>?> getRawData() async {
-    try {
-      List? data = await _fetchData();
+    if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+      try {
+        List? data = await _fetchData();
 
-      if (data != null) {
-        return data as List<ScheduleModel>;
+        if (data != null) {
+          return data as List<ScheduleModel>;
+        }
+
+        return null;
+      } on Exception catch (_) {
+        throw Exception('Cannot parse date');
       }
-
-      return null;
-    } on Exception catch (_) {
-      throw Exception('Cannot parse date');
     }
+
+    return null;
   }
 
   /// [responseData] has structure:

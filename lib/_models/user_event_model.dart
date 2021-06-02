@@ -1,6 +1,11 @@
 import 'dart:ui';
 
 import 'package:app_qldt/_models/schedule_model.dart';
+import 'package:app_qldt/plan/bloc/enum/enum.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
+
+import 'exam_schedule_model.dart';
 
 class UserEventModel {
   final String eventName;
@@ -10,6 +15,7 @@ class UserEventModel {
   late final DateTime? from;
   late final DateTime? to;
   late final bool isAllDay;
+  final String? note;
 
   UserEventModel({
     required this.eventName,
@@ -18,6 +24,7 @@ class UserEventModel {
     this.location,
     required this.backgroundColor,
     bool? isAllDay,
+    this.note,
   }) {
     if (from != null) {
       this.from = from;
@@ -68,7 +75,7 @@ class UserEventModel {
   }
 
   static String _getShortenClassName(String? string) {
-    if (string == null){
+    if (string == null) {
       return '';
     }
 
@@ -76,8 +83,12 @@ class UserEventModel {
     String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
     List<String> strArr = oldStr.split('-');
 
-    strArr.removeLast();
-    strArr.removeLast();
+    try {
+      strArr.removeLast();
+      strArr.removeLast();
+    } on RangeError catch (_) {
+      return string;
+    }
 
     String newStr = strArr.join('-');
     newStr = string.replaceAll(oldStr, newStr);
@@ -85,9 +96,30 @@ class UserEventModel {
     int indexOfOpenBrace = newStr.lastIndexOf('(');
     int indexOfCloseBrace = newStr.lastIndexOf(')');
 
-    newStr = newStr.substring(0, indexOfOpenBrace) + newStr.substring(indexOfOpenBrace+1, indexOfCloseBrace);
+    newStr = newStr.substring(0, indexOfOpenBrace) +
+        newStr.substring(indexOfOpenBrace + 1, indexOfCloseBrace);
 
     return newStr;
+  }
+
+  factory UserEventModel.fromExamScheduleModel(ExamScheduleModel examScheduleModel) {
+    String timeStr = RegExp(r'(\d{2}:\d{2})').firstMatch(examScheduleModel.timeStart)!.group(0)!;
+    int hour = int.parse(timeStr.split(':')[0]);
+    int minute = int.parse(timeStr.split(':')[1]);
+
+    DateTime from = DateFormat('d-M-yyyy').parse(examScheduleModel.dateStart);
+    from = from.add(Duration(hours: hour, minutes: minute));
+
+    DateTime to = from.add(Duration(minutes: examScheduleModel.credit * 45));
+
+    return UserEventModel(
+      eventName: 'Thi ' + examScheduleModel.moduleName,
+      location: examScheduleModel.room,
+      from: from,
+      to: to,
+      backgroundColor: PlanColors.tomato.color,
+      note: 'Số báo danh: ${examScheduleModel.identificationNumber}',
+    );
   }
 
   @override

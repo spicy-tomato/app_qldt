@@ -24,7 +24,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> notificationData = UserDataModel.of(context)
+    List notificationData = UserDataModel.of(context)
         .localNotificationService
         .notificationData as List<UserNotificationModel>;
 

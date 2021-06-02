@@ -9,7 +9,7 @@ class Gpa {
     required this.gpa4,
   });
 
-  List<dynamic> toList() {
+  List toList() {
     return [
       gpa10,
       gpa4,
