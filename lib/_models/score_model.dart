@@ -1,3 +1,27 @@
+String toLetterScore(double score) {
+  if (score <= 1.9) {
+    return 'F';
+  } else if (score <= 3.9) {
+    return 'F+';
+  } else if (score <= 4.4) {
+    return 'D';
+  } else if (score <= 5.4) {
+    return 'D+';
+  } else if (score <= 5.9) {
+    return 'C';
+  } else if (score <= 6.9) {
+    return 'C+';
+  } else if (score <= 7.9) {
+    return 'B';
+  } else if (score <= 8.4) {
+    return 'B+';
+  } else if (score <= 9.4) {
+    return 'A';
+  } else {
+    return 'A+';
+  }
+}
+
 class ScoreModel {
   final String semester;
   final String moduleName;
@@ -6,6 +30,7 @@ class ScoreModel {
   final double? processScore;
   final double? testScore;
   final double? theoreticalScore;
+  final String? letterScore;
 
   ScoreModel({
     required this.semester,
@@ -15,6 +40,7 @@ class ScoreModel {
     this.processScore,
     this.testScore,
     this.theoreticalScore,
+    this.letterScore,
   });
 
   factory ScoreModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +64,7 @@ class ScoreModel {
       processScore: map['process_score'] == null ? null : map['process_score'],
       testScore: map['test_score'] == null ? null : map['test_score'],
       theoreticalScore: map['theoretical_score'] == null ? null : map['theoretical_score'],
+      letterScore: map['theoretical_score'] == null ? null : toLetterScore(map['theoretical_score']),
     );
   }
 
@@ -58,6 +85,7 @@ class ScoreModel {
       processScore,
       testScore,
       theoreticalScore,
+      letterScore,
       credit,
       semester,
       evaluation,

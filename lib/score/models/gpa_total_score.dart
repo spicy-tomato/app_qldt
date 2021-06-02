@@ -10,7 +10,7 @@ class GpaTotalScore {
   });
 }
 
-extension doubleExtension on double {
+extension scoreExtension on double {
   double toGpa4() {
     if (this <= 1.9) {
       return 0;
