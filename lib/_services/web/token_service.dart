@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.dart';
@@ -14,27 +15,32 @@ class TokenService {
   }
 
   Future<void> upsert(String studentId) async {
-    String? token = await _firebaseRepository.getToken();
+    if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+      String? token = await _firebaseRepository.getToken();
+      print('Token: $token');
 
-    print('token: $token');
+      final json = <String, String?>{
+        'student_id': studentId,
+        'token': token,
+      };
 
-    final json = <String, String?>{
-      'student_id': studentId,
-      'token': token,
-    };
+      http.Response response;
 
-    http.Response response;
+      try {
+        response = await http
+            .post(
+              Uri.parse(Secret.url.postRequest.upsertToken),
+              body: jsonEncode(json),
+            )
+            .timeout(Const.requestTimeout);
+      } on Exception catch (e) {
+        print('Error: $e in Token service');
+        return;
+      }
 
-    try {
-      response = await http.post(
-        Uri.parse(Secret.url.postRequest.upsertToken),
-        body: jsonEncode(json),
-      ).timeout(Const.requestTimeout);
-    } on Exception catch (e) {
-      print('Error: $e in Token service');
-      return;
+      print('Upsert token status: ${response.body}');
+    } else {
+      print('Token Service: Do not upsert since no internet connection');
     }
-
-    print('Upsert token status: ${response.body}');
   }
 }

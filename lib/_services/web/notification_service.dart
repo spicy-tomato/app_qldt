@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_models/app_notification_model.dart';
@@ -16,21 +17,24 @@ class NotificationService {
   NotificationService(this.studentId);
 
   Future<AppNotificationModel?> getNotification() async {
-    try {
-      Map<String, dynamic>? data = await _fetchData();
+    if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+      try {
+        Map<String, dynamic>? data = await _fetchData();
 
-      if (data != null) {
-        List<SenderModel> senderList = SenderModel.fromList(data['sender']);
-        List<ReceiveNotificationModel> notificationList =
-            ReceiveNotificationModel.fromList(data['notification']);
+        if (data != null) {
+          List<SenderModel> senderList = SenderModel.fromList(data['sender']);
+          List<ReceiveNotificationModel> notificationList =
+              ReceiveNotificationModel.fromList(data['notification']);
 
-        return AppNotificationModel(notificationList, senderList);
+          return AppNotificationModel(notificationList, senderList);
+        }
+
+        return null;
+      } on Exception catch (_) {
+        throw Exception('Cannot parse');
       }
-
-      return null;
-    } on Exception catch (_) {
-      throw Exception('Cannot parse');
     }
+    return null;
   }
 
   Future<Map<String, dynamic>?> _fetchData() async {

@@ -52,6 +52,7 @@ dependencies:
   syncfusion_flutter_calendar: ^19.1.65
   syncfusion_localizations: ^19.1.65
   syncfusion_flutter_core: ^19.1.59
+  connectivity: ^3.0.6
 
   animations: ^2.0.0
   cupertino_icons: ^1.0.0
