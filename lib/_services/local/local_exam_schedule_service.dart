@@ -73,7 +73,9 @@ class LocalExamScheduleService extends LocalService {
       return examSchedule.semester == semester.query;
     }).toList();
 
-    res.sort((a, b) => DateFormat('d-M-yyyy').parse(a.dateStart).compareTo(DateFormat('d-M-yyyy').parse(b.dateStart)));
+    DateFormat dateFormat = DateFormat('d-M-yyyy');
+
+    res.sort((a, b) => dateFormat.parse(a.dateStart).compareTo(dateFormat.parse(b.dateStart)));
 
     return res;
   }

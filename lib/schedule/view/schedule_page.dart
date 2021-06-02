@@ -25,8 +25,6 @@ class _SchedulePageState extends State<SchedulePage> {
   final GlobalKey _globalKey = GlobalKey();
   final UserDataSourceModel _events = UserDataSourceModel(<UserEventModel>[]);
 
-  late ThemeData model;
-  late Map<DateTime, List<UserEventModel>> schedulesData;
   late CalendarController _controller = CalendarController();
 
   @override
@@ -36,17 +34,15 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    schedulesData = UserDataModel.of(context).localEventService.eventsData;
     _addData();
-
-    model = Theme.of(context);
+    final ThemeData themeModel = Theme.of(context);
 
     return NavigablePlanPage(
       child: BlocBuilder<PlanBloc, PlanState>(
         builder: (context, state) {
           return SharedUI(
             onWillPop: () {
-              if (state.visibility != PlanPageVisibility.close){
+              if (state.visibility != PlanPageVisibility.close) {
                 _controller.selectedDate = null;
                 context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
                 return Future.value(false);
@@ -57,7 +53,7 @@ class _SchedulePageState extends State<SchedulePage> {
             child: Item(
               child: Theme(
                 key: _globalKey,
-                data: model.copyWith(accentColor: model.backgroundColor),
+                data: themeModel.copyWith(accentColor: themeModel.backgroundColor),
                 child: Schedule(_events, controller: _controller),
               ),
             ),
@@ -68,7 +64,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   void _addData() {
-    final List<UserEventModel> appointment = _getDataSource(schedulesData);
+    final List<UserEventModel> appointment = _getDataSource();
 
     _events.appointments!.clear();
 
@@ -77,13 +73,20 @@ class _SchedulePageState extends State<SchedulePage> {
     });
   }
 
-  List<UserEventModel> _getDataSource(Map<DateTime, List<UserEventModel>> schedulesData) {
+  List<UserEventModel> _getDataSource() {
     final List<UserEventModel> events = <UserEventModel>[];
+    final UserDataModel userDataModel = UserDataModel.of(context);
 
-    schedulesData.forEach((_, mapValue) {
+    //  Schedule
+    userDataModel.localEventService.eventsData.forEach((_, mapValue) {
       mapValue.forEach((element) {
         events.add(element);
       });
+    });
+
+    //  Exam Schedule
+    userDataModel.localExamScheduleService.examScheduleData.forEach((element) {
+      events.add(UserEventModel.fromExamScheduleModel(element));
     });
 
     return events;
