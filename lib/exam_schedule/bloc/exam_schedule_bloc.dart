@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
+import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/exam_schedule_model.dart';
 import 'package:app_qldt/_services/web/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
@@ -60,22 +61,24 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
 
     yield state.copyWith(status: ExamSchedulePageStatus.loading);
 
-    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlExamSchedule(
+    CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
         idStudent: userDataModel.idStudent,
         idAccount: userDataModel.idAccount,
       ),
     );
-    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $scoreCrawlerStatus');
+    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $examScheduleCrawlerStatus');
 
-    List<ExamScheduleModel> newScoreData = (await userDataModel.localExamScheduleService.refresh())!;
-
-    yield state.copyWith(
-      examScheduleData: newScoreData,
-      status: ExamSchedulePageStatus.unknown,
+    //  Also request to crawl score
+    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
+      ScoreCrawlerModel(
+        idStudent: userDataModel.idStudent,
+        idAccount: userDataModel.idAccount,
+      ),
     );
+    print('exam_schedule_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
-    if (scoreCrawlerStatus.isOk) {
+    if (examScheduleCrawlerStatus.isOk) {
       canLoadNewData = true;
       yield state.copyWith(
         examScheduleData: await userDataModel.localExamScheduleService.refresh(),

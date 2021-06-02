@@ -100,7 +100,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
           ExamScheduleCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
-            all: false,
+            all: true,
           ),
         );
         print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');

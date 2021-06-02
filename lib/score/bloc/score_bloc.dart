@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_qldt/_crawler/crawler.dart';
+import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
@@ -98,6 +99,15 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       ),
     );
     print('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+
+    //  Also request to crawl exam schedule
+    CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
+      ExamScheduleCrawlerModel(
+        idStudent: userDataModel.idStudent,
+        idAccount: userDataModel.idAccount,
+      ),
+    );
+    print('score_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
 
     if (scoreCrawlerStatus.isOk) {
       canLoadNewData = true;
