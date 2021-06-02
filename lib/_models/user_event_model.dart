@@ -15,6 +15,7 @@ class UserEventModel {
   late final DateTime? from;
   late final DateTime? to;
   late final bool isAllDay;
+  final String? note;
 
   UserEventModel({
     required this.eventName,
@@ -23,6 +24,7 @@ class UserEventModel {
     this.location,
     required this.backgroundColor,
     bool? isAllDay,
+    this.note,
   }) {
     if (from != null) {
       this.from = from;
@@ -116,6 +118,7 @@ class UserEventModel {
       from: from,
       to: to,
       backgroundColor: PlanColors.tomato.color,
+      note: 'Số báo danh: ${examScheduleModel.identificationNumber}',
     );
   }
 

@@ -14,6 +14,8 @@ class EventInfoPage extends StatefulWidget {
 class _EventInfoPageState extends State<EventInfoPage> {
   @override
   Widget build(BuildContext context) {
+    final DateTime now = DateTime.now();
+
     return Scaffold(
       body: Container(
         child: Padding(
@@ -49,6 +51,7 @@ class _EventInfoPageState extends State<EventInfoPage> {
                 ],
               ),
               ListTile(
+                horizontalTitleGap: 4,
                 leading: Container(
                   width: 25,
                   height: 25,
@@ -62,19 +65,37 @@ class _EventInfoPageState extends State<EventInfoPage> {
                   style: TextStyle(fontSize: 23),
                   softWrap: true,
                 ),
-                subtitle: Text('${DateFormat(
-                  'EEEE, d MMMM',
-                  Localizations.localeOf(context).languageCode,
-                ).format(widget.event.from!)}'),
+                subtitle: Text(
+                  widget.event.from == DateTime(now.year, now.month, now.day)
+                      ? 'Hôm nay'
+                      : '${DateFormat(
+                          'E, d MMMM',
+                          Localizations.localeOf(context).languageCode,
+                        ).format(widget.event.from!)} · ${DateFormat.Hm().format(widget.event.from!)} - ${DateFormat.Hm().format(widget.event.to!)}',
+                ),
               ),
-              ListTile(
-                leading: Icon(Icons.location_on_outlined),
-                title: Text(widget.event.location.toString()),
-              ),
+              widget.event.location == null
+                  ? Container()
+                  : ListTile(
+                      horizontalTitleGap: 4,
+                      leading: Icon(Icons.location_on_outlined),
+                      title: Text(widget.event.location!),
+                    ),
+              widget.event.note == null
+                  ? Container()
+                  : ListTile(
+                      horizontalTitleGap: 4,
+                      leading: Icon(Icons.sticky_note_2_outlined),
+                      title: Text(widget.event.note!),
+                    ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String startTime(DateTime dateTime) {
+    return '${dateTime.hour}:${dateTime.minute}';
   }
 }
