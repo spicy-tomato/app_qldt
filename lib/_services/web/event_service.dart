@@ -44,7 +44,7 @@ class EventService {
   ///     ...
   /// ]
   Future<List<ScheduleModel>?> _fetchData() async {
-    String url = Secret.url.getRequest.schedule + '?id=' + userId;
+    String url = Secret.url.getRequest.schedule + '?id_student=' + userId;
 
     try {
       http.Response responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

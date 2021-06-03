@@ -44,7 +44,7 @@ class ExamScheduleService {
   ///     ...
   /// ]
   Future<List?> _fetchData() async {
-    String url = Secret.url.getRequest.examSchedule + '?id=' + userId;
+    String url = Secret.url.getRequest.examSchedule + '?id_student=' + userId;
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

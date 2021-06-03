@@ -45,7 +45,7 @@ class ScoreService {
   ///     ...
   /// ]
   Future<List?> _fetchData() async {
-    String url = Secret.url.getRequest.score + '?id=' + userId;
+    String url = Secret.url.getRequest.score + '?id_student=' + userId;
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
