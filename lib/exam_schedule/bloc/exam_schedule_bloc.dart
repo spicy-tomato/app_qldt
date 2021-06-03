@@ -61,14 +61,6 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
 
     yield state.copyWith(status: ExamSchedulePageStatus.loading);
 
-    CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
-      ExamScheduleCrawlerModel(
-        idStudent: userDataModel.idStudent,
-        idAccount: userDataModel.idAccount,
-      ),
-    );
-    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $examScheduleCrawlerStatus');
-
     //  Also request to crawl score
     CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
       ScoreCrawlerModel(
@@ -77,6 +69,14 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       ),
     );
     print('exam_schedule_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+
+    CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
+      ExamScheduleCrawlerModel(
+        idStudent: userDataModel.idStudent,
+        idAccount: userDataModel.idAccount,
+      ),
+    );
+    print('exam_schedule_bloc.dart --- Crawl Exam Schedule: $examScheduleCrawlerStatus');
 
     if (examScheduleCrawlerStatus.isOk) {
       canLoadNewData = true;
