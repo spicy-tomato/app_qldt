@@ -48,19 +48,23 @@ class EventService {
 
     try {
       http.Response responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      switch (responseData.statusCode) {
+        case 200:
+          List data = jsonDecode(responseData.body) as List;
+          List<ScheduleModel> listModel = [];
 
-      if (responseData.statusCode == 200) {
-        List data = jsonDecode(responseData.body) as List;
-        List<ScheduleModel> listModel = [];
+          for (var element in data) {
+            listModel.add(ScheduleModel.fromJson(element));
+          }
 
-        for (var element in data) {
-          listModel.add(ScheduleModel.fromJson(element));
-        }
+          return listModel;
 
-        return listModel;
-      } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode} at Event Service");
-        return null;
+        case 204:
+          return [];
+
+        default:
+          print("Error with status code: ${responseData.statusCode} at event_service.dart");
+          return null;
       }
     } on TimeoutException catch (e) {
       print('Timeout error: $e at Event service');

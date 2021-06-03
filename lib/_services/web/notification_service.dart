@@ -22,16 +22,20 @@ class NotificationService {
         Map<String, dynamic>? data = await _fetchData();
 
         if (data != null) {
-          List<SenderModel> senderList = SenderModel.fromList(data['sender']);
-          List<ReceiveNotificationModel> notificationList =
-              ReceiveNotificationModel.fromList(data['notification']);
+          if (data.isNotEmpty) {
+            List<SenderModel> senderList = SenderModel.fromList(data['sender']);
+            List<ReceiveNotificationModel> notificationList =
+                ReceiveNotificationModel.fromList(data['notification']);
 
-          return AppNotificationModel(notificationList, senderList);
+            return AppNotificationModel(notificationList, senderList);
+          }
+
+          return AppNotificationModel([], []);
         }
 
         return null;
-      } on Exception catch (_) {
-        throw Exception('Cannot parse');
+      } on Exception catch (e) {
+        print('Error: $e at notification_service.dart, getNotification()');
       }
     }
     return null;
@@ -43,11 +47,16 @@ class NotificationService {
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
-      if (responseData.statusCode == 200) {
-        return jsonDecode(responseData.body);
-      } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode} at Notification service");
-        return null;
+      switch (responseData.statusCode) {
+        case 200:
+          return jsonDecode(responseData.body);
+
+        case 204:
+          return {};
+
+        default:
+          print("Error with status code: ${responseData.statusCode} at notification_service.dart, _fetchData()");
+          return null;
       }
     } on TimeoutException catch (e) {
       print('Timeout error: $e at Notification service');

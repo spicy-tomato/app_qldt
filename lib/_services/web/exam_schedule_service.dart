@@ -48,16 +48,16 @@ class ExamScheduleService {
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      switch(responseData.statusCode){
+        case 200:
+          return jsonDecode(responseData.body) as List;
 
-      if (responseData.statusCode == 200) {
-        if (jsonDecode(responseData.body) is String) {
+        case 204:
           throw NoExamScheduleDataException();
-        }
 
-        return jsonDecode(responseData.body) as List;
-      } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode} at ExamSchedule service");
-        return null;
+        default:
+          print("Error with status code: ${responseData.statusCode} at exam_schedule_service.dart");
+          return null;
       }
     } on TimeoutException catch (e) {
       print('Timeout error: $e at ExamSchedule service');

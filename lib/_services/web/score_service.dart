@@ -50,15 +50,16 @@ class ScoreService {
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
-      if (responseData.statusCode == 200) {
-        if (jsonDecode(responseData.body) is String) {
-          throw NoScoreDataException();
-        }
+      switch (responseData.statusCode){
+        case 200:
+          return jsonDecode(responseData.body) as List;
 
-        return jsonDecode(responseData.body) as List;
-      } else {
-        print("Cannot GET. Response status code: ${responseData.statusCode} at Score service");
-        return null;
+        case 204:
+          throw NoScoreDataException();
+
+        default:
+          print("Error with status code: ${responseData.statusCode} at score_service.dart, _fetchData");
+          return null;
       }
     } on TimeoutException catch (e) {
       print('Timeout error: $e at Score service');
