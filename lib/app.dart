@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:app_qldt/_services/local/local_exam_schedule_service.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_utils/helper/pull_to_fresh_vn_delegate.dart';
@@ -8,7 +6,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '_authentication/authentication.dart';
 import '_repositories/authentication_repository/authentication_repository.dart';
@@ -49,7 +46,7 @@ class _ApplicationState extends State<Application> {
   LocalNotificationService? _localNotificationService;
   LocalExamScheduleService? _localExamScheduleService;
   String? _idAccount;
-  String? _idStudent;
+  String? _idUser;
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
@@ -147,7 +144,7 @@ class _ApplicationState extends State<Application> {
       localNotificationService: _localNotificationService!,
       localExamScheduleService: _localExamScheduleService!,
       idAccount: _idAccount!,
-      idStudent: _idStudent!,
+      idStudent: _idUser!,
       child: child,
     );
   }
@@ -179,29 +176,38 @@ class _ApplicationState extends State<Application> {
     await tokenService.init();
     await tokenService.upsert(state.user.id);
 
+    _idAccount = state.user.accountId;
+    _idUser = state.user.id;
+
     DatabaseProvider databaseProvider = DatabaseProvider();
     await databaseProvider.init();
 
-    _localEventService = LocalEventService(databaseProvider: databaseProvider, userId: state.user.id);
-    _localScoreService = LocalScoreService(databaseProvider: databaseProvider, userId: state.user.id);
-    _localNotificationService =
-        LocalNotificationService(databaseProvider: databaseProvider, userId: state.user.id);
-    _localExamScheduleService =
-        LocalExamScheduleService(databaseProvider: databaseProvider, userId: state.user.id);
+    _localEventService = LocalEventService(
+      databaseProvider: databaseProvider,
+      idUser: _idUser!,
+    );
+    _localScoreService = LocalScoreService(
+      databaseProvider: databaseProvider,
+      idUser: _idUser!,
+    );
+    _localNotificationService = LocalNotificationService(
+      databaseProvider: databaseProvider,
+      idUser: _idUser!,
+      idAccount: _idAccount!,
+    );
+    _localExamScheduleService = LocalExamScheduleService(
+      databaseProvider: databaseProvider,
+      idUser: _idUser!,
+    );
 
     await _localEventService!.refresh();
     await _localScoreService!.refresh();
     await _localNotificationService!.refresh();
     await _localExamScheduleService!.refresh();
 
-    final Map<String, dynamic> userInfo =
-        jsonDecode((await SharedPreferences.getInstance()).getString('user_info')!);
-    _idAccount = userInfo['ID'];
-    _idStudent = userInfo['ID_Student'];
-
     final timeEnded = stopwatch.elapsed;
 
-    print(timeEnded);
+    // print(timeEnded);
 
     await Future.delayed(
         timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () {

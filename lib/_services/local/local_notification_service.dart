@@ -11,8 +11,11 @@ class LocalNotificationService extends LocalService {
 
   List notificationData = [];
 
-  LocalNotificationService({DatabaseProvider? databaseProvider, required String userId})
-      : _notificationService = NotificationService(userId),
+  LocalNotificationService({
+    DatabaseProvider? databaseProvider,
+    required String idUser,
+    required String idAccount,
+  })  : _notificationService = NotificationService(idUser, idAccount),
         super(databaseProvider);
 
   Future<List> refresh() async {

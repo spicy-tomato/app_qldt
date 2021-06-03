@@ -12,9 +12,10 @@ import 'package:app_qldt/_models/sender_model.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 
 class NotificationService {
-  final String studentId;
+  final String idStudent;
+  final String idAccount;
 
-  NotificationService(this.studentId);
+  NotificationService(this.idStudent, this.idAccount);
 
   Future<AppNotificationModel?> getNotification() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
@@ -42,7 +43,7 @@ class NotificationService {
   }
 
   Future<Map<String, dynamic>?> _fetchData() async {
-    String url = Secret.url.getRequest.notification + '?id=' + studentId;
+    String url = '${Secret.url.getRequest.notification}?id_student=$idStudent&id_account=$idAccount';
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

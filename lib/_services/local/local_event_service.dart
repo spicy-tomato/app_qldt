@@ -19,8 +19,10 @@ class LocalEventService extends LocalService {
 
   /// Constructs a [LocalEventService] instance with user's ID account
   ///
-  LocalEventService({DatabaseProvider? databaseProvider, required String userId})
-      : _eventService = EventService(userId),
+  LocalEventService({
+    DatabaseProvider? databaseProvider,
+    required String idUser,
+  })  : _eventService = EventService(idUser),
         super(databaseProvider);
 
   /// Refresh events data

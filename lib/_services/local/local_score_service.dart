@@ -12,8 +12,10 @@ class LocalScoreService extends LocalService {
   List<ScoreModel> scoreData = [];
   List<SemesterModel> semester = [];
 
-  LocalScoreService({DatabaseProvider? databaseProvider, required String userId})
-      : _scoreService = ScoreService(userId),
+  LocalScoreService({
+    DatabaseProvider? databaseProvider,
+    required String idUser,
+  })  : _scoreService = ScoreService(idUser),
         super(databaseProvider);
 
   Future<List<ScoreModel>?> refresh() async {

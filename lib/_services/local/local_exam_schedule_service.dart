@@ -12,8 +12,10 @@ class LocalExamScheduleService extends LocalService {
   List<ExamScheduleModel> examScheduleData = [];
   List<SemesterModel> semester = [];
 
-  LocalExamScheduleService({DatabaseProvider? databaseProvider, required String userId})
-      : _examScheduleService = ExamScheduleService(userId),
+  LocalExamScheduleService({
+    DatabaseProvider? databaseProvider,
+    required String idUser,
+  })  : _examScheduleService = ExamScheduleService(idUser),
         super(databaseProvider);
 
   SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
