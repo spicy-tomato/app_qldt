@@ -24,8 +24,7 @@ class SchedulePage extends StatefulWidget {
 class _SchedulePageState extends State<SchedulePage> {
   final GlobalKey _globalKey = GlobalKey();
   final UserDataSourceModel _events = UserDataSourceModel(<UserEventModel>[]);
-
-  late CalendarController _controller = CalendarController();
+  final CalendarController _controller = CalendarController();
 
   @override
   void initState() {
@@ -38,6 +37,7 @@ class _SchedulePageState extends State<SchedulePage> {
     final ThemeData themeModel = Theme.of(context);
 
     return NavigablePlanPage(
+      onPanelClose: _onPanelClose,
       child: BlocBuilder<PlanBloc, PlanState>(
         builder: (context, state) {
           return SharedUI(
@@ -61,6 +61,13 @@ class _SchedulePageState extends State<SchedulePage> {
         },
       ),
     );
+  }
+
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _addData() {
@@ -90,5 +97,10 @@ class _SchedulePageState extends State<SchedulePage> {
     });
 
     return events;
+  }
+
+  void _onPanelClose(){
+    print('Closing panel');
+    _controller.selectedDate = null;
   }
 }

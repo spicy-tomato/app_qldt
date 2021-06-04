@@ -44,10 +44,10 @@ class _ScheduleState extends State<Schedule> {
             CalendarView.week,
             CalendarView.month,
           ],
-          monthViewSettings: MonthViewSettings(
-            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment
+          monthViewSettings: const MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
           ),
-          scheduleViewSettings: ScheduleViewSettings(
+          scheduleViewSettings: const ScheduleViewSettings(
             weekHeaderSettings: WeekHeaderSettings(
               startDateFormat: 'd MMMM ',
               endDateFormat: 'd MMMM',
@@ -62,10 +62,10 @@ class _ScheduleState extends State<Schedule> {
           minDate: DateTime(2020, 8, 1),
           maxDate: DateTime(2024, 8, 31),
           firstDayOfWeek: 1,
-          timeSlotViewSettings: TimeSlotViewSettings(
+          timeSlotViewSettings: const TimeSlotViewSettings(
             timeInterval: Duration(hours: 1),
             timeFormat: 'H:mm',
-            timeIntervalHeight: 30,
+            timeIntervalHeight: 35,
           ),
           initialDisplayDate: DateTime.now(),
           onTap: (details) => _onTap(details, state),
@@ -87,6 +87,7 @@ class _ScheduleState extends State<Schedule> {
         context.read<PlanBloc>().add(PlanToDateChanged(details.date!.add(Duration(hours: 1))));
         context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.apart));
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
+        widget.controller.selectedDate = null;
         context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
       } else if (_previousSelectedDay != null && details.date != _previousSelectedDay) {
         widget.controller.selectedDate = null;
@@ -95,8 +96,14 @@ class _ScheduleState extends State<Schedule> {
 
       _previousSelectedDay = details.date!;
     } else if (details.targetElement == CalendarElement.appointment) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
+      if (state.visibility != PlanPageVisibility.close) {
+        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+      } else {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
+      }
+
+      widget.controller.selectedDate = null;
     }
   }
 
@@ -109,7 +116,7 @@ class _ScheduleState extends State<Schedule> {
     return Stack(
       children: <Widget>[
         Image(
-          image: ExactAssetImage('images/schedule_design.jpg'),
+          image: const ExactAssetImage('images/schedule_design.jpg'),
           fit: BoxFit.cover,
           width: details.bounds.width,
           height: details.bounds.height,

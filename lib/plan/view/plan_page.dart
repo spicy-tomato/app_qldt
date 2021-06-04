@@ -14,12 +14,14 @@ class PlanPage extends StatefulWidget {
   final DateTime? from;
   final DateTime? to;
   final ScrollController? scrollController;
+  final Function()? onCloseButtonTap;
 
   PlanPage({
     Key? key,
     this.from,
     this.to,
     this.scrollController,
+    this.onCloseButtonTap,
   }) : super(key: key);
 
   @override
@@ -48,10 +50,10 @@ class _PlanPageState extends State<PlanPage> {
               previous.fromDay != current.fromDay || previous.visibility != current.visibility,
           builder: (context, state) {
             if (state.visibility == PlanPageVisibility.open) {
-              return _FullPlanPage();
+              return _FullPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
             }
 
-            return _ApartPlanPage();
+            return _ApartPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
           },
         ),
       ),
@@ -61,8 +63,13 @@ class _PlanPageState extends State<PlanPage> {
 
 class _FullPlanPage extends StatefulWidget {
   final ScrollController? scrollController;
+  final Function()? onCloseButtonTap;
 
-  _FullPlanPage({Key? key, this.scrollController}) : super(key: key);
+  _FullPlanPage({
+    Key? key,
+    this.scrollController,
+    this.onCloseButtonTap,
+  }) : super(key: key);
 
   @override
   _FullPlanPageState createState() => _FullPlanPageState();
@@ -84,7 +91,7 @@ class _FullPlanPageState extends State<_FullPlanPage> {
                 width: 40,
               ),
             ),
-            PlanPageTopbar(),
+            PlanPageTopbar(onCloseButtonTap: widget.onCloseButtonTap),
           ],
         ),
         Expanded(
@@ -118,9 +125,19 @@ class _FullPlanPageState extends State<_FullPlanPage> {
   }
 }
 
-class _ApartPlanPage extends StatelessWidget {
-  const _ApartPlanPage({Key? key}) : super(key: key);
+class _ApartPlanPage extends StatefulWidget {
+  final Function()? onCloseButtonTap;
 
+  const _ApartPlanPage({
+    Key? key,
+    this.onCloseButtonTap,
+  }) : super(key: key);
+
+  @override
+  __ApartPlanPageState createState() => __ApartPlanPageState();
+}
+
+class __ApartPlanPageState extends State<_ApartPlanPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -133,8 +150,7 @@ class _ApartPlanPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.3,
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () =>
-            context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open)),
+        onTap: _onTap,
         child: Column(
           children: <Widget>[
             Padding(
@@ -144,7 +160,7 @@ class _ApartPlanPage extends StatelessWidget {
                 width: 80,
               ),
             ),
-            PlanPageTopbar(),
+            PlanPageTopbar(onCloseButtonTap: widget.onCloseButtonTap),
             CustomListTile(
               title: Text(
                 'Thêm tiêu đề',
@@ -178,5 +194,9 @@ class _ApartPlanPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onTap() {
+    context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
   }
 }
