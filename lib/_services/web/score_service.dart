@@ -12,9 +12,13 @@ import 'package:app_qldt/_utils/secret/secret.dart';
 import 'exception/no_score_data_exception.dart';
 
 class ScoreService {
-  final String userId;
+  final String idUser;
+  int localVersion;
 
-  ScoreService(this.userId);
+  ScoreService({
+    required this.idUser,
+    required this.localVersion,
+  });
 
   Future<List<ScoreModel>?> getScore() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
@@ -45,14 +49,15 @@ class ScoreService {
   ///     ...
   /// ]
   Future<List?> _fetchData() async {
-    String url = Secret.url.getRequest.score + '?id_student=' + userId;
+    String url = '${Secret.url.getRequest.score}?id_student=$idUser&version=$localVersion';
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
-      switch (responseData.statusCode){
+      switch (responseData.statusCode) {
         case 200:
-          return jsonDecode(responseData.body) as List;
+          localVersion = jsonDecode(responseData.body)['data_version'];
+          return jsonDecode(responseData.body)['data'] as List;
 
         case 204:
           throw NoScoreDataException();

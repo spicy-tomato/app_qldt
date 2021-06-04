@@ -15,21 +15,29 @@ class LocalNotificationService extends LocalService {
     DatabaseProvider? databaseProvider,
     required String idUser,
     required String idAccount,
-  })  : _notificationService = NotificationService(idUser, idAccount),
+  })  : _notificationService = NotificationService(
+          idStudent: idUser,
+          idAccount: idAccount,
+          localVersion: databaseProvider!.dataVersion.schedule,
+        ),
         super(databaseProvider);
 
   Future<List> refresh() async {
     AppNotificationModel? data = await _notificationService.getNotification();
 
-    if (data != null) {
+    if (data != null && databaseProvider.dataVersion.notification < _notificationService.localVersion) {
+      print('Notification service: Updating new data');
+
       List<ReceiveNotificationModel> notifications = data.notification;
       List<SenderModel> senders = data.sender;
 
-      await removeNotification();
-      await saveNotification(notifications);
+      await _removeNotification();
+      await _saveNotification(notifications);
 
-      await removeSender();
-      await saveSender(senders);
+      await _removeSender();
+      await _saveSender(senders);
+
+      await _updateVersion();
     }
 
     notificationData = await getFromDb();
@@ -38,30 +46,32 @@ class LocalNotificationService extends LocalService {
   }
 
   //#region notification
-  Future<void> saveNotification(List<ReceiveNotificationModel> rawData) async {
+  Future<void> _removeNotification() async {
+    await databaseProvider.notification.delete();
+  }
+
+  Future<void> _saveNotification(List<ReceiveNotificationModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.notification.insert(row.toMap());
     }
   }
-
-  Future<void> removeNotification() async {
-    await databaseProvider.notification.delete();
-  }
-
   //#endregion
 
   //#region sender
-  Future<void> saveSender(List<SenderModel> rawData) async {
+  Future<void> _removeSender() async {
+    await databaseProvider.sender.delete();
+  }
+
+  Future<void> _saveSender(List<SenderModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.sender.insert(row.toMap());
     }
   }
-
-  Future<void> removeSender() async {
-    await databaseProvider.sender.delete();
-  }
-
   //#endregion
+
+  Future<void> _updateVersion() async {
+    await databaseProvider.dataVersion.setNotificationVersion(_notificationService.localVersion);
+  }
 
   Future<List> getFromDb() async {
     final rawData = await databaseProvider.notification.all;

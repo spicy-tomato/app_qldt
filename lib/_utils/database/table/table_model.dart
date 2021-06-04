@@ -7,7 +7,7 @@ abstract class TableModel {
 
   TableModel([this.database]);
 
-  void create(database) async {
+  Future<void> create(database) async {
     await database.execute(createScript);
   }
 }

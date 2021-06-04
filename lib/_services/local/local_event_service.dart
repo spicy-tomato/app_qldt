@@ -11,7 +11,7 @@ import '../web/event_service.dart';
 /// into local storage
 ///
 class LocalEventService extends LocalService {
-  late final EventService? _eventService;
+  final EventService? _eventService;
   final List<UserEventModel> userEventList = [];
 
   Map<String, int> colorMap = Map();
@@ -22,7 +22,10 @@ class LocalEventService extends LocalService {
   LocalEventService({
     DatabaseProvider? databaseProvider,
     required String idUser,
-  })  : _eventService = EventService(idUser),
+  })  : _eventService = EventService(
+          idUser: idUser,
+          localVersion: databaseProvider!.dataVersion.schedule,
+        ),
         super(databaseProvider);
 
   /// Refresh events data
@@ -37,12 +40,14 @@ class LocalEventService extends LocalService {
   Future<void> refresh() async {
     List<ScheduleModel>? rawData = await _eventService!.getRawData();
 
-    if (rawData != null) {
+    if (rawData != null && databaseProvider.dataVersion.schedule < _eventService!.localVersion) {
+      print('Event service: Updating new data');
       await _remove();
       await _save(rawData);
+      await _updateVersion();
+      await _addColor();
     }
 
-    await _addColor();
     await _getColorMap();
 
     eventsData = await _getFromDb();
@@ -88,6 +93,10 @@ class LocalEventService extends LocalService {
         colorMap[key] = value;
       }
     }
+  }
+
+  Future<void> _updateVersion() async {
+    await databaseProvider.dataVersion.setScheduleVersion(_eventService!.localVersion);
   }
 
   /// Get schedule data from local database

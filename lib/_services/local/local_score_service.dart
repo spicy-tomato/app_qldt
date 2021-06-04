@@ -15,16 +15,22 @@ class LocalScoreService extends LocalService {
   LocalScoreService({
     DatabaseProvider? databaseProvider,
     required String idUser,
-  })  : _scoreService = ScoreService(idUser),
+  })  : _scoreService = ScoreService(
+          idUser: idUser,
+          localVersion: databaseProvider!.dataVersion.score,
+        ),
         super(databaseProvider);
 
   Future<List<ScoreModel>?> refresh() async {
     try {
       List<ScoreModel>? data = await _scoreService.getScore();
 
-      if (data != null) {
-        await removeOld();
+      if (data != null && databaseProvider.dataVersion.score < _scoreService.localVersion) {
+        print('Score service: Updating new data');
+
+        await _removeOld();
         await _saveNew(data);
+        await _updateVersion();
       }
 
       scoreData = await _getScoreDataFromDb();
@@ -39,14 +45,18 @@ class LocalScoreService extends LocalService {
     }
   }
 
+  Future<void> _removeOld() async {
+    await databaseProvider.score.delete();
+  }
+
   Future<void> _saveNew(List<ScoreModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.score.insert(row.toMap());
     }
   }
 
-  Future<void> removeOld() async {
-    await databaseProvider.score.delete();
+  Future<void> _updateVersion() async {
+    await databaseProvider.dataVersion.setScoreVersion(_scoreService.localVersion);
   }
 
   Future<List<ScoreModel>> _getScoreDataFromDb() async {

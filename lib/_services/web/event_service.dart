@@ -10,9 +10,13 @@ import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_utils/secret/secret.dart';
 
 class EventService {
-  final String userId;
+  final String idUser;
+  int localVersion;
 
-  EventService(this.userId);
+  EventService({
+    required this.idUser,
+    required this.localVersion,
+  });
 
   Future<List<ScheduleModel>?> getRawData() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
@@ -24,8 +28,8 @@ class EventService {
         }
 
         return null;
-      } on Exception catch (_) {
-        throw Exception('Cannot parse date');
+      } on Exception catch (e) {
+        print(e);
       }
     }
 
@@ -44,19 +48,20 @@ class EventService {
   ///     ...
   /// ]
   Future<List<ScheduleModel>?> _fetchData() async {
-    String url = Secret.url.getRequest.schedule + '?id_student=' + userId;
+    String url = '${Secret.url.getRequest.schedule}?id=$idUser&version=$localVersion';
 
     try {
       http.Response responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       switch (responseData.statusCode) {
         case 200:
-          List data = jsonDecode(responseData.body) as List;
+          List data = jsonDecode(responseData.body)['data'] as List;
           List<ScheduleModel> listModel = [];
 
           for (var element in data) {
             listModel.add(ScheduleModel.fromJson(element));
           }
 
+          localVersion = jsonDecode(responseData.body)['data_version'];
           return listModel;
 
         case 204:

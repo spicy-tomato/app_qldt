@@ -11,9 +11,13 @@ import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 class ExamScheduleService {
-  final String userId;
+  final String idUser;
+  int localVersion;
 
-  ExamScheduleService(this.userId);
+  ExamScheduleService({
+    required this.idUser,
+    required this.localVersion,
+  });
 
   Future<List<ExamScheduleModel>?> getExamSchedule() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
@@ -44,13 +48,14 @@ class ExamScheduleService {
   ///     ...
   /// ]
   Future<List?> _fetchData() async {
-    String url = Secret.url.getRequest.examSchedule + '?id_student=' + userId;
+    String url = '${Secret.url.getRequest.examSchedule}?id_student=$idUser&version=$localVersion';
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
-      switch(responseData.statusCode){
+      switch (responseData.statusCode) {
         case 200:
-          return jsonDecode(responseData.body) as List;
+          localVersion = jsonDecode(responseData.body)['data_version'];
+          return jsonDecode(responseData.body)['data'] as List;
 
         case 204:
           throw NoExamScheduleDataException();

@@ -29,6 +29,8 @@ class AuthenticationRepository {
 
     loginResponse = LoginResponse.fromJson(jsonDecode(response));
 
+    print('Login response: ${loginResponse.message}');
+
     if (loginResponse.message == 'success') {
       await _saveUserInfo(jsonEncode(loginResponse.info));
       _controller.add(AuthenticationStatus.authenticated);

@@ -200,14 +200,22 @@ class _ApplicationState extends State<Application> {
       idUser: _idUser!,
     );
 
+    print('Event: ${stopwatch.elapsed}');
     await _localEventService!.refresh();
+
+    print('Score: ${stopwatch.elapsed}');
     await _localScoreService!.refresh();
+
+    print('Notification: ${stopwatch.elapsed}');
     await _localNotificationService!.refresh();
+
+    print('Exam Schedule: ${stopwatch.elapsed}');
     await _localExamScheduleService!.refresh();
 
     final timeEnded = stopwatch.elapsed;
+    stopwatch.stop();
 
-    // print(timeEnded);
+    print(timeEnded);
 
     await Future.delayed(
         timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () {

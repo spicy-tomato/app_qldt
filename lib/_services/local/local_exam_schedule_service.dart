@@ -15,7 +15,10 @@ class LocalExamScheduleService extends LocalService {
   LocalExamScheduleService({
     DatabaseProvider? databaseProvider,
     required String idUser,
-  })  : _examScheduleService = ExamScheduleService(idUser),
+  })  : _examScheduleService = ExamScheduleService(
+          idUser: idUser,
+          localVersion: databaseProvider!.dataVersion.examSchedule,
+        ),
         super(databaseProvider);
 
   SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
@@ -24,9 +27,13 @@ class LocalExamScheduleService extends LocalService {
     try {
       List<ExamScheduleModel>? data = await _examScheduleService.getExamSchedule();
 
-      if (data != null) {
+      if (data != null &&
+          databaseProvider.dataVersion.examSchedule < _examScheduleService.localVersion) {
+        print('ExamSchedule service: Updating new data');
+
         await _removeOld();
         await _saveNew(data);
+        await _updateVersion();
       }
 
       examScheduleData = await _getExamScheduleDataFromDb();
@@ -41,14 +48,18 @@ class LocalExamScheduleService extends LocalService {
     }
   }
 
+  Future<void> _removeOld() async {
+    await databaseProvider.examSchedule.delete();
+  }
+
   Future<void> _saveNew(List<ExamScheduleModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.examSchedule.insert(row.toMap());
     }
   }
 
-  Future<void> _removeOld() async {
-    await databaseProvider.examSchedule.delete();
+  Future<void> _updateVersion() async {
+    await databaseProvider.dataVersion.setExamScheduleVersion(_examScheduleService.localVersion);
   }
 
   Future<List<ExamScheduleModel>> _getExamScheduleDataFromDb() async {

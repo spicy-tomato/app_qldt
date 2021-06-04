@@ -14,8 +14,13 @@ import 'package:app_qldt/_utils/secret/secret.dart';
 class NotificationService {
   final String idStudent;
   final String idAccount;
+  int localVersion;
 
-  NotificationService(this.idStudent, this.idAccount);
+  NotificationService({
+    required this.idStudent,
+    required this.idAccount,
+    required this.localVersion,
+  });
 
   Future<AppNotificationModel?> getNotification() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
@@ -43,20 +48,23 @@ class NotificationService {
   }
 
   Future<Map<String, dynamic>?> _fetchData() async {
-    String url = '${Secret.url.getRequest.notification}?id_student=$idStudent&id_account=$idAccount';
+    String url =
+        '${Secret.url.getRequest.notification}?id_student=$idStudent&id_account=$idAccount&version=$localVersion';
 
     try {
       final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
 
       switch (responseData.statusCode) {
         case 200:
-          return jsonDecode(responseData.body);
+          localVersion = jsonDecode(responseData.body)['data_version'];
+          return jsonDecode(responseData.body)['data'];
 
         case 204:
           return {};
 
         default:
-          print("Error with status code: ${responseData.statusCode} at notification_service.dart, _fetchData()");
+          print(
+              "Error with status code: ${responseData.statusCode} at notification_service.dart, _fetchData()");
           return null;
       }
     } on TimeoutException catch (e) {
