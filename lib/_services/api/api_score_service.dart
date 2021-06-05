@@ -63,7 +63,7 @@ class ScoreService {
           throw NoScoreDataException();
 
         default:
-          print("Error with status code: ${responseData.statusCode} at score_service.dart, _fetchData");
+          print("Error with status code: ${responseData.statusCode} at api_score_service.dart, _fetchData");
           return null;
       }
     } on TimeoutException catch (e) {

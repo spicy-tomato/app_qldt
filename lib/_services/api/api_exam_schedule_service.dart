@@ -61,7 +61,7 @@ class ExamScheduleService {
           throw NoExamScheduleDataException();
 
         default:
-          print("Error with status code: ${responseData.statusCode} at exam_schedule_service.dart");
+          print("Error with status code: ${responseData.statusCode} at api_exam_schedule_service.dart");
           return null;
       }
     } on TimeoutException catch (e) {

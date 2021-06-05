@@ -41,7 +41,7 @@ class NotificationService {
 
         return null;
       } on Exception catch (e) {
-        print('Error: $e at notification_service.dart, getNotification()');
+        print('Error: $e at api_notification_service.dart, getNotification()');
       }
     }
     return null;
@@ -64,7 +64,7 @@ class NotificationService {
 
         default:
           print(
-              "Error with status code: ${responseData.statusCode} at notification_service.dart, _fetchData()");
+              "Error with status code: ${responseData.statusCode} at api_notification_service.dart, _fetchData()");
           return null;
       }
     } on TimeoutException catch (e) {

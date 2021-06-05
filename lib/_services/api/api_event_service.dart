@@ -68,7 +68,7 @@ class EventService {
           return [];
 
         default:
-          print("Error with status code: ${responseData.statusCode} at event_service.dart");
+          print("Error with status code: ${responseData.statusCode} at api_event_service.dart");
           return null;
       }
     } on TimeoutException catch (e) {
