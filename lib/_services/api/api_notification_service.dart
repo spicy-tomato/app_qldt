@@ -1,80 +1,50 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_qldt/_services/api/api_service.dart';
+import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:app_qldt/_models/app_notification_model.dart';
-import 'package:app_qldt/_models/receive_notification_model.dart';
-import 'package:app_qldt/_models/sender_model.dart';
-import 'package:app_qldt/_utils/secret/secret.dart';
-
-class NotificationService {
-  final String idStudent;
+class ApiNotificationService extends ApiService {
   final String idAccount;
-  int localVersion;
 
-  NotificationService({
-    required this.idStudent,
+  ApiNotificationService({
     required this.idAccount,
-    required this.localVersion,
-  });
+    required String idStudent,
+    required ApiUrl apiUrl,
+  }) : super(
+          idUser: idStudent,
+          apiUrl: apiUrl,
+        );
 
-  Future<AppNotificationModel?> getNotification() async {
+  Future<ServiceResponse> request() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
-      try {
-        Map<String, dynamic>? data = await _fetchData();
-
-        if (data != null) {
-          if (data.isNotEmpty) {
-            List<SenderModel> senderList = SenderModel.fromList(data['sender']);
-            List<ReceiveNotificationModel> notificationList =
-                ReceiveNotificationModel.fromList(data['notification']);
-
-            return AppNotificationModel(notificationList, senderList);
-          }
-
-          return AppNotificationModel([], []);
-        }
-
-        return null;
-      } on Exception catch (e) {
-        print('Error: $e at api_notification_service.dart, getNotification()');
-      }
+      return await _fetchData();
     }
-    return null;
+
+    return ServiceResponse.offline();
   }
 
-  Future<Map<String, dynamic>?> _fetchData() async {
-    String url =
-        '${Secret.url.getRequest.notification}?id_student=$idStudent&id_account=$idAccount&version=$localVersion';
+  Future<ServiceResponse> _fetchData() async {
+    String baseUrl = apiUrl.get.notification;
+    int version = controller.localService.databaseProvider.dataVersion.notification;
+
+    String url = '$baseUrl?id_student=$idUser&id_account=$idAccount&version=$version';
 
     try {
-      final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
-
-      switch (responseData.statusCode) {
-        case 200:
-          localVersion = jsonDecode(responseData.body)['data_version'];
-          return jsonDecode(responseData.body)['data'];
-
-        case 204:
-          return {};
-
-        default:
-          print(
-              "Error with status code: ${responseData.statusCode} at api_notification_service.dart, _fetchData()");
-          return null;
-      }
+      final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      return ServiceResponse(response);
     } on TimeoutException catch (e) {
-      print('Timeout error: $e at Notification service');
+      print('Timeout error: $e at API Notification service');
     } on SocketException catch (e) {
-      print('Socket error: $e at Notification service');
+      print('Socket error: $e at API Notification service');
     } on Error catch (e) {
-      print('General Error: $e at Notification service');
+      print('General Error: $e at API Notification service');
     }
 
-    return null;
+    return ServiceResponse.error();
   }
 }

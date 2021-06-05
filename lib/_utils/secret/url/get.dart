@@ -1,13 +1,15 @@
 import 'package:app_qldt/_utils/secret/url/base.dart';
 
 class GetRequest {
-  const GetRequest();
+  final Host host;
 
-  String get schedule => Host.base + 'get_schedule.php';
+  const GetRequest(this.host);
 
-  String get notification => Host.base + 'get_notification.php';
+  String get schedule => host.base + 'get_schedule.php';
 
-  String get score => Host.base + 'get_score.php';
+  String get notification => host.base + 'get_notification.php';
 
-  String get examSchedule => Host.base + 'get_exam_schedule.php';
+  String get score => host.base + 'get_score.php';
+
+  String get examSchedule => host.base + 'get_exam_schedule.php';
 }

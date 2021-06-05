@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import '_repositories/authentication_repository/authentication_repository.dart';
 import '_repositories/user_repository/user_repository.dart';
 
+import '_widgets/model/app_mode.dart';
 import 'app.dart';
 
 void main() async {
@@ -18,11 +20,16 @@ void main() async {
 
   Paint.enableDithering = true;
 
+  AppMode mode = AppMode.debug;
+
   runApp(
     Phoenix(
-      child: Application(
-        authenticationRepository: AuthenticationRepository(),
-        userRepository: UserRepository(),
+      child: AppModeWidget(
+        mode: kReleaseMode ? AppMode.release : mode,
+        child: Application(
+          authenticationRepository: AuthenticationRepository(),
+          userRepository: UserRepository(),
+        ),
       ),
     ),
   );

@@ -5,7 +5,8 @@ import 'package:app_qldt/_crawler/model/qldt_password_model.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/update_password_crawler_model.dart';
-import 'package:app_qldt/_services/web/crawler_service.dart';
+import 'package:app_qldt/_services/api/crawler_service.dart';
+import 'package:app_qldt/_widgets/model/app_mode.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,8 +19,11 @@ part 'crawler_state.dart';
 
 class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
   final BuildContext context;
+  CrawlerService _crawlerService;
 
-  CrawlerBloc(this.context) : super(CrawlerInitial());
+  CrawlerBloc(this.context)
+      : _crawlerService = CrawlerService(AppModeWidget.of(context).apiUrl),
+        super(CrawlerInitial());
 
   @override
   Stream<CrawlerState> mapEventToState(
@@ -63,7 +67,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
       final String password = state.password.value;
 
-      CrawlerStatus passwordStatus = await CrawlerService.updatePassword(
+      CrawlerStatus passwordStatus = await _crawlerService.updatePassword(
         UpdatePasswordCrawlerModel(
           idAccount: idAccount,
           idStudent: idStudent,
@@ -78,7 +82,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
         //  Crawl score
         yield state.copyWith(status: CrawlerStatus.crawlingScore);
-        CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
+        CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
           ScoreCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
@@ -88,15 +92,15 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
         if (scoreCrawlerStatus.isOk) {
-          await UserDataModel.of(context).localScoreService.refresh();
-          UserDataModel.of(context).localScoreService.connected = true;
+          await UserDataModel.of(context).scoreServiceController.refresh();
+          UserDataModel.of(context).scoreServiceController.connected = true;
         } else {
           hasError = true;
         }
 
         //  Crawl exam schedule
         yield state.copyWith(status: CrawlerStatus.crawlingExamSchedule);
-        CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
+        CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
           ExamScheduleCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
@@ -106,16 +110,17 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
 
         if (examScheduleCrawlerStatus.isOk) {
-          await UserDataModel.of(context).localExamScheduleService.refresh();
-
-          yield state.copyWith(status: CrawlerStatus.ok);
-          UserDataModel.of(context).localExamScheduleService.connected = true;
+          await UserDataModel.of(context).examScheduleServiceController.refresh();
+          UserDataModel.of(context).examScheduleServiceController.connected = true;
         } else {
           hasError = true;
         }
 
         if (hasError) {
           yield state.copyWith(status: CrawlerStatus.errorWhileCrawling);
+        }
+        else {
+          yield state.copyWith(status: CrawlerStatus.ok);
         }
       }
 

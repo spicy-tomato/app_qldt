@@ -1,39 +1,28 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:app_qldt/_services/api/api_service.dart';
+import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:app_qldt/_models/schedule_model.dart';
-import 'package:app_qldt/_utils/secret/secret.dart';
+class ApiEventService extends ApiService {
+  ApiEventService({
+    required String idUser,
+    required ApiUrl apiUrl,
+  }) : super(
+          idUser: idUser,
+          apiUrl: apiUrl,
+        );
 
-class EventService {
-  final String idUser;
-  int localVersion;
-
-  EventService({
-    required this.idUser,
-    required this.localVersion,
-  });
-
-  Future<List<ScheduleModel>?> getRawData() async {
+  Future<ServiceResponse> request() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
-      try {
-        List? data = await _fetchData();
-
-        if (data != null) {
-          return data as List<ScheduleModel>;
-        }
-
-        return null;
-      } on Exception catch (e) {
-        print(e);
-      }
+      return await _fetchData();
     }
 
-    return null;
+    return ServiceResponse.offline();
   }
 
   /// [responseData] has structure:
@@ -47,30 +36,15 @@ class EventService {
   ///     },
   ///     ...
   /// ]
-  Future<List<ScheduleModel>?> _fetchData() async {
-    String url = '${Secret.url.getRequest.schedule}?id=$idUser&version=$localVersion';
+  Future<ServiceResponse> _fetchData() async {
+    String baseUrl = apiUrl.get.schedule;
+    int version = controller.localService.databaseProvider.dataVersion.schedule;
+
+    String url = '$baseUrl?id=$idUser&version=$version';
 
     try {
-      http.Response responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
-      switch (responseData.statusCode) {
-        case 200:
-          List data = jsonDecode(responseData.body)['data'] as List;
-          List<ScheduleModel> listModel = [];
-
-          for (var element in data) {
-            listModel.add(ScheduleModel.fromJson(element));
-          }
-
-          localVersion = jsonDecode(responseData.body)['data_version'];
-          return listModel;
-
-        case 204:
-          return [];
-
-        default:
-          print("Error with status code: ${responseData.statusCode} at api_event_service.dart");
-          return null;
-      }
+      http.Response response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      return ServiceResponse(response);
     } on TimeoutException catch (e) {
       print('Timeout error: $e at Event service');
     } on SocketException catch (e) {
@@ -79,6 +53,6 @@ class EventService {
       print('General Error: $e at Event service');
     }
 
-    return null;
+    return ServiceResponse.error();
   }
 }

@@ -14,7 +14,7 @@ class ExamScheduleFilter extends StatefulWidget {
 class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
   @override
   Widget build(BuildContext context) {
-    final List<SemesterModel> semesterList = UserDataModel.of(context).localExamScheduleService.semester;
+    final List<SemesterModel> semesterList = UserDataModel.of(context).examScheduleServiceController.semester;
 
     return BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
       buildWhen: (previous, current) => previous.status != current.status,

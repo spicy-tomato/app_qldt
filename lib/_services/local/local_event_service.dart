@@ -2,31 +2,31 @@ import 'dart:ui';
 
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
+import 'package:app_qldt/_services/api/api_event_service.dart';
+import 'package:app_qldt/_services/controller/event_service_controller.dart';
+import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
-
-import '../web/event_service.dart';
 
 /// This class used for saving data about events (or schedules)
 /// into local storage
 ///
 class LocalEventService extends LocalService {
-  final EventService? _eventService;
+  Map<String, int> colorMap = Map();
+
+  //  For calendar
   final List<UserEventModel> userEventList = [];
 
-  Map<String, int> colorMap = Map();
+  //  For schedule
   Map<DateTime, List<UserEventModel>> eventsData = Map();
 
   /// Constructs a [LocalEventService] instance with user's ID account
   ///
-  LocalEventService({
-    DatabaseProvider? databaseProvider,
-    required String idUser,
-  })  : _eventService = EventService(
-          idUser: idUser,
-          localVersion: databaseProvider!.dataVersion.schedule,
-        ),
-        super(databaseProvider);
+  LocalEventService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
+
+  @override
+  ServiceController<LocalService, ApiEventService> get serviceController =>
+      controller as EventServiceController;
 
   /// Refresh events data
   ///
@@ -34,23 +34,27 @@ class LocalEventService extends LocalService {
   /// 2. If data is received successfully, then:
   ///   2.1. Remove saved data from local database, by calling [_remove].
   ///   2.2. Save new data to database, by calling [_save].
-  /// 3. Get data from local database, by calling [_getFromDb].
+  /// 3. Get data from local database, by calling [_loadFromDb].
   /// 4. Return data.
   ///
-  Future<void> refresh() async {
-    List<ScheduleModel>? rawData = await _eventService!.getRawData();
+  Future<void> saveNewData(List<ScheduleModel> newData) async {
+    print('Event service: Updating new data');
 
-    if (rawData != null && databaseProvider.dataVersion.schedule < _eventService!.localVersion) {
-      print('Event service: Updating new data');
-      await _remove();
-      await _save(rawData);
-      await _updateVersion();
-      await _addColor();
-    }
+    await _remove();
+    await _save(newData);
+    await _addColor();
 
-    await _getColorMap();
+    await _loadColorMap();
+    await _loadFromDb();
+  }
 
-    eventsData = await _getFromDb();
+  Future<void> updateVersion(int newVersion) async {
+    await databaseProvider.dataVersion.setScheduleVersion(newVersion);
+  }
+
+  Future<void> loadOldData() async {
+    await _loadFromDb();
+    _refreshUserEventList();
   }
 
   Future<void> updateColor(String idModuleClass, Color color) async {
@@ -58,6 +62,20 @@ class LocalEventService extends LocalService {
     dataMap[idModuleClass] = color.toString();
 
     await databaseProvider.colorEvent.update(dataMap);
+  }
+
+  void _refreshUserEventList() {
+    userEventList.clear();
+
+    eventsData.forEach((_, mapValue) {
+      mapValue.forEach((element) {
+        userEventList.add(element);
+      });
+    });
+  }
+
+  Future<void> delete() async {
+    await _remove();
   }
 
   /// Save schedule data to local database
@@ -80,7 +98,7 @@ class LocalEventService extends LocalService {
     await databaseProvider.colorEvent.insertColorToNew(databaseProvider.schedule);
   }
 
-  Future<void> _getColorMap() async {
+  Future<void> _loadColorMap() async {
     List<Map<String, dynamic>> colorMapList = await databaseProvider.colorEvent.map;
 
     if (colorMapList.isEmpty) {
@@ -95,21 +113,16 @@ class LocalEventService extends LocalService {
     }
   }
 
-  Future<void> _updateVersion() async {
-    await databaseProvider.dataVersion.setScheduleVersion(_eventService!.localVersion);
-  }
-
   /// Get schedule data from local database
   ///
   /// 1. Get raw schedule data from local database.
   /// 2. Parse raw data to [Map<DateTime, List<UserEvent>>].
   /// 3. Return parsed data.
   ///
-  Future<Map<DateTime, List<UserEventModel>>> _getFromDb() async {
+  Future<void> _loadFromDb() async {
     List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
     Map<DateTime, List<UserEventModel>> data = _parseToStandardStructure(rawData);
-
-    return data;
+    eventsData = data;
   }
 
   /// Parse data from [List<Map<String, dynamic>>?]
@@ -150,19 +163,5 @@ class LocalEventService extends LocalService {
     }
 
     return events;
-  }
-
-  void refreshUserEventList() {
-    userEventList.clear();
-
-    eventsData.forEach((_, mapValue) {
-      mapValue.forEach((element) {
-        userEventList.add(element);
-      });
-    });
-  }
-
-  Future<void> delete() async {
-    await _remove();
   }
 }

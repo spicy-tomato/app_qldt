@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:app_qldt/_repositories/authentication_repository/src/services/models/models.dart';
+import 'package:app_qldt/_widgets/model/app_mode.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
+import 'package:app_qldt/_repositories/authentication_repository/src/services/loginService.dart';
 import 'package:app_qldt/login/models/models.dart';
 
 part 'login_event.dart';
@@ -14,9 +18,10 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthenticationRepository _authenticationRepository;
+  final BuildContext context;
 
-  LoginBloc({required AuthenticationRepository authenticationRepository})
-      : _authenticationRepository = authenticationRepository,
+  LoginBloc(this.context)
+      : _authenticationRepository = RepositoryProvider.of<AuthenticationRepository>(context),
         super(const LoginInitial());
 
   @override
@@ -61,10 +66,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
+        final apiUrl = AppModeWidget.of(context).apiUrl;
         final loginUser = LoginUser(state.username.value, state.password.value);
-        bool shouldLogin = await _authenticationRepository.logIn(loginUser);
 
-        if (shouldLogin) {
+        final LoginStatus loginStatus = await _authenticationRepository.logIn(apiUrl, loginUser);
+
+        if (loginStatus.isSuccessfully) {
           yield state.copyWith(status: FormzStatus.submissionSuccess);
         } else {
           yield state.copyWith(

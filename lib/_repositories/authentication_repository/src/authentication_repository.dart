@@ -1,12 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/services.dart';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated }
+enum AuthenticationStatus {
+  unknown,
+  authenticated,
+  unauthenticated,
+}
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>.broadcast();
@@ -16,29 +20,20 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<bool> logIn(LoginUser loginUser) async {
-    final loginService = LoginService(loginUser);
+  Future<LoginStatus> logIn(ApiUrl apiUrl, LoginUser loginUser) async {
+    final loginService = LoginService(apiUrl, loginUser);
+    final LoginResponse loginResponse = await loginService.login();
 
-    String? response = await loginService.login();
-    LoginResponse loginResponse;
+    print('Login status: ${loginResponse.status}');
 
-    if (response == null) {
-      // _controller.add(AuthenticationStatus.unauthenticated);
-      return false;
-    }
-
-    loginResponse = LoginResponse.fromJson(jsonDecode(response));
-
-    print('Login response: ${loginResponse.message}');
-
-    if (loginResponse.message == 'success') {
-      await _saveUserInfo(jsonEncode(loginResponse.info));
+    if (loginResponse.status.isSuccessfully) {
+      await _saveUserInfo(loginResponse.data!);
       _controller.add(AuthenticationStatus.authenticated);
-      return true;
+    } else {
+      _controller.add(AuthenticationStatus.unauthenticated);
     }
 
-    _controller.add(AuthenticationStatus.unauthenticated);
-    return false;
+    return loginResponse.status;
   }
 
   Future<void> _saveUserInfo(String info) async {

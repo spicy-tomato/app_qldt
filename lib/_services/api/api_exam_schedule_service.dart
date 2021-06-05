@@ -1,36 +1,29 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:app_qldt/_models/exam_schedule_model.dart';
-import 'package:app_qldt/_services/web/exception/no_exam_schedule_data_exception.dart';
+import 'package:app_qldt/_services/api/api_service.dart';
+import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
-import 'package:app_qldt/_utils/secret/secret.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
 
 import 'package:http/http.dart' as http;
 
-class ExamScheduleService {
-  final String idUser;
-  int localVersion;
+class ApiExamScheduleService extends ApiService {
+  ApiExamScheduleService({
+    required String idUser,
+    required ApiUrl apiUrl,
+  }) : super(
+          idUser: idUser,
+          apiUrl: apiUrl,
+        );
 
-  ExamScheduleService({
-    required this.idUser,
-    required this.localVersion,
-  });
-
-  Future<List<ExamScheduleModel>?> getExamSchedule() async {
+  Future<ServiceResponse> request() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
-      try {
-        List? rawData = await _fetchData();
-        return _parseData(rawData);
-      } on NoExamScheduleDataException catch (e) {
-        throw (e);
-      } on Exception catch (e) {
-        print(e);
-      }
+      return await _fetchData();
     }
-    return null;
+
+    return ServiceResponse.offline();
   }
 
   /// [responseData] has structure:
@@ -47,23 +40,15 @@ class ExamScheduleService {
   ///     },
   ///     ...
   /// ]
-  Future<List?> _fetchData() async {
-    String url = '${Secret.url.getRequest.examSchedule}?id_student=$idUser&version=$localVersion';
+  Future<ServiceResponse> _fetchData() async {
+    String baseUrl = apiUrl.get.examSchedule;
+    int version = controller.localService.databaseProvider.dataVersion.examSchedule;
+
+    String url = '$baseUrl?id_student=$idUser&version=$version';
 
     try {
-      final responseData = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
-      switch (responseData.statusCode) {
-        case 200:
-          localVersion = jsonDecode(responseData.body)['data_version'];
-          return jsonDecode(responseData.body)['data'] as List;
-
-        case 204:
-          throw NoExamScheduleDataException();
-
-        default:
-          print("Error with status code: ${responseData.statusCode} at api_exam_schedule_service.dart");
-          return null;
-      }
+      final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      return ServiceResponse(response);
     } on TimeoutException catch (e) {
       print('Timeout error: $e at ExamSchedule service');
     } on SocketException catch (e) {
@@ -72,20 +57,6 @@ class ExamScheduleService {
       print('General Error: $e at ExamSchedule service');
     }
 
-    return null;
-  }
-
-  List<ExamScheduleModel>? _parseData(List? rawData) {
-    if (rawData == null) {
-      return null;
-    }
-
-    List<ExamScheduleModel> listModel = [];
-
-    for (var element in rawData) {
-      listModel.add(ExamScheduleModel.fromJson(element));
-    }
-
-    return listModel;
+    return ServiceResponse.error();
   }
 }

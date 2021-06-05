@@ -28,7 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    schedulesData = UserDataModel.of(context).localEventService.eventsData;
+    schedulesData = UserDataModel.of(context).eventServiceController.eventsData;
 
     return NavigablePlanPage(
       child: BlocBuilder<PlanBloc, PlanState>(
@@ -73,8 +73,8 @@ class _CalendarPageState extends State<CalendarPage> {
       onTap: () async {
         widget.isLoading.value = true;
 
-        await UserDataModel.of(context).localEventService.refresh();
-        schedulesData = UserDataModel.of(context).localEventService.eventsData;
+        await UserDataModel.of(context).eventServiceController.refresh();
+        schedulesData = UserDataModel.of(context).eventServiceController.eventsData;
 
         widget.isLoading.value = false;
       },

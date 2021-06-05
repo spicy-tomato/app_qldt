@@ -85,14 +85,14 @@ class _SchedulePageState extends State<SchedulePage> {
     final UserDataModel userDataModel = UserDataModel.of(context);
 
     //  Schedule
-    userDataModel.localEventService.eventsData.forEach((_, mapValue) {
+    userDataModel.eventServiceController.eventsData.forEach((_, mapValue) {
       mapValue.forEach((element) {
         events.add(element);
       });
     });
 
     //  Exam Schedule
-    userDataModel.localExamScheduleService.examScheduleData.forEach((element) {
+    userDataModel.examScheduleServiceController.examScheduleData.forEach((element) {
       events.add(UserEventModel.fromExamScheduleModel(element));
     });
 
