@@ -28,9 +28,9 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return CrawlablePage(
-      service: UserDataModel.of(context).localExamScheduleService,
+      controller: UserDataModel.of(context).examScheduleServiceController,
       child: BlocProvider<ExamScheduleBloc>(
-        create: (_) => ExamScheduleBloc(UserDataModel.of(context)),
+        create: (_) => ExamScheduleBloc(context),
         child: SharedUI(
           stable: false,
           topRightWidget: _refreshButton(),

@@ -4,8 +4,9 @@ import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/score_model.dart';
-import 'package:app_qldt/_services/local/local_score_service.dart';
-import 'package:app_qldt/_services/web/crawler_service.dart';
+import 'package:app_qldt/_services/api/crawler_service.dart';
+import 'package:app_qldt/_services/controller/score_service_controller.dart';
+import 'package:app_qldt/_widgets/model/app_mode.dart';
 import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/score/bloc/enum/score_type.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
@@ -13,6 +14,7 @@ import 'package:app_qldt/_models/semester_model.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'enum/score_page_status.dart';
 
@@ -23,10 +25,13 @@ part 'score_event.dart';
 part 'score_state.dart';
 
 class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
-  // final BuildContext context;
-  final UserDataModel userDataModel;
+  final UserDataModel _userDataModel;
+  final CrawlerService _crawlerService;
 
-  ScoreBloc(this.userDataModel) : super(ScoreInitialState(userDataModel.localScoreService.scoreData));
+  ScoreBloc(BuildContext context)
+      : _userDataModel = UserDataModel.of(context),
+        _crawlerService = CrawlerService(AppModeWidget.of(context).apiUrl),
+        super(ScoreInitialState(UserDataModel.of(context).scoreServiceController.scoreData));
 
   @override
   Stream<ScoreState> mapEventToState(
@@ -61,23 +66,24 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
   ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     List<ScoreModel> newScoreData = [];
-    LocalScoreService scoreService = userDataModel.localScoreService;
+    ScoreServiceController scoreServiceController = _userDataModel.scoreServiceController;
 
     //  Query all
     if (event.semester == SemesterModel.all && event.subjectEvaluation == SubjectEvaluation.all) {
-      newScoreData = scoreService.scoreData;
+      newScoreData = scoreServiceController.scoreData;
     }
     //  Query a specific semester with all subject status
     else if (event.subjectEvaluation == SubjectEvaluation.all) {
-      newScoreData = scoreService.getScoreDataOfAllEvaluation(event.semester);
+      newScoreData = scoreServiceController.getScoreDataOfAllEvaluation(event.semester);
     }
     //  Query all semester with a specific subject status
     else if (event.semester == SemesterModel.all) {
-      newScoreData = scoreService.getScoreDataOfAllSemester(event.subjectEvaluation);
+      newScoreData = scoreServiceController.getScoreDataOfAllSemester(event.subjectEvaluation);
     }
     //  Query a specific semester with a specific subject status
     else {
-      newScoreData = scoreService.getSpecificScoreData(event.semester, event.subjectEvaluation);
+      newScoreData =
+          scoreServiceController.getSpecificScoreData(event.semester, event.subjectEvaluation);
     }
 
     return state.copyWith(
@@ -92,27 +98,29 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     yield state.copyWith(status: ScorePageStatus.loading);
 
-    CrawlerStatus scoreCrawlerStatus = await CrawlerService.crawlScore(
+    CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
       ScoreCrawlerModel(
-        idStudent: userDataModel.idStudent,
-        idAccount: userDataModel.idAccount,
+        idStudent: _userDataModel.idStudent,
+        idAccount: _userDataModel.idAccount,
       ),
     );
     print('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
     //  Also request to crawl exam schedule
-    CrawlerStatus examScheduleCrawlerStatus = await CrawlerService.crawlExamSchedule(
+    CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
-        idStudent: userDataModel.idStudent,
-        idAccount: userDataModel.idAccount,
+        idStudent: _userDataModel.idStudent,
+        idAccount: _userDataModel.idAccount,
       ),
     );
     print('score_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
 
     if (scoreCrawlerStatus.isOk) {
       canLoadNewData = true;
+      await _userDataModel.scoreServiceController.refresh();
+
       yield state.copyWith(
-        scoreData: await userDataModel.localScoreService.refresh(),
+        scoreData: _userDataModel.scoreServiceController.scoreData,
         status: ScorePageStatus.successfully,
       );
     }
@@ -130,12 +138,12 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     if (state.scoreType != event.type) {
       if (event.type == ScoreType.gpaScore) {
         yield state.copyWith(
-          scoreData: userDataModel.localScoreService.getGpaModulesData(),
+          scoreData: _userDataModel.scoreServiceController.getGpaModulesData(),
           scoreType: event.type,
         );
       } else {
         yield state.copyWith(
-          scoreData: userDataModel.localScoreService.scoreData,
+          scoreData: _userDataModel.scoreServiceController.scoreData,
           scoreType: event.type,
         );
       }

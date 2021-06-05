@@ -29,9 +29,9 @@ class _ScorePageState extends State<ScorePage> {
   @override
   Widget build(BuildContext context) {
     return CrawlablePage(
-      service: UserDataModel.of(context).localScoreService,
+      controller: UserDataModel.of(context).scoreServiceController,
       child: BlocProvider<ScoreBloc>(
-        create: (_) => ScoreBloc(UserDataModel.of(context)),
+        create: (_) => ScoreBloc(context),
         child: SharedUI(
           stable: false,
           topRightWidget: _refreshButton(),

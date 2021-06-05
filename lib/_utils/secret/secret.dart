@@ -1,10 +1,6 @@
 import 'dart:io';
 
-import 'url/url.dart';
-
 class Secret {
-  static Url url = Url();
-
   static const ANDROID_CLIENT_ID =
       '227524919974-ogjnrouk4pq2cvsgt7jf19nd0h4fio8a.apps.googleusercontent.com';
   static const IOS_CLIENT_ID = '';

@@ -57,7 +57,7 @@ class ViewScheduleButton extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: OutlinedButton(
             onPressed: () {
-              print('Xem lịch biểu');
+              // print('Xem lịch biểu');
             },
             child: Text(
               'Xem lịch biểu',

@@ -25,7 +25,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     List notificationData = UserDataModel.of(context)
-        .localNotificationService
+        .notificationServiceController
         .notificationData as List<UserNotificationModel>;
 
     return SharedUI(
@@ -55,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void _onRefresh() async {
-    await UserDataModel.of(context).localNotificationService.refresh();
+    await UserDataModel.of(context).notificationServiceController.refresh();
     await Future.delayed(Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});

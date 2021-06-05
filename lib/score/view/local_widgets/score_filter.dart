@@ -58,7 +58,7 @@ class SemesterFilter extends StatefulWidget {
 class _SemesterFilterState extends State<SemesterFilter> {
   @override
   Widget build(BuildContext context) {
-    final List<SemesterModel> semesterList = UserDataModel.of(context).localScoreService.semester;
+    final List<SemesterModel> semesterList = UserDataModel.of(context).scoreServiceController.semester;
 
     return BlocBuilder<ScoreBloc, ScoreState>(
       buildWhen: (previous, current) =>

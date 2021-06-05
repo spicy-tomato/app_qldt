@@ -1,21 +1,21 @@
-import 'dart:convert';
-
-import 'package:app_qldt/_services/local/local_exam_schedule_service.dart';
-import 'package:app_qldt/_services/local/local_score_service.dart';
+import 'package:app_qldt/_models/serviceControllerData.dart';
 import 'package:app_qldt/_utils/helper/pull_to_fresh_vn_delegate.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/_widgets/model/app_mode.dart';
 import 'package:app_qldt/exam_schedule/exam_schedule.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '_authentication/authentication.dart';
 import '_repositories/authentication_repository/authentication_repository.dart';
 import '_repositories/user_repository/user_repository.dart';
-import '_services/local/local_event_service.dart';
-import '_services/local/local_notification_service.dart';
-import '_services/web/token_service.dart';
+import '_services/api/token_service.dart';
+import '_services/controller/event_service_controller.dart';
+import '_services/controller/exam_schedule_service_controller.dart';
+import '_services/controller/notification_service_controller.dart';
+import '_services/controller/score_service_controller.dart';
 import '_utils/database/provider.dart';
 import '_utils/helper/sf_localization_vn_delegate.dart';
 import '_utils/helper/const.dart';
@@ -44,12 +44,12 @@ class Application extends StatefulWidget {
 }
 
 class _ApplicationState extends State<Application> {
-  LocalEventService? _localEventService;
-  LocalScoreService? _localScoreService;
-  LocalNotificationService? _localNotificationService;
-  LocalExamScheduleService? _localExamScheduleService;
+  EventServiceController? _eventServiceController;
+  ScoreServiceController? _scoreServiceController;
+  NotificationServiceController? _notificationServiceController;
+  ExamScheduleServiceController? _examScheduleServiceController;
   String? _idAccount;
-  String? _idStudent;
+  String? _idUser;
 
   NavigatorState? get _navigator => _navigatorKey.currentState;
 
@@ -142,12 +142,12 @@ class _ApplicationState extends State<Application> {
 
   Widget userData(Widget child) {
     return UserDataModel(
-      localEventService: _localEventService!,
-      localScoreService: _localScoreService!,
-      localNotificationService: _localNotificationService!,
-      localExamScheduleService: _localExamScheduleService!,
+      eventServiceController: _eventServiceController!,
+      scoreServiceController: _scoreServiceController!,
+      notificationServiceController: _notificationServiceController!,
+      examScheduleServiceController: _examScheduleServiceController!,
       idAccount: _idAccount!,
-      idStudent: _idStudent!,
+      idStudent: _idUser!,
       child: child,
     );
   }
@@ -157,10 +157,10 @@ class _ApplicationState extends State<Application> {
       _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
     }
 
-    _localEventService = null;
-    _localScoreService = null;
-    _localNotificationService = null;
-    _localExamScheduleService = null;
+    _eventServiceController = null;
+    _scoreServiceController = null;
+    _notificationServiceController = null;
+    _examScheduleServiceController = null;
 
     await Future.delayed(const Duration(milliseconds: 1500), () {
       _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
@@ -171,35 +171,47 @@ class _ApplicationState extends State<Application> {
     if (ModalRoute.of(context)?.settings.name != '/') {
       _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
     }
+
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);
+    final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
 
     /// Khởi động các service
-    final tokenService = TokenService();
+    final tokenService = TokenService(apiUrl);
     await tokenService.init();
     await tokenService.upsert(state.user.id);
 
-    DatabaseProvider databaseProvider = DatabaseProvider();
+    _idAccount = state.user.accountId;
+    _idUser = state.user.id;
+
+    final DatabaseProvider databaseProvider = DatabaseProvider();
     await databaseProvider.init();
 
-    _localEventService = LocalEventService(databaseProvider: databaseProvider, userId: state.user.id);
-    _localScoreService = LocalScoreService(databaseProvider: databaseProvider, userId: state.user.id);
-    _localNotificationService =
-        LocalNotificationService(databaseProvider: databaseProvider, userId: state.user.id);
-    _localExamScheduleService =
-        LocalExamScheduleService(databaseProvider: databaseProvider, userId: state.user.id);
+    final ServiceControllerData controllerData = ServiceControllerData(
+      databaseProvider: databaseProvider,
+      apiUrl: apiUrl,
+      idUser: _idUser!,
+    );
 
-    await _localEventService!.refresh();
-    await _localScoreService!.refresh();
-    await _localNotificationService!.refresh();
-    await _localExamScheduleService!.refresh();
+    _eventServiceController = EventServiceController(controllerData);
+    _scoreServiceController = ScoreServiceController(controllerData);
+    _notificationServiceController = NotificationServiceController(controllerData, _idAccount!);
+    _examScheduleServiceController = ExamScheduleServiceController(controllerData);
 
-    final Map<String, dynamic> userInfo =
-        jsonDecode((await SharedPreferences.getInstance()).getString('user_info')!);
-    _idAccount = userInfo['ID'];
-    _idStudent = userInfo['ID_Student'];
+    print('Event: ${stopwatch.elapsed}');
+    await _eventServiceController!.refresh();
+
+    print('Score: ${stopwatch.elapsed}');
+    await _scoreServiceController!.refresh();
+
+    print('Notification: ${stopwatch.elapsed}');
+    await _notificationServiceController!.refresh();
+
+    print('Exam Schedule: ${stopwatch.elapsed}');
+    await _examScheduleServiceController!.refresh();
 
     final timeEnded = stopwatch.elapsed;
+    stopwatch.stop();
 
     print(timeEnded);
 

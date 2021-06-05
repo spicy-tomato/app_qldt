@@ -24,8 +24,7 @@ class SchedulePage extends StatefulWidget {
 class _SchedulePageState extends State<SchedulePage> {
   final GlobalKey _globalKey = GlobalKey();
   final UserDataSourceModel _events = UserDataSourceModel(<UserEventModel>[]);
-
-  late CalendarController _controller = CalendarController();
+  final CalendarController _controller = CalendarController();
 
   @override
   void initState() {
@@ -38,6 +37,7 @@ class _SchedulePageState extends State<SchedulePage> {
     final ThemeData themeModel = Theme.of(context);
 
     return NavigablePlanPage(
+      onPanelClose: _onPanelClose,
       child: BlocBuilder<PlanBloc, PlanState>(
         builder: (context, state) {
           return SharedUI(
@@ -63,6 +63,13 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   void _addData() {
     final List<UserEventModel> appointment = _getDataSource();
 
@@ -78,17 +85,22 @@ class _SchedulePageState extends State<SchedulePage> {
     final UserDataModel userDataModel = UserDataModel.of(context);
 
     //  Schedule
-    userDataModel.localEventService.eventsData.forEach((_, mapValue) {
+    userDataModel.eventServiceController.eventsData.forEach((_, mapValue) {
       mapValue.forEach((element) {
         events.add(element);
       });
     });
 
     //  Exam Schedule
-    userDataModel.localExamScheduleService.examScheduleData.forEach((element) {
+    userDataModel.examScheduleServiceController.examScheduleData.forEach((element) {
       events.add(UserEventModel.fromExamScheduleModel(element));
     });
 
     return events;
+  }
+
+  void _onPanelClose(){
+    print('Closing panel');
+    _controller.selectedDate = null;
   }
 }

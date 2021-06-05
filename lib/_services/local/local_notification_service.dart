@@ -1,69 +1,76 @@
-import 'package:app_qldt/_models/app_notification_model.dart';
 import 'package:app_qldt/_models/receive_notification_model.dart';
 import 'package:app_qldt/_models/sender_model.dart';
 import 'package:app_qldt/_models/user_notification_model.dart';
+import 'package:app_qldt/_services/api/api_service.dart';
+import 'package:app_qldt/_services/controller/notification_service_controller.dart';
+import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
-import 'package:app_qldt/_services/web/notification_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 
 class LocalNotificationService extends LocalService {
-  late final NotificationService _notificationService;
+  List<UserNotificationModel> notificationData = [];
 
-  List notificationData = [];
+  LocalNotificationService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
 
-  LocalNotificationService({DatabaseProvider? databaseProvider, required String userId})
-      : _notificationService = NotificationService(userId),
-        super(databaseProvider);
+  @override
+  ServiceController<LocalService, ApiService> get serviceController =>
+      controller as NotificationServiceController;
 
-  Future<List> refresh() async {
-    AppNotificationModel? data = await _notificationService.getNotification();
+  Future<List> saveNewData(
+    List<SenderModel> senderList,
+    List<ReceiveNotificationModel> notificationList,
+  ) async {
+    print('Notification service: Updating new data');
 
-    if (data != null) {
-      List<ReceiveNotificationModel> notifications = data.notification;
-      List<SenderModel> senders = data.sender;
+    await _removeNotification();
+    await _saveNotification(notificationList);
 
-      await removeNotification();
-      await saveNotification(notifications);
+    await _removeSender();
+    await _saveSender(senderList);
 
-      await removeSender();
-      await saveSender(senders);
-    }
-
-    notificationData = await getFromDb();
+    await _loadFromDb();
 
     return this.notificationData;
   }
 
+  Future<void> updateVersion(int newVersion) async {
+    await databaseProvider.dataVersion.setNotificationVersion(newVersion);
+  }
+
+  Future<void> loadOldData() async {
+    await _loadFromDb();
+  }
+
   //#region notification
-  Future<void> saveNotification(List<ReceiveNotificationModel> rawData) async {
+  Future<void> _removeNotification() async {
+    await databaseProvider.notification.delete();
+  }
+
+  Future<void> _saveNotification(List<ReceiveNotificationModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.notification.insert(row.toMap());
     }
   }
 
-  Future<void> removeNotification() async {
-    await databaseProvider.notification.delete();
-  }
-
   //#endregion
 
   //#region sender
-  Future<void> saveSender(List<SenderModel> rawData) async {
+  Future<void> _removeSender() async {
+    await databaseProvider.sender.delete();
+  }
+
+  Future<void> _saveSender(List<SenderModel> rawData) async {
     for (var row in rawData) {
       await databaseProvider.sender.insert(row.toMap());
     }
   }
 
-  Future<void> removeSender() async {
-    await databaseProvider.sender.delete();
-  }
-
   //#endregion
 
-  Future<List> getFromDb() async {
+  Future<void> _loadFromDb() async {
     final rawData = await databaseProvider.notification.all;
 
-    return rawData.map((data) {
+    notificationData = rawData.map((data) {
       return UserNotificationModel.fromMap(data);
     }).toList();
   }

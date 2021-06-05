@@ -5,13 +5,17 @@ import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/update_password_crawler_model.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
-import 'package:app_qldt/_utils/secret/secret.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:http/http.dart' as http;
 
 class CrawlerService {
-  static Future<CrawlerStatus> updatePassword(UpdatePasswordCrawlerModel crawler) async {
+  final ApiUrl apiUrl;
+
+  CrawlerService(this.apiUrl);
+
+  Future<CrawlerStatus> updatePassword(UpdatePasswordCrawlerModel crawler) async {
     http.Response response;
-    String url = Secret.url.postRequest.updatePasswordCrawler;
+    String url = apiUrl.post.updatePasswordCrawler;
     String body = jsonEncode(crawler);
 
     try {
@@ -22,9 +26,8 @@ class CrawlerService {
       return CrawlerStatus.serverError;
     }
   }
-
-  static Future<CrawlerStatus> crawlScore(ScoreCrawlerModel crawler) async {
-    String url = Secret.url.postRequest.scoreCrawler;
+  Future<CrawlerStatus> crawlScore(ScoreCrawlerModel crawler) async {
+    String url = apiUrl.post.scoreCrawler;
     String body = jsonEncode(crawler);
     http.Response response;
 
@@ -37,8 +40,8 @@ class CrawlerService {
     }
   }
 
-  static Future<CrawlerStatus> crawlExamSchedule(ExamScheduleCrawlerModel crawler) async {
-    String url = Secret.url.postRequest.examScheduleCrawler;
+  Future<CrawlerStatus> crawlExamSchedule(ExamScheduleCrawlerModel crawler) async {
+    String url = apiUrl.post.examScheduleCrawler;
     String body = jsonEncode(crawler);
     http.Response response;
 

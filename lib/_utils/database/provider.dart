@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_qldt/_utils/database/table/data_version.dart';
 import 'package:app_qldt/_utils/database/table/db_exam_schedule.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -15,12 +16,18 @@ class DatabaseProvider {
   late DbColorEvent colorEvent;
   late DbScore score;
   late DbExamSchedule examSchedule;
+  late DbDataVersion dataVersion;
 
   DatabaseProvider();
 
   Future<void> init() async {
     await _initDb();
-    _initTables();
+    await _initTables();
+
+    print('DbProvider: Schedule version ${dataVersion.schedule}');
+    print('DbProvider: Notification version ${dataVersion.notification}');
+    print('DbProvider: ExamSchedule version ${dataVersion.examSchedule}');
+    print('DbProvider: Score version ${dataVersion.score}');
   }
 
   Future<void> _initDb() async {
@@ -51,19 +58,21 @@ class DatabaseProvider {
 
     database = await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
   }
 
-  void _initTables() {
+  Future<void> _initTables() async {
     schedule = DbSchedule(database);
     sender = DbSender(database);
     notification = DbNotification(database);
     colorEvent = DbColorEvent(database);
     score = DbScore(database);
     examSchedule = DbExamSchedule(database);
+    dataVersion = DbDataVersion(database);
+    await dataVersion.getVersionToCache();
   }
 
   Future<String> _getPath() async {
@@ -78,14 +87,25 @@ class DatabaseProvider {
       DbColorEvent().create(db);
       DbScore().create(db);
       DbExamSchedule().create(db);
+
+      var dv = DbDataVersion();
+      dv.create(db);
+      DbDataVersion.insertInitial(db);
+
     } on Exception catch (e) {
       print(e);
     }
   }
 
   void _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    try {} on Exception catch (e) {
+    try {
+      if (oldVersion < 2) {
+        await _upgradeToV2(db);
+      }
+    } on Exception catch (e) {
       print(e);
     }
   }
+
+  Future<void> _upgradeToV2(Database db) async {}
 }

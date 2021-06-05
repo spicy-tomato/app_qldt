@@ -6,7 +6,12 @@ import 'package:app_qldt/plan/bloc/enum/enum.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 
 class PlanPageTopbar extends StatelessWidget {
-  const PlanPageTopbar({Key? key}) : super(key: key);
+  final Function()? onCloseButtonTap;
+
+  const PlanPageTopbar({
+    Key? key,
+    this.onCloseButtonTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +21,12 @@ class PlanPageTopbar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           TextButton(
-            onPressed: () =>
-                context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close)),
+            onPressed: () {
+              context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+              if (onCloseButtonTap != null) {
+                onCloseButtonTap!.call();
+              }
+            },
             style: ButtonStyle(
               overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
               backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),

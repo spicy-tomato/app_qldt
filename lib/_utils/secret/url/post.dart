@@ -1,15 +1,17 @@
 import 'base.dart';
 
 class PostRequest {
-  const PostRequest();
+  final Host host;
 
-  String get authentication => Host.base + 'authenticate.php';
+  const PostRequest(this.host);
 
-  String get upsertToken => Host.base + 'upsert_token.php';
+  String get authentication => host.base + 'authenticate.php';
 
-  String get updatePasswordCrawler => Host.base + 'update_qldt_password.php';
+  String get upsertToken => host.base + 'upsert_token.php';
 
-  String get scoreCrawler => Host.externalBase + 'crawl_score.php';
+  String get updatePasswordCrawler => host.base + 'update_qldt_password.php';
 
-  String get examScheduleCrawler => Host.externalBase + 'crawl_exam_schedule.php';
+  String get scoreCrawler => host.externalBase + 'crawl_score.php';
+
+  String get examScheduleCrawler => host.externalBase + 'crawl_exam_schedule.php';
 }

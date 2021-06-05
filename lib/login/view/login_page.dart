@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 
 import 'login_form.dart';
@@ -24,8 +23,7 @@ class LoginPage extends StatelessWidget {
       constraints: const BoxConstraints.expand(),
       color: Colors.deepPurple,
       child: BlocProvider<LoginBloc>(
-        create: (context) => LoginBloc(
-            authenticationRepository: RepositoryProvider.of<AuthenticationRepository>(context)),
+        create: (context) => LoginBloc(context),
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return WillPopScope(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_qldt/_utils/helper/const.dart';
-import 'package:app_qldt/_utils/secret/secret.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,6 +9,9 @@ import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.d
 
 class TokenService {
   final FirebaseRepository _firebaseRepository = FirebaseRepository();
+  final ApiUrl apiUrl;
+
+  TokenService(this.apiUrl);
 
   Future<void> init() async {
     await _firebaseRepository.initialise();
@@ -20,7 +23,7 @@ class TokenService {
       print('Token: $token');
 
       final json = <String, String?>{
-        'student_id': studentId,
+        'id_student': studentId,
         'token': token,
       };
 
@@ -29,7 +32,7 @@ class TokenService {
       try {
         response = await http
             .post(
-              Uri.parse(Secret.url.postRequest.upsertToken),
+              Uri.parse(apiUrl.post.upsertToken),
               body: jsonEncode(json),
             )
             .timeout(Const.requestTimeout);
