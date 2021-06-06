@@ -37,12 +37,23 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           child: Stack(
             children: <Widget>[
               Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ExamScheduleFilter(),
-                    ExamScheduleTable(scrollControllers: widget._scrollControllers),
-                  ],
+                child: BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
+                  buildWhen: (previous, current) =>
+                      (previous.semester.hasData && !current.semester.hasData) ||
+                      (!previous.semester.hasData && current.semester.hasData),
+                  builder: (context, state) {
+                    return state.semester.hasData
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ExamScheduleFilter(),
+                              ExamScheduleTable(scrollControllers: widget._scrollControllers),
+                            ],
+                          )
+                        : Center(
+                            child: Text('Chưa có dữ liệu'),
+                          );
+                  },
                 ),
               ),
               BlocBuilder<ExamScheduleBloc, ExamScheduleState>(

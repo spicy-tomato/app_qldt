@@ -26,8 +26,8 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
 
     if (response.statusCode == 200) {
       List<ScoreModel> newData = _parseData(response.data);
-      localService.saveNewData(newData);
-      localService.updateVersion(response.version!);
+      await localService.saveNewData(newData);
+      await localService.updateVersion(response.version!);
     } else {
       await localService.loadOldData();
       if (response.statusCode == 204) {

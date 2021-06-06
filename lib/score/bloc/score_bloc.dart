@@ -69,7 +69,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreServiceController scoreServiceController = _userDataModel.scoreServiceController;
 
     //  Query all
-    if (event.semester == SemesterModel.all && event.subjectEvaluation == SubjectEvaluation.all) {
+    if (event.semester == SemesterModel.all() && event.subjectEvaluation == SubjectEvaluation.all) {
       newScoreData = scoreServiceController.scoreData;
     }
     //  Query a specific semester with all subject status
@@ -77,7 +77,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       newScoreData = scoreServiceController.getScoreDataOfAllEvaluation(event.semester);
     }
     //  Query all semester with a specific subject status
-    else if (event.semester == SemesterModel.all) {
+    else if (event.semester == SemesterModel.all()) {
       newScoreData = scoreServiceController.getScoreDataOfAllSemester(event.subjectEvaluation);
     }
     //  Query a specific semester with a specific subject status
@@ -114,6 +114,9 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       ),
     );
     print('score_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
+    if (examScheduleCrawlerStatus.isOk){
+      await _userDataModel.examScheduleServiceController.refresh();
+    }
 
     if (scoreCrawlerStatus.isOk) {
       canLoadNewData = true;

@@ -37,14 +37,25 @@ class _ScorePageState extends State<ScorePage> {
           topRightWidget: _refreshButton(),
           child: Stack(
             children: <Widget>[
-              Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    ScoreFilter(),
-                    ScorePageTable(scrollControllers: widget._scrollControllers),
-                  ],
-                ),
+              BlocBuilder<ScoreBloc, ScoreState>(
+                buildWhen: (previous, current) =>
+                    (previous.semester.hasData && !current.semester.hasData) ||
+                    (!previous.semester.hasData && current.semester.hasData),
+                builder: (context, state) {
+                  return state.semester.hasData
+                      ? Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ScoreFilter(),
+                              ScorePageTable(scrollControllers: widget._scrollControllers),
+                            ],
+                          ),
+                        )
+                      : Center(
+                          child: Text('Chưa có dữ liệu'),
+                        );
+                },
               ),
               BlocBuilder<ScoreBloc, ScoreState>(
                 buildWhen: (previous, current) => previous.status != current.status,

@@ -24,7 +24,11 @@ class ExamScheduleServiceController
 
   SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
-  List<ExamScheduleModel> getExamScheduleOfSemester(SemesterModel semester) {
+  List<ExamScheduleModel> getExamScheduleOfSemester(SemesterModel? semester) {
+    if (semester == null){
+      return [];
+    }
+
     List<ExamScheduleModel> res = examScheduleData.where((examSchedule) {
       return examSchedule.semester == semester.query;
     }).toList();

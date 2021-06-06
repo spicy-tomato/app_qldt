@@ -30,8 +30,9 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
           examScheduleData: UserDataModel.of(context)
               .examScheduleServiceController
               .getExamScheduleOfSemester(
-                  UserDataModel.of(context).examScheduleServiceController.lastSemester!),
-          semester: UserDataModel.of(context).examScheduleServiceController.lastSemester!,
+                  UserDataModel.of(context).examScheduleServiceController.lastSemester),
+          semester:
+              UserDataModel.of(context).examScheduleServiceController.lastSemester ?? SemesterModel.none(),
         ));
 
   @override
@@ -77,6 +78,9 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       ),
     );
     print('exam_schedule_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+    if (scoreCrawlerStatus.isOk){
+      await _userDataModel.scoreServiceController.refresh();
+    }
 
     CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
@@ -89,7 +93,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
     if (examScheduleCrawlerStatus.isOk) {
       canLoadNewData = true;
       await _userDataModel.examScheduleServiceController.refresh();
-      
+
       yield state.copyWith(
         examScheduleData: _userDataModel.examScheduleServiceController.examScheduleData,
         status: ExamSchedulePageStatus.successfully,

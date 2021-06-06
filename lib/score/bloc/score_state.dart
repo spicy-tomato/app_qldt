@@ -45,7 +45,7 @@ class ScoreInitialState extends ScoreState {
       : super(
           scoreData: scoreData,
           status: ScorePageStatus.unknown,
-          semester: const SemesterModel(),
+          semester: const SemesterModel(''),
           subjectEvaluation: SubjectEvaluation.all,
           scoreType: ScoreType.moduleScore,
         );

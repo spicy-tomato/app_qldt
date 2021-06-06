@@ -59,7 +59,7 @@ class LocalScoreService extends LocalService {
 
   Future<void> _loadSemesterFromDb() async {
     final List<Map<String, dynamic>> rawData = await databaseProvider.score.semester;
-    final List<SemesterModel> list = [SemesterModel.all];
+    final List<SemesterModel> list = [SemesterModel.all()];
 
     rawData.forEach((data) {
       list.add(SemesterModel(data['semester'].toString()));
