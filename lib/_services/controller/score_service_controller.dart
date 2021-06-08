@@ -38,6 +38,10 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
     }
   }
 
+  Future<void> load() async {
+    await localService.loadOldData();
+  }
+
   List<ScoreModel> getScoreDataOfAllEvaluation(SemesterModel semester) {
     return scoreData.where((score) => score.semester == semester.query).toList();
   }

@@ -16,6 +16,6 @@ class PreloadStatusChanged extends PreloadEvent {
   List<Object> get props => [status];
 }
 
-class PreloadLoading extends PreloadEvent {
-  const PreloadLoading();
-}
+class PreloadLoading extends PreloadEvent {}
+
+class PreloadLoadingAfterLogin extends PreloadEvent {}

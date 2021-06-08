@@ -63,16 +63,19 @@ class ExamScheduleServiceController
 
     if (response.statusCode == 200) {
       List<ExamScheduleModel> newData = _parseData(response.data);
-      await localService.updateVersion(response.version!);
+      await localService.updateVersion();
       await localService.saveNewData(newData);
     } else {
-      await localService.loadOldData();
       if (response.statusCode == 204) {
         connected = true;
       } else {
         print("Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart");
       }
     }
+  }
+
+  Future<void> load() async {
+    await localService.loadOldData();
   }
 
   List<ExamScheduleModel> _parseData(dynamic responseData) {

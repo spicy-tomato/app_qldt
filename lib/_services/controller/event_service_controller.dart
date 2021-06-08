@@ -30,11 +30,16 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
       await localService.saveNewData(newData);
       await localService.updateVersion(response.version!);
     } else {
-      await localService.loadOldData();
-      if (response.statusCode != 204) {
+      if (response.statusCode == 204) {
+        print('There are no new data');
+      } else {
         print("Error with status code: ${response.statusCode} at event_service_controller.dart");
       }
     }
+  }
+
+  Future<void> load() async {
+    await localService.loadOldData();
   }
 
   List<ScheduleModel> _getListModel(dynamic responseData) {

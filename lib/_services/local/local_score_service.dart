@@ -41,7 +41,7 @@ class LocalScoreService extends LocalService {
   }
 
   Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setScoreVersion(newVersion);
+    await databaseProvider.dataVersion.setScoreVersion();
   }
 
   Future<void> loadOldData() async {

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatelessWidget {
-  static Route route() {
-    return PageRouteBuilder(
-      pageBuilder: (context, __, ___) => SplashPage(),
-      transitionsBuilder: (context, animation, _, child) =>
-          FadeTransition(opacity: animation, child: child),
-      transitionDuration: Duration(milliseconds: 1500),
-    );
-  }
+  final bool shouldLoadAfterLogin;
+
+  const SplashPage(
+    this.shouldLoadAfterLogin, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,29 @@ class SplashPage extends StatelessWidget {
             SizedBox(
               height: 100,
             ),
-            CircularProgressIndicator(),
+            Column(children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(height: 50,),
+              shouldLoadAfterLogin
+                  ? Column(
+                      children: <Widget>[
+                        Text(
+                          'Đang tải dữ liệu, vui lòng chờ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Theme.of(context).backgroundColor),
+                        ),
+                        Text(
+                          '* Bước này chỉ xảy ra một lần sau khi đăng nhập',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).backgroundColor,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+            ]),
           ],
         ),
       ),

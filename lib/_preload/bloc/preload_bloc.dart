@@ -4,6 +4,7 @@ import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_services/api/token_service.dart';
+import 'package:app_qldt/_services/api/version_service.dart';
 import 'package:app_qldt/_services/controller/event_service_controller.dart';
 import 'package:app_qldt/_services/controller/exam_schedule_service_controller.dart';
 import 'package:app_qldt/_services/controller/notification_service_controller.dart';
@@ -16,6 +17,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'preload_event.dart';
@@ -41,6 +43,8 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       yield* _mapPreloadStatusChangedToState(event);
     } else if (event is PreloadLoading) {
       yield* _mapPreloadLoadingToState(event);
+    } else if (event is PreloadLoadingAfterLogin) {
+      yield* _mapPreloadLoadingAfterLoginToState(event);
     }
   }
 
@@ -50,6 +54,102 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
   Stream<PreloadState> _mapPreloadLoadingToState(PreloadLoading event) async* {
     yield PreloadState.loading();
+
+    Stopwatch stopwatch = Stopwatch()..start();
+    final minTurnAroundTime = const Duration(seconds: 2);
+    final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
+
+    /// Khởi động các service
+    final tokenService = TokenService(apiUrl);
+    await tokenService.init();
+    await tokenService.upsert(user.id);
+
+    String idAccount = user.accountId;
+    String idUser = user.id;
+
+    final DatabaseProvider databaseProvider = DatabaseProvider();
+    await databaseProvider.init();
+
+    final ServiceControllerData controllerData = ServiceControllerData(
+      databaseProvider: databaseProvider,
+      apiUrl: apiUrl,
+      idUser: idUser,
+    );
+
+    EventServiceController eventServiceController = EventServiceController(controllerData);
+    ScoreServiceController scoreServiceController = ScoreServiceController(controllerData);
+    NotificationServiceController notificationServiceController =
+        NotificationServiceController(controllerData, idAccount);
+    ExamScheduleServiceController examScheduleServiceController =
+        ExamScheduleServiceController(controllerData);
+
+    print('Event: ${stopwatch.elapsed}');
+    await eventServiceController.load();
+
+    print('Score: ${stopwatch.elapsed}');
+    await scoreServiceController.load();
+
+    print('Notification: ${stopwatch.elapsed}');
+    await notificationServiceController.load();
+
+    print('Exam Schedule: ${stopwatch.elapsed}');
+    await examScheduleServiceController.load();
+
+    Map<String, dynamic> versionMap = await VersionService(
+      apiUrl: apiUrl,
+      idStudent: idUser,
+    ).getServerDataVersion();
+    if (versionMap.isNotEmpty) {
+      if (versionMap['Schedule']! as int >
+          eventServiceController.localService.databaseProvider.dataVersion.schedule) {
+        await eventServiceController.refresh();
+      }
+      if (versionMap['Notification']! as int >
+          eventServiceController.localService.databaseProvider.dataVersion.notification) {
+        await notificationServiceController.refresh();
+      }
+      if (versionMap['Exam_Schedule']! as int >
+          eventServiceController.localService.databaseProvider.dataVersion.examSchedule) {
+        await examScheduleServiceController.refresh();
+      }
+      if (versionMap['Module_Score']! as int >
+          eventServiceController.localService.databaseProvider.dataVersion.score) {
+        await scoreServiceController.refresh();
+      }
+    }
+
+    final timeEnded = stopwatch.elapsed;
+    stopwatch.stop();
+
+    print(timeEnded);
+
+    context.read<UserRepository>().userDataModel = UserDataModel(
+      eventServiceController: eventServiceController,
+      scoreServiceController: scoreServiceController,
+      notificationServiceController: notificationServiceController,
+      examScheduleServiceController: examScheduleServiceController,
+      idAccount: idAccount,
+      idStudent: idUser,
+    );
+
+    await Future.delayed(
+        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0),
+        () async {
+      await navigator?.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
+    });
+
+    yield PreloadState.loaded(
+      eventServiceController: eventServiceController,
+      scoreServiceController: scoreServiceController,
+      notificationServiceController: notificationServiceController,
+      examScheduleServiceController: examScheduleServiceController,
+      idAccount: idAccount,
+      idUser: idUser,
+    );
+  }
+
+  Stream<PreloadState> _mapPreloadLoadingAfterLoginToState(PreloadLoadingAfterLogin event) async* {
+    yield PreloadState.loadingAfterLogin();
 
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);

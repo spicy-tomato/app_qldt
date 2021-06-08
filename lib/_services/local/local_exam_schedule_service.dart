@@ -30,8 +30,8 @@ class LocalExamScheduleService extends LocalService {
     return this.examScheduleData;
   }
 
-  Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setExamScheduleVersion(newVersion);
+  Future<void> updateVersion() async {
+    await databaseProvider.dataVersion.setExamScheduleVersion();
   }
 
   Future<void> loadOldData() async {

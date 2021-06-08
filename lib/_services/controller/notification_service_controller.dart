@@ -30,10 +30,15 @@ class NotificationServiceController
       await localService.saveNewData(senderList, notificationList);
       await localService.updateVersion(response.version!);
     } else {
-      await localService.loadOldData();
-      if (response.statusCode != 204) {
+      if (response.statusCode == 204) {
+        print('There are no new data');
+      } else {
         print("Error with status code: ${response.statusCode} at notification_service_controller.dart");
       }
     }
+  }
+
+  Future<void> load() async {
+    await localService.loadOldData();
   }
 }

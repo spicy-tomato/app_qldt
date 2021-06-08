@@ -31,6 +31,7 @@ class Application extends StatefulWidget {
 
 class _ApplicationState extends State<Application> {
   NavigatorState? get _navigator => _navigatorKey.currentState;
+  bool _shouldLoadAfterLogin = false;
 
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -91,6 +92,7 @@ class _ApplicationState extends State<Application> {
                 listener: (context, state) async {
                   switch (state.status) {
                     case AuthenticationStatus.unauthenticated:
+                      _shouldLoadAfterLogin = true;
                       await unauthenticated();
                       break;
 
@@ -114,8 +116,9 @@ class _ApplicationState extends State<Application> {
                       context: context,
                       user: state.user,
                       navigator: _navigator,
-                    )..add(PreloadLoading()),
+                    )..add(_shouldLoadAfterLogin ? PreloadLoadingAfterLogin() : PreloadLoading()),
                     child: BlocBuilder<PreloadBloc, PreloadState>(
+                      buildWhen: (previous, current) => previous.status != current.status,
                       builder: (context, state) {
                         return child!;
                       },
@@ -126,7 +129,7 @@ class _ApplicationState extends State<Application> {
             );
           },
           routes: {
-            '/': (_) => SplashPage(),
+            '/': (_) => SplashPage(_shouldLoadAfterLogin),
             '/login': (_) => LoginPage(),
             '/home': (_) => HomePage(),
             '/calendar': (_) => CalendarPage(),

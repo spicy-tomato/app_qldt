@@ -101,14 +101,12 @@ class DbDataVersion extends TableModel {
     notification = newVersion;
   }
 
-  Future<void> setExamScheduleVersion(int newVersion) async {
-    await _setVersion('exam_schedule', newVersion);
-    examSchedule = newVersion;
+  Future<void> setExamScheduleVersion() async {
+    await _setVersion('exam_schedule', ++examSchedule);
   }
 
-  Future<void> setScoreVersion(int newVersion) async {
-    await _setVersion('score', newVersion);
-    score = newVersion;
+  Future<void> setScoreVersion() async {
+    await _setVersion('score', ++score);
   }
 
   Future<void> delete() async {
