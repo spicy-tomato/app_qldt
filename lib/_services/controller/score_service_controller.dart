@@ -1,6 +1,6 @@
 import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_models/semester_model.dart';
-import 'package:app_qldt/_models/serviceControllerData.dart';
+import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_services/api/api_score_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';

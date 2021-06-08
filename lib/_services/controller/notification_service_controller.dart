@@ -1,6 +1,6 @@
 import 'package:app_qldt/_models/receive_notification_model.dart';
 import 'package:app_qldt/_models/sender_model.dart';
-import 'package:app_qldt/_models/serviceControllerData.dart';
+import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_services/api/api_notification_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_notification_service.dart';

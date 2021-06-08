@@ -1,7 +1,7 @@
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_widgets/element/auto_hide_message_dialog.dart';
 import 'package:app_qldt/_widgets/element/loading.dart';
 import 'package:app_qldt/_widgets/element/refresh_button.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/crawlable_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 import 'package:app_qldt/exam_schedule/bloc/exam_schedule_bloc.dart';
@@ -28,7 +28,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return CrawlablePage(
-      controller: UserDataModel.of(context).examScheduleServiceController,
+      controller: context.read<UserRepository>().userDataModel.examScheduleServiceController,
       child: BlocProvider<ExamScheduleBloc>(
         create: (_) => ExamScheduleBloc(context),
         child: SharedUI(

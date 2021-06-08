@@ -1,4 +1,4 @@
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
 import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:app_qldt/score/bloc/enum/score_type.dart';
@@ -58,7 +58,7 @@ class SemesterFilter extends StatefulWidget {
 class _SemesterFilterState extends State<SemesterFilter> {
   @override
   Widget build(BuildContext context) {
-    final List<SemesterModel> semesterList = UserDataModel.of(context).scoreServiceController.semester;
+    final List<SemesterModel> semesterList = context.read<UserRepository>().userDataModel.scoreServiceController.semester;
 
     return BlocBuilder<ScoreBloc, ScoreState>(
       buildWhen: (previous, current) =>

@@ -1,3 +1,4 @@
+import 'package:app_qldt/_repositories/user_repository/src/user_repository.dart';
 import 'package:app_qldt/_widgets/element/loading.dart';
 import 'package:app_qldt/_widgets/element/refresh_button.dart';
 import 'package:app_qldt/plan/plan.dart';
@@ -9,7 +10,6 @@ import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
 import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
 
 import '../bloc/calendar_bloc.dart';
 import '../view/local_widgets/local_widgets.dart';
@@ -28,7 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    schedulesData = UserDataModel.of(context).eventServiceController.eventsData;
+    schedulesData = context.read<UserRepository>().userDataModel.eventServiceController.eventsData;
 
     return NavigablePlanPage(
       child: BlocBuilder<PlanBloc, PlanState>(
@@ -73,8 +73,8 @@ class _CalendarPageState extends State<CalendarPage> {
       onTap: () async {
         widget.isLoading.value = true;
 
-        await UserDataModel.of(context).eventServiceController.refresh();
-        schedulesData = UserDataModel.of(context).eventServiceController.eventsData;
+        await context.read<UserRepository>().userDataModel.eventServiceController.refresh();
+        schedulesData = context.read<UserRepository>().userDataModel.eventServiceController.eventsData;
 
         widget.isLoading.value = false;
       },

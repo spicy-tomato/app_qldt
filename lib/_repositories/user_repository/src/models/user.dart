@@ -9,7 +9,7 @@ class User {
     this.idCardNumber,
     this.phoneNumberStudent,
     this.address,
-    this.accountId,
+    this.accountId = '',
   });
 
   final String id;
@@ -19,7 +19,7 @@ class User {
   final String? idCardNumber;
   final String? phoneNumberStudent;
   final String? address;
-  final String? accountId;
+  final String accountId;
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

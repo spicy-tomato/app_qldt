@@ -12,8 +12,17 @@ enum AuthenticationStatus {
   unauthenticated,
 }
 
+extension AuthenticationStatusExtension on AuthenticationStatus {
+  bool get isAuthenticated => this == AuthenticationStatus.authenticated;
+
+  bool get isUnauthenticated => this == AuthenticationStatus.unauthenticated;
+
+  bool get isUnknown => this == AuthenticationStatus.unknown;
+}
+
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>.broadcast();
+  LoginService? _loginService;
 
   Stream<AuthenticationStatus> get stream async* {
     yield AuthenticationStatus.unauthenticated;
@@ -21,8 +30,11 @@ class AuthenticationRepository {
   }
 
   Future<LoginStatus> logIn(ApiUrl apiUrl, LoginUser loginUser) async {
-    final loginService = LoginService(apiUrl, loginUser);
-    final LoginResponse loginResponse = await loginService.login();
+    if (_loginService == null) {
+      _loginService = LoginService(apiUrl);
+    }
+
+    final LoginResponse loginResponse = await _loginService!.login(loginUser);
 
     print('Login status: ${loginResponse.status}');
 
@@ -42,18 +54,18 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
+    print('${DateTime.now()}: Request to logout');
+
     await DatabaseProvider.deleteDb();
     await _removeUserInfo();
-
-    _controller.add(AuthenticationStatus.unauthenticated);
   }
 
-  void dispose() {
-    _controller.close();
+  Future<void> dispose() async {
+    await _controller.close();
   }
 
   Future<void> _removeUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove('user_info');
+    await prefs.remove('user_info');
   }
 }

@@ -4,14 +4,15 @@ import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/exam_schedule_model.dart';
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_services/api/crawler_service.dart';
 import 'package:app_qldt/_widgets/model/app_mode.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
+import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:app_qldt/exam_schedule/bloc/enum/exam_schedule_page_status.dart';
 import 'package:app_qldt/_models/semester_model.dart';
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 export 'enum/exam_schedule_page_status.dart';
 
@@ -24,16 +25,9 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
   final CrawlerService _crawlerService;
 
   ExamScheduleBloc(BuildContext context)
-      : _userDataModel = UserDataModel.of(context),
+      : _userDataModel = context.read<UserRepository>().userDataModel,
         _crawlerService = CrawlerService(AppModeWidget.of(context).apiUrl),
-        super(ExamScheduleInitial(
-          examScheduleData: UserDataModel.of(context)
-              .examScheduleServiceController
-              .getExamScheduleOfSemester(
-                  UserDataModel.of(context).examScheduleServiceController.lastSemester),
-          semester:
-              UserDataModel.of(context).examScheduleServiceController.lastSemester ?? SemesterModel.none(),
-        ));
+        super(ExamScheduleInitial(userDataModel: context.read<UserRepository>().userDataModel));
 
   @override
   Stream<ExamScheduleState> mapEventToState(
@@ -78,7 +72,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       ),
     );
     print('exam_schedule_bloc.dart --- Crawl score: $scoreCrawlerStatus');
-    if (scoreCrawlerStatus.isOk){
+    if (scoreCrawlerStatus.isOk) {
       await _userDataModel.scoreServiceController.refresh();
     }
 

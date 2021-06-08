@@ -1,5 +1,5 @@
 import 'package:app_qldt/_models/schedule_model.dart';
-import 'package:app_qldt/_models/serviceControllerData.dart';
+import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_services/api/api_event_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';

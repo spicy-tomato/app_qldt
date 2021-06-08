@@ -1,6 +1,6 @@
 import 'package:app_qldt/_models/semester_model.dart';
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
 import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
 import 'package:app_qldt/exam_schedule/bloc/exam_schedule_bloc.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,8 @@ class ExamScheduleFilter extends StatefulWidget {
 class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
   @override
   Widget build(BuildContext context) {
-    final List<SemesterModel> semesterList = UserDataModel.of(context).examScheduleServiceController.semester;
+    final List<SemesterModel> semesterList =
+        context.read<UserRepository>().userDataModel.examScheduleServiceController.semester;
 
     return BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
       buildWhen: (previous, current) => previous.status != current.status,
