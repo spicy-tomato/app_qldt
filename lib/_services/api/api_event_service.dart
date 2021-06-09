@@ -44,7 +44,7 @@ class ApiEventService extends ApiService {
 
     try {
       http.Response response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
-      return ServiceResponse(response);
+      return ServiceResponse.withVersion(response);
     } on TimeoutException catch (e) {
       print('Timeout error: $e at Event service');
     } on SocketException catch (e) {

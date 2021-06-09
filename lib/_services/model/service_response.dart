@@ -13,33 +13,40 @@ class ServiceResponse {
       Map<String, dynamic> body = jsonDecode(response.body);
       data = body['data'];
       version = body['data_version'];
-    } on Error catch (_) {
-      try {
-        data = jsonDecode(response.body);
-        version = -1;
-      } on Error catch (e) {
-        print(e);
-      }
+    } on Error catch (e) {
+      print(e);
     }
   }
 
-  ServiceResponse.__({
+  ServiceResponse.__(Response response){
+    statusCode = response.statusCode;
+    try {
+      data = jsonDecode(response.body);
+      version = -1;
+    } on Error catch (e) {
+      print(e);
+    }
+  }
+
+  ServiceResponse.___({
     required this.statusCode,
     required this.version,
     this.data,
   });
 
-  ServiceResponse(Response response) : this._(response);
+  ServiceResponse(Response response) : this.__(response);
+
+  ServiceResponse.withVersion(Response response) : this._(response);
 
   ServiceResponse.error()
-      : this.__(
+      : this.___(
           statusCode: 0,
           version: -1,
           data: null,
         );
 
   ServiceResponse.offline()
-      : this.__(
+      : this.___(
           statusCode: -1,
           version: -1,
           data: null,
