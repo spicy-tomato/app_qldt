@@ -25,7 +25,7 @@ class LocalExamScheduleService extends LocalService {
     await _loadExamScheduleDataFromDb();
     await _loadSemesterFromDb();
 
-    controller.connected = true;
+    connected = true;
 
     return this.examScheduleData;
   }

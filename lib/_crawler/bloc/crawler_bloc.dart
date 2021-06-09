@@ -97,7 +97,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
         if (scoreCrawlerStatus.isOk) {
           await userDataModel.scoreServiceController.refresh();
-          userDataModel.scoreServiceController.connected = true;
+          userDataModel.scoreServiceController.setConnected();
         } else {
           hasError = true;
         }
@@ -115,7 +115,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
         if (examScheduleCrawlerStatus.isOk) {
           await userDataModel.examScheduleServiceController.refresh();
-          userDataModel.examScheduleServiceController.connected = true;
+          userDataModel.examScheduleServiceController.setConnected();
         } else {
           hasError = true;
         }

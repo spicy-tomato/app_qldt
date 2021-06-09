@@ -28,10 +28,11 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
       List<ScoreModel> newData = _parseData(response.data);
       await localService.saveNewData(newData);
       await localService.updateVersion(response.version!);
+      setConnected();
     } else {
       await localService.loadOldData();
-      if (response.statusCode == 204) {
-        connected = true;
+      if (response.statusCode == 204 && localService.databaseProvider.dataVersion.score > 0) {
+        setConnected();
       } else {
         print("Error with status code: ${response.statusCode} at score_service_controller.dart");
       }

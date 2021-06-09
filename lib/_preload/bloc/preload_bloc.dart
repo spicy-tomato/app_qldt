@@ -10,6 +10,7 @@ import 'package:app_qldt/_services/controller/exam_schedule_service_controller.d
 import 'package:app_qldt/_services/controller/notification_service_controller.dart';
 import 'package:app_qldt/_services/controller/score_service_controller.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/_utils/database/table/data_version.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_widgets/model/app_mode.dart';
 import 'package:app_qldt/_models/user_data_model.dart';
@@ -77,20 +78,20 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     );
 
     EventServiceController eventServiceController = EventServiceController(controllerData);
-    ScoreServiceController scoreServiceController = ScoreServiceController(controllerData);
     NotificationServiceController notificationServiceController =
         NotificationServiceController(controllerData, idAccount);
+    ScoreServiceController scoreServiceController = ScoreServiceController(controllerData);
     ExamScheduleServiceController examScheduleServiceController =
         ExamScheduleServiceController(controllerData);
 
     print('Event: ${stopwatch.elapsed}');
     await eventServiceController.load();
 
-    print('Score: ${stopwatch.elapsed}');
-    await scoreServiceController.load();
-
     print('Notification: ${stopwatch.elapsed}');
     await notificationServiceController.load();
+
+    print('Score: ${stopwatch.elapsed}');
+    await scoreServiceController.load();
 
     print('Exam Schedule: ${stopwatch.elapsed}');
     await examScheduleServiceController.load();
@@ -100,21 +101,25 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       idStudent: idUser,
     ).getServerDataVersion();
     if (versionMap.isNotEmpty) {
-      if (versionMap['Schedule']! as int >
-          eventServiceController.localService.databaseProvider.dataVersion.schedule) {
+      print(versionMap);
+
+      DbDataVersion version = eventServiceController.localService.databaseProvider.dataVersion;
+
+      if (versionMap['Schedule']! as int > version.schedule) {
         await eventServiceController.refresh();
       }
-      if (versionMap['Notification']! as int >
-          eventServiceController.localService.databaseProvider.dataVersion.notification) {
+      if (versionMap['Notification']! as int > version.notification) {
         await notificationServiceController.refresh();
       }
-      if (versionMap['Exam_Schedule']! as int >
-          eventServiceController.localService.databaseProvider.dataVersion.examSchedule) {
+      if (versionMap['Exam_Schedule']! as int > version.examSchedule) {
         await examScheduleServiceController.refresh();
+      } else if (version.examSchedule > 0) {
+        examScheduleServiceController.setConnected();
       }
-      if (versionMap['Module_Score']! as int >
-          eventServiceController.localService.databaseProvider.dataVersion.score) {
+      if (versionMap['Module_Score']! as int > version.score) {
         await scoreServiceController.refresh();
+      } else if (version.score > 0) {
+        scoreServiceController.setConnected();
       }
     }
 
@@ -182,11 +187,11 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     print('Event: ${stopwatch.elapsed}');
     await eventServiceController.refresh();
 
-    print('Score: ${stopwatch.elapsed}');
-    await scoreServiceController.refresh();
-
     print('Notification: ${stopwatch.elapsed}');
     await notificationServiceController.refresh();
+
+    print('Score: ${stopwatch.elapsed}');
+    await scoreServiceController.refresh();
 
     print('Exam Schedule: ${stopwatch.elapsed}');
     await examScheduleServiceController.refresh();

@@ -21,7 +21,7 @@ class LocalScoreService extends LocalService {
     await _loadScoreDataFromDb();
     await _loadSemesterFromDb();
 
-    controller.connected = true;
+    connected = true;
 
     return this.scoreData;
   }

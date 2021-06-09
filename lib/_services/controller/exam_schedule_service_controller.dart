@@ -25,7 +25,7 @@ class ExamScheduleServiceController
   SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
   List<ExamScheduleModel> getExamScheduleOfSemester(SemesterModel? semester) {
-    if (semester == null){
+    if (semester == null) {
       return [];
     }
 
@@ -43,7 +43,7 @@ class ExamScheduleServiceController
   List<ExamScheduleModel> getExamScheduleOfLastSemester() {
     SemesterModel? semester = lastSemester;
 
-    if (semester == null){
+    if (semester == null) {
       return [];
     }
 
@@ -65,9 +65,10 @@ class ExamScheduleServiceController
       List<ExamScheduleModel> newData = _parseData(response.data);
       await localService.updateVersion();
       await localService.saveNewData(newData);
+      setConnected();
     } else {
-      if (response.statusCode == 204) {
-        connected = true;
+      if (response.statusCode == 204 && localService.databaseProvider.dataVersion.examSchedule > 0) {
+        setConnected();
       } else {
         print("Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart");
       }

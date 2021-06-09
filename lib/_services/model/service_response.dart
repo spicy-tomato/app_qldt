@@ -13,18 +13,18 @@ class ServiceResponse {
       Map<String, dynamic> body = jsonDecode(response.body);
       data = body['data'];
       version = body['data_version'];
-    } on Error catch (e) {
+    } on Exception catch (e) {
       print(e);
     }
   }
 
-  ServiceResponse.__(Response response){
+  ServiceResponse.__(Response response) {
     statusCode = response.statusCode;
+    version = -1;
     try {
       data = jsonDecode(response.body);
-      version = -1;
-    } on Error catch (e) {
-      print(e);
+    } on Exception catch (_) {
+      data = null;
     }
   }
 
