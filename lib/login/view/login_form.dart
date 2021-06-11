@@ -76,7 +76,7 @@ class _LoginFormState extends State<LoginForm> {
                         Container(
                           margin: const EdgeInsets.only(bottom: 20),
                           child: const Text(
-                            "Đăng nhập để tiếp tục",
+                            'Đăng nhập để tiếp tục',
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.black,
@@ -107,15 +107,15 @@ class _LoginFormState extends State<LoginForm> {
         return Future.value(true);
       },
       child: AlertDialog(
-        title: Text("Thông tin"),
-        content: Text("Đăng nhập thất bại"),
+        title: Text('Thông tin'),
+        content: Text('Đăng nhập thất bại'),
         actions: [
           TextButton(
             onPressed: () {
               showLoginFailedDialog = false;
               Navigator.of(context).pop();
             },
-            child: const Text("Đồng ý"),
+            child: const Text('Đồng ý'),
           )
         ],
       ),

@@ -112,7 +112,7 @@ class _ScheduleState extends State<Schedule> {
   }
 
   Widget _scheduleViewMonthHeaderBuilder(_, details) {
-    final String monthName = "Tháng ${details.date.month}";
+    final String monthName = 'Tháng ${details.date.month}';
     return Stack(
       children: <Widget>[
         Image(

@@ -44,6 +44,6 @@ class ScheduleModel {
   }
 
   String toString() {
-    return "Mã HP: $idModuleClass, HP: $moduleClassName";
+    return 'Mã HP: $idModuleClass, HP: $moduleClassName';
   }
 }

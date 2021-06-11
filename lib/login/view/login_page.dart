@@ -70,7 +70,7 @@ class BackScreen extends StatelessWidget {
       duration: Duration(milliseconds: 1000),
       decoration: new BoxDecoration(
         image: new DecorationImage(
-          image: new AssetImage("images/background.gif"),
+          image: new AssetImage('images/background.gif'),
           fit: BoxFit.fill,
         ),
       ),
@@ -100,7 +100,7 @@ class BackScreen extends StatelessWidget {
                   ),
                   child: const Center(
                     child: Text(
-                      "Đăng nhập",
+                      'Đăng nhập',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,

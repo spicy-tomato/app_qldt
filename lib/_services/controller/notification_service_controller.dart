@@ -33,7 +33,7 @@ class NotificationServiceController
       if (response.statusCode == 204) {
         print('There are no new data');
       } else {
-        print("Error with status code: ${response.statusCode} at notification_service_controller.dart");
+        print('Error with status code: ${response.statusCode} at notification_service_controller.dart');
       }
     }
   }

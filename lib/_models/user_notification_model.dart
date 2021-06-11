@@ -34,18 +34,18 @@ class UserNotificationModel {
 
   Map<String, dynamic> toMap() {
     return {
-      "id_notification": idNotification,
-      "title": title,
-      "content": content,
-      "typez": typez,
-      "id_sender": senderName,
-      "time_created": timeCreated,
-      "time_start": timeStart,
-      "time_end": timeEnd,
+      'id_notification': idNotification,
+      'title': title,
+      'content': content,
+      'typez': typez,
+      'id_sender': senderName,
+      'time_created': timeCreated,
+      'time_start': timeStart,
+      'time_end': timeEnd,
     };
   }
 
   String toString() {
-    return "ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $senderName";
+    return 'ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $senderName';
   }
 }

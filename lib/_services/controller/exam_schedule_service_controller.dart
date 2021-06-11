@@ -70,7 +70,7 @@ class ExamScheduleServiceController
       if (response.statusCode == 204 && localService.databaseProvider.dataVersion.examSchedule > 0) {
         setConnected();
       } else {
-        print("Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart");
+        print('Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart');
       }
     }
   }

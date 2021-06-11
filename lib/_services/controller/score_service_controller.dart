@@ -34,7 +34,7 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
       if (response.statusCode == 204 && localService.databaseProvider.dataVersion.score > 0) {
         setConnected();
       } else {
-        print("Error with status code: ${response.statusCode} at score_service_controller.dart");
+        print('Error with status code: ${response.statusCode} at score_service_controller.dart');
       }
     }
   }

@@ -77,7 +77,7 @@ class FromDatePicker extends StatelessWidget {
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(0))),
               onPressed: () => _chooseDay(context, state),
               child: Text(
-                  "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.fromDay)}",
+                  '${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.fromDay)}',
                   style: PlanPageConstant.textFieldStyle),
             );
           },
@@ -91,7 +91,7 @@ class FromDatePicker extends StatelessWidget {
             return TextButton(
               onPressed: () => _chooseTime(context, state),
               child: Text(
-                "${DateFormat.Hm().format(state.fromDay)}",
+                '${DateFormat.Hm().format(state.fromDay)}',
                 style: PlanPageConstant.textFieldStyle,
               ),
             );
@@ -156,7 +156,7 @@ class ToDatePicker extends StatelessWidget {
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(0))),
               onPressed: () => _chooseDay(context, state),
               child: Text(
-                  "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.toDay)}",
+                  '${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.toDay)}',
                   style: PlanPageConstant.textFieldStyle),
             );
           },
@@ -170,7 +170,7 @@ class ToDatePicker extends StatelessWidget {
             return TextButton(
               onPressed: () => _chooseTime(context, state),
               child: Text(
-                "${DateFormat.Hm().format(state.toDay)}",
+                '${DateFormat.Hm().format(state.toDay)}',
                 style: PlanPageConstant.textFieldStyle,
               ),
             );
