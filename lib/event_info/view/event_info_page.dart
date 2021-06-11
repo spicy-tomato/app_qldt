@@ -57,7 +57,7 @@ class _EventInfoPageState extends State<EventInfoPage> {
                   height: 25,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: widget.event.backgroundColor,
+                    color: widget.event.backgroundColor.color,
                   ),
                 ),
                 title: Text(
@@ -93,6 +93,13 @@ class _EventInfoPageState extends State<EventInfoPage> {
         ),
       ),
     );
+  }
+
+  String _date() {
+    return '${DateFormat(
+      'E, d MMMM',
+      Localizations.localeOf(context).languageCode,
+    ).format(widget.event.from!)} · ${DateFormat.Hm().format(widget.event.from!)} - ${DateFormat.Hm().format(widget.event.to!)}';
   }
 
   String startTime(DateTime dateTime) {

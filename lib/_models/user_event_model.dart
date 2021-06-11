@@ -1,16 +1,14 @@
-import 'dart:ui';
-
 import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/plan/bloc/enum/enum.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:app_qldt/plan/bloc/enum/color.dart';
 
 import 'exam_schedule_model.dart';
 
 class UserEventModel {
   final String eventName;
   final String? location;
-  final Color backgroundColor;
+  final PlanColors backgroundColor;
   late final String visualizeName;
   late final DateTime? from;
   late final DateTime? to;
@@ -70,7 +68,7 @@ class UserEventModel {
       from: curr,
       eventName: schedule.moduleClassName,
       location: schedule.idRoom,
-      backgroundColor: Color(color ?? PlanColors.defaultColor.color.value),
+      backgroundColor: color != null ? color.toPlanColors() : PlanColors.defaultColor,
     );
   }
 
@@ -117,7 +115,7 @@ class UserEventModel {
       location: examScheduleModel.room,
       from: from,
       to: to,
-      backgroundColor: PlanColors.tomato.color,
+      backgroundColor: PlanColors.tomato,
       note: 'Số báo danh: ${examScheduleModel.identificationNumber}',
     );
   }
