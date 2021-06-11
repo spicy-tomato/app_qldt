@@ -66,12 +66,7 @@ class _EventInfoPageState extends State<EventInfoPage> {
                   softWrap: true,
                 ),
                 subtitle: Text(
-                  widget.event.from == DateTime(now.year, now.month, now.day)
-                      ? 'Hôm nay'
-                      : '${DateFormat(
-                          'E, d MMMM',
-                          Localizations.localeOf(context).languageCode,
-                        ).format(widget.event.from!)} · ${DateFormat.Hm().format(widget.event.from!)} - ${DateFormat.Hm().format(widget.event.to!)}',
+                  widget.event.from == DateTime(now.year, now.month, now.day) ? 'Hôm nay' : _date(),
                 ),
               ),
               widget.event.location == null
@@ -100,9 +95,5 @@ class _EventInfoPageState extends State<EventInfoPage> {
       'E, d MMMM',
       Localizations.localeOf(context).languageCode,
     ).format(widget.event.from!)} · ${DateFormat.Hm().format(widget.event.from!)} - ${DateFormat.Hm().format(widget.event.to!)}';
-  }
-
-  String startTime(DateTime dateTime) {
-    return '${dateTime.hour}:${dateTime.minute}';
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -38,12 +39,16 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield _mapPlanStatusChangedToState(event);
     } else if (event is PlanColorChanged) {
       yield _mapPlanColorChangedToState(event);
-    } else if (event is PlanPageVisibilityChanged) {
-      yield _mapPlanPageVisibilityChangedToState(event);
     } else if (event is PlanTimeChangedToCurrentTime) {
       yield _mapPlanChangedToCurrentTimeToState(event);
     } else if (event is ShowApartPlanPage) {
       yield _mapShowApartPlanPageToState(event);
+    } else if (event is EditEvent) {
+      yield _mapEditEventToState(event);
+    } else if (event is OpenPlanPage) {
+      yield _mapOpenPlanPageToState();
+    } else if (event is ClosePlanPage) {
+      yield _mapClosePlanPageToState();
     }
   }
 
@@ -87,10 +92,6 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     return state.copyWith(color: event.color);
   }
 
-  PlanState _mapPlanPageVisibilityChangedToState(PlanPageVisibilityChanged event) {
-    return state.copyWith(visibility: event.visibility);
-  }
-
   PlanState _mapPlanChangedToCurrentTimeToState(PlanTimeChangedToCurrentTime event) {
     return state.copyWith(
       from: event.current,
@@ -104,5 +105,23 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       to: event.dateTime.add(Duration(hours: 1)),
       visibility: PlanPageVisibility.apart,
     );
+  }
+
+  PlanState _mapEditEventToState(EditEvent event) {
+    return state.copyWith(
+      from: event.event.from,
+      to: event.event.to,
+      color: event.event.backgroundColor,
+      location: event.event.location,
+      visibility: PlanPageVisibility.open,
+    );
+  }
+
+  PlanState _mapOpenPlanPageToState() {
+    return state.copyWith(visibility: PlanPageVisibility.open);
+  }
+
+  PlanState _mapClosePlanPageToState() {
+    return state.copyWith(visibility: PlanPageVisibility.close);
   }
 }

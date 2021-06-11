@@ -86,16 +86,16 @@ class _ScheduleState extends State<Schedule> {
         context.read<PlanBloc>().add(ShowApartPlanPage(details.date!));
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
         widget.controller.selectedDate = null;
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+        context.read<PlanBloc>().add(OpenPlanPage());
       } else if (_previousSelectedDay != null && details.date != _previousSelectedDay) {
         widget.controller.selectedDate = null;
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+        context.read<PlanBloc>().add(ClosePlanPage());
       }
 
       _previousSelectedDay = details.date!;
     } else if (details.targetElement == CalendarElement.appointment) {
       if (state.visibility != PlanPageVisibility.close) {
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+        context.read<PlanBloc>().add(ClosePlanPage());
       } else {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
