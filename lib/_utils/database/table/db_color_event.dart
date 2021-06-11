@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 
-import 'db_schedule.dart';
 import 'table_model.dart';
 
 class DbColorEvent extends TableModel {
@@ -35,23 +34,6 @@ class DbColorEvent extends TableModel {
 
     try {
       await database!.update('color_event', map);
-    } on Exception catch (e) {
-      print('Error: ${e.toString()}');
-    }
-  }
-
-  Future<void> insertColorToNew(DbSchedule schedule) async {
-    assert(database != null, 'Database must not be null');
-
-    try {
-      List<Map<String, dynamic>> moduleClassIdList = await schedule.moduleClass;
-
-      moduleClassIdList.forEach((id) async {
-        await database!.rawQuery(''
-            'INSERT OR IGNORE '
-            'INTO color_event(id_module_class, color) '
-            'VALUES("${id['id_module_class']}", "0xff007bff");');
-      });
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

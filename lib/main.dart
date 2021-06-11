@@ -18,7 +18,7 @@ void main() async {
 
   Paint.enableDithering = true;
 
-  AppMode mode = AppMode.debug;
+  AppMode mode = AppMode.staging;
 
   print('Running in mode ${kReleaseMode ? AppMode.release : mode}');
 
