@@ -11,7 +11,7 @@ class PostRequest {
 
   String get updatePasswordCrawler => host.base + 'update_qldt_password.php';
 
-  String get scoreCrawler => host.externalBase + 'crawl_score.php';
+  String get scoreCrawler => host.crawlBase + 'crawl_score.php';
 
-  String get examScheduleCrawler => host.externalBase + 'crawl_exam_schedule.php';
+  String get examScheduleCrawler => host.crawlBase + 'crawl_exam_schedule.php';
 }

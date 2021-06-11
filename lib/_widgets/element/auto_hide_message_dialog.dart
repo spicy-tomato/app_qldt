@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +44,7 @@ class _AutoHideMessageDialogState extends State<AutoHideMessageDialog>
   late Animation<Color?> _backgroundColorAnimation;
   late Animation<Color?> _textColorAnimation;
   late Animation<Color?> _iconColorAnimation;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -80,8 +83,10 @@ class _AutoHideMessageDialogState extends State<AutoHideMessageDialog>
 
     _controller.forward();
 
-    Future.delayed(widget.duration ?? const Duration(seconds: 3), () async {
-      await _controller.reverse();
+    _timer = Timer(widget.duration ?? const Duration(seconds: 3), () async {
+      if (mounted) {
+        await _controller.reverse();
+      }
       widget.onClose?.call();
     });
   }
@@ -89,6 +94,7 @@ class _AutoHideMessageDialogState extends State<AutoHideMessageDialog>
   @override
   void dispose() {
     _controller.dispose();
+    _timer.cancel();
     super.dispose();
   }
 

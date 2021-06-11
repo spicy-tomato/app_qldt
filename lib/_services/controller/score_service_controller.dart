@@ -1,6 +1,6 @@
 import 'package:app_qldt/_models/score_model.dart';
 import 'package:app_qldt/_models/semester_model.dart';
-import 'package:app_qldt/_models/serviceControllerData.dart';
+import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_services/api/api_score_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
@@ -26,16 +26,21 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
 
     if (response.statusCode == 200) {
       List<ScoreModel> newData = _parseData(response.data);
-      localService.saveNewData(newData);
-      localService.updateVersion(response.version!);
+      await localService.saveNewData(newData);
+      await localService.updateVersion(response.version!);
+      setConnected();
     } else {
       await localService.loadOldData();
-      if (response.statusCode == 204) {
-        connected = true;
+      if (response.statusCode == 204 && localService.databaseProvider.dataVersion.score > 0) {
+        setConnected();
       } else {
         print("Error with status code: ${response.statusCode} at score_service_controller.dart");
       }
     }
+  }
+
+  Future<void> load() async {
+    await localService.loadOldData();
   }
 
   List<ScoreModel> getScoreDataOfAllEvaluation(SemesterModel semester) {

@@ -70,7 +70,7 @@ class UserEventModel {
       from: curr,
       eventName: schedule.moduleClassName,
       location: schedule.idRoom,
-      backgroundColor: Color(color ?? 0xff0f8644),
+      backgroundColor: Color(color ?? PlanColors.defaultColor.color.value),
     );
   }
 

@@ -5,7 +5,6 @@ class ApiService {
   final String idUser;
   late final ServiceController controller;
   final ApiUrl apiUrl;
-  bool connected = false;
 
   ApiService({
     required this.idUser,

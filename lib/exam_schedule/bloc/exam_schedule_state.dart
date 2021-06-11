@@ -32,12 +32,11 @@ class ExamScheduleState extends Equatable {
 }
 
 class ExamScheduleInitial extends ExamScheduleState {
-  const ExamScheduleInitial({
-    required List<ExamScheduleModel> examScheduleData,
-    required SemesterModel semester,
+  ExamScheduleInitial({
+    required UserDataModel userDataModel,
   }) : super(
-          examScheduleData: examScheduleData,
+          examScheduleData: userDataModel.examScheduleServiceController.getExamScheduleOfLastSemester(),
+          semester: userDataModel.examScheduleServiceController.lastSemester ?? SemesterModel.none(),
           status: ExamSchedulePageStatus.unknown,
-          semester: semester,
         );
 }

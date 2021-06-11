@@ -20,7 +20,7 @@ class BottomNote extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           BottomText(useCurrentTime: useCurrentTime),
-          AddNoteButton(),
+          AddNoteButton(useCurrentTime: useCurrentTime),
         ],
       ),
     );
@@ -69,6 +69,10 @@ class BottomText extends StatelessWidget {
 }
 
 class AddNoteButton extends StatelessWidget {
+  final bool? useCurrentTime;
+
+  const AddNoteButton({Key? key, this.useCurrentTime}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -81,7 +85,10 @@ class AddNoteButton extends StatelessWidget {
           child: InkWell(
             customBorder: addNoteButtonShape(),
             onTap: () {
-              print("Button pressed!");
+              if (useCurrentTime == null || useCurrentTime!) {
+                context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
+              }
+              context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
             },
             child: Align(
               alignment: Alignment(-0.7, 0),

@@ -1,9 +1,9 @@
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/notification_post/notification_post.dart';
 import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -17,14 +17,15 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   _NotificationPageState();
 
   @override
   Widget build(BuildContext context) {
-    List notificationData = UserDataModel.of(context)
+    List notificationData = context
+        .read<UserRepository>()
+        .userDataModel
         .notificationServiceController
         .notificationData as List<UserNotificationModel>;
 
@@ -55,7 +56,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void _onRefresh() async {
-    await UserDataModel.of(context).notificationServiceController.refresh();
+    await context.read<UserRepository>().userDataModel.notificationServiceController.refresh();
     await Future.delayed(Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});

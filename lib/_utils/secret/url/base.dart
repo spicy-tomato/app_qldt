@@ -17,7 +17,7 @@ class Host {
     return 'https://utcapi-development.herokuapp.com/api-v2/app/';
   }
 
-  String get externalBase {
+  String get crawlBase {
     if (mode.isRelease){
       return 'https://utcapi.herokuapp.herokuapp.com/api-v2/app/crawl/';
     }

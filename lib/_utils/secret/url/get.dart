@@ -12,4 +12,6 @@ class GetRequest {
   String get score => host.base + 'get_score.php';
 
   String get examSchedule => host.base + 'get_exam_schedule.php';
+
+  String get version => host.base + 'get_data_version.php';
 }

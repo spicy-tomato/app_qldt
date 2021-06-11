@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/models.dart';
 
 class UserRepository {
   late User _user;
+  late UserDataModel userDataModel;
 
   Future<User?> getUser() async {
     Map<String, dynamic> loginInfo = await _getSavedLoginInfo();

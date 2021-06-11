@@ -9,31 +9,44 @@ class ServiceResponse {
 
   ServiceResponse._(Response response) {
     statusCode = response.statusCode;
-
     try {
       Map<String, dynamic> body = jsonDecode(response.body);
-      version = body['data_version'];
       data = body['data'];
-    } on Exception catch (_) {}
+      version = body['data_version'];
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
-  ServiceResponse.__({
+  ServiceResponse.__(Response response) {
+    statusCode = response.statusCode;
+    version = -1;
+    try {
+      data = jsonDecode(response.body);
+    } on Exception catch (_) {
+      data = null;
+    }
+  }
+
+  ServiceResponse.___({
     required this.statusCode,
     required this.version,
     this.data,
   });
 
-  ServiceResponse(Response response) : this._(response);
+  ServiceResponse(Response response) : this.__(response);
+
+  ServiceResponse.withVersion(Response response) : this._(response);
 
   ServiceResponse.error()
-      : this.__(
+      : this.___(
           statusCode: 0,
           version: -1,
           data: null,
         );
 
   ServiceResponse.offline()
-      : this.__(
+      : this.___(
           statusCode: -1,
           version: -1,
           data: null,

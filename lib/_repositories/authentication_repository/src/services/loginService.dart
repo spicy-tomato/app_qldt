@@ -12,11 +12,10 @@ extension LoginStatusExtension on LoginStatus {
 
 class LoginService {
   final ApiUrl apiUrl;
-  final LoginUser loginUser;
 
-  const LoginService(this.apiUrl, this.loginUser);
+  const LoginService(this.apiUrl);
 
-  Future<LoginResponse> login() async {
+  Future<LoginResponse> login(LoginUser loginUser) async {
     if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
       return LoginResponse(status: LoginStatus.noInternetConnection);
     }

@@ -42,7 +42,6 @@ class LocalEventService extends LocalService {
 
     await _remove();
     await _save(newData);
-    await _addColor();
 
     await _loadColorMap();
     await _loadFromDb();
@@ -90,12 +89,6 @@ class LocalEventService extends LocalService {
   ///
   Future<void> _remove() async {
     await databaseProvider.schedule.delete();
-  }
-
-  /// Update color of schedule from local database
-  ///
-  Future<void> _addColor() async {
-    await databaseProvider.colorEvent.insertColorToNew(databaseProvider.schedule);
   }
 
   Future<void> _loadColorMap() async {

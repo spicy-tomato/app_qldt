@@ -28,7 +28,7 @@ class DbSchedule extends TableModel {
         'schedule.day_schedules,'
         'color_event.color '
         'FROM '
-        'schedule JOIN color_event '
+        'schedule LEFT JOIN color_event '
         'ON schedule.id_module_class = color_event.id_module_class;',
       );
     } on Exception catch (e) {

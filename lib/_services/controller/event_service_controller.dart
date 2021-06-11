@@ -1,5 +1,5 @@
 import 'package:app_qldt/_models/schedule_model.dart';
-import 'package:app_qldt/_models/serviceControllerData.dart';
+import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_services/api/api_event_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
@@ -30,11 +30,16 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
       await localService.saveNewData(newData);
       await localService.updateVersion(response.version!);
     } else {
-      await localService.loadOldData();
-      if (response.statusCode != 204) {
+      if (response.statusCode == 204) {
+        print('There are no new data');
+      } else {
         print("Error with status code: ${response.statusCode} at event_service_controller.dart");
       }
     }
+  }
+
+  Future<void> load() async {
+    await localService.loadOldData();
   }
 
   List<ScheduleModel> _getListModel(dynamic responseData) {

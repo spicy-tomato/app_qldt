@@ -21,7 +21,7 @@ class LocalScoreService extends LocalService {
     await _loadScoreDataFromDb();
     await _loadSemesterFromDb();
 
-    controller.connected = true;
+    connected = true;
 
     return this.scoreData;
   }
@@ -41,7 +41,7 @@ class LocalScoreService extends LocalService {
   }
 
   Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setScoreVersion(newVersion);
+    await databaseProvider.dataVersion.setScoreVersion();
   }
 
   Future<void> loadOldData() async {
@@ -59,7 +59,7 @@ class LocalScoreService extends LocalService {
 
   Future<void> _loadSemesterFromDb() async {
     final List<Map<String, dynamic>> rawData = await databaseProvider.score.semester;
-    final List<SemesterModel> list = [SemesterModel.all];
+    final List<SemesterModel> list = [SemesterModel.all()];
 
     rawData.forEach((data) {
       list.add(SemesterModel(data['semester'].toString()));

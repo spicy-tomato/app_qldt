@@ -4,6 +4,7 @@ import 'package:app_qldt/_utils/database/provider.dart';
 abstract class LocalService {
   late final DatabaseProvider databaseProvider;
   late final ServiceController controller;
+  bool connected = false;
 
   LocalService(DatabaseProvider? databaseProvider){
     this.databaseProvider = databaseProvider ?? DatabaseProvider();

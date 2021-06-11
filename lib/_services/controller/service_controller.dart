@@ -10,9 +10,9 @@ abstract class ServiceController<L extends LocalService, A extends ApiService> {
     apiService.controller = this;
   }
 
-  bool get connected => apiService.connected;
+  bool get connected => localService.connected;
 
-  set connected(bool isConnected) {
-    apiService.connected = isConnected;
+  void setConnected() {
+    localService.connected = true;
   }
 }

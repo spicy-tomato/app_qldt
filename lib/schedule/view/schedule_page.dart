@@ -1,10 +1,11 @@
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
 import 'package:app_qldt/_models/meeting_data_source_model.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
-import 'package:app_qldt/_widgets/model/user_data_model.dart';
+import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,7 +64,6 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
-
   @override
   void dispose() {
     _controller.dispose();
@@ -82,7 +82,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
   List<UserEventModel> _getDataSource() {
     final List<UserEventModel> events = <UserEventModel>[];
-    final UserDataModel userDataModel = UserDataModel.of(context);
+    final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
 
     //  Schedule
     userDataModel.eventServiceController.eventsData.forEach((_, mapValue) {
@@ -99,7 +99,7 @@ class _SchedulePageState extends State<SchedulePage> {
     return events;
   }
 
-  void _onPanelClose(){
+  void _onPanelClose() {
     print('Closing panel');
     _controller.selectedDate = null;
   }
