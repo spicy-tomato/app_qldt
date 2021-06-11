@@ -11,15 +11,11 @@ import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
 import 'local_widgets/local_widgets.dart';
 
 class PlanPage extends StatefulWidget {
-  final DateTime? from;
-  final DateTime? to;
   final ScrollController? scrollController;
   final Function()? onCloseButtonTap;
 
   PlanPage({
     Key? key,
-    this.from,
-    this.to,
     this.scrollController,
     this.onCloseButtonTap,
   }) : super(key: key);
@@ -197,6 +193,6 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
   }
 
   void _onTap() {
-    context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+    context.read<PlanBloc>().add(OpenPlanPage());
   }
 }

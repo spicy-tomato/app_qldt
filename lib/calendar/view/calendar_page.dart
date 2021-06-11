@@ -36,7 +36,7 @@ class _CalendarPageState extends State<CalendarPage> {
           return SharedUI(
             onWillPop: () {
               if (state.visibility != PlanPageVisibility.close) {
-                context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+                context.read<PlanBloc>().add(ClosePlanPage());
                 return Future.value(false);
               }
 

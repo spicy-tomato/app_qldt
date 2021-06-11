@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/plan/bloc/enum/enum.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 
 class PlanPageTopbar extends StatelessWidget {
@@ -22,7 +21,7 @@ class PlanPageTopbar extends StatelessWidget {
         children: <Widget>[
           TextButton(
             onPressed: () {
-              context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+              context.read<PlanBloc>().add(ClosePlanPage());
               if (onCloseButtonTap != null) {
                 onCloseButtonTap!.call();
               }

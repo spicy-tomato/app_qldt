@@ -45,7 +45,7 @@ class _SchedulePageState extends State<SchedulePage> {
             onWillPop: () {
               if (state.visibility != PlanPageVisibility.close) {
                 _controller.selectedDate = null;
-                context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+                context.read<PlanBloc>().add(ClosePlanPage());
                 return Future.value(false);
               }
 
