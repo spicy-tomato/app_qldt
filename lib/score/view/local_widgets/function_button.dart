@@ -1,4 +1,5 @@
 import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
+import 'package:app_qldt/_widgets/wrapper/hide_tooltip.dart';
 import 'package:app_qldt/score/bloc/score_bloc.dart';
 import 'package:app_qldt/_models/semester_model.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +22,7 @@ class _FunctionButtonState extends State<FunctionButton> {
   Widget build(BuildContext context) {
     semesters = context.read<UserRepository>().userDataModel.scoreServiceController.semester;
 
-    return Theme(
-      //  Hide tooltip
-      data: Theme.of(context).copyWith(
-          tooltipTheme: TooltipThemeData(decoration: BoxDecoration(color: Colors.transparent))),
+    return HideTooltip(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: Material(
