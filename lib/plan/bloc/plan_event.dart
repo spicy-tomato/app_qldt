@@ -109,3 +109,12 @@ class PlanTimeChangedToCurrentTime extends PlanEvent {
   @override
   List<Object> get props => [current];
 }
+
+class ShowApartPlanPage extends PlanEvent {
+  final DateTime dateTime;
+
+  const ShowApartPlanPage(this.dateTime);
+
+  @override
+  List<Object> get props => [dateTime];
+}

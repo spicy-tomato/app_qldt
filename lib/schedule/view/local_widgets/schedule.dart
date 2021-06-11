@@ -83,9 +83,7 @@ class _ScheduleState extends State<Schedule> {
 
     if (details.targetElement == CalendarElement.calendarCell) {
       if (state.visibility == PlanPageVisibility.close) {
-        context.read<PlanBloc>().add(PlanFromDateChanged(details.date!));
-        context.read<PlanBloc>().add(PlanToDateChanged(details.date!.add(Duration(hours: 1))));
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.apart));
+        context.read<PlanBloc>().add(ShowApartPlanPage(details.date!));
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
         widget.controller.selectedDate = null;
         context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));

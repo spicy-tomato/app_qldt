@@ -100,7 +100,6 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   void _onPanelClose() {
-    print('Closing panel');
     _controller.selectedDate = null;
   }
 }

@@ -21,27 +21,29 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     if (event is PlanTitleChanged) {
       yield _mapPlanTitleChangedToState(event);
     } else if (event is PlanIsAllDayChanged) {
-      yield (_mapPlanIsAllDayChangedToState());
+      yield _mapPlanIsAllDayChangedToState();
     } else if (event is PlanFromDateChanged) {
-      yield (_mapPlanFromDateChangedToState(event));
+      yield _mapPlanFromDateChangedToState(event);
     } else if (event is PlanToDateChanged) {
-      yield (_mapPlanToDateChangedToState(event));
+      yield _mapPlanToDateChangedToState(event);
     } else if (event is PlanRepeatChanged) {
-      yield (_mapPlanRepeatChangedToState(event));
+      yield _mapPlanRepeatChangedToState(event);
     } else if (event is PlanPeopleChanged) {
-      yield (_mapPlanPeopleChangedToState(event));
+      yield _mapPlanPeopleChangedToState(event);
     } else if (event is PlanDescriptionChanged) {
-      yield (_mapPlanDescriptionChangedToState(event));
+      yield _mapPlanDescriptionChangedToState(event);
     } else if (event is PlanAccessibilityChanged) {
-      yield (_mapPlanAccessibilityChangedToState(event));
+      yield _mapPlanAccessibilityChangedToState(event);
     } else if (event is PlanStatusChanged) {
-      yield (_mapPlanStatusChangedToState(event));
+      yield _mapPlanStatusChangedToState(event);
     } else if (event is PlanColorChanged) {
-      yield (_mapPlanColorChangedToState(event));
+      yield _mapPlanColorChangedToState(event);
     } else if (event is PlanPageVisibilityChanged) {
-      yield (_mapPlanPageVisibilityChangedToState(event));
+      yield _mapPlanPageVisibilityChangedToState(event);
     } else if (event is PlanTimeChangedToCurrentTime) {
       yield _mapPlanChangedToCurrentTimeToState(event);
+    } else if (event is ShowApartPlanPage) {
+      yield _mapShowApartPlanPageToState(event);
     }
   }
 
@@ -90,6 +92,17 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
   }
 
   PlanState _mapPlanChangedToCurrentTimeToState(PlanTimeChangedToCurrentTime event) {
-    return state.copyWith(from: event.current, to: event.current.add(Duration(hours: 1)));
+    return state.copyWith(
+      from: event.current,
+      to: event.current.add(Duration(hours: 1)),
+    );
+  }
+
+  PlanState _mapShowApartPlanPageToState(ShowApartPlanPage event) {
+    return state.copyWith(
+      from: event.dateTime,
+      to: event.dateTime.add(Duration(hours: 1)),
+      visibility: PlanPageVisibility.apart,
+    );
   }
 }
