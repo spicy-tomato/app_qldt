@@ -21,7 +21,7 @@ class ExamScheduleModel {
 
   factory ExamScheduleModel.fromJson(Map<String, dynamic> json) {
     return ExamScheduleModel(
-      semester: json['Semester'],
+      semester: json['School_Year'],
       moduleName: json['Module_Name'],
       credit: json['Credit'],
       dateStart: json['Date_Start'],

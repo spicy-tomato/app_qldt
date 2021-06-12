@@ -24,6 +24,38 @@ class ExamScheduleServiceController
 
   SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
+  Future<void> refresh() async {
+    ServiceResponse response = await apiService.request();
+
+    if (response.statusCode == 200) {
+      List<ExamScheduleModel> newData = _parseData(response.data);
+      await localService.updateVersion();
+      await localService.saveNewData(newData);
+      setConnected();
+    } else {
+      if (response.statusCode == 204 && localService.databaseProvider.dataVersion.examSchedule > 0) {
+        setConnected();
+      } else {
+        print('Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart');
+      }
+    }
+  }
+
+  Future<void> load() async {
+    await localService.loadOldData();
+  }
+
+  List<ExamScheduleModel> _parseData(dynamic responseData) {
+    List data = responseData as List;
+    List<ExamScheduleModel> listModel = [];
+
+    for (var element in data) {
+      listModel.add(ExamScheduleModel.fromJson(element));
+    }
+
+    return listModel;
+  }
+
   List<ExamScheduleModel> getExamScheduleOfSemester(SemesterModel? semester) {
     if (semester == null) {
       return [];
@@ -56,37 +88,5 @@ class ExamScheduleServiceController
     res.sort((a, b) => dateFormat.parse(a.dateStart).compareTo(dateFormat.parse(b.dateStart)));
 
     return res;
-  }
-
-  Future<void> refresh() async {
-    ServiceResponse response = await apiService.request();
-
-    if (response.statusCode == 200) {
-      List<ExamScheduleModel> newData = _parseData(response.data);
-      await localService.updateVersion();
-      await localService.saveNewData(newData);
-      setConnected();
-    } else {
-      if (response.statusCode == 204 && localService.databaseProvider.dataVersion.examSchedule > 0) {
-        setConnected();
-      } else {
-        print('Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart');
-      }
-    }
-  }
-
-  Future<void> load() async {
-    await localService.loadOldData();
-  }
-
-  List<ExamScheduleModel> _parseData(dynamic responseData) {
-    List data = responseData as List;
-    List<ExamScheduleModel> listModel = [];
-
-    for (var element in data) {
-      listModel.add(ExamScheduleModel.fromJson(element));
-    }
-
-    return listModel;
   }
 }

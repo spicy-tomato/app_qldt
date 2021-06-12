@@ -5,7 +5,7 @@ class ScheduleModel {
   final int shiftSchedules;
   final DateTime daySchedules;
 
-  ScheduleModel({
+  const ScheduleModel({
     required this.idModuleClass,
     required this.moduleClassName,
     required this.idRoom,

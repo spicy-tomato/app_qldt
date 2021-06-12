@@ -35,7 +35,10 @@ class LoginService {
 
       LoginStatus status = statusFromCode(response.statusCode);
 
-      return LoginResponse(status: status, data: status.isSuccessfully ? response.body : null);
+      return LoginResponse(
+        status: status,
+        data: status.isSuccessfully ? response.body : null,
+      );
     } on Exception catch (e) {
       print('Error: $e in Login service');
       return LoginResponse(status: LoginStatus.serverError);
