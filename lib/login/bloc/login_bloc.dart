@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import 'package:app_qldt/_repositories/authentication_repository/authentication_repository.dart';
-import 'package:app_qldt/_repositories/authentication_repository/src/services/loginService.dart';
+import 'package:app_qldt/_repositories/authentication_repository/src/services/login_service.dart';
 import 'package:app_qldt/login/models/models.dart';
 
 part 'login_event.dart';
