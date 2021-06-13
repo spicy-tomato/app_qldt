@@ -91,6 +91,17 @@ class PlanColorChanged extends PlanEvent {
   @override
   List<Object> get props => [color];
 }
+class PlanLocationChanged extends PlanEvent {
+  final String location;
+
+  const PlanLocationChanged(this.location);
+
+  @override
+  List<Object> get props => [location];
+}
+
+class OpenPlanPage extends PlanEvent {
+  final PlanType? type;
 
 class OpenPlanPage extends PlanEvent {}
 

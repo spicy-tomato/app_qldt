@@ -39,6 +39,8 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield _mapPlanStatusChangedToState(event);
     } else if (event is PlanColorChanged) {
       yield _mapPlanColorChangedToState(event);
+    } else if (event is PlanLocationChanged) {
+      yield _mapPlanLocationChangedToState(event);
     } else if (event is PlanTimeChangedToCurrentTime) {
       yield _mapPlanChangedToCurrentTimeToState(event);
     } else if (event is ShowApartPlanPage) {
@@ -90,6 +92,10 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
 
   PlanState _mapPlanColorChangedToState(PlanColorChanged event) {
     return state.copyWith(color: event.color);
+  }
+
+  PlanState _mapPlanLocationChangedToState(PlanLocationChanged event) {
+    return state.copyWith(location: event.location);
   }
 
   PlanState _mapPlanChangedToCurrentTimeToState(PlanTimeChangedToCurrentTime event) {
