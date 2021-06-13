@@ -14,10 +14,10 @@ import 'package:app_qldt/_utils/database/provider.dart';
 class LocalEventService extends LocalService {
   Map<String, int> colorMap = Map();
 
-  //  For calendar
+  //  For schedule
   final List<UserEventModel> userEventList = [];
 
-  //  For schedule
+  //  For calendar
   Map<DateTime, List<UserEventModel>> eventsData = Map();
 
   /// Constructs a [LocalEventService] instance with user's ID account
@@ -45,6 +45,8 @@ class LocalEventService extends LocalService {
 
     await _loadColorMap();
     await _loadFromDb();
+
+    _refreshUserEventList();
   }
 
   Future<void> updateVersion(int newVersion) async {
