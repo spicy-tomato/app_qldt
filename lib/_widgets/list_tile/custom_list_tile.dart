@@ -6,6 +6,7 @@ class CustomListTile extends StatelessWidget {
   final Widget? trailing;
   final bool? defaultHeight;
   final Function()? onTap;
+  final bool? disabled;
 
   const CustomListTile({
     Key? key,
@@ -14,11 +15,13 @@ class CustomListTile extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.defaultHeight,
+    this.disabled,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget listTile = Container(
+      color: disabled != null && disabled! ? Colors.grey.withOpacity(0.5) : null,
       height: defaultHeight == null || defaultHeight == true ? 48 : null,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -40,6 +43,12 @@ class CustomListTile extends StatelessWidget {
         ),
       ),
     );
+
+    if (disabled != null && disabled!) {
+      return AbsorbPointer(
+        child: listTile,
+      );
+    }
 
     if (onTap == null) {
       return listTile;
