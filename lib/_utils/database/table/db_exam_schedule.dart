@@ -4,10 +4,12 @@ import 'package:sqflite/sqflite.dart';
 class DbExamSchedule extends TableModel {
   DbExamSchedule([Database? database]) : super(database);
 
+  static String get tableName => 'exam_schedule';
+
   @override
   String get createScript => ''
-      'CREATE TABLE IF NOT EXISTS exam_schedule('
-      'id_exam_schedule INTEGER PRIMARY KEY AUTOINCREMENT,'
+      'CREATE TABLE IF NOT EXISTS $tableName('
+      'id_exam_schedule INTEGER PRIMARY KEY,'
       'semester TEXT,'
       'module_name TEXT,'
       'credit INTEGER,'
@@ -21,13 +23,10 @@ class DbExamSchedule extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      return await database!.rawQuery(
-        'SELECT * '
-        'FROM exam_schedule;',
-      );
+      return await database!.query(tableName);
     } on Exception catch (_) {
       await database!.execute(createScript);
-      return await database!.query('exam_schedule');
+      return await database!.query(tableName);
     }
   }
 
@@ -37,26 +36,26 @@ class DbExamSchedule extends TableModel {
     try {
       return await database!.rawQuery(
         'SELECT semester '
-        'FROM exam_schedule '
+        'FROM $tableName '
         'GROUP BY semester '
         'ORDER BY semester;',
       );
     } on Exception catch (_) {
       await database!.execute(createScript);
-      return await database!.query('exam_schedule');
+      return await database!.query(tableName);
     }
   }
 
   Future<void> insert(Map<String, dynamic> examSchedule) async {
     assert(database != null, 'Database must not be null');
-    await database!.insert('exam_schedule', examSchedule);
+    await database!.insert(tableName, examSchedule);
   }
 
   Future<void> delete() async {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.delete('exam_schedule');
+      await database!.delete(tableName);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

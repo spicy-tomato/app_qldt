@@ -5,9 +5,13 @@ import 'table_model.dart';
 class DbNotification extends TableModel {
   DbNotification([Database? database]) : super(database);
 
+  static String get tableName => 'notification';
+
+  static String get senderTable => 'sender';
+
   @override
   String get createScript => ''
-      'CREATE TABLE IF NOT EXISTS notification('
+      'CREATE TABLE IF NOT EXISTS $tableName('
       'id INTEGER PRIMARY KEY AUTOINCREMENT,'
       'id_notification INTEGER,'
       'title TEXT,'
@@ -24,22 +28,22 @@ class DbNotification extends TableModel {
     try {
       return await database!.rawQuery(
         'SELECT '
-        'notification.id_notification,'
-        'notification.title,'
-        'notification.content,'
-        'notification.typez,'
-        'notification.time_start,'
-        'notification.time_end,'
-        'notification.time_created,'
-        'sender.sender_name '
+        '$tableName.id_notification,'
+        '$tableName.title,'
+        '$tableName.content,'
+        '$tableName.typez,'
+        '$tableName.time_start,'
+        '$tableName.time_end,'
+        '$tableName.time_created,'
+        '$senderTable.sender_name '
         'FROM '
-        'notification JOIN sender '
-        'ON notification.id_sender = sender.id_sender '
-        'ORDER BY notification.id_notification DESC;',
+        '$tableName JOIN sender '
+        'ON $tableName.id_sender = $senderTable.id_sender '
+        'ORDER BY $tableName.id_notification DESC;',
       );
     } on Exception catch (_) {
       await database!.execute(createScript);
-      return await database!.query('notification');
+      return await database!.query(tableName);
     }
   }
 
@@ -47,7 +51,7 @@ class DbNotification extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.insert('notification', notification);
+      await database!.insert(tableName, notification);
     } on Exception catch (e) {
       print(e);
     }
@@ -57,7 +61,7 @@ class DbNotification extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.delete('notification');
+      await database!.delete(tableName);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

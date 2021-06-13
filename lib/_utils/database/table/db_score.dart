@@ -5,9 +5,11 @@ import 'table_model.dart';
 class DbScore extends TableModel {
   DbScore([Database? database]) : super(database);
 
+  static String get tableName => 'score';
+
   @override
   String get createScript => ''
-      'CREATE TABLE IF NOT EXISTS score('
+      'CREATE TABLE IF NOT EXISTS $tableName('
       'id_score INTEGER PRIMARY KEY AUTOINCREMENT,'
       'module_name TEXT,'
       'semester TEXT,'
@@ -23,7 +25,7 @@ class DbScore extends TableModel {
     try {
       return await database!.rawQuery(
         'SELECT * '
-        'FROM score '
+        'FROM $tableName '
         'ORDER BY semester, module_name COLLATE LOCALIZED;',
       );
     } on Exception catch (_) {
@@ -38,26 +40,26 @@ class DbScore extends TableModel {
     try {
       return await database!.rawQuery(
         'SELECT semester '
-        'FROM score '
+        'FROM $tableName '
         'GROUP BY semester '
         'ORDER BY semester;',
       );
     } on Exception catch (_) {
       await database!.execute(createScript);
-      return await database!.query('score');
+      return await database!.query(tableName);
     }
   }
 
   Future<void> insert(Map<String, dynamic> score) async {
     assert(database != null, 'Database must not be null');
-    await database!.insert('score', score);
+    await database!.insert(tableName, score);
   }
 
   Future<void> delete() async {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.delete('score');
+      await database!.delete(tableName);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

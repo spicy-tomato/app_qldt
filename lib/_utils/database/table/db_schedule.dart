@@ -5,10 +5,14 @@ import 'table_model.dart';
 class DbSchedule extends TableModel {
   DbSchedule([Database? database]) : super(database);
 
+  static String get tableName => 'schedule';
+
+  static String get colorTable => 'color_event';
+
   @override
   String get createScript => ''
-      'CREATE TABLE IF NOT EXISTS schedule('
-      'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+      'CREATE TABLE IF NOT EXISTS $tableName('
+      'id_schedule INTEGER PRIMARY KEY,'
       'id_module_class TEXT,'
       'module_class_name TEXT,'
       'id_room TEXT,'
@@ -21,15 +25,16 @@ class DbSchedule extends TableModel {
     try {
       return await database!.rawQuery(
         'SELECT '
-        'schedule.id_module_class,'
-        'schedule.module_class_name,'
-        'schedule.id_room,'
-        'schedule.shift_schedules,'
-        'schedule.day_schedules,'
-        'color_event.color '
+        '$tableName.id_module_class,'
+        '$tableName.id_schedule,'
+        '$tableName.module_class_name,'
+        '$tableName.id_room,'
+        '$tableName.shift_schedules,'
+        '$tableName.day_schedules,'
+        '$colorTable.color '
         'FROM '
-        'schedule LEFT JOIN color_event '
-        'ON schedule.id_module_class = color_event.id_module_class;',
+        '$tableName LEFT JOIN $colorTable '
+        'ON $tableName.id_module_class = $colorTable.id_module_class;',
       );
     } on Exception catch (e) {
       print(e);
@@ -42,10 +47,8 @@ class DbSchedule extends TableModel {
 
     try {
       return await database!.rawQuery(
-        'SELECT '
-            'schedule.id_module_class '
-            'FROM '
-            'schedule;',
+        'SELECT id_module_class '
+        'FROM $tableName;',
       );
     } on Exception catch (e) {
       print(e);
@@ -57,7 +60,7 @@ class DbSchedule extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.insert('schedule', schedule);
+      await database!.insert(tableName, schedule);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
@@ -67,7 +70,7 @@ class DbSchedule extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.delete('schedule');
+      await database!.delete(tableName);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
