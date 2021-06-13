@@ -91,29 +91,26 @@ class _FullPlanPageState extends State<_FullPlanPage> {
           ],
         ),
         Expanded(
-          child: BlocBuilder<PlanBloc, PlanState>(
-            builder: (context, state) {
-              return ListView(
-                controller: widget.scrollController,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  PlanPageTime(),
-                  PlanPageDivider(context: context),
-                  AddGuest(),
-                  PlanPageDivider(context: context),
-                  Location(),
-                  PlanPageDivider(context: context),
-                  Describe(),
-                  PlanPageDivider(context: context),
-                  Accessibility(),
-                  PlanPageDivider(context: context),
-                  Status(),
-                  PlanPageDivider(context: context),
-                  PlanColor(),
-                ],
-              );
-            },
+          child: ListView(
+            controller: widget.scrollController,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              PlanPageTime(),
+              PlanPageDivider(context: context),
+              // AddGuest(),
+              // PlanPageDivider(context: context),
+              Location(),
+              PlanPageDivider(context: context),
+              Describe(),
+              PlanPageDivider(context: context),
+              // Accessibility(),
+              // PlanPageDivider(context: context),
+              // Status(),
+              // PlanPageDivider(context: context),
+              PlanColor(),
+              PlanPageDivider(context: context),
+            ],
           ),
         ),
       ],
@@ -167,14 +164,13 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
             CustomListTile(
               title: Padding(
                 padding: EdgeInsets.only(top: 15),
-                child: BlocBuilder<PlanBloc, PlanState>(
-                  builder: (context, state) {
-                    return Text(
-                      '${DayOfWeekVN.get(state.fromDay.weekday)}, ngày ${state.fromDay.day} '
-                      'tháng ${state.fromDay.month} · ${state.fromDay.hour}:00 - ${state.toDay.hour}:00',
-                      style: PlanPageConstant.textFieldStyle,
-                    );
-                  },
+                child: Text(
+                  '${DayOfWeekVN.get(context.read<PlanBloc>().state.fromDay.weekday)}, '
+                  'ngày ${context.read<PlanBloc>().state.fromDay.day} '
+                  'tháng ${context.read<PlanBloc>().state.fromDay.month} · '
+                  '${context.read<PlanBloc>().state.fromDay.hour}:00 - '
+                  '${context.read<PlanBloc>().state.toDay.hour}:00',
+                  style: PlanPageConstant.textFieldStyle,
                 ),
               ),
               defaultHeight: false,
