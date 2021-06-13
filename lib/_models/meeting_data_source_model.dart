@@ -21,7 +21,9 @@ class UserDataSourceModel extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return appointments![index].visualizeName;
+    return appointments![index].visualizeName != ''
+        ? appointments![index].visualizeName
+        : 'Không có tiêu đề';
   }
 
   @override
