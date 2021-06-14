@@ -1,10 +1,11 @@
+import 'package:app_qldt/_models/screen.dart';
 import 'package:flutter/material.dart';
 
 class Const {
-  static get requestTimeout => Duration(seconds: 20);
-  static get crawlerTimeout => Duration(minutes: 5);
+  static Duration get requestTimeout => Duration(seconds: 20);
+  static Duration get crawlerTimeout => Duration(minutes: 5);
 
-  static get defaultPage => '/home';
+  static String get defaultPage => ScreenPage.home.string;
 
   static const Color primaryColor = Color(0xff0779e4);
 
