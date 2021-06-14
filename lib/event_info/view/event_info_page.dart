@@ -60,14 +60,14 @@ class _EventInfoPageState extends State<EventInfoPage> {
                   widget.event.from == DateTime(now.year, now.month, now.day) ? 'Hôm nay' : _date(),
                 ),
               ),
-              widget.event.location == null
+              widget.event.location == null || widget.event.location == ''
                   ? Container()
                   : ListTile(
                       horizontalTitleGap: 4,
                       leading: Icon(Icons.location_on_outlined),
                       title: Text(widget.event.location!),
                     ),
-              widget.event.description == null
+              widget.event.description == null || widget.event.description == ''
                   ? Container()
                   : ListTile(
                       horizontalTitleGap: 4,

@@ -42,7 +42,11 @@ class UserEventModel {
     this.isAllDay = isAllDay ?? false;
     this.color = color ?? PlanColors.defaultColor;
 
-    visualizeName = type == EventType.schedule ? _getShortenClassName(eventName) : eventName;
+    visualizeName = type == EventType.schedule
+        ? _getShortenClassName(eventName)
+        : eventName == ''
+            ? '(Chưa có tiêu đề)'
+            : eventName;
   }
 
   factory UserEventModel.fromSchedule(ScheduleModel schedule, [int? color]) {
