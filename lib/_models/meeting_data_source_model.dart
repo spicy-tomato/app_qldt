@@ -23,12 +23,12 @@ class UserDataSourceModel extends CalendarDataSource {
   String getSubject(int index) {
     return appointments![index].visualizeName != ''
         ? appointments![index].visualizeName
-        : 'Không có tiêu đề';
+        : '(Không có tiêu đề)';
   }
 
   @override
   Color getColor(int index) {
-    return (appointments![index].backgroundColor as PlanColors).color;
+    return (appointments![index].color as PlanColors).color;
   }
 
   @override

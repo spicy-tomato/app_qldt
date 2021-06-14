@@ -1,11 +1,8 @@
-import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_widgets/wrapper/item.dart';
 import 'package:app_qldt/plan/plan.dart';
+import 'package:app_qldt/schedule/bloc/schedule_bloc.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app_qldt/_models/meeting_data_source_model.dart';
-import 'package:app_qldt/_models/user_event_model.dart';
-import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,42 +21,35 @@ class SchedulePage extends StatefulWidget {
 
 class _SchedulePageState extends State<SchedulePage> {
   final GlobalKey _globalKey = GlobalKey();
-  final UserDataSourceModel _events = UserDataSourceModel(<UserEventModel>[]);
   final CalendarController _controller = CalendarController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  late ThemeData _themeModel;
 
   @override
   Widget build(BuildContext context) {
-    _addData();
-    final ThemeData themeModel = Theme.of(context);
+    _themeModel = Theme.of(context);
 
-    return NavigablePlanPage(
-      onPanelClose: _onPanelClose,
-      child: BlocBuilder<PlanBloc, PlanState>(
-        builder: (context, state) {
-          return SharedUI(
-            onWillPop: () {
-              if (state.visibility != PlanPageVisibility.close) {
-                _controller.selectedDate = null;
-                context.read<PlanBloc>().add(ClosePlanPage());
-                return Future.value(false);
-              }
-
-              return Future.value(null);
-            },
-            child: Item(
-              child: Theme(
-                key: _globalKey,
-                data: themeModel.copyWith(accentColor: themeModel.backgroundColor),
-                child: Schedule(_events, controller: _controller),
+    return BlocProvider<ScheduleBloc>(
+      create: (_) => ScheduleBloc(context)..add(InitializeEvents()),
+      child: NavigablePlanPage(
+        onPanelClose: _onPanelClose,
+        child: BlocBuilder<PlanBloc, PlanState>(
+          builder: (context, state) {
+            return SharedUI(
+              onWillPop: () => _onWillPop(state),
+              child: Item(
+                child: Theme(
+                  key: _globalKey,
+                  data: _themeModel.copyWith(accentColor: _themeModel.backgroundColor),
+                  child: BlocBuilder<ScheduleBloc, ScheduleState>(
+                    builder: (context, state) {
+                      return Schedule(state.sourceModel, controller: _controller);
+                    },
+                  ),
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -70,36 +60,17 @@ class _SchedulePageState extends State<SchedulePage> {
     super.dispose();
   }
 
-  void _addData() {
-    final List<UserEventModel> appointment = _getDataSource();
-
-    _events.appointments!.clear();
-
-    appointment.forEach((element) {
-      _events.appointments!.add(element);
-    });
-  }
-
-  List<UserEventModel> _getDataSource() {
-    final List<UserEventModel> events = <UserEventModel>[];
-    final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
-
-    //  Schedule
-    userDataModel.eventServiceController.eventsData.forEach((_, mapValue) {
-      mapValue.forEach((element) {
-        events.add(element);
-      });
-    });
-
-    //  Exam Schedule
-    userDataModel.examScheduleServiceController.examScheduleData.forEach((element) {
-      events.add(UserEventModel.fromExamScheduleModel(element));
-    });
-
-    return events;
-  }
-
   void _onPanelClose() {
     _controller.selectedDate = null;
+  }
+
+  Future<bool?> _onWillPop(PlanState state) {
+    if (state.visibility != PlanPageVisibility.close) {
+      _controller.selectedDate = null;
+      context.read<PlanBloc>().add(ClosePlanPage());
+      return Future.value(false);
+    }
+
+    return Future.value(null);
   }
 }

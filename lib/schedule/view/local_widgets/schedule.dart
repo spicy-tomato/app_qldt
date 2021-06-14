@@ -98,7 +98,7 @@ class _ScheduleState extends State<Schedule> {
         context.read<PlanBloc>().add(ClosePlanPage());
       } else {
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
+            MaterialPageRoute(builder: (_) => EventInfoPage(context, event: details.appointments![0])));
       }
 
       widget.controller.selectedDate = null;
@@ -125,7 +125,7 @@ class _ScheduleState extends State<Schedule> {
           top: 20,
           bottom: 0,
           child: Text(
-            monthName + ' ' + details.date.year.toString(),
+            '$monthName' '${details.date.year.toString()}',
             style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w500,

@@ -45,10 +45,10 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield _mapPlanChangedToCurrentTimeToState(event);
     } else if (event is ShowApartPlanPage) {
       yield _mapShowApartPlanPageToState(event);
-    } else if (event is EditEvent) {
-      yield _mapEditEventToState(event);
+    } else if (event is EditSchedule) {
+      yield _mapEditScheduleToState(event);
     } else if (event is OpenPlanPage) {
-      yield _mapOpenPlanPageToState();
+      yield _mapOpenPlanPageToState(event);
     } else if (event is ClosePlanPage) {
       yield _mapClosePlanPageToState();
     }
@@ -113,18 +113,30 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     );
   }
 
-  PlanState _mapEditEventToState(EditEvent event) {
+  PlanState _mapEditScheduleToState(EditSchedule event) {
     return state.copyWith(
+      title: event.event.visualizeName,
       from: event.event.from,
       to: event.event.to,
-      color: event.event.backgroundColor,
+      color: event.event.color,
       location: event.event.location,
       visibility: PlanPageVisibility.open,
+      type: PlanType.editSchedule,
+      id: event.event.id,
     );
   }
 
-  PlanState _mapOpenPlanPageToState() {
-    return state.copyWith(visibility: PlanPageVisibility.open);
+  PlanState _mapOpenPlanPageToState(OpenPlanPage event) {
+    return state.copyWith(
+      title: '',
+      color: PlanColors.defaultColor,
+      location: '',
+      description: '',
+      isAllDay: false,
+      repeat: PlanRepeat.noRepeat,
+      visibility: PlanPageVisibility.open,
+      type: event.type ?? PlanType.create,
+    );
   }
 
   PlanState _mapClosePlanPageToState() {

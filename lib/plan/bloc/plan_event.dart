@@ -103,7 +103,11 @@ class PlanLocationChanged extends PlanEvent {
 class OpenPlanPage extends PlanEvent {
   final PlanType? type;
 
-class OpenPlanPage extends PlanEvent {}
+  OpenPlanPage({this.type});
+
+  @override
+  List<Object> get props => [type!];
+}
 
 class ClosePlanPage extends PlanEvent {}
 
@@ -125,10 +129,10 @@ class ShowApartPlanPage extends PlanEvent {
   List<Object> get props => [dateTime];
 }
 
-class EditEvent extends PlanEvent {
+class EditSchedule extends PlanEvent {
   final UserEventModel event;
 
-  const EditEvent(this.event);
+  const EditSchedule(this.event);
 
   @override
   List<Object> get props => [event];

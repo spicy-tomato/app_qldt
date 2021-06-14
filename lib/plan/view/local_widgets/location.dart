@@ -27,7 +27,7 @@ class _LocationState extends State<Location> {
       leading: const Icon(Icons.location_on_outlined),
       title: TextField(
         controller: _controller,
-        onChanged: (text) => context.read<PlanBloc>().add(PlanLocationChanged(text)),
+        onChanged: _onChanged,
         style: PlanPageConstant.textFieldStyle,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -36,5 +36,9 @@ class _LocationState extends State<Location> {
         ),
       ),
     );
+  }
+
+  void _onChanged(String text) {
+    context.read<PlanBloc>().add(PlanLocationChanged(text));
   }
 }

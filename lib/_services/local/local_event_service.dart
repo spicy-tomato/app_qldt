@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_services/api/api_event_service.dart';
@@ -12,13 +10,15 @@ import 'package:app_qldt/_utils/database/provider.dart';
 /// into local storage
 ///
 class LocalEventService extends LocalService {
-  Map<String, int> colorMap = Map();
+  // Map<String, int> colorMap = Map();
 
   //  For schedule
-  final List<UserEventModel> userEventList = [];
+  List<UserEventModel> scheduleData = [];
+
+  List<UserEventModel> eventData = [];
 
   //  For calendar
-  Map<DateTime, List<UserEventModel>> eventsData = Map();
+  Map<DateTime, List<UserEventModel>> calendarData = Map();
 
   /// Constructs a [LocalEventService] instance with user's ID account
   ///
@@ -34,7 +34,7 @@ class LocalEventService extends LocalService {
   /// 2. If data is received successfully, then:
   ///   2.1. Remove saved data from local database, by calling [_remove].
   ///   2.2. Save new data to database, by calling [_save].
-  /// 3. Get data from local database, by calling [_loadFromDb].
+  /// 3. Get data from local database, by calling [_loadCalendarData].
   /// 4. Return data.
   ///
   Future<void> saveNewData(List<ScheduleModel> newData) async {
@@ -43,10 +43,10 @@ class LocalEventService extends LocalService {
     await _remove();
     await _save(newData);
 
-    await _loadColorMap();
-    await _loadFromDb();
-
-    _refreshUserEventList();
+    // await _loadColorMap();
+    // await _loadCalendarData();
+    await _loadScheduleData();
+    await _loadEventData();
   }
 
   Future<void> updateVersion(int newVersion) async {
@@ -54,25 +54,48 @@ class LocalEventService extends LocalService {
   }
 
   Future<void> loadOldData() async {
-    await _loadFromDb();
-    _refreshUserEventList();
+    // await _loadCalendarData();
+    await _loadScheduleData();
+    await _loadEventData();
   }
 
-  Future<void> updateColor(String idModuleClass, Color color) async {
-    Map<String, dynamic> dataMap = new Map();
-    dataMap[idModuleClass] = color.toString();
+  // Future<void> updateColor(String idModuleClass, Color color) async {
+  //   Map<String, dynamic> dataMap = new Map();
+  //   dataMap[idModuleClass] = color.toString();
+  //
+  //   await databaseProvider.colorEvent.update(dataMap);
+  // }
 
-    await databaseProvider.colorEvent.update(dataMap);
+  Future<void> _loadScheduleData() async {
+    scheduleData.clear();
+
+    List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
+
+    scheduleData =
+        List.generate(rawData.length, (index) => UserEventModel.fromScheduleMap(rawData[index]));
+
+    // eventsData.forEach((_, mapValue) {
+    //   mapValue.forEach((element) {
+    //     userEventList.add(element);
+    //   });
+    // });
   }
 
-  void _refreshUserEventList() {
-    userEventList.clear();
+  Future<void> loadEvents() async {
+    _loadEventData();
+  }
 
-    eventsData.forEach((_, mapValue) {
-      mapValue.forEach((element) {
-        userEventList.add(element);
-      });
-    });
+  Future<void> _loadEventData() async {
+    eventData.clear();
+
+    List<Map<String, dynamic>> rawData = await databaseProvider.event.all;
+
+    eventData = List.generate(rawData.length, (index) => UserEventModel.fromMap(rawData[index]));
+  }
+
+  Future<void> saveNewEvent(Map<String, dynamic> event) async {
+    print('Adding event: $event');
+    await databaseProvider.event.insert(event);
   }
 
   Future<void> delete() async {
@@ -93,20 +116,20 @@ class LocalEventService extends LocalService {
     await databaseProvider.schedule.delete();
   }
 
-  Future<void> _loadColorMap() async {
-    List<Map<String, dynamic>> colorMapList = await databaseProvider.colorEvent.map;
-
-    if (colorMapList.isEmpty) {
-      colorMap = new Map();
-    } else {
-      for (var map in colorMapList) {
-        String key = map['id_module_class'];
-        int value = int.parse(map['color']);
-
-        colorMap[key] = value;
-      }
-    }
-  }
+  // Future<void> _loadColorMap() async {
+  //   List<Map<String, dynamic>> colorMapList = await databaseProvider.colorEvent.map;
+  //
+  //   if (colorMapList.isEmpty) {
+  //     colorMap = new Map();
+  //   } else {
+  //     for (var map in colorMapList) {
+  //       String key = map['id_module_class'];
+  //       int value = int.parse(map['color']);
+  //
+  //       colorMap[key] = value;
+  //     }
+  //   }
+  // }
 
   /// Get schedule data from local database
   ///
@@ -114,11 +137,11 @@ class LocalEventService extends LocalService {
   /// 2. Parse raw data to [Map<DateTime, List<UserEvent>>].
   /// 3. Return parsed data.
   ///
-  Future<void> _loadFromDb() async {
-    List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
-    Map<DateTime, List<UserEventModel>> data = _parseToStandardStructure(rawData);
-    eventsData = data;
-  }
+// Future<void> _loadCalendarData() async {
+//   List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
+//   Map<DateTime, List<UserEventModel>> data = _parseToStandardStructure(rawData);
+//   calendarData = data;
+// }
 
   /// Parse data from [List<Map<String, dynamic>>?]
   ///              to [Map<DateTime, List<UserEvent>>]
@@ -132,31 +155,31 @@ class LocalEventService extends LocalService {
   ///   4.2. Add new [UserEventModel] instance to [events[schedule.daySchedules]].
   /// 5. Return [events].
   ///
-  Map<DateTime, List<UserEventModel>> _parseToStandardStructure(List<Map<String, dynamic>>? maps) {
-    if (maps == null) {
-      return new Map();
-    }
-
-    List<ScheduleModel> rawData = List.generate(
-      maps.length,
-      (index) => ScheduleModel.fromMap(maps[index]),
-    );
-
-    Map<DateTime, List<UserEventModel>> events = new Map();
-
-    for (var schedule in rawData) {
-      if (events[schedule.daySchedules] == null) {
-        events[schedule.daySchedules] = [];
-      }
-
-      UserEventModel event = UserEventModel.fromSchedule(
-        schedule,
-        colorMap[schedule.idModuleClass],
-      );
-
-      events[schedule.daySchedules]!.add(event);
-    }
-
-    return events;
-  }
+// Map<DateTime, List<UserEventModel>> _parseToStandardStructure(List<Map<String, dynamic>>? maps) {
+//   if (maps == null) {
+//     return new Map();
+//   }
+//
+//   List<ScheduleModel> rawData = List.generate(
+//     maps.length,
+//     (index) => ScheduleModel.fromMap(maps[index]),
+//   );
+//
+//   Map<DateTime, List<UserEventModel>> events = new Map();
+//
+//   for (var schedule in rawData) {
+//     if (events[schedule.daySchedules] == null) {
+//       events[schedule.daySchedules] = [];
+//     }
+//
+//     UserEventModel event = UserEventModel.fromSchedule(
+//       schedule,
+//       colorMap[schedule.idModuleClass],
+//     );
+//
+//     events[schedule.daySchedules]!.add(event);
+//   }
+//
+//   return events;
+// }
 }

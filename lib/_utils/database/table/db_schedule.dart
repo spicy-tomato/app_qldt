@@ -7,7 +7,7 @@ class DbSchedule extends TableModel {
 
   static String get tableName => 'schedule';
 
-  static String get colorTable => 'color_event';
+  static String get eventScheduleTable => 'event_schedule';
 
   @override
   String get createScript => ''
@@ -31,10 +31,11 @@ class DbSchedule extends TableModel {
         '$tableName.id_room,'
         '$tableName.shift_schedules,'
         '$tableName.day_schedules,'
-        '$colorTable.color '
+        '$eventScheduleTable.color,'
+        '$eventScheduleTable.description '
         'FROM '
-        '$tableName LEFT JOIN $colorTable '
-        'ON $tableName.id_module_class = $colorTable.id_module_class;',
+        '$tableName LEFT JOIN $eventScheduleTable '
+        'ON $tableName.id_schedule = $eventScheduleTable.id_schedule;',
       );
     } on Exception catch (e) {
       print(e);

@@ -16,11 +16,13 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
           ),
         );
 
-  Map<String, int> get colorMap => localService.colorMap;
+  // Map<String, int> get colorMap => localService.colorMap;
 
-  List<UserEventModel> get userEventList => localService.userEventList;
+  List<UserEventModel> get scheduleData => localService.scheduleData;
 
-  Map<DateTime, List<UserEventModel>> get eventsData => localService.eventsData;
+  List<UserEventModel> get eventData => localService.eventData;
+
+  Map<DateTime, List<UserEventModel>> get calendarData => localService.calendarData;
 
   Future<void> refresh() async {
     ServiceResponse response = await apiService.request();
@@ -40,6 +42,11 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
 
   Future<void> load() async {
     await localService.loadOldData();
+  }
+
+  Future<void> saveNewEvent(Map<String, dynamic> event) async {
+    await localService.saveNewEvent(event);
+    await localService.loadEvents();
   }
 
   List<ScheduleModel> _getListModel(dynamic responseData) {

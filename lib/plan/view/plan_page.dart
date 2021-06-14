@@ -96,6 +96,8 @@ class _FullPlanPageState extends State<_FullPlanPage> {
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             children: <Widget>[
+              PlanPageTitle(),
+              PlanPageDivider(context: context),
               PlanPageTime(),
               PlanPageDivider(context: context),
               // AddGuest(),
@@ -131,6 +133,17 @@ class _ApartPlanPage extends StatefulWidget {
 }
 
 class __ApartPlanPageState extends State<_ApartPlanPage> {
+  late DateTime _fromDay;
+  late DateTime _toDay;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fromDay = context.read<PlanBloc>().state.fromDay;
+    _toDay = context.read<PlanBloc>().state.toDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -165,11 +178,11 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
               title: Padding(
                 padding: EdgeInsets.only(top: 15),
                 child: Text(
-                  '${DayOfWeekVN.get(context.read<PlanBloc>().state.fromDay.weekday)}, '
-                  'ngày ${context.read<PlanBloc>().state.fromDay.day} '
-                  'tháng ${context.read<PlanBloc>().state.fromDay.month} · '
-                  '${context.read<PlanBloc>().state.fromDay.hour}:00 - '
-                  '${context.read<PlanBloc>().state.toDay.hour}:00',
+                  '${DayOfWeekVN.get(_fromDay.weekday)}, '
+                  'ngày ${_fromDay.day} '
+                  'tháng ${_fromDay.month} · '
+                  '${_fromDay.hour}:00 - '
+                  '${_toDay.hour}:00',
                   style: PlanPageConstant.textFieldStyle,
                 ),
               ),

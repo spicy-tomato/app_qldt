@@ -9,7 +9,7 @@ class DbColorEvent extends TableModel {
   String get createScript => ''
       'CREATE TABLE IF NOT EXISTS color_event('
       'id_module_class TEXT,'
-      'color TEXT,'
+      'color INTEGER,'
       'PRIMARY KEY (id_module_class, color));';
 
   Future<List<Map<String, dynamic>>> get map async {
@@ -29,13 +29,13 @@ class DbColorEvent extends TableModel {
     }
   }
 
-  Future<void> update(Map<String, dynamic> map) async {
-    assert(database != null, 'Database must not be null');
-
-    try {
-      await database!.update('color_event', map);
-    } on Exception catch (e) {
-      print('Error: ${e.toString()}');
-    }
-  }
+  // Future<void> update(Map<String, dynamic> map) async {
+  //   assert(database != null, 'Database must not be null');
+  //
+  //   try {
+  //     await database!.update('color_event', map);
+  //   } on Exception catch (e) {
+  //     print('Error: ${e.toString()}');
+  //   }
+  // }
 }

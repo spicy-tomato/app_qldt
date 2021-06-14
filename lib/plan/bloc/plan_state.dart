@@ -13,12 +13,15 @@ class PlanState extends Equatable {
   final PlanStatus status;
   final PlanColors color;
   final PlanPageVisibility visibility;
+  final PlanType type;
+  final int? id;
 
   const PlanState({
     this.title = '',
     this.isAllDay = false,
     required this.fromDay,
     required this.toDay,
+    this.type = PlanType.create,
     this.repeat = PlanRepeat.noRepeat,
     this.people = '',
     this.location = '',
@@ -27,6 +30,7 @@ class PlanState extends Equatable {
     this.status = PlanStatus.free,
     this.color = PlanColors.defaultColor,
     this.visibility = PlanPageVisibility.close,
+    this.id,
   });
 
   PlanState copyWith({
@@ -34,6 +38,7 @@ class PlanState extends Equatable {
     bool? isAllDay,
     DateTime? from,
     DateTime? to,
+    PlanType? type,
     PlanRepeat? repeat,
     String? people,
     String? location,
@@ -42,12 +47,14 @@ class PlanState extends Equatable {
     PlanStatus? status,
     PlanColors? color,
     PlanPageVisibility? visibility,
+    int? id,
   }) {
     return PlanState(
       title: title ?? this.title,
       isAllDay: isAllDay ?? this.isAllDay,
       fromDay: from ?? this.fromDay,
       toDay: to ?? this.toDay,
+      type: type ?? this.type,
       repeat: repeat ?? this.repeat,
       people: people ?? this.people,
       location: location ?? this.location,
@@ -56,6 +63,7 @@ class PlanState extends Equatable {
       status: status ?? this.status,
       color: color ?? this.color,
       visibility: visibility ?? this.visibility,
+      id: id ?? this.id,
     );
   }
 
@@ -65,6 +73,7 @@ class PlanState extends Equatable {
         isAllDay,
         fromDay,
         toDay,
+        type,
         repeat,
         people,
         location,
@@ -73,5 +82,6 @@ class PlanState extends Equatable {
         status,
         color,
         visibility,
+        id,
       ];
 }
