@@ -1,6 +1,5 @@
 import 'package:app_qldt/_models/event_model.dart';
-import 'package:app_qldt/_models/user_data_model.dart';
-import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
+import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/schedule/schedule.dart';
 import 'package:flutter/material.dart';
 
@@ -21,14 +20,6 @@ class PlanPageTopbar extends StatefulWidget {
 }
 
 class _PlanPageTopbarState extends State<PlanPageTopbar> {
-  late UserDataModel _userDataModel;
-
-  @override
-  void initState() {
-    super.initState();
-    _userDataModel = context.read<UserRepository>().userDataModel;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -97,7 +88,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
   Future<void> _saveNewEvent() async {
     final state = context.read<PlanBloc>().state;
 
-    EventModel event = EventModel(
+    final event = EventModel(
       eventName: state.title,
       color: state.color,
       isAllDay: state.isAllDay,
@@ -107,13 +98,24 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       to: state.toDay,
     );
 
-    await _userDataModel.eventServiceController.saveNewEvent(event.toMap());
-
     context.read<ScheduleBloc>().add(AddEvent(event));
     context.read<PlanBloc>().add(ClosePlanPage());
   }
 
-  Future<void> _saveModifiedSchedule() async {}
+  Future<void> _saveModifiedSchedule() async {
+    final state = context.read<PlanBloc>().state;
+
+    final event = EventScheduleModel(
+      idSchedule: state.id!,
+      description: state.description,
+      color: state.color,
+      eventName: state.title,
+      location: state.location,
+    );
+
+    context.read<ScheduleBloc>().add(ModifyEvent(event));
+    context.read<PlanBloc>().add(ClosePlanPage());
+  }
 
   Future<void> _saveModifiedEvent() async {}
 }

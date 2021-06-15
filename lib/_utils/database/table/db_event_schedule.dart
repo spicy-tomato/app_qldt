@@ -32,7 +32,11 @@ class DbEventSchedule extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.update(tableName, map);
+      await database!.insert(
+        tableName,
+        map,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/meeting_data_source_model.dart';
 
 import 'package:app_qldt/_models/user_data_model.dart';
@@ -14,9 +15,13 @@ part 'schedule_event.dart';
 part 'schedule_state.dart';
 
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
-  final BuildContext context;
+  final BuildContext _context;
+  final UserDataModel _userDataModel;
 
-  ScheduleBloc(this.context) : super(ScheduleInitial());
+  ScheduleBloc(BuildContext context)
+      : _context = context,
+        _userDataModel = context.read<UserRepository>().userDataModel,
+        super(ScheduleInitial());
 
   @override
   Stream<ScheduleState> mapEventToState(
@@ -28,14 +33,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       yield* _mapAddEventToState(event);
     } else if (event is RemoveEvent) {
       yield* _mapRemoveEventToState(event);
-    } else if (event is ReloadEvents) {
-      _mapReloadEventsToState();
+    } else if (event is ModifyEvent) {
+      yield* _mapModifyEventToState(event);
     }
   }
 
   Stream<ScheduleState> _mapInitializeEventsToState(InitializeEvents event) async* {
     final List<UserEventModel> events = <UserEventModel>[];
-    final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
+    final UserDataModel userDataModel = _context.read<UserRepository>().userDataModel;
 
     //  Event
     userDataModel.eventServiceController.eventData.forEach((event) {
@@ -54,20 +59,31 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
     state.sourceModel.appointments = events;
 
-    _mapReloadEventsToState();
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
   }
 
   Stream<ScheduleState> _mapAddEventToState(AddEvent event) async* {
-    state.sourceModel.appointments!.add(event.event);
-    _mapReloadEventsToState();
+    final newEvent = event.event;
+
+    await _userDataModel.eventServiceController.saveNewEvent(newEvent);
+    state.sourceModel.appointments!.add(newEvent);
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
   }
 
   Stream<ScheduleState> _mapRemoveEventToState(RemoveEvent event) async* {
     state.sourceModel.appointments!.remove(event.event);
-    _mapReloadEventsToState();
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.remove, state.sourceModel.appointments!);
   }
 
-  void _mapReloadEventsToState() {
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
+  Stream<ScheduleState> _mapModifyEventToState(ModifyEvent event) async* {
+    final modifiedEventInfo = event.event;
+    await _userDataModel.eventServiceController.saveModifiedSchedule(modifiedEventInfo);
+
+    final modifiedEvent = (state.sourceModel.appointments!
+            .firstWhere((oldEvent) => (oldEvent as UserEventModel).id == modifiedEventInfo.id)
+        as UserEventModel);
+    modifiedEvent.color = modifiedEventInfo.color;
+    modifiedEvent.description = modifiedEventInfo.description;
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 }

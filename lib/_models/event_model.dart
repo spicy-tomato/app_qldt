@@ -11,6 +11,7 @@ class EventModel extends UserEventModel {
     required DateTime to,
     required bool isAllDay,
   }) : super(
+          id: -1,
           eventName: eventName,
           color: color,
           location: location,
