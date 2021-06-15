@@ -1,8 +1,8 @@
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/plan/plan.dart';
 
-class NewEventModel extends UserEventModel {
-  NewEventModel({
+class EventModel extends UserEventModel {
+  EventModel({
     required String eventName,
     required PlanColors color,
     required String location,

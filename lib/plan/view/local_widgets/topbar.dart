@@ -97,7 +97,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
   Future<void> _saveNewEvent() async {
     final state = context.read<PlanBloc>().state;
 
-    NewEventModel event = NewEventModel(
+    EventModel event = EventModel(
       eventName: state.title,
       color: state.color,
       isAllDay: state.isAllDay,
