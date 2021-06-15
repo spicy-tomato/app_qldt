@@ -25,10 +25,6 @@ class CrawlerPasswordVisibleChanged extends CrawlerEvent {
   List<Object> get props => [hidePassword!];
 }
 
-class CrawlerResetStatus extends CrawlerEvent {
-  const CrawlerResetStatus();
-}
+class CrawlerResetStatus extends CrawlerEvent {}
 
-class CrawlerSubmitted extends CrawlerEvent {
-  const CrawlerSubmitted();
-}
+class CrawlerSubmitted extends CrawlerEvent {}

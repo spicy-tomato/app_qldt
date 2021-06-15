@@ -43,10 +43,6 @@ class LoginPasswordVisibleChanged extends LoginEvent {
   List<Object> get props => [hidePassword!];
 }
 
-class LoginSubmitted extends LoginEvent {
-  const LoginSubmitted();
-}
+class LoginSubmitted extends LoginEvent {}
 
-class ShowedLoginFailedDialog extends LoginEvent {
-  const ShowedLoginFailedDialog();
-}
+class ShowedLoginFailedDialog extends LoginEvent {}

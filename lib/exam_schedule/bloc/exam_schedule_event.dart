@@ -25,9 +25,7 @@ class ExamScheduleDataChanged extends ExamScheduleEvent {
   List<Object?> get props => [semester];
 }
 
-class ExamScheduleDataRefresh extends ExamScheduleEvent {
-  ExamScheduleDataRefresh();
-}
+class ExamScheduleDataRefresh extends ExamScheduleEvent {}
 
 class ExamSchedulePageStatusChanged extends ExamScheduleEvent {
   final ExamSchedulePageStatus status;

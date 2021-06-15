@@ -16,9 +16,7 @@ class PlanTitleChanged extends PlanEvent {
   List<Object> get props => [title];
 }
 
-class PlanIsAllDayChanged extends PlanEvent {
-  const PlanIsAllDayChanged();
-}
+class PlanIsAllDayChanged extends PlanEvent {}
 
 class PlanFromDateChanged extends PlanEvent {
   final DateTime from;
