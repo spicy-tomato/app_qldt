@@ -47,6 +47,8 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       yield _mapShowApartPlanPageToState(event);
     } else if (event is EditSchedule) {
       yield _mapEditScheduleToState(event);
+    } else if (event is EditEvent) {
+      yield _mapEditEventToState(event);
     } else if (event is OpenPlanPage) {
       yield _mapOpenPlanPageToState(event);
     } else if (event is ClosePlanPage) {
@@ -122,6 +124,19 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       location: event.event.location,
       visibility: PlanPageVisibility.open,
       type: PlanType.editSchedule,
+      id: event.event.id,
+    );
+  }
+
+  PlanState _mapEditEventToState(EditEvent event) {
+    return state.copyWith(
+      title: event.event.visualizeName,
+      from: event.event.from,
+      to: event.event.to,
+      color: event.event.color,
+      location: event.event.location,
+      visibility: PlanPageVisibility.open,
+      type: PlanType.editEvent,
       id: event.event.id,
     );
   }

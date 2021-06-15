@@ -89,6 +89,7 @@ class PlanColorChanged extends PlanEvent {
   @override
   List<Object> get props => [color];
 }
+
 class PlanLocationChanged extends PlanEvent {
   final String location;
 
@@ -131,6 +132,15 @@ class EditSchedule extends PlanEvent {
   final UserEventModel event;
 
   const EditSchedule(this.event);
+
+  @override
+  List<Object> get props => [event];
+}
+
+class EditEvent extends PlanEvent {
+  final UserEventModel event;
+
+  const EditEvent(this.event);
 
   @override
   List<Object> get props => [event];

@@ -154,7 +154,12 @@ class __TopbarState extends State<_Topbar> {
 
   void _onEdit() {
     Navigator.of(context, rootNavigator: true).pop();
-    widget.rootContext.read<PlanBloc>().add(EditSchedule(widget.event));
+
+    if (widget.event.type == EventType.schedule) {
+      widget.rootContext.read<PlanBloc>().add(EditSchedule(widget.event));
+    } else if (widget.event.type == EventType.event) {
+      widget.rootContext.read<PlanBloc>().add(EditEvent(widget.event));
+    }
   }
 
   void _onSelect(_DropdownOption select) {

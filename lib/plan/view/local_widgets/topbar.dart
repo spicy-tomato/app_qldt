@@ -86,11 +86,11 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
         break;
 
       case PlanType.editSchedule:
-        await _saveSchedule();
+        await _saveModifiedSchedule();
         break;
 
       default:
-        await _saveEvent();
+        await _saveModifiedEvent();
     }
   }
 
@@ -113,7 +113,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
     context.read<PlanBloc>().add(ClosePlanPage());
   }
 
-  Future<void> _saveSchedule() async {}
+  Future<void> _saveModifiedSchedule() async {}
 
-  Future<void> _saveEvent() async {}
+  Future<void> _saveModifiedEvent() async {}
 }
