@@ -47,7 +47,7 @@ class BottomText extends StatelessWidget {
             if (useCurrentTime == null || useCurrentTime!) {
               context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
             }
-            context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+            context.read<PlanBloc>().add(OpenPlanPage());
           },
           child: Padding(
             padding: EdgeInsets.only(left: 15),
@@ -88,7 +88,7 @@ class AddNoteButton extends StatelessWidget {
               if (useCurrentTime == null || useCurrentTime!) {
                 context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
               }
-              context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+              context.read<PlanBloc>().add(OpenPlanPage());
             },
             child: Align(
               alignment: Alignment(-0.7, 0),

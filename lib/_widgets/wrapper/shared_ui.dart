@@ -79,11 +79,11 @@ class SharedUI extends StatelessWidget {
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text("Có"),
+                  child: const Text('Có'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text("Không"),
+                  child: const Text('Không'),
                 ),
               ],
             );

@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // var _clientId = new ClientId(Secret.getId(), "");
+  // var _clientId = new ClientId(Secret.getId(), '');
   // const _scopes = const [];
 
   Paint.enableDithering = true;

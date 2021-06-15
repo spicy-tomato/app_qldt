@@ -1,11 +1,13 @@
+import 'package:app_qldt/_models/event_model.dart';
+import 'package:app_qldt/_models/event_schedule_model.dart';
+import 'package:app_qldt/schedule/schedule.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/plan/bloc/enum/enum.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 
-class PlanPageTopbar extends StatelessWidget {
+class PlanPageTopbar extends StatefulWidget {
   final Function()? onCloseButtonTap;
 
   const PlanPageTopbar({
@@ -13,6 +15,11 @@ class PlanPageTopbar extends StatelessWidget {
     this.onCloseButtonTap,
   }) : super(key: key);
 
+  @override
+  _PlanPageTopbarState createState() => _PlanPageTopbarState();
+}
+
+class _PlanPageTopbarState extends State<PlanPageTopbar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,9 +29,9 @@ class PlanPageTopbar extends StatelessWidget {
         children: <Widget>[
           TextButton(
             onPressed: () {
-              context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
-              if (onCloseButtonTap != null) {
-                onCloseButtonTap!.call();
+              context.read<PlanBloc>().add(ClosePlanPage());
+              if (widget.onCloseButtonTap != null) {
+                widget.onCloseButtonTap!.call();
               }
             },
             style: ButtonStyle(
@@ -48,9 +55,7 @@ class PlanPageTopbar extends StatelessWidget {
                   shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                 ),
-                onPressed: () {
-                  print('Save button pressed!');
-                },
+                onPressed: _onPressed,
                 child: const Center(
                   child: Text(
                     'Lưu',
@@ -64,4 +69,53 @@ class PlanPageTopbar extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _onPressed() async {
+    switch (context.read<PlanBloc>().state.type) {
+      case PlanType.create:
+        await _saveNewEvent();
+        break;
+
+      case PlanType.editSchedule:
+        await _saveModifiedSchedule();
+        break;
+
+      default:
+        await _saveModifiedEvent();
+    }
+  }
+
+  Future<void> _saveNewEvent() async {
+    final state = context.read<PlanBloc>().state;
+
+    final event = EventModel(
+      eventName: state.title,
+      color: state.color,
+      isAllDay: state.isAllDay,
+      description: state.description,
+      location: state.location,
+      from: state.fromDay,
+      to: state.toDay,
+    );
+
+    context.read<ScheduleBloc>().add(AddEvent(event));
+    context.read<PlanBloc>().add(ClosePlanPage());
+  }
+
+  Future<void> _saveModifiedSchedule() async {
+    final state = context.read<PlanBloc>().state;
+
+    final event = EventScheduleModel(
+      idSchedule: state.id!,
+      description: state.description,
+      color: state.color,
+      eventName: state.title,
+      location: state.location,
+    );
+
+    context.read<ScheduleBloc>().add(ModifyEvent(event));
+    context.read<PlanBloc>().add(ClosePlanPage());
+  }
+
+  Future<void> _saveModifiedEvent() async {}
 }

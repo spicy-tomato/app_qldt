@@ -16,11 +16,11 @@ enum PlanColors {
 }
 
 extension PlanColorsExtension on PlanColors {
-  static String stringFunction(PlanColors color){
+  static String stringFunction(PlanColors color) {
     return color.string;
   }
 
-  static Color colorFunction(PlanColors color){
+  static Color colorFunction(PlanColors color) {
     return color.color;
   }
 
@@ -101,6 +101,48 @@ extension PlanColorsExtension on PlanColors {
 
       default:
         return Color(0xff007bff);
+    }
+  }
+}
+
+extension IntToPlanColors on int {
+  PlanColors toPlanColors() {
+    switch (this) {
+      case 0xffff6347:
+        return PlanColors.tomato;
+
+      case 0xfff28500:
+        return PlanColors.tangerine;
+
+      case 0xffffe135:
+        return PlanColors.banana;
+
+      case 0xff579229:
+        return PlanColors.basil;
+
+      case 0xff32CD32:
+        return PlanColors.sage;
+
+      case 0xff007bff:
+        return PlanColors.peacock;
+
+      case 0xff464196:
+        return PlanColors.blueberry;
+
+      case 0xffbaa2fd:
+        return PlanColors.lavender;
+
+      case 0xff8d2da8:
+        return PlanColors.grape;
+
+      case 0xfffc8eac:
+        return PlanColors.flamingo;
+
+      case 0xff848884:
+        return PlanColors.graphite;
+
+      default:
+        return PlanColors.defaultColor;
     }
   }
 }

@@ -29,7 +29,7 @@ class ApiExamScheduleService extends ApiService {
   /// [responseData] has structure:
   /// [
   ///     {
-  ///         "Semester":               [String]
+  ///         "School_Year:             [String]
   ///         "Module_Name":            [String]
   ///         "Credit":                 [int]
   ///         "Date_Start":             [String]

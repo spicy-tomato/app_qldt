@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_core/localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
-class CustomeSfLocalizationsVi extends SfLocalizationsVi {
+class CustomSfLocalizationsVi extends SfLocalizationsVi {
   @override
   String get allowedViewDayLabel => r'Ngày';
 
@@ -155,7 +155,7 @@ class SfLocalizationsVnDelegate extends LocalizationsDelegate<SfLocalizations> {
 
   @override
   Future<SfLocalizations> load(Locale locale) {
-    return SynchronousFuture<SfLocalizations>(CustomeSfLocalizationsVi());
+    return SynchronousFuture<SfLocalizations>(CustomSfLocalizationsVi());
   }
 
   @override

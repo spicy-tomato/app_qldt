@@ -1,11 +1,13 @@
 class ScheduleModel {
+  final int id;
   final String idModuleClass;
   final String moduleClassName;
   final String idRoom;
   final int shiftSchedules;
   final DateTime daySchedules;
 
-  ScheduleModel({
+  const ScheduleModel({
+    required this.id,
     required this.idModuleClass,
     required this.moduleClassName,
     required this.idRoom,
@@ -15,6 +17,7 @@ class ScheduleModel {
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     return ScheduleModel(
+      id: json['ID_Schedules'],
       idModuleClass: json['ID_Module_Class'],
       moduleClassName: json['Module_Class_Name'],
       idRoom: json['ID_Room'],
@@ -25,6 +28,7 @@ class ScheduleModel {
 
   factory ScheduleModel.fromMap(Map<String, dynamic> map) {
     return ScheduleModel(
+      id: map['id_schedule'],
       idModuleClass: map['id_module_class'],
       moduleClassName: map['module_class_name'],
       idRoom: map['id_room'],
@@ -35,6 +39,7 @@ class ScheduleModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id_schedule': id,
       'id_module_class': idModuleClass,
       'module_class_name': moduleClassName,
       'id_room': idRoom,
@@ -44,6 +49,6 @@ class ScheduleModel {
   }
 
   String toString() {
-    return "Mã HP: $idModuleClass, HP: $moduleClassName";
+    return 'Mã HP: $idModuleClass, HP: $moduleClassName, id: $id';
   }
 }

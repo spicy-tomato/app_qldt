@@ -1,6 +1,8 @@
-import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
+import 'package:app_qldt/plan/plan.dart';
 import 'package:app_qldt/plan/view/local_widgets/local_widgets.dart';
 
 class AddGuest extends StatelessWidget {
@@ -19,6 +21,7 @@ class AddGuestTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      disabled: context.read<PlanBloc>().state.type.isEditSchedule,
       leading: const Icon(Icons.people_alt_outlined),
       title: Text(
         'Thêm người',
@@ -97,7 +100,6 @@ class _AddGuestScreen extends State<AddGuestScreen> {
           children: [
             CustomListTile(
               title: TextField(),
-
             ),
           ],
         ),

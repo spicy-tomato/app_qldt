@@ -11,15 +11,11 @@ import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
 import 'local_widgets/local_widgets.dart';
 
 class PlanPage extends StatefulWidget {
-  final DateTime? from;
-  final DateTime? to;
   final ScrollController? scrollController;
   final Function()? onCloseButtonTap;
 
   PlanPage({
     Key? key,
-    this.from,
-    this.to,
     this.scrollController,
     this.onCloseButtonTap,
   }) : super(key: key);
@@ -95,29 +91,28 @@ class _FullPlanPageState extends State<_FullPlanPage> {
           ],
         ),
         Expanded(
-          child: BlocBuilder<PlanBloc, PlanState>(
-            builder: (context, state) {
-              return ListView(
-                controller: widget.scrollController,
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  PlanPageTime(),
-                  PlanPageDivider(context: context),
-                  AddGuest(),
-                  PlanPageDivider(context: context),
-                  Location(),
-                  PlanPageDivider(context: context),
-                  Describe(),
-                  PlanPageDivider(context: context),
-                  Accessibility(),
-                  PlanPageDivider(context: context),
-                  Status(),
-                  PlanPageDivider(context: context),
-                  PlanColor(),
-                ],
-              );
-            },
+          child: ListView(
+            controller: widget.scrollController,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              PlanPageTitle(),
+              PlanPageDivider(context: context),
+              PlanPageTime(),
+              PlanPageDivider(context: context),
+              // AddGuest(),
+              // PlanPageDivider(context: context),
+              Location(),
+              PlanPageDivider(context: context),
+              Describe(),
+              PlanPageDivider(context: context),
+              // Accessibility(),
+              // PlanPageDivider(context: context),
+              // Status(),
+              // PlanPageDivider(context: context),
+              PlanColor(),
+              PlanPageDivider(context: context),
+            ],
           ),
         ),
       ],
@@ -138,6 +133,17 @@ class _ApartPlanPage extends StatefulWidget {
 }
 
 class __ApartPlanPageState extends State<_ApartPlanPage> {
+  late DateTime _fromDay;
+  late DateTime _toDay;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fromDay = context.read<PlanBloc>().state.fromDay;
+    _toDay = context.read<PlanBloc>().state.toDay;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -171,14 +177,13 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
             CustomListTile(
               title: Padding(
                 padding: EdgeInsets.only(top: 15),
-                child: BlocBuilder<PlanBloc, PlanState>(
-                  builder: (context, state) {
-                    return Text(
-                      '${DayOfWeekVN.get(state.fromDay.weekday)}, ngày ${state.fromDay.day} '
-                      'tháng ${state.fromDay.month} · ${state.fromDay.hour}:00 - ${state.toDay.hour}:00',
-                      style: PlanPageConstant.textFieldStyle,
-                    );
-                  },
+                child: Text(
+                  '${DayOfWeekVN.get(_fromDay.weekday)}, '
+                  'ngày ${_fromDay.day} '
+                  'tháng ${_fromDay.month} · '
+                  '${_fromDay.hour}:00 - '
+                  '${_toDay.hour}:00',
+                  style: PlanPageConstant.textFieldStyle,
                 ),
               ),
               defaultHeight: false,
@@ -197,6 +202,6 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
   }
 
   void _onTap() {
-    context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+    context.read<PlanBloc>().add(OpenPlanPage());
   }
 }

@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
@@ -16,11 +17,13 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
           ),
         );
 
-  Map<String, int> get colorMap => localService.colorMap;
+  // Map<String, int> get colorMap => localService.colorMap;
 
-  List<UserEventModel> get userEventList => localService.userEventList;
+  List<UserEventModel> get scheduleData => localService.scheduleData;
 
-  Map<DateTime, List<UserEventModel>> get eventsData => localService.eventsData;
+  List<UserEventModel> get eventData => localService.eventData;
+
+  Map<DateTime, List<UserEventModel>> get calendarData => localService.calendarData;
 
   Future<void> refresh() async {
     ServiceResponse response = await apiService.request();
@@ -33,7 +36,7 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
       if (response.statusCode == 204) {
         print('There are no new data');
       } else {
-        print("Error with status code: ${response.statusCode} at event_service_controller.dart");
+        print('Error with status code: ${response.statusCode} at event_service_controller.dart');
       }
     }
   }
@@ -42,7 +45,17 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
     await localService.loadOldData();
   }
 
-  List<ScheduleModel> _getListModel(dynamic responseData) {
+  Future<void> saveNewEvent(UserEventModel event) async {
+    await localService.saveNewEvent(event);
+    await localService.loadEvents();
+  }
+
+  Future<void> saveModifiedSchedule(EventScheduleModel event) async {
+    await localService.saveModifiedSchedule(event);
+    await localService.loadEvents();
+  }
+
+    List<ScheduleModel> _getListModel(dynamic responseData) {
     List data = responseData as List;
     List<ScheduleModel> listModel = [];
 

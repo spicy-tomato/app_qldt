@@ -16,9 +16,7 @@ class PlanTitleChanged extends PlanEvent {
   List<Object> get props => [title];
 }
 
-class PlanIsAllDayChanged extends PlanEvent {
-  const PlanIsAllDayChanged();
-}
+class PlanIsAllDayChanged extends PlanEvent {}
 
 class PlanFromDateChanged extends PlanEvent {
   final DateTime from;
@@ -92,14 +90,25 @@ class PlanColorChanged extends PlanEvent {
   List<Object> get props => [color];
 }
 
-class PlanPageVisibilityChanged extends PlanEvent {
-  final PlanPageVisibility visibility;
+class PlanLocationChanged extends PlanEvent {
+  final String location;
 
-  const PlanPageVisibilityChanged(this.visibility);
+  const PlanLocationChanged(this.location);
 
   @override
-  List<Object> get props => [visibility];
+  List<Object> get props => [location];
 }
+
+class OpenPlanPage extends PlanEvent {
+  final PlanType? type;
+
+  OpenPlanPage({this.type});
+
+  @override
+  List<Object> get props => [type!];
+}
+
+class ClosePlanPage extends PlanEvent {}
 
 class PlanTimeChangedToCurrentTime extends PlanEvent {
   final DateTime current = DateTime.now();
@@ -108,4 +117,31 @@ class PlanTimeChangedToCurrentTime extends PlanEvent {
 
   @override
   List<Object> get props => [current];
+}
+
+class ShowApartPlanPage extends PlanEvent {
+  final DateTime dateTime;
+
+  const ShowApartPlanPage(this.dateTime);
+
+  @override
+  List<Object> get props => [dateTime];
+}
+
+class EditSchedule extends PlanEvent {
+  final UserEventModel event;
+
+  const EditSchedule(this.event);
+
+  @override
+  List<Object> get props => [event];
+}
+
+class EditEvent extends PlanEvent {
+  final UserEventModel event;
+
+  const EditEvent(this.event);
+
+  @override
+  List<Object> get props => [event];
 }

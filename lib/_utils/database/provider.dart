@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:app_qldt/_utils/database/table/data_version.dart';
+import 'package:app_qldt/_utils/database/table/db_event.dart';
+import 'package:app_qldt/_utils/database/table/db_event_exam.dart';
+import 'package:app_qldt/_utils/database/table/db_event_schedule.dart';
 import 'package:app_qldt/_utils/database/table/db_exam_schedule.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -17,6 +20,9 @@ class DatabaseProvider {
   late DbScore score;
   late DbExamSchedule examSchedule;
   late DbDataVersion dataVersion;
+  late DbEvent event;
+  late DbEventSchedule eventSchedule;
+  late DbEventExam eventExam;
 
   DatabaseProvider();
 
@@ -71,6 +77,9 @@ class DatabaseProvider {
     colorEvent = DbColorEvent(database);
     score = DbScore(database);
     examSchedule = DbExamSchedule(database);
+    event = DbEvent(database);
+    eventSchedule = DbEventSchedule(database);
+    eventExam = DbEventExam(database);
     dataVersion = DbDataVersion(database);
     await dataVersion.getVersionToCache();
   }
@@ -87,6 +96,9 @@ class DatabaseProvider {
       DbColorEvent().create(db);
       DbScore().create(db);
       DbExamSchedule().create(db);
+      DbEvent().create(db);
+      DbEventSchedule().create(db);
+      DbEventExam().create(db);
 
       var dv = DbDataVersion();
       dv.create(db);

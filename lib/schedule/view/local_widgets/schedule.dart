@@ -83,24 +83,22 @@ class _ScheduleState extends State<Schedule> {
 
     if (details.targetElement == CalendarElement.calendarCell) {
       if (state.visibility == PlanPageVisibility.close) {
-        context.read<PlanBloc>().add(PlanFromDateChanged(details.date!));
-        context.read<PlanBloc>().add(PlanToDateChanged(details.date!.add(Duration(hours: 1))));
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.apart));
+        context.read<PlanBloc>().add(ShowApartPlanPage(details.date!));
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
         widget.controller.selectedDate = null;
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+        context.read<PlanBloc>().add(OpenPlanPage());
       } else if (_previousSelectedDay != null && details.date != _previousSelectedDay) {
         widget.controller.selectedDate = null;
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+        context.read<PlanBloc>().add(ClosePlanPage());
       }
 
       _previousSelectedDay = details.date!;
     } else if (details.targetElement == CalendarElement.appointment) {
       if (state.visibility != PlanPageVisibility.close) {
-        context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+        context.read<PlanBloc>().add(ClosePlanPage());
       } else {
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => EventInfoPage(event: details.appointments![0])));
+            MaterialPageRoute(builder: (_) => EventInfoPage(context, event: details.appointments![0])));
       }
 
       widget.controller.selectedDate = null;
@@ -112,7 +110,7 @@ class _ScheduleState extends State<Schedule> {
   }
 
   Widget _scheduleViewMonthHeaderBuilder(_, details) {
-    final String monthName = "Tháng ${details.date.month}";
+    final String monthName = 'Tháng ${details.date.month}';
     return Stack(
       children: <Widget>[
         Image(
@@ -127,14 +125,14 @@ class _ScheduleState extends State<Schedule> {
           top: 20,
           bottom: 0,
           child: Text(
-            monthName + ' ' + details.date.year.toString(),
+            '$monthName' '${details.date.year.toString()}',
             style: TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w500,
               color: Colors.black,
             ),
           ),
-        )
+        ),
       ],
     );
   }

@@ -46,7 +46,7 @@ class ScoreModel {
   factory ScoreModel.fromJson(Map<String, dynamic> json) {
     return ScoreModel(
       moduleName: json['Module_Name'],
-      semester: json['Semester'],
+      semester: json['School_Year'],
       credit: json['Credit'],
       evaluation: json['Evaluation'],
       processScore: json['Process_Score'] == null ? null : json['Process_Score'].toDouble(),

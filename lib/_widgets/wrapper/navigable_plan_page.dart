@@ -73,7 +73,7 @@ class _SlideState extends State<Slide> {
 
   void _onPanelClosed(PlanState state) {
     if (state.visibility != PlanPageVisibility.close) {
-      context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.close));
+      context.read<PlanBloc>().add(ClosePlanPage());
       if (widget.onPanelClose != null) {
         widget.onPanelClose!.call();
       }
@@ -82,7 +82,7 @@ class _SlideState extends State<Slide> {
 
   void _onPanelSlide(double position, PlanState state) {
     if (position > 0.31 && state.visibility == PlanPageVisibility.apart) {
-      context.read<PlanBloc>().add(PlanPageVisibilityChanged(PlanPageVisibility.open));
+      context.read<PlanBloc>().add(OpenPlanPage());
     }
   }
 }

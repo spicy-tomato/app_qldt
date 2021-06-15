@@ -30,7 +30,7 @@ class User {
       idCardNumber: json['ID_Card_Number'],
       phoneNumberStudent: json['Phone_Number_Student'],
       address: json['Address_Student'],
-      accountId: json['ID'],
+      accountId: json['ID_Account'],
     );
   }
 

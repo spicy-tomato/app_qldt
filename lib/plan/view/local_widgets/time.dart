@@ -63,7 +63,12 @@ extension DateTimeExtesion on DateTime {
       this.isSameDay(other) && hour == other.hour && minute == other.minute;
 }
 
-class FromDatePicker extends StatelessWidget {
+class FromDatePicker extends StatefulWidget {
+  @override
+  _FromDatePickerState createState() => _FromDatePickerState();
+}
+
+class _FromDatePickerState extends State<FromDatePicker> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
@@ -77,7 +82,7 @@ class FromDatePicker extends StatelessWidget {
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(0))),
               onPressed: () => _chooseDay(context, state),
               child: Text(
-                  "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.fromDay)}",
+                  '${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.fromDay)}',
                   style: PlanPageConstant.textFieldStyle),
             );
           },
@@ -91,7 +96,7 @@ class FromDatePicker extends StatelessWidget {
             return TextButton(
               onPressed: () => _chooseTime(context, state),
               child: Text(
-                "${DateFormat.Hm().format(state.fromDay)}",
+                '${DateFormat.Hm().format(state.fromDay)}',
                 style: PlanPageConstant.textFieldStyle,
               ),
             );
@@ -101,12 +106,18 @@ class FromDatePicker extends StatelessWidget {
     );
   }
 
-  final Function _chooseDay = (BuildContext context, PlanState state) async {
+  Function _chooseDay = (BuildContext context, PlanState state) async {
     DateTime? newDate = await showDatePicker(
       context: context,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
       initialDate: state.fromDay,
+      builder: (context, _) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: _!,
+        );
+      },
     );
 
     if (newDate != null) {
@@ -126,6 +137,12 @@ class FromDatePicker extends StatelessWidget {
     TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(state.fromDay),
+      builder: (context, _) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: _!,
+        );
+      },
     );
 
     if (newTime != null) {
@@ -152,11 +169,11 @@ class ToDatePicker extends StatelessWidget {
           buildWhen: (previous, current) => !previous.toDay.isSameDay(current.toDay),
           builder: (context, state) {
             return TextButton(
-              style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(0))),
+              style:
+                  ButtonStyle(padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(0))),
               onPressed: () => _chooseDay(context, state),
               child: Text(
-                  "${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.toDay)}",
+                  '${DateFormat('E, d MMMM, y', Localizations.localeOf(context).languageCode).format(state.toDay)}',
                   style: PlanPageConstant.textFieldStyle),
             );
           },
@@ -170,7 +187,7 @@ class ToDatePicker extends StatelessWidget {
             return TextButton(
               onPressed: () => _chooseTime(context, state),
               child: Text(
-                "${DateFormat.Hm().format(state.toDay)}",
+                '${DateFormat.Hm().format(state.toDay)}',
                 style: PlanPageConstant.textFieldStyle,
               ),
             );
@@ -186,6 +203,12 @@ class ToDatePicker extends StatelessWidget {
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
       initialDate: state.toDay,
+      builder: (context, _) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: _!,
+        );
+      },
     );
 
     if (newDate != null) {
@@ -197,7 +220,7 @@ class ToDatePicker extends StatelessWidget {
         state.toDay.minute,
       );
 
-      context.read<PlanBloc>().add(PlanFromDateChanged(newDate));
+      context.read<PlanBloc>().add(PlanToDateChanged(newDate));
     }
   };
 
@@ -205,6 +228,12 @@ class ToDatePicker extends StatelessWidget {
     TimeOfDay? newTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(state.toDay),
+      builder: (context, _) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: _!,
+        );
+      },
     );
 
     if (newTime != null) {
@@ -216,7 +245,7 @@ class ToDatePicker extends StatelessWidget {
         newTime.minute,
       );
 
-      context.read<PlanBloc>().add(PlanFromDateChanged(newDate));
+      context.read<PlanBloc>().add(PlanToDateChanged(newDate));
     }
   };
 }

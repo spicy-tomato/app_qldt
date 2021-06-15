@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:app_qldt/plan/bloc/enum/color.dart';
 
 class UserDataSourceModel extends CalendarDataSource {
   UserDataSourceModel(List<UserEventModel> source) {
@@ -25,7 +26,7 @@ class UserDataSourceModel extends CalendarDataSource {
 
   @override
   Color getColor(int index) {
-    return appointments![index].backgroundColor;
+    return (appointments![index].color as PlanColors).color;
   }
 
   @override

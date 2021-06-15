@@ -9,9 +9,11 @@ class DbDataVersion extends TableModel {
 
   DbDataVersion([Database? database]) : super(database);
 
+  static String get tableName => 'data_version';
+
   @override
   String get createScript => ''
-      'CREATE TABLE IF NOT EXISTS data_version('
+      'CREATE TABLE IF NOT EXISTS $tableName('
       'id_data INTEGER PRIMARY KEY AUTOINCREMENT,'
       'data_field TEXT,'
       'version INTEGER);';
@@ -20,13 +22,10 @@ class DbDataVersion extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      return await database!.rawQuery(
-        'SELECT * '
-        'FROM data_version;',
-      );
+      return await database!.query(tableName);
     } on Exception catch (_) {
       await database!.execute(createScript);
-      return await database!.query('data_version');
+      return await database!.query(tableName);
     }
   }
 
@@ -34,7 +33,7 @@ class DbDataVersion extends TableModel {
     List<String> _initialFields = ['schedule', 'notification', 'exam_schedule', 'score'];
 
     _initialFields.forEach((field) async {
-      await db.insert('data_version', {
+      await db.insert(tableName, {
         'data_field': field,
         'version': 0,
       });
@@ -43,12 +42,12 @@ class DbDataVersion extends TableModel {
 
   Future<void> update(String dataField, int version) async {
     assert(database != null, 'Database must not be null');
-    await database!.update('data_version', {dataField: version});
+    await database!.update(tableName, {dataField: version});
   }
 
   Future<void> getVersionToCache() async {
     schedule = int.parse((await database!.query(
-      'data_version',
+      tableName,
       columns: ['version'],
       where: 'data_field=?',
       whereArgs: ['schedule'],
@@ -56,7 +55,7 @@ class DbDataVersion extends TableModel {
         .toString());
 
     notification = int.parse((await database!.query(
-      'data_version',
+      tableName,
       where: 'data_field=?',
       columns: ['version'],
       whereArgs: ['notification'],
@@ -64,7 +63,7 @@ class DbDataVersion extends TableModel {
         .toString());
 
     examSchedule = int.parse((await database!.query(
-      'data_version',
+      tableName,
       where: 'data_field=?',
       columns: ['version'],
       whereArgs: ['exam_schedule'],
@@ -72,7 +71,7 @@ class DbDataVersion extends TableModel {
         .toString());
 
     score = int.parse((await database!.query(
-      'data_version',
+      tableName,
       where: 'data_field=?',
       columns: ['version'],
       whereArgs: ['score'],
@@ -82,7 +81,7 @@ class DbDataVersion extends TableModel {
 
   Future<void> _setVersion(String field, int newVersion) async {
     await database!.update(
-      'data_version',
+      tableName,
       {
         'version': newVersion,
       },
@@ -113,7 +112,7 @@ class DbDataVersion extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.delete('data_version');
+      await database!.delete(tableName);
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }

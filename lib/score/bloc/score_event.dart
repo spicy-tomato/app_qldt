@@ -35,9 +35,7 @@ class ScoreDataChanged extends ScoreEvent {
   List<Object?> get props => [semester, subjectEvaluation];
 }
 
-class ScoreDataRefresh extends ScoreEvent {
-  const ScoreDataRefresh();
-}
+class ScoreDataRefresh extends ScoreEvent {}
 
 class ScorePageStatusChanged extends ScoreEvent {
   final ScorePageStatus status;
