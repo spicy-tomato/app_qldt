@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_models/service_controller_data.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
@@ -44,12 +45,17 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
     await localService.loadOldData();
   }
 
-  Future<void> saveNewEvent(Map<String, dynamic> event) async {
+  Future<void> saveNewEvent(UserEventModel event) async {
     await localService.saveNewEvent(event);
     await localService.loadEvents();
   }
 
-  List<ScheduleModel> _getListModel(dynamic responseData) {
+  Future<void> saveModifiedSchedule(EventScheduleModel event) async {
+    await localService.saveModifiedSchedule(event);
+    await localService.loadEvents();
+  }
+
+    List<ScheduleModel> _getListModel(dynamic responseData) {
     List data = responseData as List;
     List<ScheduleModel> listModel = [];
 

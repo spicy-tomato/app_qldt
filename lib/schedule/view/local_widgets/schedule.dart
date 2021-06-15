@@ -132,7 +132,7 @@ class _ScheduleState extends State<Schedule> {
               color: Colors.black,
             ),
           ),
-        )
+        ),
       ],
     );
   }

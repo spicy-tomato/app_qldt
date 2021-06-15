@@ -12,21 +12,21 @@ enum EventType {
 }
 
 class UserEventModel {
-  final int? id;
-  final String eventName;
-  final String? location;
-  final String? description;
+  final int id;
   final EventType type;
-  late final PlanColors color;
-  late final DateTime? from;
-  late final DateTime? to;
-  late final bool isAllDay;
-  late final String visualizeName;
+  late String eventName;
+  late String? location;
+  late String? description;
+  late PlanColors color;
+  late DateTime? from;
+  late DateTime? to;
+  late bool isAllDay;
+  late String visualizeName;
 
   UserEventModel({
     required this.eventName,
     required this.type,
-    this.id,
+    required this.id,
     this.location,
     this.description,
     PlanColors? color,
@@ -37,6 +37,8 @@ class UserEventModel {
     if (from != null) {
       this.from = from;
       this.to = to ?? from.add(Duration(hours: 2, minutes: 25));
+    } else {
+      this.from = this.to = null;
     }
 
     this.isAllDay = isAllDay ?? false;
@@ -50,34 +52,7 @@ class UserEventModel {
   }
 
   factory UserEventModel.fromSchedule(ScheduleModel schedule, [int? color]) {
-    DateTime curr = schedule.daySchedules;
-    int hour, minute = 0;
-
-    switch (schedule.shiftSchedules) {
-      case 1:
-        hour = 7;
-        break;
-
-      case 2:
-        hour = 9;
-        minute = 35;
-        break;
-
-      case 3:
-        hour = 13;
-        break;
-
-      case 4:
-        hour = 15;
-        minute = 35;
-        break;
-
-      default:
-        hour = 19;
-        break;
-    }
-
-    curr = DateTime(curr.year, curr.month, curr.day, hour, minute);
+    DateTime curr = schedule.daySchedules.withShift(schedule.shiftSchedules);
 
     return UserEventModel(
       id: schedule.id,
@@ -94,27 +69,27 @@ class UserEventModel {
       return '';
     }
 
-    List<String> listSplitByWhiteSpace = string.split(' ');
-    String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
-    List<String> strArr = oldStr.split('-');
-
     try {
+      List<String> listSplitByWhiteSpace = string.split(' ');
+      String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
+      List<String> strArr = oldStr.split('-');
+
       strArr.removeLast();
       strArr.removeLast();
+
+      String newStr = strArr.join('-');
+      newStr = string.replaceAll(oldStr, newStr);
+
+      int indexOfOpenBrace = newStr.lastIndexOf('(');
+      int indexOfCloseBrace = newStr.lastIndexOf(')');
+
+      newStr = newStr.substring(0, indexOfOpenBrace) +
+          newStr.substring(indexOfOpenBrace + 1, indexOfCloseBrace);
+
+      return newStr;
     } on RangeError catch (_) {
       return string;
     }
-
-    String newStr = strArr.join('-');
-    newStr = string.replaceAll(oldStr, newStr);
-
-    int indexOfOpenBrace = newStr.lastIndexOf('(');
-    int indexOfCloseBrace = newStr.lastIndexOf(')');
-
-    newStr = newStr.substring(0, indexOfOpenBrace) +
-        newStr.substring(indexOfOpenBrace + 1, indexOfCloseBrace);
-
-    return newStr;
   }
 
   factory UserEventModel.fromExamScheduleModel(ExamScheduleModel examScheduleModel) {
@@ -128,7 +103,6 @@ class UserEventModel {
     DateTime to = from.add(Duration(minutes: examScheduleModel.credit * 45));
 
     return UserEventModel(
-      /// TODO: Change id
       id: -1,
       type: EventType.exam,
       eventName: 'Thi ' + examScheduleModel.moduleName,
@@ -155,10 +129,35 @@ class UserEventModel {
   }
 
   factory UserEventModel.fromScheduleMap(Map<String, dynamic> map) {
-    DateTime curr = DateTime.parse(map['day_schedules']);
+    DateTime curr = DateTime.parse(map['day_schedules']).withShift(map['shift_schedules'] as int);
+
+    return UserEventModel(
+      id: map['id_schedule'],
+      eventName: map['module_class_name'],
+      type: EventType.schedule,
+      from: curr,
+      color: map['color'] != null ? (map['color'] as int).toPlanColors() : null,
+      location: map['id_room'],
+      description: map['description'],
+      isAllDay: map['is_all_day'] != null ? (map['is_all_day'] as int) == 1 : false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return Map();
+  }
+
+  @override
+  String toString() {
+    return 'UserEvent{time: $from, name: $eventName, location: $location}';
+  }
+}
+
+extension DateTimeWithShift on DateTime {
+  DateTime withShift(int shift) {
     int hour, minute = 0;
 
-    switch (map['shift_schedules'] as int) {
+    switch (shift) {
       case 1:
         hour = 7;
         break;
@@ -182,26 +181,6 @@ class UserEventModel {
         break;
     }
 
-    curr = DateTime(curr.year, curr.month, curr.day, hour, minute);
-
-    return UserEventModel(
-      id: map['id_event'],
-      eventName: map['module_class_name'],
-      type: EventType.schedule,
-      from: curr,
-      color: map['color'] != null ? (map['color'] as int).toPlanColors() : null,
-      location: map['id_room'],
-      description: map['description'],
-      isAllDay: map['color'] != null ? (map['is_all_day'] as int) == 1 : false,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return Map();
-  }
-
-  @override
-  String toString() {
-    return 'UserEvent{time: $from, name: $eventName, location: $location}';
+    return DateTime(this.year, this.month, this.day, hour, minute);
   }
 }

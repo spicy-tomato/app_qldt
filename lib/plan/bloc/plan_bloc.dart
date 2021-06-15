@@ -116,28 +116,32 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
   }
 
   PlanState _mapEditScheduleToState(EditSchedule event) {
+    final newEvent = event.event;
+
     return state.copyWith(
-      title: event.event.visualizeName,
-      from: event.event.from,
-      to: event.event.to,
-      color: event.event.color,
-      location: event.event.location,
+      id: newEvent.id,
+      title: newEvent.visualizeName,
+      color: newEvent.color,
       visibility: PlanPageVisibility.open,
+      from: newEvent.from,
+      to: newEvent.to,
+      location: newEvent.location,
       type: PlanType.editSchedule,
-      id: event.event.id,
     );
   }
 
   PlanState _mapEditEventToState(EditEvent event) {
+    final newEvent = event.event;
+
     return state.copyWith(
-      title: event.event.visualizeName,
-      from: event.event.from,
-      to: event.event.to,
-      color: event.event.color,
-      location: event.event.location,
+      id: newEvent.id,
+      title: newEvent.visualizeName,
+      color: newEvent.color,
+      from: newEvent.from,
+      to: newEvent.to,
+      location: newEvent.location,
       visibility: PlanPageVisibility.open,
       type: PlanType.editEvent,
-      id: event.event.id,
     );
   }
 
