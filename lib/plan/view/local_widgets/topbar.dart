@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/new_event_model.dart';
+import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/schedule/schedule.dart';
@@ -97,7 +97,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
   Future<void> _saveNewEvent() async {
     final state = context.read<PlanBloc>().state;
 
-    NewEventModel event = NewEventModel(
+    EventModel event = EventModel(
       eventName: state.title,
       color: state.color,
       isAllDay: state.isAllDay,
