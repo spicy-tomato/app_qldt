@@ -1,5 +1,7 @@
 import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
+import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
+import 'package:app_qldt/plan/modify_range_bloc/modify_range_bloc.dart';
 import 'package:app_qldt/schedule/schedule.dart';
 import 'package:flutter/material.dart';
 
@@ -104,17 +106,56 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
 
   Future<void> _saveModifiedSchedule() async {
     final state = context.read<PlanBloc>().state;
+    final rootContext = context;
 
     final event = EventScheduleModel(
-      idSchedule: state.id!,
+      id: state.id!,
+      name: state.title,
       description: state.description,
       color: state.color,
-      eventName: state.title,
       location: state.location,
     );
 
-    context.read<ScheduleBloc>().add(ModifyEvent(event));
-    context.read<PlanBloc>().add(ClosePlanPage());
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocProvider(
+          create: (context) => ModifyRangeBloc(),
+          child: BlocBuilder<ModifyRangeBloc, ModifyRangeState>(
+            builder: (context, state) {
+              return RadioAlertDialog<ModifyRange>(
+                optionsList: ModifyRange.values,
+                currentOption: context.read<ModifyRangeBloc>().state.range,
+                stringFunction: ModifyRangeExtension.stringFunction,
+                onSelect: (ModifyRange range) {
+                  context.read<ModifyRangeBloc>().add(ModifyRangeChanged(range));
+                },
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Huỷ'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      if (state.range.isAllEvent) {
+                        rootContext.read<ScheduleBloc>().add(ModifyAllEventsWithName(event));
+                      } else {
+                        rootContext.read<ScheduleBloc>().add(ModifyEvent(event));
+                      }
+                      rootContext.read<PlanBloc>().add(ClosePlanPage());
+                    },
+                    child: Text('Lưu'),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _saveModifiedEvent() async {}

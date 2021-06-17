@@ -88,6 +88,11 @@ class LocalEventService extends LocalService {
     await databaseProvider.eventSchedule.update(event.toMap());
   }
 
+  Future<void> saveAllModifiedScheduleWithName(String name, EventScheduleModel event) async {
+    print('Modifying all schedules with name $name: $event');
+    await databaseProvider.eventSchedule.updateWithName(name, event.toMap());
+  }
+
   Future<void> delete() async {
     await _remove();
   }

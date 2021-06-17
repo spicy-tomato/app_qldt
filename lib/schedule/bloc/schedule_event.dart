@@ -36,4 +36,11 @@ class ModifyEvent extends ScheduleEvent {
   List<Object?> get props => [event];
 }
 
-class ReloadEvents extends ScheduleEvent {}
+class ModifyAllEventsWithName extends ScheduleEvent {
+  final EventScheduleModel event;
+
+  const ModifyAllEventsWithName(this.event);
+
+  @override
+  List<Object?> get props => [event];
+}

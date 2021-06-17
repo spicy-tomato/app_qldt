@@ -55,7 +55,12 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
     await localService.loadEvents();
   }
 
-    List<ScheduleModel> _getListModel(dynamic responseData) {
+  Future<void> saveAllModifiedScheduleWithName(String eventName, EventScheduleModel event) async {
+    await localService.saveAllModifiedScheduleWithName(eventName, event);
+    await localService.loadEvents();
+  }
+
+  List<ScheduleModel> _getListModel(dynamic responseData) {
     List data = responseData as List;
     List<ScheduleModel> listModel = [];
 
