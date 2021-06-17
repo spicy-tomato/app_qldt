@@ -7,6 +7,7 @@ class RadioAlertDialog<T> extends StatefulWidget {
   final Color Function(T)? radioColorFunction;
   final void Function(T) onSelect;
   final TextStyle? textStyle;
+  final List<Widget>? actions;
 
   const RadioAlertDialog({
     Key? key,
@@ -16,6 +17,7 @@ class RadioAlertDialog<T> extends StatefulWidget {
     required this.onSelect,
     this.textStyle,
     this.radioColorFunction,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -31,6 +33,7 @@ class _RadioAlertDialogState<T> extends State<RadioAlertDialog<T>> {
         mainAxisSize: MainAxisSize.min,
         children: _listTiles(widget.currentOption),
       ),
+      actions: widget.actions,
     );
   }
 
