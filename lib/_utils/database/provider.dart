@@ -105,7 +105,7 @@ class DatabaseProvider {
       DbDataVersion.insertInitial(db);
 
     } on Exception catch (e) {
-      print(e);
+      print('$e in DatabaseProvider._onCreate()');
     }
   }
 
@@ -115,7 +115,7 @@ class DatabaseProvider {
         await _upgradeToV2(db);
       }
     } on Exception catch (e) {
-      print(e);
+      print('$e in DatabaseProvider._onUpgrade()');
     }
   }
 

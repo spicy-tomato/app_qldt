@@ -25,7 +25,7 @@ class DbEvent extends TableModel {
     try {
       return await database!.query(tableName);
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbEvent.get');
       return [];
     }
   }
@@ -36,7 +36,7 @@ class DbEvent extends TableModel {
     try {
       await database!.insert(tableName, event);
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbEvent.insert()');
     }
   }
 

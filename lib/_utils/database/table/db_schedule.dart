@@ -38,7 +38,7 @@ class DbSchedule extends TableModel {
         'ON $tableName.id_schedule = $eventScheduleTable.id_schedule;',
       );
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbSchedule.all');
       return [];
     }
   }
@@ -52,7 +52,7 @@ class DbSchedule extends TableModel {
         'FROM $tableName;',
       );
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbSchedule.moduleClass');
       return [];
     }
   }
@@ -63,7 +63,7 @@ class DbSchedule extends TableModel {
     try {
       await database!.insert(tableName, schedule);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      print('Error: ${e.toString()} in DbSchedule.insert()');
     }
   }
 
@@ -73,7 +73,7 @@ class DbSchedule extends TableModel {
     try {
       await database!.delete(tableName);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      print('Error: ${e.toString()} in DbSchedule.delete()');
     }
   }
 }

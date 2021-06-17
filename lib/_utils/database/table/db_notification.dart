@@ -53,7 +53,7 @@ class DbNotification extends TableModel {
     try {
       await database!.insert(tableName, notification);
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbNotification.insert()');
     }
   }
 
