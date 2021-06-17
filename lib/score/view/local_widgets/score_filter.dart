@@ -58,7 +58,8 @@ class SemesterFilter extends StatefulWidget {
 class _SemesterFilterState extends State<SemesterFilter> {
   @override
   Widget build(BuildContext context) {
-    final List<SemesterModel> semesterList = context.read<UserRepository>().userDataModel.scoreServiceController.semester;
+    final List<SemesterModel> semesterList =
+        context.read<UserRepository>().userDataModel.scoreServiceController.semester;
 
     return BlocBuilder<ScoreBloc, ScoreState>(
       buildWhen: (previous, current) =>
@@ -76,10 +77,15 @@ class _SemesterFilterState extends State<SemesterFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SemesterModel>(
-                          onSelect: _onSelect,
-                          stringFunction: SemesterModel.getString,
-                          currentOption: state.semester,
-                          optionsList: semesterList);
+                        title: Text(
+                          'Chọn học kỳ',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onSelect: _onSelect,
+                        stringFunction: SemesterModel.getString,
+                        currentOption: state.semester,
+                        optionsList: semesterList,
+                      );
                     },
                   );
                 },
@@ -119,6 +125,7 @@ class _StatusFilterState extends State<StatusFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SubjectEvaluation>(
+                        title: Text('Trạng thái'),
                         onSelect: _onSelect,
                         stringFunction: SubjectStatusExtension.stringFunction,
                         currentOption: state.subjectEvaluation,
@@ -159,6 +166,7 @@ class _TypeFilterState extends State<TypeFilter> {
               context: context,
               builder: (context) {
                 return RadioAlertDialog<ScoreType>(
+                  title: Text('Chọn loại điểm'),
                   onSelect: _onSelect,
                   stringFunction: ScoreTypeExtension.stringFunction,
                   currentOption: state.scoreType,

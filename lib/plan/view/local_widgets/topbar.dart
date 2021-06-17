@@ -124,6 +124,10 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
           child: BlocBuilder<ModifyRangeBloc, ModifyRangeState>(
             builder: (context, state) {
               return RadioAlertDialog<ModifyRange>(
+                title: Text(
+                  'Tuỳ chọn sự kiện',
+                  style: TextStyle(color: Colors.black),
+                ),
                 optionsList: ModifyRange.values,
                 currentOption: context.read<ModifyRangeBloc>().state.range,
                 stringFunction: ModifyRangeExtension.stringFunction,

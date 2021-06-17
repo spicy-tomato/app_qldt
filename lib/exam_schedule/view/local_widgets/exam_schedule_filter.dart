@@ -35,10 +35,15 @@ class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SemesterModel>(
-                          onSelect: _onSelect,
-                          stringFunction: SemesterModel.getString,
-                          currentOption: state.semester,
-                          optionsList: semesterList);
+                        title: Text(
+                          'Chọn học kỳ',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onSelect: _onSelect,
+                        stringFunction: SemesterModel.getString,
+                        currentOption: state.semester,
+                        optionsList: semesterList,
+                      );
                     },
                   );
                 },
