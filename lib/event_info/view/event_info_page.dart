@@ -52,7 +52,7 @@ class _EventInfoPageState extends State<EventInfoPage> {
                   ),
                 ),
                 title: Text(
-                  widget.event.visualizeName,
+                  widget.event.eventName,
                   style: TextStyle(fontSize: 23),
                   softWrap: true,
                 ),

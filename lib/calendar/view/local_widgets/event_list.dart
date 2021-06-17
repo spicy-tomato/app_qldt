@@ -111,7 +111,7 @@ class _EventListItem extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: Text(
-                    event.visualizeName,
+                    event.eventName,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 16,

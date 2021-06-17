@@ -21,7 +21,6 @@ class UserEventModel {
   late DateTime? from;
   late DateTime? to;
   late bool isAllDay;
-  late String visualizeName;
 
   UserEventModel({
     required this.eventName,
@@ -44,7 +43,7 @@ class UserEventModel {
     this.isAllDay = isAllDay ?? false;
     this.color = color ?? PlanColors.defaultColor;
 
-    visualizeName = type == EventType.schedule
+    eventName = type == EventType.schedule
         ? _getShortenClassName(eventName)
         : eventName == ''
             ? '(Chưa có tiêu đề)'

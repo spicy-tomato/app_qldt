@@ -120,7 +120,7 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
 
     return state.copyWith(
       id: newEvent.id,
-      title: newEvent.visualizeName,
+      title: newEvent.eventName,
       color: newEvent.color,
       visibility: PlanPageVisibility.open,
       from: newEvent.from,
@@ -135,7 +135,7 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
 
     return state.copyWith(
       id: newEvent.id,
-      title: newEvent.visualizeName,
+      title: newEvent.eventName,
       color: newEvent.color,
       from: newEvent.from,
       to: newEvent.to,

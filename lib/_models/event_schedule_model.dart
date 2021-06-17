@@ -3,14 +3,14 @@ import 'package:app_qldt/plan/plan.dart';
 
 class EventScheduleModel extends UserEventModel {
   EventScheduleModel({
-    required int idSchedule,
+    required int id,
     required PlanColors color,
     required String description,
-    required String eventName,
+    required String name,
     required String location,
   }) : super(
-    id: idSchedule,
-    eventName: eventName,
+    id: id,
+    eventName: name,
     color: color,
     location: location,
     description: description,
