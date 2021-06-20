@@ -6,13 +6,9 @@ class SchoolLogo extends StatelessWidget {
     return Container(
       width: 625,
       height: 170,
-
       child: Hero(
         tag: 'login',
-        child: Image.asset(
-          'images/bia.jpg',
-        ),
-
+        child: Image.asset('images/bia.jpg'),
       ),
     );
   }

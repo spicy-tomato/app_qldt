@@ -1,10 +1,11 @@
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 
 import 'calendar_widgets/calendar_widgets.dart';
@@ -33,7 +34,7 @@ class Calendar<UserEvent> extends StatefulWidget {
   _CalendarState createState() => _CalendarState();
 }
 
-class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderStateMixin {
+class _CalendarState extends State<Calendar<UserEventModel>> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late final PageController _pageController;
 
@@ -84,7 +85,7 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
               titleCentered: true,
               titleTextFormatter: _titleTextFormatter,
               titleTextStyle: TextStyle(
-                fontSize: 27,
+                fontSize: 24,
                 fontWeight: FontWeight.w300,
               ),
             ),
@@ -116,7 +117,7 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
                     ? TodayInFocusedMonthWidget(date: date)
                     : TodayOutFocusedMonthWidget(date: date);
               },
-              markerBuilder: (_, day, List<UserEvent> events) {
+              markerBuilder: (_, day, List<UserEventModel> events) {
                 return day.month == _focusedDay.month
                     ? DayInFocusMonthMarker(events)
                     : DayOutFocusedMonthMarker(events);
@@ -135,7 +136,7 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
     );
   }
 
-  List<UserEvent?> _eventLoader(DateTime day) {
+  List<UserEventModel?> _eventLoader(DateTime day) {
     day = day.toStandard;
     return widget.events[day] == null ? [] : widget.events[day]!;
   }
@@ -162,6 +163,9 @@ class _CalendarState extends State<Calendar<UserEvent>> with TickerProviderState
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
+    context.read<PlanBloc>().add(PlanFromDateChanged(focusedDay));
+    context.read<PlanBloc>().add(PlanToDateChanged(focusedDay.add(Duration(hours: 1))));
+
     if (!isSameDay(_selectedDay, selectedDay)) {
       selectedDay = selectedDay.toStandard;
 

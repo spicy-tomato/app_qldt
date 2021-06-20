@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:app_qldt/_models/user_notification.dart';
+import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:intl/intl.dart';
 
 class NotificationPostPage extends StatelessWidget {
-  final UserNotification notification;
+  final UserNotificationModel notification;
 
   const NotificationPostPage({Key? key, required this.notification}) : super(key: key);
 
@@ -13,12 +13,10 @@ class NotificationPostPage extends StatelessWidget {
       key: const Key('Plan_page'),
       direction: DismissDirection.down,
       onDismissed: (_) => Navigator.of(context).pop(),
-      child: SafeArea(
-        child: Scaffold(
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: ScrollView(notification: notification),
-          ),
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          child: ScrollView(notification: notification),
         ),
       ),
     );
@@ -26,7 +24,7 @@ class NotificationPostPage extends StatelessWidget {
 }
 
 class ScrollView extends StatefulWidget {
-  final UserNotification notification;
+  final UserNotificationModel notification;
 
   const ScrollView({
     Key? key,
@@ -108,7 +106,11 @@ class _ScrollViewState extends State<ScrollView> {
                       ),
                     ),
                     Text(
-                      '3 ngày trước',
+                      DateTime.now()
+                              .subtract(Duration(days: 1))
+                              .isAfter(widget.notification.timeCreated)
+                          ? '${DateTime.now().difference(widget.notification.timeCreated).inDays} ngày trước'
+                          : '${DateTime.now().difference(widget.notification.timeCreated).inHours} giờ trước',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -121,7 +123,7 @@ class _ScrollViewState extends State<ScrollView> {
               ),
             ),
             Text(
-              DateFormat.Md().format(DateTime.now()),
+              DateFormat('d/M').format(widget.notification.timeCreated),
               style: TextStyle(
                 color: Theme.of(context).backgroundColor,
               ),

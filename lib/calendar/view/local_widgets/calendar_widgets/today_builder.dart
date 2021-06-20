@@ -12,7 +12,7 @@ class TodayInFocusedMonthWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Stack(
-        children: [
+        children: <Widget>[
           Center(
             child: Container(
               width: 45,
@@ -49,7 +49,7 @@ class TodayOutFocusedMonthWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Stack(
-        children: [
+        children: <Widget>[
           Center(
             child: Container(
               width: 45,

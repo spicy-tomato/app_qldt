@@ -1,14 +1,15 @@
-import 'package:app_qldt/_widgets/bottom_note/view/bottom_note.dart';
+import 'package:app_qldt/_repositories/user_repository/src/user_repository.dart';
+import 'package:app_qldt/_widgets/element/loading.dart';
+import 'package:app_qldt/_widgets/element/refresh_button.dart';
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
-import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:app_qldt/_models/user_event.dart';
+import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
-import 'package:app_qldt/_widgets/topbar/topbar.dart';
-import 'package:app_qldt/_widgets/user_data_model.dart';
+import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 
 import '../bloc/calendar_bloc.dart';
 import '../view/local_widgets/local_widgets.dart';
@@ -23,120 +24,69 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  late Map<DateTime, List<UserEventModel>> schedulesData;
+
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, List<UserEvent>> schedulesData =
-        UserDataModel.of(context)!.localEventService.eventsData;
+    schedulesData = context.read<UserRepository>().userDataModel.eventServiceController.calendarData;
 
-    return SharedUI(
-      topRightWidget: RefreshButton(
-        context,
-        () async {
-          widget.isLoading.value = true;
+    return NavigablePlanPage(
+      child: BlocBuilder<PlanBloc, PlanState>(
+        builder: (context, state) {
+          return SharedUI(
+            onWillPop: () {
+              if (state.visibility != PlanPageVisibility.close) {
+                context.read<PlanBloc>().add(ClosePlanPage());
+                return Future.value(false);
+              }
 
-          await UserDataModel.of(context)!.localEventService.refresh();
-          schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
-
-          widget.isLoading.value = false;
-        },
-      ),
-      child: Container(
-        child: BlocProvider(
-          create: (_) {
-            return CalendarBloc();
-          },
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Calendar(events: schedulesData),
-                  ValueListenableBuilder(
-                    builder: (_, bool value, Widget? child) {
-                      return value ? Loading() : Container();
-                    },
-                    valueListenable: widget.isLoading,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: BlocBuilder<CalendarBloc, CalendarState>(
-                  buildWhen: (previous, current) =>
-                      current.buildFirstTime &&
-                      !DeepCollectionEquality()
-                          .equals(previous.selectedEvents, current.selectedEvents),
-                  builder: (_, state) {
-                    // print(state.selectedEvents);
-                    return EventList(event: state.selectedEvents);
-                  },
+              return Future.value(null);
+            },
+            topRightWidget: _refreshButton(context),
+            child: Container(
+              child: BlocProvider<CalendarBloc>(
+                create: (_) => CalendarBloc(),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Calendar(events: schedulesData),
+                        _fader(),
+                      ],
+                    ),
+                    Expanded(child: EventList()),
+                    BottomNote(
+                      useCurrentTime: false,
+                    ),
+                  ],
                 ),
               ),
-              BottomNote(),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
-}
 
-class RefreshButton extends TopBarItem {
-  final GestureTapCallback onTap;
-  final BuildContext context;
+  Widget _refreshButton(BuildContext context) {
+    return RefreshButton(
+      onTap: () async {
+        widget.isLoading.value = true;
 
-  RefreshButton(this.context, this.onTap)
-      : super(
-          onTap: onTap,
-          alignment: Alignment(0.95, 0),
-          icon: Icons.refresh,
-        );
-}
+        await context.read<UserRepository>().userDataModel.eventServiceController.refresh();
+        schedulesData = context.read<UserRepository>().userDataModel.eventServiceController.calendarData;
 
-class Loading extends StatefulWidget {
-  @override
-  _LoadingState createState() => _LoadingState();
-}
-
-class _LoadingState extends State<Loading> with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<Color?> animation;
-  late bool shouldClose = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
+        widget.isLoading.value = false;
+      },
     );
-
-    animation = ColorTween(
-      begin: Colors.transparent,
-      end: Colors.white.withOpacity(0.3),
-    ).animate(controller)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    controller.forward();
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Container(
-        color: animation.value,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
+  Widget _fader() {
+    return ValueListenableBuilder<bool>(
+      builder: (_, value, __) {
+        return value ? Loading() : Container();
+      },
+      valueListenable: widget.isLoading,
     );
   }
 }

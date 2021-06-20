@@ -1,1 +1,2 @@
-export 'view/plan_page.dart';
+export 'view/view.dart';
+export 'bloc/plan_bloc.dart';

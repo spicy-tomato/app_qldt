@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+local.properties
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -40,4 +41,7 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-local.properties
+key.properties
+upload-keystore.jks
+
+/android/app/build.gradle

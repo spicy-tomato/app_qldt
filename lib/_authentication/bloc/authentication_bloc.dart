@@ -18,36 +18,32 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   AuthenticationBloc({
     required AuthenticationRepository authenticationRepository,
     required UserRepository userRepository,
-  })   : _authenticationRepository = authenticationRepository,
+  })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    _authenticationStatusSubscription = _authenticationRepository.stream
-        .listen((status) => add(AuthenticationStatusChanged(status)));
+    _authenticationStatusSubscription =
+        _authenticationRepository.stream.listen((status) => add(AuthenticationStatusChanged(status)));
   }
 
   @override
-  Stream<AuthenticationState> mapEventToState(
-    AuthenticationEvent event,
-  ) async* {
+  Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
     if (event is AuthenticationStatusChanged) {
       yield await _mapAuthenticationStatusChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
-      print('${DateTime.now()}: Request to logout');
-      await _authenticationRepository.logOut();
+      yield* _mapAuthenticationLogoutRequestedToState();
     }
   }
 
   @override
-  Future<void> close() {
-    _authenticationStatusSubscription.cancel();
-    _authenticationRepository.dispose();
-    return super.close();
+  Future<void> close() async {
+    await _authenticationStatusSubscription.cancel();
+    await _authenticationRepository.dispose();
+    await super.close();
   }
 
   Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
     AuthenticationStatusChanged event,
-  ) async {
-    final user = await _tryGetUser();
+  ) async {    final user = await _tryGetUser();
 
     if (user != null) {
       return AuthenticationState.authenticated(user);
@@ -58,6 +54,13 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     }
 
     return const AuthenticationState.unknown();
+  }
+
+  Stream<AuthenticationState> _mapAuthenticationLogoutRequestedToState() async* {
+    yield const AuthenticationState.unknown();
+    await _authenticationRepository.logOut();
+    await Future.delayed(const Duration(seconds: 2));
+    yield const AuthenticationState.unauthenticated();
   }
 
   Future<User?> _tryGetUser() async {

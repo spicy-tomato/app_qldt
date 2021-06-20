@@ -1,15 +1,29 @@
-enum LoginStatus { successful, failed }
+enum LoginStatus {
+  successfully,
+  incorrectInformation,
+  serverError,
+  noInternetConnection,
+}
+
+LoginStatus statusFromCode(int code) {
+  switch (code) {
+    case 200:
+      return LoginStatus.successfully;
+
+    case 401:
+      return LoginStatus.incorrectInformation;
+
+    default:
+      return LoginStatus.serverError;
+  }
+}
 
 class LoginResponse {
-  final String? message;
-  final dynamic info;
+  final LoginStatus status;
+  final String? data;
 
-  LoginResponse({this.message, this.info});
-
-  factory LoginResponse.fromJson(Map<String, dynamic> json) {
-    return LoginResponse(
-      message: json['message'],
-      info: json['info'],
-    );
-  }
+  LoginResponse({
+    required this.status,
+    this.data,
+  });
 }

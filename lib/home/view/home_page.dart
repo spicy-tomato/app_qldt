@@ -1,7 +1,10 @@
-import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
-import 'package:app_qldt/_widgets/bottom_note/view/bottom_note.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
+
+import 'package:app_qldt/_widgets/bottom_note/bottom_note.dart';
+import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,27 +14,41 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return SharedUI(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Theme.of(context).accentColor,
-            Theme.of(context).backgroundColor,
-          ],
-        ),
-      ),
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Greeting(),
-            Art(),
-            Quote(),
-            BottomNote(),
-          ],
-        ),
+    return NavigablePlanPage(
+      child: BlocBuilder<PlanBloc, PlanState>(
+        builder: (context, state) {
+          return SharedUI(
+            onWillPop: () {
+              if (state.visibility != PlanPageVisibility.close) {
+                context.read<PlanBloc>().add(ClosePlanPage());
+                return Future.value(false);
+              }
+
+              return Future.value(null);
+            },
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Theme.of(context).accentColor,
+                  Theme.of(context).backgroundColor,
+                ],
+              ),
+            ),
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Greeting(),
+                  Art(),
+                  Quote(),
+                  BottomNote(),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -41,7 +58,7 @@ class Greeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
+      child: const Text(
         'Xin chào',
         style: TextStyle(
           fontSize: 35,
@@ -72,7 +89,7 @@ class Quote extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        child: Text(
+        child: const Text(
           'No pain, no gain',
           style: TextStyle(
             color: Colors.white,

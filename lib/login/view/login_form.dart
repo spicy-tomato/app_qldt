@@ -1,221 +1,124 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:formz/formz.dart';
 
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:app_qldt/login/bloc/login_bloc.dart';
+import 'local_widgets/local_widgets.dart';
 
-import 'local_widgets/login_button.dart';
-import 'local_widgets/password_input.dart';
-import 'local_widgets/username_input.dart';
-
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: "Nunito"),
-      debugShowCheckedModeBanner: false,
-      home:Scaffold(
-
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          child: HomeScreen(),
-        ),
-      ),
-    );
-  }
+  _LoginFormState createState() => _LoginFormState();
 }
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<HomeScreen> {
-  int _pageState = 0;
-
-  double _headingTop = 100;
-
-  double _loginWidth = 0;
-  double _loginHeight = 0;
-  double _loginOpacity = 1;
-
-  double _loginYOffset = 0;
-  double _loginXOffset = 0;
-
-  double windowWidth = 0;
-  double windowHeight = 0;
-
-  bool _keyboardVisible = false;
+class _LoginFormState extends State<LoginForm> {
+  late bool showLoginFailedDialog;
 
   @override
   void initState() {
     super.initState();
-
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          _keyboardVisible = visible;
-          print("Keyboard State Changed : $visible");
-        });
-      },
-    );
+    showLoginFailedDialog = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    windowHeight = MediaQuery.of(context).size.height;
-    windowWidth = MediaQuery.of(context).size.width;
+    final FocusScopeNode focusNode = FocusScope.of(context);
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
-    _loginHeight = windowHeight - 270;
-
-    switch (_pageState) {
-      case 0:
-        _headingTop = 100;
-
-        _loginWidth = windowWidth;
-        _loginOpacity = 1;
-
-        _loginYOffset = windowHeight;
-        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 220;
-
-        _loginXOffset = 0;
-        break;
-
-      case 1:
-
-        _headingTop = 90;
-
-        _loginWidth = windowWidth;
-        _loginOpacity = 1;
-
-        _loginYOffset = _keyboardVisible ? 150 : 270;
-        _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 220;
-
-        _loginXOffset = 0;
-        break;
-      // case 2:
-      //   _headingColor = Colors.white;
-      //
-      //   _headingTop = 80;
-      //
-      //   _loginWidth = windowWidth - 40;
-      //   _loginOpacity = 0.7;
-      //
-      //   _loginYOffset = _keyboardVisible ? 30 : 20;
-      //   _loginHeight = _keyboardVisible ? windowHeight : windowHeight - 240;
-      //
-      //   _loginXOffset = 20;
-      //   _registerYOffset = _keyboardVisible ? 55 : 270;
-      //   _registerHeight = _keyboardVisible ? windowHeight : windowHeight - 270;
-      //   break;
-    }
-
-    return Stack(
-      children: <Widget>[
-        AnimatedContainer(
-            curve: Curves.fastLinearToSlowEaseIn,
-            duration: Duration(milliseconds: 1000),
-          decoration: new BoxDecoration(
-            image: new DecorationImage(
-              image: new AssetImage("images/backgr.gif"),
-              fit: BoxFit.fill,
-            ),
-          ),
-             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _pageState = 0;
-                    });
-                  },
-                  child: Container(
-                    child: Column(
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) async {
+        if (state.status.isSubmissionFailure &&
+            !showLoginFailedDialog &&
+            state.shouldShowLoginFailedDialog) {
+          showLoginFailedDialog = true;
+          context.read<LoginBloc>().add(ShowedLoginFailedDialog());
+          await showDialog(
+            barrierDismissible: true,
+            context: context,
+            builder: (_) => _loginFailedDialog(context),
+          );
+        }
+      },
+      child: BlocBuilder<LoginBloc, LoginState>(
+        buildWhen: (previous, current) {
+          return previous.hideLoginDialog != current.hideLoginDialog;
+        },
+        builder: (_, state) {
+          return KeyboardVisibilityBuilder(
+            builder: (context, isKeyboardVisible) {
+              return AnimatedContainer(
+                padding: const EdgeInsets.all(32),
+                width: screenWidth,
+                height: screenHeight,
+                curve: Curves.fastLinearToSlowEaseIn,
+                duration: const Duration(milliseconds: 1000),
+                transform: Matrix4.translationValues(
+                    0,
+                    state.hideLoginDialog
+                        ? screenHeight
+                        : isKeyboardVisible
+                            ? 170
+                            : 270,
+                    1),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
                       children: <Widget>[
-                        AnimatedContainer(
-                          curve: Curves.fastLinearToSlowEaseIn,
-                          duration: Duration(milliseconds: 1000),
-                          margin: EdgeInsets.only(
-                            top: _headingTop,
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: const Text(
+                            'Đăng nhập để tiếp tục',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.all(20),
-                          padding: EdgeInsets.symmetric(horizontal: 32),
-                        )
+                        UsernameInput(focusNode: focusNode),
+                        const SizedBox(height: 20),
+                        PasswordInput(focusNode: focusNode),
+                        const SizedBox(height: 20),
+                        LoginButton(focusNode),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                ),
-                Container(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (_pageState != 0) {
-                          _pageState = 0;
-                        } else {
-                          _pageState = 1;
-                        }
-                      });
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(32),
-                      padding: EdgeInsets.all(20),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: Color(0xFFB40284A), borderRadius: BorderRadius.circular(50)),
-                      child: Center(
-                        child: Text(
-                          "Get Started",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )),
-        AnimatedContainer(
-          padding: EdgeInsets.all(32),
-          width: _loginWidth,
-          height: _loginHeight,
-          curve: Curves.fastLinearToSlowEaseIn,
-          duration: Duration(milliseconds: 1000),
-          transform: Matrix4.translationValues(_loginXOffset, _loginYOffset, 1),
-          decoration: BoxDecoration(
-              color: Colors.white.withOpacity(_loginOpacity),
-              borderRadius:
-                  BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Text(
-                      "Login To Continue",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  UsernameInput(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PasswordInput(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  LoginButton(),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  /// TODO: Alert wrong login information, server or no internet
+  Widget _loginFailedDialog(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(true);
+      },
+      child: AlertDialog(
+        title: Text('Thông tin'),
+        content: Text('Đăng nhập thất bại'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              showLoginFailedDialog = false;
+              Navigator.of(context).pop();
+            },
+            child: const Text('Đồng ý'),
+          )
+        ],
+      ),
     );
   }
 }

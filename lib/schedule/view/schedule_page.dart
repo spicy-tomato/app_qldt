@@ -1,70 +1,76 @@
-import 'package:app_qldt/_widgets/user_data_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_qldt/_widgets/wrapper/item.dart';
+import 'package:app_qldt/plan/plan.dart';
+import 'package:app_qldt/schedule/bloc/schedule_bloc.dart';
 import 'package:flutter/material.dart';
 
-import 'package:app_qldt/_models/meeting_data_source.dart';
-import 'package:app_qldt/_models/user_event.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
+import 'package:app_qldt/_widgets/wrapper/navigable_plan_page.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'local_widgets/schedule.dart';
 
 class SchedulePage extends StatefulWidget {
+  final void Function()? onClose;
+
+  const SchedulePage({Key? key, this.onClose}) : super(key: key);
+
   @override
   _SchedulePageState createState() => _SchedulePageState();
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  _SchedulePageState();
-
-  late var model;
-  final UserDataSource _events = UserDataSource(<UserEvent>[]);
-
   final GlobalKey _globalKey = GlobalKey();
-  late Map<DateTime, List<UserEvent>> schedulesData;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final CalendarController _controller = CalendarController();
+  late ThemeData _themeModel;
 
   @override
   Widget build(BuildContext context) {
-    schedulesData = UserDataModel.of(context)!.localEventService.eventsData;
-    _addData();
+    _themeModel = Theme.of(context);
 
-    model = Theme.of(context);
-
-    return SharedUI(
-      child: Container(
-        child: Theme(
-          key: _globalKey,
-          data: model.copyWith(accentColor: model.backgroundColor),
-          child: Schedule(_events),
+    return BlocProvider<ScheduleBloc>(
+      create: (_) => ScheduleBloc(context)..add(InitializeEvents()),
+      child: NavigablePlanPage(
+        onPanelClose: _onPanelClose,
+        child: BlocBuilder<PlanBloc, PlanState>(
+          builder: (context, state) {
+            return SharedUI(
+              onWillPop: () => _onWillPop(state),
+              child: Item(
+                child: Theme(
+                  key: _globalKey,
+                  data: _themeModel.copyWith(accentColor: _themeModel.backgroundColor),
+                  child: BlocBuilder<ScheduleBloc, ScheduleState>(
+                    builder: (context, state) {
+                      return Schedule(state.sourceModel, controller: _controller);
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
-  void _addData() {
-    final List<UserEvent> appointment = _getDataSource(schedulesData);
-
-    print('_addData() called');
-    _events.appointments!.clear();
-
-    appointment.forEach((element) {
-      _events.appointments!.add(element);
-    });
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
-  List<UserEvent> _getDataSource(Map<DateTime, List<UserEvent>> schedulesData) {
-    final List<UserEvent> events = <UserEvent>[];
+  void _onPanelClose() {
+    _controller.selectedDate = null;
+  }
 
-    schedulesData.forEach((_, mapValue) {
-      mapValue.forEach((element) {
-        events.add(element);
-      });
-    });
+  Future<bool?> _onWillPop(PlanState state) {
+    if (state.visibility != PlanPageVisibility.close) {
+      _controller.selectedDate = null;
+      context.read<PlanBloc>().add(ClosePlanPage());
+      return Future.value(false);
+    }
 
-    return events;
+    return Future.value(null);
   }
 }

@@ -1,0 +1,1 @@
+enum PlanStatus { free, busy }

@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:app_qldt/plan/plan.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 
 class BottomNote extends StatelessWidget {
-  const BottomNote({Key? key}) : super(key: key);
+  final bool? useCurrentTime;
+
+  const BottomNote({
+    Key? key,
+    this.useCurrentTime,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +19,8 @@ class BottomNote extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.07,
       child: Stack(
         children: <Widget>[
-          BottomText(),
-          AddNoteButton(),
+          BottomText(useCurrentTime: useCurrentTime),
+          AddNoteButton(useCurrentTime: useCurrentTime),
         ],
       ),
     );
@@ -20,6 +28,13 @@ class BottomNote extends StatelessWidget {
 }
 
 class BottomText extends StatelessWidget {
+  final bool? useCurrentTime;
+
+  const BottomText({
+    Key? key,
+    this.useCurrentTime,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
@@ -29,24 +44,10 @@ class BottomText extends StatelessWidget {
         ),
         child: TextButton(
           onPressed: () {
-            showGeneralDialog(
-              barrierDismissible: false,
-              barrierColor: Colors.black.withOpacity(0.5),
-              transitionDuration: Duration(milliseconds: 200),
-              context: context,
-              pageBuilder: (_, __, ___) {
-                return PlanPage();
-              },
-              transitionBuilder: (_, anim1, __, child) {
-                return SlideTransition(
-                  position: Tween(
-                    begin: Offset(0, 1),
-                    end: Offset(0, 0),
-                  ).animate(anim1),
-                  child: child,
-                );
-              },
-            );
+            if (useCurrentTime == null || useCurrentTime!) {
+              context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
+            }
+            context.read<PlanBloc>().add(OpenPlanPage());
           },
           child: Padding(
             padding: EdgeInsets.only(left: 15),
@@ -68,6 +69,10 @@ class BottomText extends StatelessWidget {
 }
 
 class AddNoteButton extends StatelessWidget {
+  final bool? useCurrentTime;
+
+  const AddNoteButton({Key? key, this.useCurrentTime}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -80,7 +85,10 @@ class AddNoteButton extends StatelessWidget {
           child: InkWell(
             customBorder: addNoteButtonShape(),
             onTap: () {
-              print("Button pressed!");
+              if (useCurrentTime == null || useCurrentTime!) {
+                context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
+              }
+              context.read<PlanBloc>().add(OpenPlanPage());
             },
             child: Align(
               alignment: Alignment(-0.7, 0),

@@ -1,15 +1,13 @@
+import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/notification_post/notification_post.dart';
+import 'package:app_qldt/_models/user_notification_model.dart';
+import 'package:app_qldt/_widgets/wrapper/item.dart';
+import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import 'package:app_qldt/_models/user_notification.dart';
-import 'package:app_qldt/_widgets/item.dart';
-import 'package:app_qldt/_widgets/shared_ui.dart';
-import 'package:app_qldt/_widgets/user_data_model.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -25,11 +23,14 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> notificationData = UserDataModel.of(context)!
-        .localNotificationService
-        .notificationData as List<UserNotification>;
+    List notificationData = context
+        .read<UserRepository>()
+        .userDataModel
+        .notificationServiceController
+        .notificationData as List<UserNotificationModel>;
 
     return SharedUI(
+      stable: false,
       child: Item(
         child: SmartRefresher(
           enablePullDown: true,
@@ -55,7 +56,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void _onRefresh() async {
-    await UserDataModel.of(context)!.localNotificationService.refresh();
+    await context.read<UserRepository>().userDataModel.notificationServiceController.refresh();
     await Future.delayed(Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});
@@ -71,7 +72,7 @@ class _NotificationPageState extends State<NotificationPage> {
 }
 
 class ListItem extends StatelessWidget {
-  final UserNotification notification;
+  final UserNotificationModel notification;
 
   const ListItem({
     Key? key,
@@ -161,7 +162,7 @@ class ListItem extends StatelessWidget {
               ),
             ),
             Text(
-              DateFormat.Md().format(DateTime.now()),
+              DateFormat('d/M').format(notification.timeCreated),
               style: TextStyle(
                 color: Theme.of(context).backgroundColor,
               ),

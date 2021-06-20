@@ -1,457 +1,207 @@
+import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-class PlanPage extends StatelessWidget {
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import 'package:app_qldt/plan/plan.dart';
+import 'package:app_qldt/_utils/helper/day_of_week_vn.dart';
+import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
+
+import 'local_widgets/local_widgets.dart';
+
+class PlanPage extends StatefulWidget {
+  final ScrollController? scrollController;
+  final Function()? onCloseButtonTap;
+
+  PlanPage({
+    Key? key,
+    this.scrollController,
+    this.onCloseButtonTap,
+  }) : super(key: key);
+
+  @override
+  _PlanPageState createState() => _PlanPageState();
+}
+
+class _PlanPageState extends State<PlanPage> {
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: const Key('Plan_page'),
-      direction: DismissDirection.down,
-      onDismissed: (_) => Navigator.of(context).pop(),
-      child: SafeArea(
-        child: Scaffold(
-          body: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topCenter,
-                child: Icon(
-                  Icons.keyboard_arrow_down,
-                  size: 40,
-                  color: Theme.of(context).backgroundColor,
-                ),
-              ),
-              SizedBox(height: 20),
-              ListView(
-                physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                children: <Widget>[
-                  PlanPageTopbar(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Title(),
-                  ),
-                  PlanPageDivider(context: context),
-                  Time(),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0,30,0,0),
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child : repeat(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Morepeople(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: location(),
-                  ),
+    return BlocListener<PlanBloc, PlanState>(
+      listener: (context, state) async {
+        PanelController panelController = InheritedScrollToPlanPage.of(context).panelController;
 
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: describe(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0,30,0,0),
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child : Display(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0,30,0,0),
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child : status(),
-                  ),
-                ],
+        if (state.visibility == PlanPageVisibility.close && !panelController.isPanelClosed) {
+          await panelController.close();
+        } else if (state.visibility == PlanPageVisibility.open && !panelController.isPanelOpen) {
+          await panelController.open();
+        } else if (state.visibility == PlanPageVisibility.apart &&
+            panelController.panelPosition != 0.3) {
+          await panelController.animatePanelToPosition(0.3);
+        }
+      },
+      child: Scaffold(
+        body: BlocBuilder<PlanBloc, PlanState>(
+          buildWhen: (previous, current) =>
+              previous.fromDay != current.fromDay || previous.visibility != current.visibility,
+          builder: (context, state) {
+            if (state.visibility == PlanPageVisibility.open) {
+              return _FullPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
+            }
+
+            return _ApartPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _FullPlanPage extends StatefulWidget {
+  final ScrollController? scrollController;
+  final Function()? onCloseButtonTap;
+
+  _FullPlanPage({
+    Key? key,
+    this.scrollController,
+    this.onCloseButtonTap,
+  }) : super(key: key);
+
+  @override
+  _FullPlanPageState createState() => _FullPlanPageState();
+}
+
+class _FullPlanPageState extends State<_FullPlanPage> {
+  @override
+  Widget build(BuildContext contexts) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Image.asset(
+                'images/icon/swipe-down-icon.png',
+                width: 40,
               ),
+            ),
+            PlanPageTopbar(onCloseButtonTap: widget.onCloseButtonTap),
+          ],
+        ),
+        Expanded(
+          child: ListView(
+            controller: widget.scrollController,
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              PlanPageTitle(),
+              PlanPageDivider(context: context),
+              PlanPageTime(),
+              PlanPageDivider(context: context),
+              // AddGuest(),
+              // PlanPageDivider(context: context),
+              Location(),
+              PlanPageDivider(context: context),
+              Describe(),
+              PlanPageDivider(context: context),
+              // Accessibility(),
+              // PlanPageDivider(context: context),
+              // Status(),
+              // PlanPageDivider(context: context),
+              PlanColor(),
+              PlanPageDivider(context: context),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ApartPlanPage extends StatefulWidget {
+  final Function()? onCloseButtonTap;
+
+  const _ApartPlanPage({
+    Key? key,
+    this.onCloseButtonTap,
+  }) : super(key: key);
+
+  @override
+  __ApartPlanPageState createState() => __ApartPlanPageState();
+}
+
+class __ApartPlanPageState extends State<_ApartPlanPage> {
+  late DateTime _fromDay;
+  late DateTime _toDay;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _fromDay = context.read<PlanBloc>().state.fromDay;
+    _toDay = context.read<PlanBloc>().state.toDay;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      height: MediaQuery.of(context).size.height * 0.3,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _onTap,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Image.asset(
+                'images/icon/minimize-icon.png',
+                width: 80,
+              ),
+            ),
+            PlanPageTopbar(onCloseButtonTap: widget.onCloseButtonTap),
+            CustomListTile(
+              title: Text(
+                'Thêm tiêu đề',
+                style: PlanPageConstant.hintTextFieldStyle.copyWith(fontSize: 25),
+              ),
+              defaultHeight: false,
+            ),
+            CustomListTile(
+              title: Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Text(
+                  '${DayOfWeekVN.get(_fromDay.weekday)}, '
+                  'ngày ${_fromDay.day} '
+                  'tháng ${_fromDay.month} · '
+                  '${_fromDay.hour}:00 - '
+                  '${_toDay.hour}:00',
+                  style: PlanPageConstant.textFieldStyle,
+                ),
+              ),
+              defaultHeight: false,
+            ),
+            CustomListTile(
+              leading: Icon(Icons.people_alt_outlined),
+              title: Text(
+                'Thêm người',
+                style: PlanPageConstant.hintTextFieldStyle,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-}
-
-TextStyle addTitleTextStyle() {
-  return TextStyle(
-    fontSize: 25,
-  );
-}
-TextStyle addTitleTextStyle1() {
-  return TextStyle(
-    fontSize: 20.0,
-  );
-}
-
-class CommonPadding extends Padding {
-  CommonPadding({required Widget child})
-      : super(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: child,
-        );
-}
-
-class PlanPageDivider extends Divider {
-  PlanPageDivider({required BuildContext context})
-      : super(
-          color: Theme.of(context).backgroundColor,
-        );
-}
-
-class PlanPageTopbar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 10, right: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          TextButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-            ),
-            child: Icon(
-              Icons.close,
-              color: Theme.of(context).backgroundColor,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          Container(
-            width: 80,
-            height: 40,
-            child: Material(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              color: Theme.of(context).backgroundColor,
-              child: InkWell(
-                customBorder: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                onTap: () {
-                  print('Save button pressed!');
-                },
-                child: Center(
-                  child: Text('Lưu'),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  void _onTap() {
+    context.read<PlanBloc>().add(OpenPlanPage());
   }
 }
-
-class Title extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: addTitleTextStyle(),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: 'Thêm tiêu đề',
-        hintStyle: addTitleTextStyle(),
-      ),
-    );
-  }
-}
-class Morepeople extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: addTitleTextStyle(),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-
-        icon: new Icon(Icons.people),
-        hintText: 'Thêm người...',
-        hintStyle: addTitleTextStyle1(),
-      ),
-    );
-  }
-}
-
-class location extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: addTitleTextStyle(),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-
-        icon: new Icon(Icons.location_on_rounded),
-        hintText: 'Vị trí...',
-        hintStyle: addTitleTextStyle1(),
-      ),
-    );
-  }
-}
-class describe extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: addTitleTextStyle(),
-      decoration: InputDecoration(
-        border: InputBorder.none,
-
-        icon: new Icon(Icons.dehaze_outlined),
-        hintText: 'Mô tả ...',
-        hintStyle: addTitleTextStyle1(),
-      ),
-    );
-  }
-}
-class Time extends StatefulWidget {
-  @override
-  _TimeState createState() => _TimeState();
-}
-class _TimeState extends State<Time> {
-  late DateTime pickedDatef;
-  late DateTime pickedDatel;
-  late TimeOfDay timef;
-  late TimeOfDay timel;
-  @override
-  void initState(){
-    super.initState();
-    pickedDatef=DateTime.now();
-    pickedDatel=DateTime.now();
-    timef = TimeOfDay.now();
-    timel = TimeOfDay.now();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CommonPadding(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.access_time_rounded),
-            title: Text('Cả ngày'),
-            trailing: Switcher(),
-          ),
-          ListTile(
-              // ignore: deprecated_member_use
-              title:  RaisedButton(
-                  child: Text("Stuff  ${pickedDatef.weekday+1}, ${DateFormat.yMMMd().format(pickedDatef)}"),
-                  onPressed: ()  async{
-                    DateTime datef = (await showDatePicker(
-                      context: context,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2100),
-                      initialDate:pickedDatef,
-                    ))!;
-                  if (datef != null) {
-                    setState(() {
-                        pickedDatef=datef;
-                      });
-                    }
-                  }
-              ),
-              // ignore: deprecated_member_use
-              trailing: RaisedButton(
-                  child: Text(" ${timef.hour}:${timef.minute}"),
-                  onPressed: () async{
-                    TimeOfDay timefi = (await showTimePicker(
-                      context: context,
-                      initialTime: timef,
-                    ))!;
-
-                    if(timefi != null ){
-                      setState(() {
-                        timef=timefi;
-                      });
-                    }
-                  }
-              ),
-
-          ),
-          ListTile(
-            // ignore: deprecated_member_use
-            title:  RaisedButton(
-                child: Text("Stuff  ${pickedDatel.weekday+1}, ${DateFormat.yMMMd().format(pickedDatel)}"),
-                onPressed: ()  async{
-                  DateTime datel = (await showDatePicker(
-                    context: context,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2100),
-                    initialDate:pickedDatef,
-                  ))!;
-                  if(datel != null){
-                    setState(() {
-                      pickedDatel=datel;
-                    });
-                  }
-                }
-            ),
-            // ignore: deprecated_member_use
-            trailing: RaisedButton(
-                child: Text(" ${timel.hour}:${timel.minute}"),
-                onPressed: () async{
-                  TimeOfDay timela = (await showTimePicker(
-                    context: context,
-                    initialTime: timef,
-                  ))!;
-
-                  if(timela != null ){
-                    setState(() {
-                      timel=timela;
-                    });
-                  }
-                }
-            ),
-
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Switcher extends StatefulWidget {
-  final bool? initState;
-
-  Switcher({this.initState});
-
-  @override
-  _SwitcherState createState() => _SwitcherState(initState);
-}
-
-class _SwitcherState extends State<Switcher> {
-  late bool isOn;
-
-  _SwitcherState(bool? isOn) {
-    this.isOn = isOn ?? false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: isOn,
-      onChanged: toggleSwitch,
-    );
-  }
-
-  void toggleSwitch(_) {
-    setState(() {
-      isOn = !isOn;
-    });
-  }
-}
-class repeat extends StatefulWidget {
-  @override
-  _repeatState createState() => _repeatState();
-}
-
-// ignore: camel_case_types
-class _repeatState  extends State<repeat> {
-  late String value = 'Không lặp lại';
-  List _listitem =  ['Không lặp lại', 'Hàng ngày', 'Hàng tuần', 'Hàng tháng','Hàng năm','Tuỳ chỉnh...'];
-  @override
-  Widget build(BuildContext context) {
-
-    return CommonPadding(
-      child: DropdownButton(
-            dropdownColor: Colors.grey,
-          style: TextStyle(color: Colors.black,fontSize: 22.0),
-          elevation: 5,
-          icon: new Icon(Icons.arrow_drop_down),
-          iconSize: 36.0,
-          isExpanded: true,
-          value: value,
-        onChanged:(newValue){
-          setState(() {
-            value= newValue.toString();
-          });
-        },
-        items: _listitem.map((newValue){
-          return DropdownMenuItem(
-
-               value: newValue,
-              child: Text(newValue),
-          );
-        }).toList()
-      )
-
-    );
-  }
-}
-class Display extends StatefulWidget {
-  @override
-  _DisplayState createState() => _DisplayState();
-}
-
-// ignore: camel_case_types
-class _DisplayState  extends State<Display> {
-  late String Display = 'Mặc định';
-  List _listitem =  ['Công khai', 'Mặc định', 'Riêng tư'];
-  @override
-  Widget build(BuildContext context) {
-
-    return CommonPadding(
-        child: DropdownButton(
-            dropdownColor: Colors.grey,
-            style: TextStyle(color: Colors.black,fontSize: 22.0),
-            elevation: 5,
-            icon: new Icon(Icons.arrow_drop_down),
-            iconSize: 36.0,
-            isExpanded: true,
-            value: Display,
-            onChanged:(newValue){
-              setState(() {
-                Display= newValue.toString();
-              });
-            },
-            items: _listitem.map((newValue){
-              return DropdownMenuItem(
-
-                value: newValue,
-                child: Text(newValue),
-              );
-            }).toList()
-        )
-
-    );
-  }
-}
-class status extends StatefulWidget {
-  @override
-  statusState createState() => statusState();
-}
-
-// ignore: camel_case_types
-class statusState  extends State<status> {
-  late String status = 'Rảnh';
-  List _listitem =  ['Rảnh', 'Bận'];
-  @override
-  Widget build(BuildContext context) {
-
-    return CommonPadding(
-        child: DropdownButton(
-            dropdownColor: Colors.grey,
-            style: TextStyle(color: Colors.black,fontSize: 22.0),
-            elevation: 5,
-            icon: new Icon(Icons.arrow_drop_down),
-            iconSize: 36.0,
-            isExpanded: true,
-            value: status,
-            onChanged:(newValue){
-              setState(() {
-                status= newValue.toString();
-              });
-            },
-            items: _listitem.map((newValue){
-              return DropdownMenuItem(
-
-                value: newValue,
-                child: Text(newValue),
-              );
-            }).toList()
-        )
-
-    );
-  }
-}
-
