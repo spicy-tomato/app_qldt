@@ -181,7 +181,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('AlertDialog Title'),
+          title: const Text('AlertDialog success'),
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
@@ -192,13 +192,14 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
             ),
           ),
           actions: <Widget>[
+
             TextButton(
-                child: Text('Xác Nhận'),
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.teal,
-                  onSurface: Colors.grey,
-                ),
+              child: Text('Xác Nhận'),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.teal,
+                onSurface: Colors.grey,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
