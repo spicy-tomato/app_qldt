@@ -10,14 +10,18 @@ class DbSender extends TableModel {
   @override
   String get createScript => ''
       'CREATE TABLE IF NOT EXISTS $tableName('
-      'id_sender TEXT,'
+      'id_sender INTEGER PRIMARY KEY,'
       'sender_name TEXT,'
       'permission INTEGER);';
 
   Future<void> insert(Map<String, dynamic> sender) async {
     assert(database != null, 'Database must not be null');
 
-    await database!.insert(tableName, sender);
+    await database!.insert(
+      tableName,
+      sender,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 
   Future<void> delete() async {

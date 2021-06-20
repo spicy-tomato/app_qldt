@@ -10,26 +10,33 @@ class NotificationServiceController
     extends ServiceController<LocalNotificationService, ApiNotificationService> {
   NotificationServiceController(ServiceControllerData data, String idAccount)
       : super(
-          LocalNotificationService(databaseProvider: data.databaseProvider),
-          ApiNotificationService(
-            apiUrl: data.apiUrl,
-            idAccount: idAccount,
-            idStudent: data.idUser,
-          ),
-        );
+    LocalNotificationService(databaseProvider: data.databaseProvider),
+    ApiNotificationService(
+      apiUrl: data.apiUrl,
+      idAccount: idAccount,
+      idStudent: data.idUser,
+    ),
+  );
 
   List get notificationData => localService.notificationData;
 
-  Future<void> refresh() async {
-    ServiceResponse response = await apiService.request();
+  Future<void> refresh({bool getAll = false}) async {
+    ServiceResponse response = getAll ? await apiService.requestAll() : await apiService.request();
 
     if (response.statusCode == 200) {
-      List<SenderModel> senderList = SenderModel.fromList(response.data['sender']);
-      List<ReceiveNotificationModel> notificationList =
-          ReceiveNotificationModel.fromList(response.data['notification']);
-      await localService.saveNewData(senderList, notificationList);
+      List<SenderModel>? senderList = SenderModel.fromList(response.data['sender']);
+      List<ReceiveNotificationModel>? notificationList =
+      ReceiveNotificationModel.fromList(response.data['notification']);
+      List<int>? deleteList;
+      if (response.data['index_del'] != null){
+        deleteList = List.generate(
+            response.data['index_del'].length, (index) => response.data['index_del'][index] as int);
+      }
+
+      await localService.saveNewData(senderList, notificationList, deleteList);
       await localService.updateVersion(response.version!);
-    } else {
+    }
+    else {
       if (response.statusCode == 204) {
         print('There are no new data');
       } else {

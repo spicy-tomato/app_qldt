@@ -188,7 +188,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     await eventServiceController.refresh();
 
     print('Notification: ${stopwatch.elapsed}');
-    await notificationServiceController.refresh();
+    await notificationServiceController.refresh(getAll: true);
 
     print('Score: ${stopwatch.elapsed}');
     await scoreServiceController.refresh();

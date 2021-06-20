@@ -12,8 +12,7 @@ class DbNotification extends TableModel {
   @override
   String get createScript => ''
       'CREATE TABLE IF NOT EXISTS $tableName('
-      'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-      'id_notification INTEGER,'
+      'id_notification INTEGER PRIMARY KEY,'
       'title TEXT,'
       'content TEXT,'
       'typez TEXT,'
@@ -47,11 +46,32 @@ class DbNotification extends TableModel {
     }
   }
 
+  Future<int?> get lastId async {
+    assert(database != null, 'Database must not be null');
+
+    try {
+      int lastId = (await database!.query(
+        tableName,
+        columns: ['id_notification'],
+        orderBy: 'id_notification DESC',
+        limit: 1,
+      ))[0]['id_notification'] as int;
+
+      print('Last notification id: $lastId');
+      return lastId;
+    } on Exception catch (e) {
+      print('$e in DbNotification.lastId');
+    }
+  }
+
   Future<void> insert(Map<String, dynamic> notification) async {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.insert(tableName, notification);
+      await database!.insert(
+        tableName,
+        notification,
+      );
     } on Exception catch (e) {
       print('$e in DbNotification.insert()');
     }
@@ -65,5 +85,21 @@ class DbNotification extends TableModel {
     } on Exception catch (e) {
       print('Error: ${e.toString()}');
     }
+  }
+
+  Future<void> deleteRow(List<int> list) async {
+    assert(database != null, 'Database must not be null');
+
+    list.forEach((element) async {
+      try {
+        await database!.delete(
+          tableName,
+          where: 'id_notification=?',
+          whereArgs: [element],
+        );
+      } on Exception catch (e) {
+        print('Error: ${e.toString()}');
+      }
+    });
   }
 }

@@ -51,8 +51,8 @@ class TopBarItem extends StatelessWidget {
 
   const TopBarItem({
     Key? key,
-    required this.icon,
     required this.onTap,
+    required this.icon,
     this.color,
     this.child,
   }) : super(key: key);

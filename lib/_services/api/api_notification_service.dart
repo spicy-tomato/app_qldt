@@ -20,7 +20,7 @@ class ApiNotificationService extends ApiService {
           apiUrl: apiUrl,
         );
 
-  Future<ServiceResponse> request() async {
+  Future<ServiceResponse> requestAll() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
       return await _fetchData();
     }
@@ -28,11 +28,25 @@ class ApiNotificationService extends ApiService {
     return ServiceResponse.offline();
   }
 
-  Future<ServiceResponse> _fetchData() async {
+  Future<ServiceResponse> request() async {
+    if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+      int? idNotification = await controller.localService.databaseProvider.notification.lastId;
+      return await _fetchData(idNotification: idNotification);
+    }
+
+    return ServiceResponse.offline();
+  }
+
+  Future<ServiceResponse> _fetchData({int? idNotification}) async {
     String baseUrl = apiUrl.get.notification;
     int version = controller.localService.databaseProvider.dataVersion.notification;
 
     String url = '$baseUrl?id_student=$idUser&id_account=$idAccount&version=$version';
+    if (idNotification != null){
+      url += '&id_notification=$idNotification';
+    }
+
+    print(url);
 
     try {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

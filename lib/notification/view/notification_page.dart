@@ -19,8 +19,6 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
-  _NotificationPageState();
-
   @override
   Widget build(BuildContext context) {
     List notificationData = context
