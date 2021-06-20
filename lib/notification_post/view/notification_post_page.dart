@@ -106,11 +106,7 @@ class _ScrollViewState extends State<ScrollView> {
                       ),
                     ),
                     Text(
-                      DateTime.now()
-                              .subtract(Duration(days: 1))
-                              .isAfter(widget.notification.timeCreated)
-                          ? '${DateTime.now().difference(widget.notification.timeCreated).inDays} ngày trước'
-                          : '${DateTime.now().difference(widget.notification.timeCreated).inHours} giờ trước',
+                      _timeSent(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -146,6 +142,22 @@ class _ScrollViewState extends State<ScrollView> {
     if (_controller.offset <= _controller.position.minScrollExtent && popFlag == false) {
       popFlag = true;
       Navigator.of(context).pop();
+    }
+  }
+
+  String _timeSent() {
+    final now = DateTime.now();
+
+    if (now.subtract(Duration(days: 30)).isAfter(widget.notification.timeCreated)) {
+      return widget.notification.timeCreated.toString();
+    } else if (now.subtract(Duration(days: 1)).isAfter(widget.notification.timeCreated)) {
+      return '${DateTime.now().difference(widget.notification.timeCreated).inDays} ngày trước';
+    } else if (now.subtract(Duration(hours: 1)).isAfter(widget.notification.timeCreated)) {
+      return '${DateTime.now().difference(widget.notification.timeCreated).inHours} giờ trước';
+    } else if (now.subtract(Duration(minutes: 1)).isAfter(widget.notification.timeCreated)) {
+      return '${DateTime.now().difference(widget.notification.timeCreated).inMinutes} phút trước';
+    } else {
+      return '${DateTime.now().difference(widget.notification.timeCreated).inSeconds} giây trước';
     }
   }
 }

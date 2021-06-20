@@ -42,17 +42,13 @@ class LocalNotificationService extends LocalService {
 
   Future<void> _saveNotification(List<ReceiveNotificationModel>? rawData) async {
     if (rawData != null) {
-      for (var row in rawData) {
-        await databaseProvider.notification.insert(row.toMap());
-      }
+      await databaseProvider.notification.insert(rawData);
     }
   }
 
   Future<void> _saveSender(List<SenderModel>? rawData) async {
     if (rawData != null) {
-      for (var row in rawData) {
-        await databaseProvider.sender.insert(row.toMap());
-      }
+      await databaseProvider.sender.insert(rawData);
     }
   }
 

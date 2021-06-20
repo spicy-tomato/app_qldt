@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -57,14 +58,19 @@ class DbSchedule extends TableModel {
     }
   }
 
-  Future<void> insert(Map<String, dynamic> schedule) async {
+  Future<void> insert(List<ScheduleModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    try {
-      await database!.insert(tableName, schedule);
-    } on Exception catch (e) {
-      print('Error: ${e.toString()} in DbSchedule.insert()');
-    }
+    rawData.forEach((element) async {
+      try {
+        await database!.insert(
+          tableName,
+          element.toMap(),
+        );
+      } on Exception catch (e) {
+        print('Error: ${e.toString()} in DbSchedule.insert()');
+      }
+    });
   }
 
   Future<void> delete() async {

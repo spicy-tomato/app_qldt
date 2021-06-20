@@ -46,8 +46,6 @@ class ApiNotificationService extends ApiService {
       url += '&id_notification=$idNotification';
     }
 
-    print(url);
-
     try {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return ServiceResponse.withVersion(response);

@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/receive_notification_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -64,17 +65,19 @@ class DbNotification extends TableModel {
     }
   }
 
-  Future<void> insert(Map<String, dynamic> notification) async {
+  Future<void> insert(List<ReceiveNotificationModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    try {
-      await database!.insert(
-        tableName,
-        notification,
-      );
-    } on Exception catch (e) {
-      print('$e in DbNotification.insert()');
-    }
+    rawData.forEach((element) async {
+      try {
+        await database!.insert(
+          tableName,
+          element.toMap(),
+        );
+      } on Exception catch (e) {
+        print('$e in DbNotification.insert()');
+      }
+    });
   }
 
   Future<void> delete() async {

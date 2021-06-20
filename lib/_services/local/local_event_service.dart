@@ -100,9 +100,7 @@ class LocalEventService extends LocalService {
   /// Save schedule data to local database
   ///
   Future<void> _save(List<ScheduleModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.schedule.insert(row.toMap());
-    }
+    await databaseProvider.schedule.insert(rawData);
   }
 
   /// Remove schedule data from local database
