@@ -114,6 +114,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       description: state.description,
       color: state.color,
       location: state.location,
+      people: state.people,
     );
 
     showDialog(

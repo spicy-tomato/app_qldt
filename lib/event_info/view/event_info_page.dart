@@ -74,6 +74,13 @@ class _EventInfoPageState extends State<EventInfoPage> {
                       leading: Icon(Icons.sticky_note_2_outlined),
                       title: Text(widget.event.description!),
                     ),
+              widget.event.people == null || widget.event.people == ''
+                  ? Container()
+                  : ListTile(
+                      horizontalTitleGap: 4,
+                      leading: Icon(Icons.people_alt_outlined),
+                      title: Text(widget.event.people!),
+                    )
             ],
           ),
         ),

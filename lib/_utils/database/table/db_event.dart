@@ -17,7 +17,8 @@ class DbEvent extends TableModel {
       'description TEXT,'
       'time_start TEXT,'
       'time_end TEXT,'
-      'is_all_day INTEGER);';
+      'is_all_day INTEGER,'
+      'people TEXT);';
 
   Future<List<Map<String, dynamic>>> get all async {
     assert(database != null, 'Database must not be null');
