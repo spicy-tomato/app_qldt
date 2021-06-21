@@ -25,7 +25,7 @@ class ScheduleModel {
       idRoom: json['ID_Room'],
       shiftSchedules: json['Shift_Schedules'],
       daySchedules: DateTime.parse(json['Day_Schedules']),
-      teacher: json['Teacher_Name'] ?? '',
+      teacher: json['Name_Teacher'] ?? '',
     );
   }
 

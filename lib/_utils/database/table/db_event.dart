@@ -31,11 +31,11 @@ class DbEvent extends TableModel {
     }
   }
 
-  Future<void> insert(Map<String, dynamic> event) async {
+  Future<int?> insert(Map<String, dynamic> event) async {
     assert(database != null, 'Database must not be null');
 
     try {
-      await database!.insert(tableName, event);
+      return await database!.insert(tableName, event);
     } on Exception catch (e) {
       print('$e in DbEvent.insert()');
     }
@@ -47,7 +47,21 @@ class DbEvent extends TableModel {
     try {
       await database!.update(tableName, map);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      print('Error: ${e.toString()} in DbEvent.update()');
+    }
+  }
+
+  Future<void> delete(int id) async {
+    assert(database != null, 'Database must not be null');
+
+    try {
+      await database!.delete(
+        tableName,
+        where: 'id_event=?',
+        whereArgs: [id],
+      );
+    } on Exception catch (e) {
+      print('Error: ${e.toString()} in DbEvent.delete()');
     }
   }
 }

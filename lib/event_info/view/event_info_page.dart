@@ -1,3 +1,4 @@
+import 'package:app_qldt/schedule/schedule.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -79,7 +80,8 @@ class _EventInfoPageState extends State<EventInfoPage> {
                   : ListTile(
                       horizontalTitleGap: 4,
                       leading: Icon(Icons.people_alt_outlined),
-                      title: Text(widget.event.people!),
+                      title:
+                          Text('${widget.event.type.isSchedule ? 'Gv. ' : ''}${widget.event.people!}'),
                     )
             ],
           ),
@@ -184,7 +186,25 @@ class __TopbarState extends State<_Topbar> {
   }
 
   void _deleteEvent() {
-    print('Delete event');
+    if (!widget.event.type.isEvent) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Không thể xóa sự kiện này!'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('Đồng ý'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      widget.rootContext.read<ScheduleBloc>().add(RemoveEvent(widget.event.id));
+      Navigator.of(context, rootNavigator: true).pop();
+    }
   }
 
   void _duplicateEvent() {

@@ -28,12 +28,12 @@ class ModifyEvent extends ScheduleEvent {
 }
 
 class RemoveEvent extends ScheduleEvent {
-  final UserEventModel event;
+  final int id;
 
-  const RemoveEvent(this.event);
+  const RemoveEvent(this.id);
 
   @override
-  List<Object?> get props => [event];
+  List<Object?> get props => [id];
 }
 
 class ModifySchedule extends ScheduleEvent {

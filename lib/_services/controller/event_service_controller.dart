@@ -44,16 +44,18 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
     await localService.loadOldData();
   }
 
-  Future<void> saveNewEvent(UserEventModel event) async {
-    await localService.saveNewEvent(event);
+  Future<int?> saveNewEvent(UserEventModel event) async {
+    int? lastId = await localService.saveNewEvent(event);
     await localService.loadEvents();
+
+    return lastId;
   }
 
   Future<void> saveModifiedEvent(EventModel event) async {
     await localService.saveModifiedEvent(event);
     await localService.loadEvents();
   }
-  
+
   Future<void> saveModifiedSchedule(EventScheduleModel event) async {
     await localService.saveModifiedSchedule(event);
     await localService.loadEvents();
@@ -61,6 +63,11 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
 
   Future<void> saveAllModifiedScheduleWithName(String eventName, EventScheduleModel event) async {
     await localService.saveAllModifiedScheduleWithName(eventName, event);
+    await localService.loadEvents();
+  }
+
+  Future<void> deleteEvent(int id) async {
+    await localService.deleteEvent(id);
     await localService.loadEvents();
   }
 

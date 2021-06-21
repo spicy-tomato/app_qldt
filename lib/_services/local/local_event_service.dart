@@ -79,9 +79,9 @@ class LocalEventService extends LocalService {
     eventData = List.generate(rawData.length, (index) => UserEventModel.fromMap(rawData[index]));
   }
 
-  Future<void> saveNewEvent(UserEventModel event) async {
+  Future<int?> saveNewEvent(UserEventModel event) async {
     print('Adding event: $event');
-    await databaseProvider.event.insert(event.toMap());
+    return await databaseProvider.event.insert(event.toMap());
   }
 
   Future<void> saveModifiedEvent(EventModel event) async {
@@ -97,6 +97,11 @@ class LocalEventService extends LocalService {
   Future<void> saveAllModifiedScheduleWithName(String name, EventScheduleModel event) async {
     print('Modifying all schedules with name $name: $event');
     await databaseProvider.eventSchedule.updateWithName(name, event.toMap());
+  }
+
+  Future<void> deleteEvent(int id) async {
+    print('Deleting schedule has id: $id');
+    await databaseProvider.event.delete(id);
   }
 
   Future<void> delete() async {

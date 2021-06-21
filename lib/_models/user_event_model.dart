@@ -11,6 +11,14 @@ enum EventType {
   event,
 }
 
+extension EventTypeExtension on EventType {
+  bool get isSchedule => this == EventType.schedule;
+
+  bool get isExam => this == EventType.exam;
+
+  bool get isEvent => this == EventType.event;
+}
+
 class UserEventModel {
   final int id;
   final EventType type;
@@ -63,6 +71,21 @@ class UserEventModel {
       location: schedule.idRoom,
       isAllDay: false,
       people: schedule.teacher,
+    );
+  }
+
+  UserEventModel withId(int id) {
+    return UserEventModel(
+      id: id,
+      type: this.type,
+      from: this.from,
+      to: this.to,
+      eventName: this.eventName,
+      location: this.location,
+      isAllDay: this.isAllDay,
+      people: this.people,
+      color: this.color,
+      description: this.description,
     );
   }
 
