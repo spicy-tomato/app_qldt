@@ -87,6 +87,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
     modifiedEvent.color = modifiedEventInfo.color;
     modifiedEvent.description = modifiedEventInfo.description;
+    // modifiedEvent.eventName = modifiedEventInfo.eventName;
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
@@ -112,7 +113,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     await _userDataModel.eventServiceController.saveModifiedEvent(BeforeEvent);
 
     final newEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
-        .firstWhere((oldEvent1) => (oldEvent1).id == BeforeEvent.id);
+        .lastWhere((oldEvent) => (oldEvent).id == BeforeEvent.id);
 
     newEvent.eventName = BeforeEvent.eventName;
     newEvent.isAllDay = BeforeEvent.isAllDay;

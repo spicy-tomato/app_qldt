@@ -34,4 +34,5 @@ class EventModel extends UserEventModel {
       'is_all_day': isAllDay ? 1 : 0,
     };
   }
+
 }

@@ -8,6 +8,7 @@ class EventScheduleModel extends UserEventModel {
     required String description,
     required String name,
     required String location,
+
   }) : super(
     id: id,
     eventName: name,
