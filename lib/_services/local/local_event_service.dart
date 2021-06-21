@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
@@ -81,6 +82,11 @@ class LocalEventService extends LocalService {
   Future<void> saveNewEvent(UserEventModel event) async {
     print('Adding event: $event');
     await databaseProvider.event.insert(event.toMap());
+  }
+
+  Future<void> saveModifiedEvent(EventModel event) async {
+    print('Modifying schedule: $event');
+    await databaseProvider.event.update(event.toMap());
   }
 
   Future<void> saveModifiedSchedule(EventScheduleModel event) async {

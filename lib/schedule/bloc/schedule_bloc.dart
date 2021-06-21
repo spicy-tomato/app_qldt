@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/meeting_data_source_model.dart';
 
@@ -34,9 +35,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     } else if (event is RemoveEvent) {
       _mapRemoveEventToState(event);
     } else if (event is ModifyEvent) {
-      await _mapModifyEventToState(event);
-    } else if (event is ModifyAllEventsWithName) {
-      await _mapModifyAllEventsWithNameToState(event);
+      _mapModifyEventToState(event);
+    } else if (event is ModifySchedule) {
+      await _mapModifyScheduleToState(event);
+    } else if (event is ModifyAllSchedulesWithName) {
+      await _mapModifyAllSchedulesWithNameToState(event);
     }
   }
 
@@ -79,6 +82,17 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   Future<void> _mapModifyEventToState(ModifyEvent event) async {
     final modifiedEventInfo = event.event;
+    await _userDataModel.eventServiceController.saveModifiedEvent(modifiedEventInfo);
+
+    final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
+        .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
+    modifiedEvent.color = modifiedEventInfo.color;
+    modifiedEvent.description = modifiedEventInfo.description;
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
+  }
+
+  Future<void> _mapModifyScheduleToState(ModifySchedule event) async {
+    final modifiedEventInfo = event.event;
     await _userDataModel.eventServiceController.saveModifiedSchedule(modifiedEventInfo);
 
     final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
@@ -88,7 +102,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
-  Future<void> _mapModifyAllEventsWithNameToState(ModifyAllEventsWithName event) async {
+  Future<void> _mapModifyAllSchedulesWithNameToState(ModifyAllSchedulesWithName event) async {
     final modifiedEventInfo = event.event;
     await _userDataModel.eventServiceController
         .saveAllModifiedScheduleWithName(modifiedEventInfo.eventName, modifiedEventInfo);

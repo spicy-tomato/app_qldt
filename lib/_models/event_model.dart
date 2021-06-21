@@ -3,6 +3,7 @@ import 'package:app_qldt/plan/plan.dart';
 
 class EventModel extends UserEventModel {
   EventModel({
+    int? id,
     required String eventName,
     required PlanColors color,
     required String location,
@@ -10,8 +11,9 @@ class EventModel extends UserEventModel {
     required DateTime from,
     required DateTime to,
     required bool isAllDay,
+    required String people,
   }) : super(
-          id: -1,
+          id: id ?? -1,
           eventName: eventName,
           color: color,
           location: location,
@@ -20,6 +22,7 @@ class EventModel extends UserEventModel {
           from: from,
           to: to,
           isAllDay: isAllDay,
+          people: people,
         );
 
   @override
@@ -32,6 +35,7 @@ class EventModel extends UserEventModel {
       'time_start': from!.toIso8601String(),
       'time_end': to!.toIso8601String(),
       'is_all_day': isAllDay ? 1 : 0,
+      'people': people,
     };
   }
 }

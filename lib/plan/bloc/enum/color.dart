@@ -67,7 +67,7 @@ extension PlanColorsExtension on PlanColors {
   Color get color {
     switch (this) {
       case PlanColors.tomato:
-        return Color(0xffff6347);
+        return Color(0xffff3d1e);
 
       case PlanColors.tangerine:
         return Color(0xfff28500);

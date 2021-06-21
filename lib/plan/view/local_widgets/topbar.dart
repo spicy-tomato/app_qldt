@@ -98,6 +98,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       location: state.location,
       from: state.fromDay,
       to: state.toDay,
+      people: state.people,
     );
 
     context.read<ScheduleBloc>().add(AddEvent(event));
@@ -146,9 +147,9 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       if (state.range.isAllEvent) {
-                        rootContext.read<ScheduleBloc>().add(ModifyAllEventsWithName(event));
+                        rootContext.read<ScheduleBloc>().add(ModifyAllSchedulesWithName(event));
                       } else {
-                        rootContext.read<ScheduleBloc>().add(ModifyEvent(event));
+                        rootContext.read<ScheduleBloc>().add(ModifySchedule(event));
                       }
                       rootContext.read<PlanBloc>().add(ClosePlanPage());
                     },
@@ -163,5 +164,23 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
     );
   }
 
-  Future<void> _saveModifiedEvent() async {}
+  Future<void> _saveModifiedEvent() async {
+    final state = context.read<PlanBloc>().state;
+    final rootContext = context;
+
+    final event = EventModel(
+      id: state.id!,
+      eventName: state.title,
+      description: state.description,
+      color: state.color,
+      location: state.location,
+      people: state.people,
+      from: state.fromDay,
+      to: state.toDay,
+      isAllDay: state.isAllDay,
+    );
+
+    rootContext.read<ScheduleBloc>().add(ModifyEvent(event));
+    rootContext.read<PlanBloc>().add(ClosePlanPage());
+  }
 }

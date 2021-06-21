@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
 import 'package:app_qldt/_models/service_controller_data.dart';
@@ -16,8 +17,6 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
             idUser: data.idUser,
           ),
         );
-
-  // Map<String, int> get colorMap => localService.colorMap;
 
   List<UserEventModel> get scheduleData => localService.scheduleData;
 
@@ -50,6 +49,11 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
     await localService.loadEvents();
   }
 
+  Future<void> saveModifiedEvent(EventModel event) async {
+    await localService.saveModifiedEvent(event);
+    await localService.loadEvents();
+  }
+  
   Future<void> saveModifiedSchedule(EventScheduleModel event) async {
     await localService.saveModifiedSchedule(event);
     await localService.loadEvents();
