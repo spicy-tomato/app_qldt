@@ -4,143 +4,123 @@ import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class NotificationPostPage extends StatelessWidget {
+class NotificationPostPage extends StatefulWidget {
   final UserNotificationModel notification;
+  final ScrollController scrollController;
 
-  const NotificationPostPage({Key? key, required this.notification}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dismissible(
-      key: const Key('Plan_page'),
-      direction: DismissDirection.down,
-      onDismissed: (_) => Navigator.of(context).pop(),
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: ScrollView(notification: notification),
-        ),
-      ),
-    );
-  }
-}
-
-class ScrollView extends StatefulWidget {
-  final UserNotificationModel notification;
-
-  const ScrollView({
+  NotificationPostPage({
     Key? key,
     required this.notification,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
-  _ScrollViewState createState() => _ScrollViewState();
+  _NotificationPostPageState createState() => _NotificationPostPageState();
 }
 
-class _ScrollViewState extends State<ScrollView> {
-  late ScrollController _controller;
-  bool _popFlag = false;
+class _NotificationPostPageState extends State<NotificationPostPage> {
   final _contentRegex = RegExp(r'<a>([^<]*[^\/]*[^a]*[^/])<\/a>');
 
   @override
-  void initState() {
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: NeverScrollableScrollPhysics(),
-      children: <Widget>[
-        Align(
-          alignment: Alignment.topCenter,
-          child: Icon(
-            Icons.keyboard_arrow_down,
-            size: 40,
-            color: Theme.of(context).backgroundColor,
-          ),
-        ),
-        SizedBox(height: 20),
-        Text(
-          widget.notification.title,
-          style: TextStyle(
-            color: Theme.of(context).backgroundColor,
-            fontSize: 24,
-            fontWeight: FontWeight.w500,
-          ),
-          softWrap: true,
-        ),
-        SizedBox(height: 35),
-        Row(
-          children: <Widget>[
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Center(
-                child: Text(
-                  widget.notification.senderName[0].toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+    return Scaffold(
+      body: ListView(
+        controller: widget.scrollController,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topCenter,
+            child: Icon(
+              Icons.keyboard_arrow_down,
+              size: 40,
+              color: Theme.of(context).backgroundColor,
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      widget.notification.senderName,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                        color: Theme.of(context).backgroundColor,
-                      ),
-                    ),
-                    Text(
-                      _timeSent(),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).backgroundColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Text(
-              DateFormat('d/M').format(widget.notification.timeCreated),
+          ),
+          SizedBox(height: 15),
+          _CommonPadding(
+            child: Text(
+              widget.notification.title,
               style: TextStyle(
                 color: Theme.of(context).backgroundColor,
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+              ),
+              softWrap: true,
+            ),
+          ),
+          SizedBox(height: 30),
+          _CommonPadding(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Center(
+                    child: Text(
+                      widget.notification.senderName[0].toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.notification.senderName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Theme.of(context).backgroundColor,
+                          ),
+                        ),
+                        Text(
+                          _timeSent(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).backgroundColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Text(
+                  DateFormat('d/M').format(widget.notification.timeCreated),
+                  style: TextStyle(
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 50),
+          _CommonPadding(
+            child: RichText(
+              text: TextSpan(
+                children: _createText(),
               ),
             ),
-          ],
-        ),
-        SizedBox(height: 50),
-        RichText(
-          text: TextSpan(
-            children: _createText(),
           ),
-        ),
-      ],
+          SizedBox(height: 50),
+        ],
+      ),
     );
   }
 
   List<TextSpan> _createText() {
-    List<TextSpan> result = [];
+    final result = <TextSpan>[];
     String content = widget.notification.content;
 
     _contentRegex.allMatches(content).forEach((value) {
@@ -192,13 +172,6 @@ class _ScrollViewState extends State<ScrollView> {
     );
   }
 
-  void _scrollListener() {
-    if (_controller.offset <= _controller.position.minScrollExtent && _popFlag == false) {
-      _popFlag = true;
-      Navigator.of(context).pop();
-    }
-  }
-
   String _timeSent() {
     final now = DateTime.now();
 
@@ -214,4 +187,15 @@ class _ScrollViewState extends State<ScrollView> {
       return '${DateTime.now().difference(widget.notification.timeCreated).inSeconds} giây trước';
     }
   }
+}
+
+class _CommonPadding extends Padding {
+  _CommonPadding({
+    Key? key,
+    required child,
+  }) : super(
+          key: key,
+          child: child,
+          padding: EdgeInsets.symmetric(horizontal: 15),
+        );
 }
