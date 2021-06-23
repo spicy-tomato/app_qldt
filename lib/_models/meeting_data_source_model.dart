@@ -21,7 +21,7 @@ class UserDataSourceModel extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return appointments![index].visualizeName;
+    return appointments![index].eventName;
   }
 
   @override

@@ -1,5 +1,7 @@
 import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
+import 'package:app_qldt/_widgets/radio_dialog/radio_dialog.dart';
+import 'package:app_qldt/plan/modify_range_bloc/modify_range_bloc.dart';
 import 'package:app_qldt/schedule/schedule.dart';
 import 'package:flutter/material.dart';
 
@@ -96,6 +98,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       location: state.location,
       from: state.fromDay,
       to: state.toDay,
+      people: state.people,
     );
 
     context.read<ScheduleBloc>().add(AddEvent(event));
@@ -104,18 +107,80 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
 
   Future<void> _saveModifiedSchedule() async {
     final state = context.read<PlanBloc>().state;
+    final rootContext = context;
 
     final event = EventScheduleModel(
-      idSchedule: state.id!,
+      id: state.id!,
+      name: state.title,
       description: state.description,
       color: state.color,
-      eventName: state.title,
       location: state.location,
+      people: state.people,
     );
 
-    context.read<ScheduleBloc>().add(ModifyEvent(event));
-    context.read<PlanBloc>().add(ClosePlanPage());
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocProvider(
+          create: (context) => ModifyRangeBloc(),
+          child: BlocBuilder<ModifyRangeBloc, ModifyRangeState>(
+            builder: (context, state) {
+              return RadioAlertDialog<ModifyRange>(
+                title: Text(
+                  'Tuỳ chọn sự kiện',
+                  style: TextStyle(color: Colors.black),
+                ),
+                optionsList: ModifyRange.values,
+                currentOption: context.read<ModifyRangeBloc>().state.range,
+                stringFunction: ModifyRangeExtension.stringFunction,
+                onSelect: (ModifyRange range) {
+                  context.read<ModifyRangeBloc>().add(ModifyRangeChanged(range));
+                },
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Huỷ'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      if (state.range.isAllEvent) {
+                        rootContext.read<ScheduleBloc>().add(ModifyAllSchedulesWithName(event));
+                      } else {
+                        rootContext.read<ScheduleBloc>().add(ModifySchedule(event));
+                      }
+                      rootContext.read<PlanBloc>().add(ClosePlanPage());
+                    },
+                    child: Text('Lưu'),
+                  ),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
-  Future<void> _saveModifiedEvent() async {}
+  Future<void> _saveModifiedEvent() async {
+    final state = context.read<PlanBloc>().state;
+    final rootContext = context;
+
+    final event = EventModel(
+      id: state.id!,
+      eventName: state.title,
+      description: state.description,
+      color: state.color,
+      location: state.location,
+      people: state.people,
+      from: state.fromDay,
+      to: state.toDay,
+      isAllDay: state.isAllDay,
+    );
+
+    rootContext.read<ScheduleBloc>().add(ModifyEvent(event));
+    rootContext.read<PlanBloc>().add(ClosePlanPage());
+  }
 }

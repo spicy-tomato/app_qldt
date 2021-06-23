@@ -31,8 +31,8 @@ class _ScorePageTableState extends State<ScorePageTable> {
   ];
 
   static final List<String> _gpaColumnTitles = [
-    'GPA10',
-    'GPA4',
+    'Hệ điểm 10',
+    'Hệ điểm 4',
   ];
 
   @override

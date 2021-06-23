@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:app_qldt/_models/user_event_model.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'enum/enum.dart';
 
@@ -13,7 +14,7 @@ part 'plan_event.dart';
 part 'plan_state.dart';
 
 class PlanBloc extends Bloc<PlanEvent, PlanState> {
-  PlanBloc() : super(PlanState(fromDay: DateTime.now(), toDay: DateTime.now()));
+  PlanBloc(BuildContext context) : super(PlanState(fromDay: DateTime.now(), toDay: DateTime.now()));
 
   @override
   Stream<PlanState> mapEventToState(
@@ -120,7 +121,7 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
 
     return state.copyWith(
       id: newEvent.id,
-      title: newEvent.visualizeName,
+      title: newEvent.eventName,
       color: newEvent.color,
       visibility: PlanPageVisibility.open,
       from: newEvent.from,
@@ -135,7 +136,7 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
 
     return state.copyWith(
       id: newEvent.id,
-      title: newEvent.visualizeName,
+      title: newEvent.eventName,
       color: newEvent.color,
       from: newEvent.from,
       to: newEvent.to,

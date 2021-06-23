@@ -49,12 +49,32 @@ class _ApplicationState extends State<Application> {
     textTheme: TextTheme(
       //  https://api.flutter.dev/flutter/material/TextTheme-class.html
       //  Headline
-      headline5: TextStyle(fontSize: 25, fontWeight: FontWeight.w500, color: Colors.white),
-      headline6: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+      headline5: TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.w500,
+        color: Colors.white,
+        fontFamily: 'Montserrat',
+      ),
+      headline6: TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        fontFamily: 'Montserrat',
+      ),
 
       //  Body text
-      bodyText1: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
-      bodyText2: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, color: Colors.white),
+      bodyText1: TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+        color: Color(0xff4A2A73),
+        fontFamily: 'Montserrat',
+      ),
+      bodyText2: TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+        color: Colors.white,
+        fontFamily: 'Montserrat',
+      ),
     ),
   );
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/meeting_data_source_model.dart';
 
@@ -28,17 +29,21 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     ScheduleEvent event,
   ) async* {
     if (event is InitializeEvents) {
-      yield* _mapInitializeEventsToState(event);
+      _mapInitializeEventsToState(event);
     } else if (event is AddEvent) {
-      yield* _mapAddEventToState(event);
+      await _mapAddEventToState(event);
     } else if (event is RemoveEvent) {
-      yield* _mapRemoveEventToState(event);
+      await _mapRemoveEventToState(event);
     } else if (event is ModifyEvent) {
-      yield* _mapModifyEventToState(event);
+      _mapModifyEventToState(event);
+    } else if (event is ModifySchedule) {
+      await _mapModifyScheduleToState(event);
+    } else if (event is ModifyAllSchedulesWithName) {
+      await _mapModifyAllSchedulesWithNameToState(event);
     }
   }
 
-  Stream<ScheduleState> _mapInitializeEventsToState(InitializeEvents event) async* {
+  void _mapInitializeEventsToState(InitializeEvents event) {
     final List<UserEventModel> events = <UserEventModel>[];
     final UserDataModel userDataModel = _context.read<UserRepository>().userDataModel;
 
@@ -59,31 +64,62 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
     state.sourceModel.appointments = events;
 
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
-  Stream<ScheduleState> _mapAddEventToState(AddEvent event) async* {
+  Future<void> _mapAddEventToState(AddEvent event) async {
     final newEvent = event.event;
+    int? lastId = await _userDataModel.eventServiceController.saveNewEvent(newEvent);
 
-    await _userDataModel.eventServiceController.saveNewEvent(newEvent);
-    state.sourceModel.appointments!.add(newEvent);
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
+    if (lastId != null) {
+      state.sourceModel.appointments!.add(newEvent.withId(lastId));
+      state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
+    }
   }
 
-  Stream<ScheduleState> _mapRemoveEventToState(RemoveEvent event) async* {
-    state.sourceModel.appointments!.remove(event.event);
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.remove, state.sourceModel.appointments!);
+  Future<void> _mapRemoveEventToState(RemoveEvent event) async {
+    int shouldDeleteEventId = event.id;
+
+    await _userDataModel.eventServiceController.deleteEvent(shouldDeleteEventId);
+
+    (state.sourceModel.appointments as List<UserEventModel>?)!
+        .removeWhere((element) => element.id == shouldDeleteEventId && element.type.isEvent);
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
-  Stream<ScheduleState> _mapModifyEventToState(ModifyEvent event) async* {
+  Future<void> _mapModifyEventToState(ModifyEvent event) async {
+    final modifiedEventInfo = event.event;
+    await _userDataModel.eventServiceController.saveModifiedEvent(modifiedEventInfo);
+
+    final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
+        .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
+    modifiedEvent.color = modifiedEventInfo.color;
+    modifiedEvent.description = modifiedEventInfo.description;
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
+  }
+
+  Future<void> _mapModifyScheduleToState(ModifySchedule event) async {
     final modifiedEventInfo = event.event;
     await _userDataModel.eventServiceController.saveModifiedSchedule(modifiedEventInfo);
 
-    final modifiedEvent = (state.sourceModel.appointments!
-            .firstWhere((oldEvent) => (oldEvent as UserEventModel).id == modifiedEventInfo.id)
-        as UserEventModel);
+    final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
+        .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
     modifiedEvent.color = modifiedEventInfo.color;
     modifiedEvent.description = modifiedEventInfo.description;
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
+  }
+
+  Future<void> _mapModifyAllSchedulesWithNameToState(ModifyAllSchedulesWithName event) async {
+    final modifiedEventInfo = event.event;
+    await _userDataModel.eventServiceController
+        .saveAllModifiedScheduleWithName(modifiedEventInfo.eventName, modifiedEventInfo);
+
+    (state.sourceModel.appointments as List<UserEventModel>?)!
+        .where((oldEvent) => (oldEvent).eventName == modifiedEventInfo.eventName)
+        .forEach((event) {
+      event.color = modifiedEventInfo.color;
+      event.description = modifiedEventInfo.description;
+    });
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 }

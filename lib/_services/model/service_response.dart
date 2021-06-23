@@ -9,12 +9,18 @@ class ServiceResponse {
 
   ServiceResponse._(Response response) {
     statusCode = response.statusCode;
-    try {
-      Map<String, dynamic> body = jsonDecode(response.body);
-      data = body['data'];
-      version = body['data_version'];
-    } on Exception catch (e) {
-      print(e);
+
+    if (statusCode == 204) {
+      version = -1;
+      data = null;
+    } else {
+      try {
+        Map<String, dynamic> body = jsonDecode(response.body);
+        data = body['data'];
+        version = body['data_version'];
+      } on Exception catch (e) {
+        print('$e in ServiceResponse._()');
+      }
     }
   }
 

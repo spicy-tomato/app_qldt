@@ -20,7 +20,7 @@ class NavigablePlanPage extends StatelessWidget {
     return InheritedScrollToPlanPage(
       panelController: _panelController,
       child: BlocProvider<PlanBloc>(
-        create: (_) => PlanBloc(),
+        create: (_) => PlanBloc(context),
         child: Stack(
           children: <Widget>[
             child,

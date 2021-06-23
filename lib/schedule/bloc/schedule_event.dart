@@ -18,17 +18,8 @@ class AddEvent extends ScheduleEvent {
   List<Object?> get props => [event];
 }
 
-class RemoveEvent extends ScheduleEvent {
-  final UserEventModel event;
-
-  const RemoveEvent(this.event);
-
-  @override
-  List<Object?> get props => [event];
-}
-
 class ModifyEvent extends ScheduleEvent {
-  final EventScheduleModel event;
+  final EventModel event;
 
   const ModifyEvent(this.event);
 
@@ -36,4 +27,29 @@ class ModifyEvent extends ScheduleEvent {
   List<Object?> get props => [event];
 }
 
-class ReloadEvents extends ScheduleEvent {}
+class RemoveEvent extends ScheduleEvent {
+  final int id;
+
+  const RemoveEvent(this.id);
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class ModifySchedule extends ScheduleEvent {
+  final EventScheduleModel event;
+
+  const ModifySchedule(this.event);
+
+  @override
+  List<Object?> get props => [event];
+}
+
+class ModifyAllSchedulesWithName extends ScheduleEvent {
+  final EventScheduleModel event;
+
+  const ModifyAllSchedulesWithName(this.event);
+
+  @override
+  List<Object?> get props => [event];
+}

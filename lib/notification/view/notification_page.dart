@@ -1,4 +1,6 @@
 import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
+import 'package:app_qldt/_services/controller/notification_service_controller.dart';
+import 'package:app_qldt/notification/bloc/notification_bloc.dart';
 import 'package:app_qldt/notification_post/notification_post.dart';
 import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:app_qldt/_widgets/wrapper/item.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -17,46 +20,78 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
-
-  _NotificationPageState();
+  final _refreshController = RefreshController(initialRefresh: false);
+  final _panelController = PanelController();
+  NotificationServiceController? _notificationServiceController;
 
   @override
   Widget build(BuildContext context) {
-    List notificationData = context
-        .read<UserRepository>()
-        .userDataModel
-        .notificationServiceController
-        .notificationData as List<UserNotificationModel>;
+    if (_notificationServiceController == null) {
+      _notificationServiceController =
+          context.read<UserRepository>().userDataModel.notificationServiceController;
+    }
 
-    return SharedUI(
-      stable: false,
-      child: Item(
-        child: SmartRefresher(
-          enablePullDown: true,
-          header: ClassicHeader(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          onLoading: _onLoading,
-          child: ListView.separated(
-            separatorBuilder: (_, __) => const Divider(
-              height: 10,
-              thickness: 2,
-              indent: 20,
-              endIndent: 20,
+    List notificationData =
+        _notificationServiceController!.notificationData as List<UserNotificationModel>;
+
+    return InheritedPanelController(
+      panelController: _panelController,
+      child: BlocProvider<NotificationBloc>(
+        create: (_) => NotificationBloc(),
+        child: Stack(
+          children: <Widget>[
+            SharedUI(
+              stable: false,
+              child: Item(
+                child: SmartRefresher(
+                  enablePullDown: true,
+                  header: ClassicHeader(),
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  onLoading: _onLoading,
+                  child: ListView.separated(
+                    separatorBuilder: (_, __) => const Divider(
+                      height: 10,
+                      thickness: 2,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+                    itemCount: notificationData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListItem(notification: notificationData[index]);
+                    },
+                  ),
+                ),
+              ),
             ),
-            itemCount: notificationData.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListItem(notification: notificationData[index]);
-            },
-          ),
+            SlidingUpPanel(
+              minHeight: 0,
+              maxHeight: MediaQuery.of(context).size.height,
+              controller: _panelController,
+              panelBuilder: (scrollController) {
+                return BlocBuilder<NotificationBloc, NotificationState>(
+                  buildWhen: (previous, current) => previous.notification != current.notification,
+                  builder: (context, state) {
+                    if (state.notification == null) {
+                      return Container();
+                    }
+
+                    return NotificationPostPage(
+                      notification: state.notification!,
+                      scrollController: scrollController,
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 
   void _onRefresh() async {
-    await context.read<UserRepository>().userDataModel.notificationServiceController.refresh();
+    await _notificationServiceController!.refresh();
     await Future.delayed(Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});
@@ -83,25 +118,9 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        showGeneralDialog(
-          barrierDismissible: false,
-          barrierColor: Colors.black.withOpacity(0.5),
-          transitionDuration: Duration(milliseconds: 200),
-          context: context,
-          pageBuilder: (_, __, ___) {
-            return NotificationPostPage(notification: notification);
-          },
-          transitionBuilder: (_, anim1, __, child) {
-            return SlideTransition(
-              position: Tween(
-                begin: Offset(0, 1),
-                end: Offset(0, 0),
-              ).animate(anim1),
-              child: child,
-            );
-          },
-        );
+      onTap: () async {
+        context.read<NotificationBloc>().add(NotificationChanged(notification));
+        await InheritedPanelController.of(context).panelController.open();
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -172,4 +191,25 @@ class ListItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class InheritedPanelController extends InheritedWidget {
+  final PanelController panelController;
+
+  InheritedPanelController({
+    Key? key,
+    required this.panelController,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  static InheritedPanelController of(BuildContext context) {
+    final InheritedPanelController? result =
+        context.dependOnInheritedWidgetOfExactType<InheritedPanelController>();
+    assert(result != null, 'No InheritedScrollToPlanPage found in context');
+
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(_) => false;
 }

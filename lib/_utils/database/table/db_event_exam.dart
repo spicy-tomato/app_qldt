@@ -23,7 +23,7 @@ class DbEventExam extends TableModel {
         'FROM $tableName;',
       );
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbEventExam.map');
       return [];
     }
   }

@@ -5,6 +5,7 @@ class ScheduleModel {
   final String idRoom;
   final int shiftSchedules;
   final DateTime daySchedules;
+  final String teacher;
 
   const ScheduleModel({
     required this.id,
@@ -13,6 +14,7 @@ class ScheduleModel {
     required this.idRoom,
     required this.shiftSchedules,
     required this.daySchedules,
+    required this.teacher,
   });
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ScheduleModel {
       idRoom: json['ID_Room'],
       shiftSchedules: json['Shift_Schedules'],
       daySchedules: DateTime.parse(json['Day_Schedules']),
+      teacher: json['Name_Teacher'] ?? '',
     );
   }
 
@@ -34,6 +37,7 @@ class ScheduleModel {
       idRoom: map['id_room'],
       shiftSchedules: map['shift_schedules'],
       daySchedules: DateTime.parse(map['day_schedules']),
+      teacher: map['teacher'],
     );
   }
 
@@ -45,6 +49,7 @@ class ScheduleModel {
       'id_room': idRoom,
       'shift_schedules': shiftSchedules,
       'day_schedules': daySchedules.toIso8601String(),
+      'teacher': teacher,
     };
   }
 

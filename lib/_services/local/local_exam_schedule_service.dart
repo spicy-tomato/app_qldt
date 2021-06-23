@@ -44,9 +44,7 @@ class LocalExamScheduleService extends LocalService {
   }
 
   Future<void> _saveNew(List<ExamScheduleModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.examSchedule.insert(row.toMap());
-    }
+    await databaseProvider.examSchedule.insert(rawData);
   }
 
   Future<void> _loadExamScheduleDataFromDb() async {

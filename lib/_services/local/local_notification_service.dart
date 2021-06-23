@@ -17,20 +17,19 @@ class LocalNotificationService extends LocalService {
       controller as NotificationServiceController;
 
   Future<List> saveNewData(
-    List<SenderModel> senderList,
-    List<ReceiveNotificationModel> notificationList,
+    List<SenderModel>? senderList,
+    List<ReceiveNotificationModel>? notificationList,
+    List<int>? deleteList,
   ) async {
     print('Notification service: Updating new data');
 
-    await _removeNotification();
     await _saveNotification(notificationList);
-
-    await _removeSender();
     await _saveSender(senderList);
+    await _deleteNotification(deleteList);
 
     await _loadFromDb();
 
-    return this.notificationData;
+    return notificationData;
   }
 
   Future<void> updateVersion(int newVersion) async {
@@ -41,31 +40,23 @@ class LocalNotificationService extends LocalService {
     await _loadFromDb();
   }
 
-  //#region notification
-  Future<void> _removeNotification() async {
-    await databaseProvider.notification.delete();
-  }
-
-  Future<void> _saveNotification(List<ReceiveNotificationModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.notification.insert(row.toMap());
+  Future<void> _saveNotification(List<ReceiveNotificationModel>? rawData) async {
+    if (rawData != null) {
+      await databaseProvider.notification.insert(rawData);
     }
   }
 
-  //#endregion
-
-  //#region sender
-  Future<void> _removeSender() async {
-    await databaseProvider.sender.delete();
-  }
-
-  Future<void> _saveSender(List<SenderModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.sender.insert(row.toMap());
+  Future<void> _saveSender(List<SenderModel>? rawData) async {
+    if (rawData != null) {
+      await databaseProvider.sender.insert(rawData);
     }
   }
 
-  //#endregion
+  Future<void> _deleteNotification(List<int>? list) async {
+    if (list != null) {
+      await databaseProvider.notification.deleteRow(list);
+    }
+  }
 
   Future<void> _loadFromDb() async {
     final rawData = await databaseProvider.notification.all;

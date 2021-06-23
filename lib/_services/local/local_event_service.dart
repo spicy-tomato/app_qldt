@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/event_model.dart';
 import 'package:app_qldt/_models/event_schedule_model.dart';
 import 'package:app_qldt/_models/user_event_model.dart';
 import 'package:app_qldt/_models/schedule_model.dart';
@@ -11,8 +12,6 @@ import 'package:app_qldt/_utils/database/provider.dart';
 /// into local storage
 ///
 class LocalEventService extends LocalService {
-  // Map<String, int> colorMap = Map();
-
   //  For schedule
   List<UserEventModel> scheduleData = [];
 
@@ -44,7 +43,6 @@ class LocalEventService extends LocalService {
     await _remove();
     await _save(newData);
 
-    // await _loadColorMap();
     // await _loadCalendarData();
     await _loadScheduleData();
     await _loadEventData();
@@ -60,13 +58,6 @@ class LocalEventService extends LocalService {
     await _loadEventData();
   }
 
-  // Future<void> updateColor(String idModuleClass, Color color) async {
-  //   Map<String, dynamic> dataMap = new Map();
-  //   dataMap[idModuleClass] = color.toString();
-  //
-  //   await databaseProvider.colorEvent.update(dataMap);
-  // }
-
   Future<void> _loadScheduleData() async {
     scheduleData.clear();
 
@@ -74,16 +65,10 @@ class LocalEventService extends LocalService {
 
     scheduleData =
         List.generate(rawData.length, (index) => UserEventModel.fromScheduleMap(rawData[index]));
-
-    // eventsData.forEach((_, mapValue) {
-    //   mapValue.forEach((element) {
-    //     userEventList.add(element);
-    //   });
-    // });
   }
 
   Future<void> loadEvents() async {
-    _loadEventData();
+    await _loadEventData();
   }
 
   Future<void> _loadEventData() async {
@@ -94,14 +79,29 @@ class LocalEventService extends LocalService {
     eventData = List.generate(rawData.length, (index) => UserEventModel.fromMap(rawData[index]));
   }
 
-  Future<void> saveNewEvent(UserEventModel event) async {
+  Future<int?> saveNewEvent(UserEventModel event) async {
     print('Adding event: $event');
-    await databaseProvider.event.insert(event.toMap());
+    return await databaseProvider.event.insert(event.toMap());
+  }
+
+  Future<void> saveModifiedEvent(EventModel event) async {
+    print('Modifying schedule: $event');
+    await databaseProvider.event.update(event.toMap());
   }
 
   Future<void> saveModifiedSchedule(EventScheduleModel event) async {
     print('Modifying schedule: $event');
     await databaseProvider.eventSchedule.update(event.toMap());
+  }
+
+  Future<void> saveAllModifiedScheduleWithName(String name, EventScheduleModel event) async {
+    print('Modifying all schedules with name $name: $event');
+    await databaseProvider.eventSchedule.updateWithName(name, event.toMap());
+  }
+
+  Future<void> deleteEvent(int id) async {
+    print('Deleting schedule has id: $id');
+    await databaseProvider.event.delete(id);
   }
 
   Future<void> delete() async {
@@ -111,9 +111,7 @@ class LocalEventService extends LocalService {
   /// Save schedule data to local database
   ///
   Future<void> _save(List<ScheduleModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.schedule.insert(row.toMap());
-    }
+    await databaseProvider.schedule.insert(rawData);
   }
 
   /// Remove schedule data from local database
@@ -121,21 +119,6 @@ class LocalEventService extends LocalService {
   Future<void> _remove() async {
     await databaseProvider.schedule.delete();
   }
-
-// Future<void> _loadColorMap() async {
-//   List<Map<String, dynamic>> colorMapList = await databaseProvider.colorEvent.map;
-//
-//   if (colorMapList.isEmpty) {
-//     colorMap = new Map();
-//   } else {
-//     for (var map in colorMapList) {
-//       String key = map['id_module_class'];
-//       int value = int.parse(map['color']);
-//
-//       colorMap[key] = value;
-//     }
-//   }
-// }
 
   /// Get schedule data from local database
   ///

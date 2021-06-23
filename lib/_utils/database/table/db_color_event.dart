@@ -24,7 +24,7 @@ class DbColorEvent extends TableModel {
         'color_event;',
       );
     } on Exception catch (e) {
-      print(e);
+      print('$e in DbColorEvent.get');
       return [];
     }
   }

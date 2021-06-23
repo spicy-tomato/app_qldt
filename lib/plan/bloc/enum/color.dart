@@ -67,13 +67,13 @@ extension PlanColorsExtension on PlanColors {
   Color get color {
     switch (this) {
       case PlanColors.tomato:
-        return Color(0xffff6347);
+        return Color(0xffff3d1e);
 
       case PlanColors.tangerine:
         return Color(0xfff28500);
 
       case PlanColors.banana:
-        return Color(0xffffe135);
+        return Color(0xfff8cf0e);
 
       case PlanColors.basil:
         return Color(0xff579229);

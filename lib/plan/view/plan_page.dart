@@ -11,12 +11,12 @@ import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
 import 'local_widgets/local_widgets.dart';
 
 class PlanPage extends StatefulWidget {
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
   final Function()? onCloseButtonTap;
 
   PlanPage({
     Key? key,
-    this.scrollController,
+    required this.scrollController,
     this.onCloseButtonTap,
   }) : super(key: key);
 
@@ -46,7 +46,10 @@ class _PlanPageState extends State<PlanPage> {
               previous.fromDay != current.fromDay || previous.visibility != current.visibility,
           builder: (context, state) {
             if (state.visibility == PlanPageVisibility.open) {
-              return _FullPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
+              return _FullPlanPage(
+                onCloseButtonTap: widget.onCloseButtonTap,
+                scrollController: widget.scrollController,
+              );
             }
 
             return _ApartPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
@@ -58,12 +61,12 @@ class _PlanPageState extends State<PlanPage> {
 }
 
 class _FullPlanPage extends StatefulWidget {
-  final ScrollController? scrollController;
+  final ScrollController scrollController;
   final Function()? onCloseButtonTap;
 
   _FullPlanPage({
     Key? key,
-    this.scrollController,
+    required this.scrollController,
     this.onCloseButtonTap,
   }) : super(key: key);
 
@@ -135,7 +138,6 @@ class _ApartPlanPage extends StatefulWidget {
 class __ApartPlanPageState extends State<_ApartPlanPage> {
   late DateTime _fromDay;
   late DateTime _toDay;
-
 
   @override
   void initState() {
