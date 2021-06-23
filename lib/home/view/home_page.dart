@@ -60,9 +60,7 @@ class Greeting extends StatelessWidget {
     return Center(
       child: const Text(
         'Xin chào',
-        style: TextStyle(
-          fontSize: 35,
-        ),
+        style: TextStyle(fontSize: 35),
       ),
     );
   }
@@ -91,10 +89,7 @@ class Quote extends StatelessWidget {
       child: Container(
         child: const Text(
           'No pain, no gain',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-          ),
+          style: TextStyle(fontSize: 25),
         ),
       ),
     );

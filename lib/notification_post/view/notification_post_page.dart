@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:app_qldt/_models/user_notification_model.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotificationPostPage extends StatelessWidget {
   final UserNotificationModel notification;
@@ -37,7 +39,8 @@ class ScrollView extends StatefulWidget {
 
 class _ScrollViewState extends State<ScrollView> {
   late ScrollController _controller;
-  bool popFlag = false;
+  bool _popFlag = false;
+  final _contentRegex = RegExp(r'<a>([^<]*[^\/]*[^a]*[^/])<\/a>');
 
   @override
   void initState() {
@@ -127,20 +130,71 @@ class _ScrollViewState extends State<ScrollView> {
           ],
         ),
         SizedBox(height: 50),
-        Text(
-          widget.notification.content,
-          softWrap: true,
-          style: TextStyle(
-            color: Theme.of(context).backgroundColor,
+        RichText(
+          text: TextSpan(
+            children: _createText(),
           ),
         ),
       ],
     );
   }
 
+  List<TextSpan> _createText() {
+    List<TextSpan> result = [];
+    String content = widget.notification.content;
+
+    _contentRegex.allMatches(content).forEach((value) {
+      final regexMatch = value.group(0)!;
+      result.add(_createTextSpan(content.split(regexMatch)[0]));
+      result.add(_createTextSpan(regexMatch, isHyperlink: true));
+      content = content.split(value.group(0)!)[1];
+    });
+
+    if (content != '') {
+      result.add(_createTextSpan(content));
+    }
+
+    return result;
+  }
+
+  TextSpan _createTextSpan(String text, {bool isHyperlink = false}) {
+    if (isHyperlink) {
+      final displayUrl = text.substring(3, text.length - 4);
+      return TextSpan(
+        text: displayUrl.split('/').last,
+        style: TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w400,
+          color: Color(0xff1e2bff),
+          fontFamily: 'Montserrat',
+          height: 2,
+        ),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () async {
+            final url = displayUrl;
+            url.replaceAll(' ', '%20');
+
+            if (await canLaunch(url)) {
+              await launch(url);
+            }
+          },
+      );
+    }
+
+    return TextSpan(
+      text: text,
+      style: TextStyle(
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+        color: Color(0xff4A2A73),
+        fontFamily: 'Montserrat',
+      ),
+    );
+  }
+
   void _scrollListener() {
-    if (_controller.offset <= _controller.position.minScrollExtent && popFlag == false) {
-      popFlag = true;
+    if (_controller.offset <= _controller.position.minScrollExtent && _popFlag == false) {
+      _popFlag = true;
       Navigator.of(context).pop();
     }
   }
