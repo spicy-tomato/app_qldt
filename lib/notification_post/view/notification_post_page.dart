@@ -139,21 +139,19 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
 
   TextSpan _createTextSpan(String text, {bool isHyperlink = false}) {
     if (isHyperlink) {
-      final displayUrl = text.substring(3, text.length - 4);
+      final url = text.substring(3, text.length - 4);
+      final displayText = Uri.decodeComponent(url).split('/').last;
+
       return TextSpan(
-        text: displayUrl.split('/').last,
+        text: displayText,
         style: TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.w400,
           color: Color(0xff1e2bff),
           fontFamily: 'Montserrat',
-          height: 2,
         ),
         recognizer: TapGestureRecognizer()
           ..onTap = () async {
-            final url = displayUrl;
-            url.replaceAll(' ', '%20');
-
             if (await canLaunch(url)) {
               await launch(url);
             }
@@ -162,7 +160,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
     }
 
     return TextSpan(
-      text: text,
+      text: text + '\n',
       style: TextStyle(
         fontSize: 17,
         fontWeight: FontWeight.w400,
