@@ -30,7 +30,7 @@ class _PlanPageState extends State<PlanPage> {
         buildWhen: (previous, current) =>
             previous.fromDay != current.fromDay || previous.visibility != current.visibility,
         builder: (context, state) {
-          if (state.visibility == PlanPageVisibility.open) {
+          if (state.visibility.isOpened) {
             return _FullPlanPage(
               onCloseButtonTap: widget.onCloseButtonTap,
               scrollController: widget.scrollController,

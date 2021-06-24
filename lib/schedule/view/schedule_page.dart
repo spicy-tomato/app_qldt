@@ -36,7 +36,7 @@ class _SchedulePageState extends State<SchedulePage> {
           builder: (context, state) {
             return SharedUI(
               onWillPop: () {
-                if (state.visibility != PlanPageVisibility.close) {
+                if (!state.visibility.isClosed) {
                   context.read<PlanBloc>().add(ClosePlanPage());
                   return Future.value(false);
                 }
