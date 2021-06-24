@@ -41,6 +41,14 @@ class _NotificationPageState extends State<NotificationPage> {
         child: Stack(
           children: <Widget>[
             SharedUI(
+              onWillPop: () async{
+                if (_panelController.isPanelOpen){
+                  await _panelController.close();
+                  return false;
+                }
+
+                return true;
+              },
               stable: false,
               child: Item(
                 child: SmartRefresher(
