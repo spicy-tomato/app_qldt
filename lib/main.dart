@@ -18,14 +18,14 @@ void main() async {
 
   Paint.enableDithering = true;
 
-  AppMode mode = AppMode.staging;
+  AppMode mode = kReleaseMode ? AppMode.release : AppMode.staging;
 
-  print('Running in mode ${kReleaseMode ? AppMode.release : mode}');
+  print('Running in mode $mode');
 
   runApp(
     Phoenix(
       child: AppModeWidget(
-        mode: kReleaseMode ? AppMode.release : mode,
+        mode: mode,
         child: Application(),
       ),
     ),
