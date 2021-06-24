@@ -35,6 +35,11 @@ class _SchedulePageState extends State<SchedulePage> {
         child: BlocBuilder<PlanBloc, PlanState>(
           builder: (context, state) {
             return SharedUI(
+              beforeOpenSidebar: () {
+                if (!state.visibility.isClosed) {
+                  context.read<PlanBloc>().add(ClosePlanPage());
+                }
+              },
               onWillPop: () {
                 if (!state.visibility.isClosed) {
                   context.read<PlanBloc>().add(ClosePlanPage());

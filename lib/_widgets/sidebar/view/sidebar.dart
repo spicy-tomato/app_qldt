@@ -31,7 +31,7 @@ class Sidebar extends StatelessWidget {
               child: CloseSidebarButton(),
             ),
             Container(
-              width: screenWidth * 0.6,
+              width: screenWidth * 0.7,
               padding: EdgeInsets.only(top: 50),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
