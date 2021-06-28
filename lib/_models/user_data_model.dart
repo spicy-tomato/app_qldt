@@ -9,7 +9,7 @@ class UserDataModel {
   final NotificationServiceController notificationServiceController;
   final ExamScheduleServiceController examScheduleServiceController;
   final String idAccount;
-  final String idStudent;
+  final String idUser;
 
   UserDataModel({
     required this.eventServiceController,
@@ -17,6 +17,6 @@ class UserDataModel {
     required this.notificationServiceController,
     required this.examScheduleServiceController,
     required this.idAccount,
-    required this.idStudent,
+    required this.idUser,
   });
 }
