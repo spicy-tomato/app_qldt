@@ -21,13 +21,13 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
 
   List<SemesterModel> get semester => localService.semester;
 
-  Future<void> refresh() async {
+  Future<void> refresh([int? newVersion]) async {
     ServiceResponse response = await apiService.request();
 
     if (response.statusCode == 200) {
       List<ScoreModel> newData = _parseData(response.data);
       await localService.saveNewData(newData);
-      await localService.updateVersion(response.version!);
+      await localService.updateVersion(newVersion);
       setConnected();
     } else {
       await localService.loadOldData();

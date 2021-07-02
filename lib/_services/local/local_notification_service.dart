@@ -33,7 +33,7 @@ class LocalNotificationService extends LocalService {
   }
 
   Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setNotificationVersion(newVersion);
+    await databaseProvider.dataVersion.updateNotificationVersion(newVersion);
   }
 
   Future<void> loadOldData() async {

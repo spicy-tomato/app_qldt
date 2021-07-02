@@ -69,8 +69,8 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     );
 
     await Future.wait([
-      upsertToken(apiUrl),
-      initControllersAndRefreshNewVersion(serviceControllers, apiUrl),
+      _upsertToken(apiUrl),
+      _initControllersAndRefreshServices(serviceControllers, apiUrl),
     ]);
 
     final timeEnded = stopwatch.elapsed;
@@ -110,8 +110,8 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     );
 
     await Future.wait([
-      upsertToken(apiUrl),
-      initControllersAndForceRefresh(serviceControllers),
+      _upsertToken(apiUrl),
+      _initControllersAndRefreshServices(serviceControllers, apiUrl, force: true),
     ]);
 
     final timeEnded = stopwatch.elapsed;
@@ -138,15 +138,18 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     yield PreloadState.loaded(userDataModel);
   }
 
-  Future<void> upsertToken(ApiUrl apiUrl) async {
+  Future<void> _upsertToken(ApiUrl apiUrl) async {
     final tokenService = TokenService(apiUrl);
     await tokenService.init();
     await tokenService.upsert(_idUser);
   }
 
-  Future<void> initControllersAndRefreshNewVersion(
-      _ServiceControllers serviceControllers, ApiUrl apiUrl) async {
-    await serviceControllers.init(loadOldData: true);
+  Future<void> _initControllersAndRefreshServices(
+    _ServiceControllers serviceControllers,
+    ApiUrl apiUrl, {
+    bool force = false,
+  }) async {
+    await serviceControllers.init(loadOldData: !force);
 
     Map<String, dynamic> versionMap = await VersionService(
       apiUrl: apiUrl,
@@ -155,13 +158,12 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
     if (versionMap.isNotEmpty) {
       print(versionMap);
-      await serviceControllers.refresh(versionMap);
+      if (force) {
+        await serviceControllers.forceRefresh(versionMap);
+      } else {
+        await serviceControllers.refresh(versionMap);
+      }
     }
-  }
-
-  Future<void> initControllersAndForceRefresh(_ServiceControllers serviceControllers) async {
-    await serviceControllers.init();
-    await serviceControllers.forceRefresh();
   }
 }
 
@@ -216,12 +218,12 @@ class _ServiceControllers {
     ]);
   }
 
-  Future<void> forceRefresh() async {
+  Future<void> forceRefresh(Map<String, dynamic> versionMap) async {
     await Future.wait([
       _forceRefreshEvent(),
       _forceRefreshNotification(getAll: true),
-      _forceRefreshExamSchedule(),
-      _forceRefreshScore(),
+      _forceRefreshExamSchedule(versionMap['Exam_Schedule']! as int),
+      _forceRefreshScore(versionMap['Module_Score']! as int),
     ]);
   }
 
@@ -238,8 +240,6 @@ class _ServiceControllers {
   Future<void> _refreshNotification(int serverVersion, localVersion) async {
     if (serverVersion > localVersion) {
       await _forceRefreshNotification();
-    } else if (localVersion > 0) {
-      examSchedule.setConnected();
     }
   }
 
@@ -249,23 +249,25 @@ class _ServiceControllers {
 
   Future<void> _refreshExamSchedule(int serverVersion, localVersion) async {
     if (serverVersion > localVersion) {
-      await _forceRefreshExamSchedule();
+      await _forceRefreshExamSchedule(serverVersion);
+    } else if (localVersion > 0) {
+      examSchedule.setConnected();
     }
   }
 
-  Future<void> _forceRefreshExamSchedule() async {
-    await examSchedule.refresh();
+  Future<void> _forceRefreshExamSchedule([int? newVersion]) async {
+    await examSchedule.refresh(newVersion);
   }
 
   Future<void> _refreshScore(int serverVersion, localVersion) async {
     if (serverVersion > localVersion) {
-      await _forceRefreshScore();
+      await _forceRefreshScore(serverVersion);
     } else if (localVersion > 0) {
       score.setConnected();
     }
   }
 
-  Future<void> _forceRefreshScore() async {
-    await score.refresh();
+  Future<void> _forceRefreshScore([int? newVersion]) async {
+    await score.refresh(newVersion);
   }
 }

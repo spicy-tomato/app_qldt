@@ -49,7 +49,7 @@ class LocalEventService extends LocalService {
   }
 
   Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setScheduleVersion(newVersion);
+    await databaseProvider.dataVersion.updateScheduleVersion(newVersion);
   }
 
   Future<void> loadOldData() async {
