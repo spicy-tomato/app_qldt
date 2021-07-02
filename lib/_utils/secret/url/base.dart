@@ -19,7 +19,7 @@ class Host {
 
   String get crawlBase {
     if (mode.isRelease){
-      return 'https://utcapi.herokuapp.herokuapp.com/api-v2/app/crawl/';
+      return 'https://utcapi.herokuapp.com/api-v2/app/crawl/';
     }
 
     if (mode.isStaging){

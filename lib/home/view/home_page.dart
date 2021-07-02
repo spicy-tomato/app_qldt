@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           return SharedUI(
             onWillPop: () {
-              if (state.visibility != PlanPageVisibility.close) {
+              if (!state.visibility.isClosed) {
                 context.read<PlanBloc>().add(ClosePlanPage());
                 return Future.value(false);
               }

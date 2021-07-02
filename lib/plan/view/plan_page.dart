@@ -2,11 +2,9 @@ import 'package:app_qldt/_widgets/list_tile/custom_list_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'package:app_qldt/plan/plan.dart';
 import 'package:app_qldt/_utils/helper/day_of_week_vn.dart';
-import 'package:app_qldt/_widgets/model/inherited_scroll_to_plan_page.dart';
 
 import 'local_widgets/local_widgets.dart';
 
@@ -27,34 +25,20 @@ class PlanPage extends StatefulWidget {
 class _PlanPageState extends State<PlanPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PlanBloc, PlanState>(
-      listener: (context, state) async {
-        PanelController panelController = InheritedScrollToPlanPage.of(context).panelController;
+    return Scaffold(
+      body: BlocBuilder<PlanBloc, PlanState>(
+        buildWhen: (previous, current) =>
+            previous.fromDay != current.fromDay || previous.visibility != current.visibility,
+        builder: (context, state) {
+          if (state.visibility.isOpened) {
+            return _FullPlanPage(
+              onCloseButtonTap: widget.onCloseButtonTap,
+              scrollController: widget.scrollController,
+            );
+          }
 
-        if (state.visibility == PlanPageVisibility.close && !panelController.isPanelClosed) {
-          await panelController.close();
-        } else if (state.visibility == PlanPageVisibility.open && !panelController.isPanelOpen) {
-          await panelController.open();
-        } else if (state.visibility == PlanPageVisibility.apart &&
-            panelController.panelPosition != 0.3) {
-          await panelController.animatePanelToPosition(0.3);
-        }
-      },
-      child: Scaffold(
-        body: BlocBuilder<PlanBloc, PlanState>(
-          buildWhen: (previous, current) =>
-              previous.fromDay != current.fromDay || previous.visibility != current.visibility,
-          builder: (context, state) {
-            if (state.visibility == PlanPageVisibility.open) {
-              return _FullPlanPage(
-                onCloseButtonTap: widget.onCloseButtonTap,
-                scrollController: widget.scrollController,
-              );
-            }
-
-            return _ApartPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
-          },
-        ),
+          return _ApartPlanPage(onCloseButtonTap: widget.onCloseButtonTap);
+        },
       ),
     );
   }

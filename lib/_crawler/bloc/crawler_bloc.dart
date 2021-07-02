@@ -61,7 +61,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     if (state.formStatus.isValidated) {
       UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
 
-      String idStudent = userDataModel.idStudent;
+      String idStudent = userDataModel.idUser;
       String idAccount = userDataModel.idAccount;
 
       yield state.copyWith(

@@ -67,7 +67,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
     //  Also request to crawl score
     CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
       ScoreCrawlerModel(
-        idStudent: _userDataModel.idStudent,
+        idStudent: _userDataModel.idUser,
         idAccount: _userDataModel.idAccount,
       ),
     );
@@ -78,7 +78,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
 
     CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
-        idStudent: _userDataModel.idStudent,
+        idStudent: _userDataModel.idUser,
         idAccount: _userDataModel.idAccount,
       ),
     );

@@ -60,8 +60,9 @@ class DbNotification extends TableModel {
 
       print('Last notification id: $lastId');
       return lastId;
-    } on Exception catch (e) {
+    } on Error catch (e) {
       print('$e in DbNotification.lastId');
+      return null;
     }
   }
 

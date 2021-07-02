@@ -82,7 +82,7 @@ class _ScheduleState extends State<Schedule> {
     }
 
     if (details.targetElement == CalendarElement.calendarCell) {
-      if (state.visibility == PlanPageVisibility.close) {
+      if (state.visibility.isClosed) {
         context.read<PlanBloc>().add(ShowApartPlanPage(details.date!));
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
         widget.controller.selectedDate = null;
@@ -94,7 +94,7 @@ class _ScheduleState extends State<Schedule> {
 
       _previousSelectedDay = details.date!;
     } else if (details.targetElement == CalendarElement.appointment) {
-      if (state.visibility != PlanPageVisibility.close) {
+      if (!state.visibility.isClosed) {
         context.read<PlanBloc>().add(ClosePlanPage());
       } else {
         Navigator.of(context).push(
@@ -102,6 +102,10 @@ class _ScheduleState extends State<Schedule> {
       }
 
       widget.controller.selectedDate = null;
+    } else {
+      if (!state.visibility.isClosed) {
+        context.read<PlanBloc>().add(ClosePlanPage());
+      }
     }
   }
 
