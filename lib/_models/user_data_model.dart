@@ -10,6 +10,7 @@ class UserDataModel {
   final ExamScheduleServiceController examScheduleServiceController;
   final String idAccount;
   final String idUser;
+  String avatarPath;
 
   UserDataModel({
     required this.eventServiceController,
@@ -18,5 +19,6 @@ class UserDataModel {
     required this.examScheduleServiceController,
     required this.idAccount,
     required this.idUser,
+    required this.avatarPath,
   });
 }

@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'preload_event.dart';
 
@@ -58,6 +59,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
   Stream<PreloadState> _mapPreloadLoadingToState(PreloadLoading event) async* {
     yield PreloadState.loading();
+    String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);
@@ -70,7 +72,8 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
     await Future.wait([
       _upsertToken(apiUrl),
-      _initControllersAndRefreshServices(serviceControllers, apiUrl),
+      _initAndRefreshApiServices(serviceControllers, apiUrl),
+      (() async => avatarPath = await _loadAvatarPath())(),
     ]);
 
     final timeEnded = stopwatch.elapsed;
@@ -85,6 +88,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       examScheduleServiceController: serviceControllers.examSchedule,
       idAccount: _idAccount,
       idUser: _idUser,
+      avatarPath: avatarPath ?? '',
     );
 
     context.read<UserRepository>().userDataModel = userDataModel;
@@ -99,6 +103,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
   Stream<PreloadState> _mapPreloadLoadingAfterLoginToState(PreloadLoadingAfterLogin event) async* {
     yield PreloadState.loadingAfterLogin();
+    String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);
@@ -111,7 +116,8 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
     await Future.wait([
       _upsertToken(apiUrl),
-      _initControllersAndRefreshServices(serviceControllers, apiUrl, force: true),
+      _initAndRefreshApiServices(serviceControllers, apiUrl, force: true),
+      (() async => avatarPath = await _loadAvatarPath())(),
     ]);
 
     final timeEnded = stopwatch.elapsed;
@@ -126,6 +132,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       examScheduleServiceController: serviceControllers.examSchedule,
       idAccount: _idAccount,
       idUser: _idUser,
+      avatarPath: avatarPath ?? '',
     );
 
     context.read<UserRepository>().userDataModel = userDataModel;
@@ -144,7 +151,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     await tokenService.upsert(_idUser);
   }
 
-  Future<void> _initControllersAndRefreshServices(
+  Future<void> _initAndRefreshApiServices(
     _ServiceControllers serviceControllers,
     ApiUrl apiUrl, {
     bool force = false,
@@ -164,6 +171,11 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
         await serviceControllers.refresh(versionMap);
       }
     }
+  }
+
+  Future<String?> _loadAvatarPath() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('avatar_path');
   }
 }
 
