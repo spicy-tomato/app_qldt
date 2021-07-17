@@ -101,12 +101,14 @@ class _UserInfoState extends State<UserInfo> {
       ],
     );
   }
-  
-  void _viewAvatar(AvatarState state){
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) {
-        return AvatarFullScreen(image: state.file);
-      }),
-    );
+
+  void _viewAvatar(AvatarState state) {
+    if (state.file.existsSync()) {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) {
+          return AvatarFullScreen(image: state.file);
+        }),
+      );
+    }
   }
 }
