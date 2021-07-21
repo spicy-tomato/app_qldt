@@ -90,22 +90,34 @@ class DbDataVersion extends TableModel {
     );
   }
 
-  Future<void> setScheduleVersion(int newVersion) async {
+  Future<void> updateScheduleVersion(int newVersion) async {
     await _setVersion('schedule', newVersion);
     schedule = newVersion;
   }
 
-  Future<void> setNotificationVersion(int newVersion) async {
+  Future<void> updateNotificationVersion(int newVersion) async {
     await _setVersion('notification', newVersion);
     notification = newVersion;
   }
 
-  Future<void> setExamScheduleVersion() async {
-    await _setVersion('exam_schedule', ++examSchedule);
+  Future<void> updateExamScheduleVersion(int? newVersion) async {
+    if (newVersion != null) {
+      examSchedule = newVersion;
+    } else {
+      examSchedule++;
+    }
+    
+    await _setVersion('exam_schedule', examSchedule);
   }
 
-  Future<void> setScoreVersion() async {
-    await _setVersion('score', ++score);
+  Future<void> updateScoreVersion(int? newVersion) async {
+    if (newVersion != null) {
+      score = newVersion;
+    } else {
+      score++;
+    }
+
+    await _setVersion('score', score);
   }
 
   Future<void> delete() async {

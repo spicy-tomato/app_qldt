@@ -62,7 +62,11 @@ class ReceiveNotificationModel {
     return 'ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $idSender';
   }
 
-  static List<ReceiveNotificationModel> fromList(List list){
+  static List<ReceiveNotificationModel> fromList(List? list){
+    if (list == null){
+      return [];
+    }
+
     List<ReceiveNotificationModel> res = [];
 
     for (var item in list){

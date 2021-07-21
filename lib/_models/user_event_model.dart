@@ -11,16 +11,25 @@ enum EventType {
   event,
 }
 
+extension EventTypeExtension on EventType {
+  bool get isSchedule => this == EventType.schedule;
+
+  bool get isExam => this == EventType.exam;
+
+  bool get isEvent => this == EventType.event;
+}
+
 class UserEventModel {
-  late final int id;
+  final int id;
   final EventType type;
   late String eventName;
-  late String? location;
-  late String? description;
   late PlanColors color;
   late DateTime? from;
   late DateTime? to;
   late bool isAllDay;
+  String? location;
+  String? description;
+  String? people;
 
   UserEventModel({
     required this.eventName,
@@ -28,6 +37,7 @@ class UserEventModel {
     required this.id,
     this.location,
     this.description,
+    this.people = '',
     PlanColors? color,
     DateTime? from,
     DateTime? to,
@@ -60,6 +70,22 @@ class UserEventModel {
       eventName: schedule.moduleClassName,
       location: schedule.idRoom,
       isAllDay: false,
+      people: schedule.teacher,
+    );
+  }
+
+  UserEventModel withId(int id) {
+    return UserEventModel(
+      id: id,
+      type: this.type,
+      from: this.from,
+      to: this.to,
+      eventName: this.eventName,
+      location: this.location,
+      isAllDay: this.isAllDay,
+      people: this.people,
+      color: this.color,
+      description: this.description,
     );
   }
 
@@ -124,6 +150,7 @@ class UserEventModel {
       to: DateTime.parse(map['time_end']),
       isAllDay: map['is_all_day'] == 1,
       type: EventType.event,
+      people: map['people'],
     );
   }
 
@@ -139,6 +166,7 @@ class UserEventModel {
       location: map['id_room'],
       description: map['description'],
       isAllDay: map['is_all_day'] != null ? (map['is_all_day'] as int) == 1 : false,
+      people: map['teacher'],
     );
   }
 

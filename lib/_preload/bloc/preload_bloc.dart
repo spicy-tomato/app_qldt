@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'preload_event.dart';
 
@@ -28,13 +29,16 @@ part 'preload_state.dart';
 class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   final BuildContext context;
   final NavigatorState? navigator;
-  final User user;
+  final String _idAccount;
+  final String _idUser;
 
   PreloadBloc({
     required this.context,
     required this.navigator,
-    required this.user,
-  }) : super(PreloadInitial());
+    required User user,
+  })  : _idAccount = user.accountId,
+        _idUser = user.id,
+        super(PreloadInitial());
 
   @override
   Stream<PreloadState> mapEventToState(
@@ -55,119 +59,142 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
   Stream<PreloadState> _mapPreloadLoadingToState(PreloadLoading event) async* {
     yield PreloadState.loading();
+    String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
-
-    /// Khởi động các service
-    final tokenService = TokenService(apiUrl);
-    await tokenService.init();
-    await tokenService.upsert(user.id);
-
-    String idAccount = user.accountId;
-    String idUser = user.id;
-
-    final DatabaseProvider databaseProvider = DatabaseProvider();
-    await databaseProvider.init();
-
-    final ServiceControllerData controllerData = ServiceControllerData(
-      databaseProvider: databaseProvider,
+    final serviceControllers = _ServiceControllers(
       apiUrl: apiUrl,
-      idUser: idUser,
+      idUser: _idUser,
+      idAccount: _idAccount,
     );
 
-    EventServiceController eventServiceController = EventServiceController(controllerData);
-    NotificationServiceController notificationServiceController =
-        NotificationServiceController(controllerData, idAccount);
-    ScoreServiceController scoreServiceController = ScoreServiceController(controllerData);
-    ExamScheduleServiceController examScheduleServiceController =
-        ExamScheduleServiceController(controllerData);
-
-    print('Event: ${stopwatch.elapsed}');
-    await eventServiceController.load();
-
-    print('Notification: ${stopwatch.elapsed}');
-    await notificationServiceController.load();
-
-    print('Score: ${stopwatch.elapsed}');
-    await scoreServiceController.load();
-
-    print('Exam Schedule: ${stopwatch.elapsed}');
-    await examScheduleServiceController.load();
-
-    Map<String, dynamic> versionMap = await VersionService(
-      apiUrl: apiUrl,
-      idStudent: idUser,
-    ).getServerDataVersion();
-    if (versionMap.isNotEmpty) {
-      print(versionMap);
-
-      DbDataVersion version = eventServiceController.localService.databaseProvider.dataVersion;
-
-      if (versionMap['Schedule']! as int > version.schedule) {
-        await eventServiceController.refresh();
-      }
-      if (versionMap['Notification']! as int > version.notification) {
-        await notificationServiceController.refresh();
-      }
-      if (versionMap['Exam_Schedule']! as int > version.examSchedule) {
-        await examScheduleServiceController.refresh();
-      } else if (version.examSchedule > 0) {
-        examScheduleServiceController.setConnected();
-      }
-      if (versionMap['Module_Score']! as int > version.score) {
-        await scoreServiceController.refresh();
-      } else if (version.score > 0) {
-        scoreServiceController.setConnected();
-      }
-    }
+    await Future.wait([
+      _upsertToken(apiUrl),
+      _initAndRefreshApiServices(serviceControllers, apiUrl),
+      (() async => avatarPath = await _loadAvatarPath())(),
+    ]);
 
     final timeEnded = stopwatch.elapsed;
     stopwatch.stop();
 
     print(timeEnded);
 
-    context.read<UserRepository>().userDataModel = UserDataModel(
-      eventServiceController: eventServiceController,
-      scoreServiceController: scoreServiceController,
-      notificationServiceController: notificationServiceController,
-      examScheduleServiceController: examScheduleServiceController,
-      idAccount: idAccount,
-      idStudent: idUser,
+    final userDataModel = UserDataModel(
+      eventServiceController: serviceControllers.event,
+      scoreServiceController: serviceControllers.score,
+      notificationServiceController: serviceControllers.notification,
+      examScheduleServiceController: serviceControllers.examSchedule,
+      idAccount: _idAccount,
+      idUser: _idUser,
+      avatarPath: avatarPath ?? '',
     );
 
+    context.read<UserRepository>().userDataModel = userDataModel;
+
     await Future.delayed(
-        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0),
-        () async {
+        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () async {
       await navigator?.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
     });
 
-    yield PreloadState.loaded(
-      eventServiceController: eventServiceController,
-      scoreServiceController: scoreServiceController,
-      notificationServiceController: notificationServiceController,
-      examScheduleServiceController: examScheduleServiceController,
-      idAccount: idAccount,
-      idUser: idUser,
-    );
+    yield PreloadState.loaded(userDataModel);
   }
 
   Stream<PreloadState> _mapPreloadLoadingAfterLoginToState(PreloadLoadingAfterLogin event) async* {
     yield PreloadState.loadingAfterLogin();
+    String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
+    final serviceControllers = _ServiceControllers(
+      apiUrl: apiUrl,
+      idUser: _idUser,
+      idAccount: _idAccount,
+    );
 
-    /// Khởi động các service
+    await Future.wait([
+      _upsertToken(apiUrl),
+      _initAndRefreshApiServices(serviceControllers, apiUrl, force: true),
+      (() async => avatarPath = await _loadAvatarPath())(),
+    ]);
+
+    final timeEnded = stopwatch.elapsed;
+    stopwatch.stop();
+
+    print(timeEnded);
+
+    final userDataModel = UserDataModel(
+      eventServiceController: serviceControllers.event,
+      scoreServiceController: serviceControllers.score,
+      notificationServiceController: serviceControllers.notification,
+      examScheduleServiceController: serviceControllers.examSchedule,
+      idAccount: _idAccount,
+      idUser: _idUser,
+      avatarPath: avatarPath ?? '',
+    );
+
+    context.read<UserRepository>().userDataModel = userDataModel;
+
+    await Future.delayed(
+        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () async {
+      await navigator?.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
+    });
+
+    yield PreloadState.loaded(userDataModel);
+  }
+
+  Future<void> _upsertToken(ApiUrl apiUrl) async {
     final tokenService = TokenService(apiUrl);
     await tokenService.init();
-    await tokenService.upsert(user.id);
+    await tokenService.upsert(_idUser);
+  }
 
-    String idAccount = user.accountId;
-    String idUser = user.id;
+  Future<void> _initAndRefreshApiServices(
+    _ServiceControllers serviceControllers,
+    ApiUrl apiUrl, {
+    bool force = false,
+  }) async {
+    await serviceControllers.init(loadOldData: !force);
 
+    Map<String, dynamic> versionMap = await VersionService(
+      apiUrl: apiUrl,
+      idStudent: _idUser,
+    ).getServerDataVersion();
+
+    if (versionMap.isNotEmpty) {
+      print(versionMap);
+      if (force) {
+        await serviceControllers.forceRefresh(versionMap);
+      } else {
+        await serviceControllers.refresh(versionMap);
+      }
+    }
+  }
+
+  Future<String?> _loadAvatarPath() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('avatar_path');
+  }
+}
+
+class _ServiceControllers {
+  late final EventServiceController event;
+  late final ScoreServiceController score;
+  late final NotificationServiceController notification;
+  late final ExamScheduleServiceController examSchedule;
+  final ApiUrl apiUrl;
+  final String idUser;
+  final String idAccount;
+
+  _ServiceControllers({
+    required this.apiUrl,
+    required this.idAccount,
+    required this.idUser,
+  });
+
+  Future<void> init({bool loadOldData = false}) async {
     final DatabaseProvider databaseProvider = DatabaseProvider();
     await databaseProvider.init();
 
@@ -177,52 +204,82 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       idUser: idUser,
     );
 
-    EventServiceController eventServiceController = EventServiceController(controllerData);
-    ScoreServiceController scoreServiceController = ScoreServiceController(controllerData);
-    NotificationServiceController notificationServiceController =
-        NotificationServiceController(controllerData, idAccount);
-    ExamScheduleServiceController examScheduleServiceController =
-        ExamScheduleServiceController(controllerData);
+    event = EventServiceController(controllerData);
+    score = ScoreServiceController(controllerData);
+    notification = NotificationServiceController(controllerData, idAccount);
+    examSchedule = ExamScheduleServiceController(controllerData);
 
-    print('Event: ${stopwatch.elapsed}');
-    await eventServiceController.refresh();
+    if (loadOldData) {
+      await Future.wait([
+        event.load(),
+        notification.load(),
+        score.load(),
+        examSchedule.load(),
+      ]);
+    }
+  }
 
-    print('Notification: ${stopwatch.elapsed}');
-    await notificationServiceController.refresh();
+  Future<void> refresh(Map<String, dynamic> versionMap) async {
+    DbDataVersion version = event.localService.databaseProvider.dataVersion;
 
-    print('Score: ${stopwatch.elapsed}');
-    await scoreServiceController.refresh();
+    await Future.wait([
+      _refreshEvent(versionMap['Schedule']! as int, version.schedule),
+      _refreshNotification(versionMap['Notification']! as int, version.notification),
+      _refreshExamSchedule(versionMap['Exam_Schedule']! as int, version.examSchedule),
+      _refreshScore(versionMap['Module_Score']! as int, version.score),
+    ]);
+  }
 
-    print('Exam Schedule: ${stopwatch.elapsed}');
-    await examScheduleServiceController.refresh();
+  Future<void> forceRefresh(Map<String, dynamic> versionMap) async {
+    await Future.wait([
+      _forceRefreshEvent(),
+      _forceRefreshNotification(getAll: true),
+      _forceRefreshExamSchedule(versionMap['Exam_Schedule']! as int),
+      _forceRefreshScore(versionMap['Module_Score']! as int),
+    ]);
+  }
 
-    final timeEnded = stopwatch.elapsed;
-    stopwatch.stop();
+  Future<void> _refreshEvent(int serverVersion, localVersion) async {
+    if (serverVersion > localVersion) {
+      await _forceRefreshEvent();
+    }
+  }
 
-    print(timeEnded);
+  Future<void> _forceRefreshEvent() async {
+    await event.refresh();
+  }
 
-    context.read<UserRepository>().userDataModel = UserDataModel(
-      eventServiceController: eventServiceController,
-      scoreServiceController: scoreServiceController,
-      notificationServiceController: notificationServiceController,
-      examScheduleServiceController: examScheduleServiceController,
-      idAccount: idAccount,
-      idStudent: idUser,
-    );
+  Future<void> _refreshNotification(int serverVersion, localVersion) async {
+    if (serverVersion > localVersion) {
+      await _forceRefreshNotification();
+    }
+  }
 
-    await Future.delayed(
-        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0),
-        () async {
-      await navigator?.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
-    });
+  Future<void> _forceRefreshNotification({bool getAll = false}) async {
+    await notification.refresh(getAll: getAll);
+  }
 
-    yield PreloadState.loaded(
-      eventServiceController: eventServiceController,
-      scoreServiceController: scoreServiceController,
-      notificationServiceController: notificationServiceController,
-      examScheduleServiceController: examScheduleServiceController,
-      idAccount: idAccount,
-      idUser: idUser,
-    );
+  Future<void> _refreshExamSchedule(int serverVersion, localVersion) async {
+    if (serverVersion > localVersion) {
+      await _forceRefreshExamSchedule(serverVersion);
+    } else if (localVersion > 0) {
+      examSchedule.setConnected();
+    }
+  }
+
+  Future<void> _forceRefreshExamSchedule([int? newVersion]) async {
+    await examSchedule.refresh(newVersion);
+  }
+
+  Future<void> _refreshScore(int serverVersion, localVersion) async {
+    if (serverVersion > localVersion) {
+      await _forceRefreshScore(serverVersion);
+    } else if (localVersion > 0) {
+      score.setConnected();
+    }
+  }
+
+  Future<void> _forceRefreshScore([int? newVersion]) async {
+    await score.refresh(newVersion);
   }
 }

@@ -33,13 +33,13 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     } else if (event is AddEvent) {
       await _mapAddEventToState(event);
     } else if (event is RemoveEvent) {
-      _mapRemoveEventToState(event);
+      await _mapRemoveEventToState(event);
     } else if (event is ModifyEvent) {
-      await _mapModifyEventToState(event);
-    } else if (event is ModifyAllEventsWithName) {
-      await _mapModifyAllEventsWithNameToState(event);
-    } else if(event is ReloadEvent){
-      await _mapEventToState(event);
+      _mapModifyEventToState(event);
+    } else if (event is ModifySchedule) {
+      await _mapModifyScheduleToState(event);
+    } else if (event is ModifyAllSchedulesWithName) {
+      await _mapModifyAllSchedulesWithNameToState(event);
     }
   }
 
@@ -64,22 +64,41 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
     state.sourceModel.appointments = events;
 
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
   Future<void> _mapAddEventToState(AddEvent event) async {
     final newEvent = event.event;
-    await _userDataModel.eventServiceController.saveNewEvent(newEvent);
-    state.sourceModel.appointments!.add(newEvent);
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.add, state.sourceModel.appointments!);
+    int? lastId = await _userDataModel.eventServiceController.saveNewEvent(newEvent);
+
+    if (lastId != null) {
+      state.sourceModel.appointments!.add(newEvent.withId(lastId));
+      state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
+    }
   }
 
-  void _mapRemoveEventToState(RemoveEvent event) {
-    state.sourceModel.appointments!.remove(event.event);
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.remove, state.sourceModel.appointments!);
+  Future<void> _mapRemoveEventToState(RemoveEvent event) async {
+    int shouldDeleteEventId = event.id;
+
+    await _userDataModel.eventServiceController.deleteEvent(shouldDeleteEventId);
+
+    (state.sourceModel.appointments as List<UserEventModel>?)!
+        .removeWhere((element) => element.id == shouldDeleteEventId && element.type.isEvent);
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
   Future<void> _mapModifyEventToState(ModifyEvent event) async {
+    final modifiedEventInfo = event.event;
+    await _userDataModel.eventServiceController.saveModifiedEvent(modifiedEventInfo);
+
+    final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
+        .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
+    modifiedEvent.color = modifiedEventInfo.color;
+    modifiedEvent.description = modifiedEventInfo.description;
+    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
+  }
+
+  Future<void> _mapModifyScheduleToState(ModifySchedule event) async {
     final modifiedEventInfo = event.event;
     await _userDataModel.eventServiceController.saveModifiedSchedule(modifiedEventInfo);
 
@@ -87,11 +106,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
     modifiedEvent.color = modifiedEventInfo.color;
     modifiedEvent.description = modifiedEventInfo.description;
-    // modifiedEvent.eventName = modifiedEventInfo.eventName;
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
 
-  Future<void> _mapModifyAllEventsWithNameToState(ModifyAllEventsWithName event) async {
+  Future<void> _mapModifyAllSchedulesWithNameToState(ModifyAllSchedulesWithName event) async {
     final modifiedEventInfo = event.event;
     await _userDataModel.eventServiceController
         .saveAllModifiedScheduleWithName(modifiedEventInfo.eventName, modifiedEventInfo);
@@ -104,26 +122,4 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     });
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
   }
-
-
-  Future<void> _mapEventToState(ReloadEvent event) async {
-
-    // ignore: non_constant_identifier_names
-    final BeforeEvent = event.event;
-    await _userDataModel.eventServiceController.saveModifiedEvent(BeforeEvent);
-
-    final newEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
-        .lastWhere((oldEvent) => (oldEvent).id == BeforeEvent.id);
-
-    newEvent.eventName = BeforeEvent.eventName;
-    newEvent.isAllDay = BeforeEvent.isAllDay;
-    newEvent.from = BeforeEvent.from;
-    newEvent.to = BeforeEvent.to;
-    newEvent.color = BeforeEvent.color;
-    newEvent.location = BeforeEvent.location;
-    newEvent.description = BeforeEvent.description;
-
-    state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
-  }
-
 }

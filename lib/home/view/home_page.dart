@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           return SharedUI(
             onWillPop: () {
-              if (state.visibility != PlanPageVisibility.close) {
+              if (!state.visibility.isClosed) {
                 context.read<PlanBloc>().add(ClosePlanPage());
                 return Future.value(false);
               }
@@ -60,9 +60,7 @@ class Greeting extends StatelessWidget {
     return Center(
       child: const Text(
         'Xin chào',
-        style: TextStyle(
-          fontSize: 35,
-        ),
+        style: TextStyle(fontSize: 35),
       ),
     );
   }
@@ -91,10 +89,7 @@ class Quote extends StatelessWidget {
       child: Container(
         child: const Text(
           'No pain, no gain',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-          ),
+          style: TextStyle(fontSize: 25),
         ),
       ),
     );

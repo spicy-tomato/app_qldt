@@ -1,11 +1,12 @@
 import 'package:app_qldt/_widgets/element/unstable_button.dart';
 import 'package:flutter/material.dart';
 
-class TopBar extends StatelessWidget {
+class TopBar extends StatefulWidget {
   final Widget? topRightWidget;
   final Color? backgroundColor;
   final Color? iconColor;
   final bool? stable;
+  final Function()? beforeOpenSidebar;
 
   const TopBar({
     Key? key,
@@ -13,12 +14,18 @@ class TopBar extends StatelessWidget {
     this.backgroundColor,
     this.iconColor,
     this.stable,
+    this.beforeOpenSidebar,
   }) : super(key: key);
 
   @override
+  _TopBarState createState() => _TopBarState();
+}
+
+class _TopBarState extends State<TopBar> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor ?? Colors.transparent,
+      color: widget.backgroundColor ?? Colors.transparent,
       height: 60,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -27,19 +34,27 @@ class TopBar extends StatelessWidget {
           children: <Widget>[
             TopBarItem(
               icon: Icons.menu,
-              color: iconColor,
-              onTap: () => Scaffold.of(context)..openDrawer(),
+              color: widget.iconColor,
+              onTap: _onTap,
             ),
             Row(
               children: <Widget>[
-                stable! ? Container() : UnstableButton(),
-                topRightWidget ?? Container(),
+                widget.stable! ? Container() : UnstableButton(),
+                widget.topRightWidget ?? Container(),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _onTap() {
+    if (widget.beforeOpenSidebar != null) {
+      widget.beforeOpenSidebar!.call();
+    }
+
+    Scaffold.of(context)..openDrawer();
   }
 }
 
@@ -51,8 +66,8 @@ class TopBarItem extends StatelessWidget {
 
   const TopBarItem({
     Key? key,
-    required this.icon,
     required this.onTap,
+    required this.icon,
     this.color,
     this.child,
   }) : super(key: key);

@@ -8,7 +8,7 @@ class EventScheduleModel extends UserEventModel {
     required String description,
     required String name,
     required String location,
-
+    required String people,
   }) : super(
     id: id,
     eventName: name,
@@ -16,6 +16,7 @@ class EventScheduleModel extends UserEventModel {
     location: location,
     description: description,
     type: EventType.schedule,
+    people: people,
   );
 
   @override

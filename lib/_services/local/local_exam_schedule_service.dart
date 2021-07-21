@@ -30,8 +30,8 @@ class LocalExamScheduleService extends LocalService {
     return this.examScheduleData;
   }
 
-  Future<void> updateVersion() async {
-    await databaseProvider.dataVersion.setExamScheduleVersion();
+  Future<void> updateVersion(int? newVersion) async {
+    await databaseProvider.dataVersion.updateExamScheduleVersion(newVersion);
   }
 
   Future<void> loadOldData() async {
@@ -44,9 +44,7 @@ class LocalExamScheduleService extends LocalService {
   }
 
   Future<void> _saveNew(List<ExamScheduleModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.examSchedule.insert(row.toMap());
-    }
+    await databaseProvider.examSchedule.insert(rawData);
   }
 
   Future<void> _loadExamScheduleDataFromDb() async {

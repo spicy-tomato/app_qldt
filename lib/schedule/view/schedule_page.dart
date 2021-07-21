@@ -35,7 +35,19 @@ class _SchedulePageState extends State<SchedulePage> {
         child: BlocBuilder<PlanBloc, PlanState>(
           builder: (context, state) {
             return SharedUI(
-              onWillPop: () => _onWillPop(state),
+              beforeOpenSidebar: () {
+                if (!state.visibility.isClosed) {
+                  context.read<PlanBloc>().add(ClosePlanPage());
+                }
+              },
+              onWillPop: () {
+                if (!state.visibility.isClosed) {
+                  context.read<PlanBloc>().add(ClosePlanPage());
+                  return Future.value(false);
+                }
+
+                return Future.value(null);
+              },
               child: Item(
                 child: Theme(
                   key: _globalKey,
@@ -62,15 +74,5 @@ class _SchedulePageState extends State<SchedulePage> {
 
   void _onPanelClose() {
     _controller.selectedDate = null;
-  }
-
-  Future<bool?> _onWillPop(PlanState state) {
-    if (state.visibility != PlanPageVisibility.close) {
-      _controller.selectedDate = null;
-      context.read<PlanBloc>().add(ClosePlanPage());
-      return Future.value(false);
-    }
-
-    return Future.value(null);
   }
 }

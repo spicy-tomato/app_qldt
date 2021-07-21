@@ -21,7 +21,11 @@ class SenderModel {
     };
   }
 
-  static List<SenderModel> fromList(List list){
+  static List<SenderModel>? fromList(List? list){
+    if (list == null){
+      return [];
+    }
+
     List<SenderModel> res = [];
 
     for (var item in list){

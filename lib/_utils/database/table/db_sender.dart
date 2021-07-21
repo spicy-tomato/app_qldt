@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/sender_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -10,14 +11,20 @@ class DbSender extends TableModel {
   @override
   String get createScript => ''
       'CREATE TABLE IF NOT EXISTS $tableName('
-      'id_sender TEXT,'
+      'id_sender INTEGER PRIMARY KEY,'
       'sender_name TEXT,'
       'permission INTEGER);';
 
-  Future<void> insert(Map<String, dynamic> sender) async {
+  Future<void> insert(List<SenderModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    await database!.insert(tableName, sender);
+    rawData.forEach((element) async {
+      await database!.insert(
+        tableName,
+        element.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    });
   }
 
   Future<void> delete() async {

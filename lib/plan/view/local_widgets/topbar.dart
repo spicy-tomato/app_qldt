@@ -98,6 +98,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       location: state.location,
       from: state.fromDay,
       to: state.toDay,
+      people: state.people,
     );
 
     context.read<ScheduleBloc>().add(AddEvent(event));
@@ -114,6 +115,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
       description: state.description,
       color: state.color,
       location: state.location,
+      people: state.people,
     );
 
     showDialog(
@@ -145,9 +147,9 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       if (state.range.isAllEvent) {
-                        rootContext.read<ScheduleBloc>().add(ModifyAllEventsWithName(event));
+                        rootContext.read<ScheduleBloc>().add(ModifyAllSchedulesWithName(event));
                       } else {
-                        rootContext.read<ScheduleBloc>().add(ModifyEvent(event));
+                        rootContext.read<ScheduleBloc>().add(ModifySchedule(event));
                       }
                       rootContext.read<PlanBloc>().add(ClosePlanPage());
                     },
@@ -164,54 +166,21 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
 
   Future<void> _saveModifiedEvent() async {
     final state = context.read<PlanBloc>().state;
+    final rootContext = context;
 
     final event = EventModel(
+      id: state.id!,
       eventName: state.title,
-      color: state.color,
-      isAllDay: state.isAllDay,
       description: state.description,
+      color: state.color,
       location: state.location,
+      people: state.people,
       from: state.fromDay,
       to: state.toDay,
-    );
-    context.read<ScheduleBloc>().add(ReloadEvent(event));
-
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('AlertDialog success'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text('Lưu Thành công  ✔'
-                ,style: TextStyle( fontSize: 20,color: Colors.black,),),
-
-              ],
-            ),
-          ),
-          actions: <Widget>[
-
-            TextButton(
-              child: Text('Xác Nhận'),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.teal,
-                onSurface: Colors.grey,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      isAllDay: state.isAllDay,
     );
 
-
-    context.read<PlanBloc>().add(ClosePlanPage());
-
-}
-
+    rootContext.read<ScheduleBloc>().add(ModifyEvent(event));
+    rootContext.read<PlanBloc>().add(ClosePlanPage());
+  }
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:app_qldt/_models/user_event_model.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'enum/enum.dart';
 
@@ -13,7 +15,12 @@ part 'plan_event.dart';
 part 'plan_state.dart';
 
 class PlanBloc extends Bloc<PlanEvent, PlanState> {
-  PlanBloc() : super(PlanState(fromDay: DateTime.now(), toDay: DateTime.now()));
+  final PanelController panelController;
+
+  PlanBloc(
+    BuildContext context, {
+    required this.panelController,
+  }) : super(PlanState(fromDay: DateTime.now(), toDay: DateTime.now()));
 
   @override
   Stream<PlanState> mapEventToState(
@@ -44,15 +51,15 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     } else if (event is PlanTimeChangedToCurrentTime) {
       yield _mapPlanChangedToCurrentTimeToState(event);
     } else if (event is ShowApartPlanPage) {
-      yield _mapShowApartPlanPageToState(event);
+      yield* _mapShowApartPlanPageToState(event);
     } else if (event is EditSchedule) {
-      yield _mapEditScheduleToState(event);
+      yield* _mapEditScheduleToState(event);
     } else if (event is EditEvent) {
-      yield _mapEditEventToState(event);
+      yield* _mapEditEventToState(event);
     } else if (event is OpenPlanPage) {
-      yield _mapOpenPlanPageToState(event);
+      yield* _mapOpenPlanPageToState(event);
     } else if (event is ClosePlanPage) {
-      yield _mapClosePlanPageToState();
+      yield* _mapClosePlanPageToState();
     }
   }
 
@@ -107,18 +114,20 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
     );
   }
 
-  PlanState _mapShowApartPlanPageToState(ShowApartPlanPage event) {
-    return state.copyWith(
+  Stream<PlanState> _mapShowApartPlanPageToState(ShowApartPlanPage event) async* {
+    yield state.copyWith(
       from: event.dateTime,
       to: event.dateTime.add(Duration(hours: 1)),
       visibility: PlanPageVisibility.apart,
     );
+
+    await panelController.animatePanelToPosition(0.3);
   }
 
-  PlanState _mapEditScheduleToState(EditSchedule event) {
+  Stream<PlanState> _mapEditScheduleToState(EditSchedule event) async* {
     final newEvent = event.event;
 
-    return state.copyWith(
+    yield state.copyWith(
       id: newEvent.id,
       title: newEvent.eventName,
       color: newEvent.color,
@@ -128,12 +137,14 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       location: newEvent.location,
       type: PlanType.editSchedule,
     );
+
+    await panelController.open();
   }
 
-  PlanState _mapEditEventToState(EditEvent event) {
+  Stream<PlanState> _mapEditEventToState(EditEvent event) async* {
     final newEvent = event.event;
 
-    return state.copyWith(
+    yield state.copyWith(
       id: newEvent.id,
       title: newEvent.eventName,
       color: newEvent.color,
@@ -143,10 +154,12 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       visibility: PlanPageVisibility.open,
       type: PlanType.editEvent,
     );
+
+    await panelController.open();
   }
 
-  PlanState _mapOpenPlanPageToState(OpenPlanPage event) {
-    return state.copyWith(
+  Stream<PlanState> _mapOpenPlanPageToState(OpenPlanPage event) async* {
+    yield state.copyWith(
       title: '',
       color: PlanColors.defaultColor,
       location: '',
@@ -156,9 +169,12 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
       visibility: PlanPageVisibility.open,
       type: event.type ?? PlanType.create,
     );
+
+    await panelController.open();
   }
 
-  PlanState _mapClosePlanPageToState() {
-    return state.copyWith(visibility: PlanPageVisibility.close);
+  Stream<PlanState> _mapClosePlanPageToState() async* {
+    yield state.copyWith(visibility: PlanPageVisibility.close);
+    await panelController.close();
   }
 }

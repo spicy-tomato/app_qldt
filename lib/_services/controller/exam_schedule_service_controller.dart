@@ -24,12 +24,12 @@ class ExamScheduleServiceController
 
   SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
-  Future<void> refresh() async {
+  Future<void> refresh([int? newVersion]) async {
     ServiceResponse response = await apiService.request();
 
     if (response.statusCode == 200) {
       List<ExamScheduleModel> newData = _parseData(response.data);
-      await localService.updateVersion();
+      await localService.updateVersion(newVersion);
       await localService.saveNewData(newData);
       setConnected();
     } else {

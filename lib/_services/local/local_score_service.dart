@@ -35,13 +35,11 @@ class LocalScoreService extends LocalService {
   }
 
   Future<void> _saveNew(List<ScoreModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.score.insert(row.toMap());
-    }
+    await databaseProvider.score.insert(rawData);
   }
 
-  Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setScoreVersion();
+  Future<void> updateVersion(int? newVersion) async {
+    await databaseProvider.dataVersion.updateScoreVersion(newVersion);
   }
 
   Future<void> loadOldData() async {

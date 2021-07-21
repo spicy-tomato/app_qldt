@@ -57,21 +57,15 @@ class PreloadState extends Equatable {
 
   const PreloadState.loadingAfterLogin() : this(status: PreloadStatus.loadingAfterLogin);
 
-  const PreloadState.loaded({
-    required String idAccount,
-    required String idUser,
-    required EventServiceController eventServiceController,
-    required ScoreServiceController scoreServiceController,
-    required NotificationServiceController notificationServiceController,
-    required ExamScheduleServiceController examScheduleServiceController,
-  }) : this(
+  PreloadState.loaded(UserDataModel userDataModel)
+      : this(
           status: PreloadStatus.loaded,
-          idAccount: idAccount,
-          idUser: idUser,
-          eventServiceController: eventServiceController,
-          scoreServiceController: scoreServiceController,
-          notificationServiceController: notificationServiceController,
-          examScheduleServiceController: examScheduleServiceController,
+          idAccount: userDataModel.idAccount,
+          idUser: userDataModel.idUser,
+          eventServiceController: userDataModel.eventServiceController,
+          scoreServiceController: userDataModel.scoreServiceController,
+          notificationServiceController: userDataModel.notificationServiceController,
+          examScheduleServiceController: userDataModel.examScheduleServiceController,
         );
 
   @override

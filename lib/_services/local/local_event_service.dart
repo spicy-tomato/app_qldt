@@ -49,7 +49,7 @@ class LocalEventService extends LocalService {
   }
 
   Future<void> updateVersion(int newVersion) async {
-    await databaseProvider.dataVersion.setScheduleVersion(newVersion);
+    await databaseProvider.dataVersion.updateScheduleVersion(newVersion);
   }
 
   Future<void> loadOldData() async {
@@ -79,9 +79,14 @@ class LocalEventService extends LocalService {
     eventData = List.generate(rawData.length, (index) => UserEventModel.fromMap(rawData[index]));
   }
 
-  Future<void> saveNewEvent(UserEventModel event) async {
+  Future<int?> saveNewEvent(UserEventModel event) async {
     print('Adding event: $event');
-    await databaseProvider.event.insert(event.toMap());
+    return await databaseProvider.event.insert(event.toMap());
+  }
+
+  Future<void> saveModifiedEvent(EventModel event) async {
+    print('Modifying schedule: $event');
+    await databaseProvider.event.update(event.toMap());
   }
 
   Future<void> saveModifiedSchedule(EventScheduleModel event) async {
@@ -93,9 +98,10 @@ class LocalEventService extends LocalService {
     print('Modifying all schedules with name $name: $event');
     await databaseProvider.eventSchedule.updateWithName(name, event.toMap());
   }
-  Future<void> saveModifiedEvent(EventModel event) async {
-    print('Modifying Event: $event');
-    await databaseProvider.event.update(event.toMap());
+
+  Future<void> deleteEvent(int id) async {
+    print('Deleting schedule has id: $id');
+    await databaseProvider.event.delete(id);
   }
 
   Future<void> delete() async {
@@ -105,9 +111,7 @@ class LocalEventService extends LocalService {
   /// Save schedule data to local database
   ///
   Future<void> _save(List<ScheduleModel> rawData) async {
-    for (var row in rawData) {
-      await databaseProvider.schedule.insert(row.toMap());
-    }
+    await databaseProvider.schedule.insert(rawData);
   }
 
   /// Remove schedule data from local database
