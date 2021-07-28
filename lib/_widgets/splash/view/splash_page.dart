@@ -17,8 +17,8 @@ class SplashPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 200,
-              height: 200,
+              width: 270,
+              height: 270,
               child: Hero(
                 tag: 'loginLogo',
                 child: Image.asset(

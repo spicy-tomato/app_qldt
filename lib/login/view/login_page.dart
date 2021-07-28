@@ -70,7 +70,7 @@ class BackScreen extends StatelessWidget {
       duration: Duration(milliseconds: 1000),
       decoration: new BoxDecoration(
         image: new DecorationImage(
-          image: new AssetImage('images/background.gif'),
+          image: new AssetImage('images/background.png'),
           fit: BoxFit.fill,
         ),
       ),
