@@ -1,10 +1,9 @@
 import 'dart:convert';
-
-import 'package:app_qldt/_utils/helper/const.dart';
-import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:app_qldt/_repositories/firebase_repository/firebase_repository.dart';
 
 class TokenService {
