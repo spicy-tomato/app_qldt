@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_qldt/_repositories/authentication_repository/src/services/models/models.dart';
 import 'package:app_qldt/_widgets/model/app_mode.dart';
+import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,9 +36,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmitToState();
     } else if (event is LoginPasswordVisibleChanged) {
-      yield _mapLoginPasswordVisibleChangedToState(event);
+      yield _mapLoginPasswordVisibleChangedToState();
     } else if (event is ShowedLoginFailedDialog) {
       yield _mapShowedLoginFailedDialogToState();
+    } else if (event is FormTypeChanged) {
+      yield _mapFormTypeChangedToState(event);
     }
   }
 
@@ -62,12 +65,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapLoginSubmitToState() async* {
+    yield state.copyWith(hidePassword: true);
+
     if (state.status.isValidated) {
       yield state.copyWith(status: FormzStatus.submissionInProgress);
 
       try {
         final apiUrl = AppModeWidget.of(context).apiUrl;
-        final loginUser = LoginUser(state.username.value, state.password.value);
+        final loginUser = LoginUser(state.username.value, state.password.value, state.accountPermission);
 
         final LoginStatus loginStatus = await _authenticationRepository.logIn(apiUrl, loginUser);
 
@@ -93,11 +98,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  LoginState _mapLoginPasswordVisibleChangedToState(LoginPasswordVisibleChanged event) {
-    return state.copyWith(hidePassword: event.hidePassword ?? !state.hidePassword);
+  LoginState _mapLoginPasswordVisibleChangedToState() {
+    return state.copyWith(hidePassword: !state.hidePassword);
   }
 
   LoginState _mapShowedLoginFailedDialogToState() {
     return state.copyWith(shouldShowLoginFailedDialog: false);
+  }
+
+  LoginState _mapFormTypeChangedToState(FormTypeChanged event) {
+    return state.copyWith(accountPermission: event.accountPermission);
   }
 }

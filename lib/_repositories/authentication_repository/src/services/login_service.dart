@@ -5,6 +5,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/models.dart';
+import 'package:app_qldt/_models/account_permission_enum.dart';
 
 extension LoginStatusExtension on LoginStatus {
   bool get isSuccessfully => this == LoginStatus.successfully;
@@ -20,7 +21,8 @@ class LoginService {
       return LoginResponse(status: LoginStatus.noInternetConnection);
     }
 
-    String url = apiUrl.post.authentication;
+    String url =
+        loginUser.accountPermission.isUser ? apiUrl.post.authentication : apiUrl.post.guestAuthentication;
     String body = jsonEncode(loginUser);
 
     http.Response? response;
