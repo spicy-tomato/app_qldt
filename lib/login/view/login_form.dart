@@ -1,3 +1,4 @@
+import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -27,19 +28,7 @@ class _LoginFormState extends State<LoginForm> {
     final double screenHeight = MediaQuery.of(context).size.height;
 
     return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) async {
-        if (state.status.isSubmissionFailure &&
-            !showLoginFailedDialog &&
-            state.shouldShowLoginFailedDialog) {
-          showLoginFailedDialog = true;
-          context.read<LoginBloc>().add(ShowedLoginFailedDialog());
-          await showDialog(
-            barrierDismissible: true,
-            context: context,
-            builder: (_) => _loginFailedDialog(context),
-          );
-        }
-      },
+      listener: _showDialogListener,
       child: BlocBuilder<LoginBloc, LoginState>(
         buildWhen: (previous, current) {
           return previous.hideLoginDialog != current.hideLoginDialog;
@@ -75,12 +64,31 @@ class _LoginFormState extends State<LoginForm> {
                       children: <Widget>[
                         Container(
                           margin: const EdgeInsets.only(bottom: 20),
-                          child: const Text(
-                            'Đăng nhập để tiếp tục',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                            ),
+                          child: BlocBuilder<LoginBloc, LoginState>(
+                            buildWhen: (previous, current) =>
+                                previous.accountPermission != current.accountPermission,
+                            builder: (context, state) {
+                              return AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                child: state.accountPermission.isUser
+                                    ? Text(
+                                        'Đăng nhập để tiếp tục',
+                                        key: ValueKey(0),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Đăng nhập với tư cách khách',
+                                        key: ValueKey(1),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                              );
+                            },
                           ),
                         ),
                         UsernameInput(focusNode: focusNode),
@@ -88,6 +96,17 @@ class _LoginFormState extends State<LoginForm> {
                         PasswordInput(focusNode: focusNode),
                         const SizedBox(height: 20),
                         LoginButton(focusNode),
+                        const SizedBox(height: 40),
+                        BlocBuilder<LoginBloc, LoginState>(
+                          buildWhen: (previous, current) =>
+                              previous.accountPermission != current.accountPermission,
+                          builder: (context, state) => Column(
+                            children: <Widget>[
+                              state.accountPermission.isUser ? Container() : _loginAnchor,
+                              state.accountPermission.isGuest ? Container() : _loginAsGuestAnchor,
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ],
@@ -99,6 +118,46 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
+
+  void _showDialogListener(BuildContext context, LoginState state) async {
+    if (state.status.isSubmissionFailure && !showLoginFailedDialog && state.shouldShowLoginFailedDialog) {
+      showLoginFailedDialog = true;
+      context.read<LoginBloc>().add(ShowedLoginFailedDialog());
+      await showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (_) => _loginFailedDialog(context),
+      );
+    }
+  }
+
+  Widget get _loginAnchor => Container(
+        margin: const EdgeInsets.only(bottom: 15),
+        child: GestureDetector(
+          onTap: () => _switchToLoginForm(context),
+          child: const Text(
+            'Đăng nhập với tài khoản đã xác minh',
+            style: const TextStyle(
+              fontSize: 17,
+              color: Colors.blueAccent,
+            ),
+          ),
+        ),
+      );
+
+  Widget get _loginAsGuestAnchor => Container(
+        margin: const EdgeInsets.only(bottom: 15),
+        child: GestureDetector(
+          onTap: () => _switchToLoginAsGuestForm(context),
+          child: const Text(
+            'Đăng nhập với tài khoản khách',
+            style: const TextStyle(
+              fontSize: 17,
+              color: Colors.blueAccent,
+            ),
+          ),
+        ),
+      );
 
   /// TODO: Alert wrong login information, server or no internet
   Widget _loginFailedDialog(BuildContext context) {
@@ -120,5 +179,13 @@ class _LoginFormState extends State<LoginForm> {
         ],
       ),
     );
+  }
+
+  void _switchToLoginForm(BuildContext context) {
+    context.read<LoginBloc>().add(FormTypeChanged(AccountPermission.user));
+  }
+
+  void _switchToLoginAsGuestForm(BuildContext context) {
+    context.read<LoginBloc>().add(FormTypeChanged(AccountPermission.guest));
   }
 }

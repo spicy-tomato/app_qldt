@@ -56,7 +56,6 @@ class Button extends StatelessWidget {
       child: const Text('Đăng nhập'),
       onPressed: () {
         FocusScope.of(context).unfocus();
-        context.read<LoginBloc>().add(LoginPasswordVisibleChanged(hidePassword: true));
         context.read<LoginBloc>().add(LoginSubmitted());
       },
     );

@@ -8,6 +8,7 @@ class LoginState extends Equatable {
   final bool hideKeyboard;
   final bool hideLoginDialog;
   final bool shouldShowLoginFailedDialog;
+  final AccountPermission accountPermission;
 
   const LoginState({
     required this.status,
@@ -17,6 +18,7 @@ class LoginState extends Equatable {
     required this.hideKeyboard,
     required this.hideLoginDialog,
     required this.shouldShowLoginFailedDialog,
+    required this.accountPermission,
   });
 
   LoginState copyWith({
@@ -27,6 +29,7 @@ class LoginState extends Equatable {
     bool? hideKeyboard,
     bool? hideLoginDialog,
     bool? shouldShowLoginFailedDialog,
+    AccountPermission? accountPermission,
   }) {
     return LoginState(
       status: status ?? this.status,
@@ -36,6 +39,7 @@ class LoginState extends Equatable {
       hideKeyboard: hideKeyboard ?? this.hideKeyboard,
       hideLoginDialog: hideLoginDialog ?? this.hideLoginDialog,
       shouldShowLoginFailedDialog: shouldShowLoginFailedDialog ?? this.shouldShowLoginFailedDialog,
+      accountPermission: accountPermission ?? this.accountPermission,
     );
   }
 
@@ -48,6 +52,7 @@ class LoginState extends Equatable {
         hideKeyboard,
         hideLoginDialog,
         shouldShowLoginFailedDialog,
+        accountPermission,
       ];
 }
 
@@ -61,5 +66,6 @@ class LoginInitial extends LoginState {
           hideKeyboard: true,
           hideLoginDialog: true,
           shouldShowLoginFailedDialog: true,
+          accountPermission: AccountPermission.user,
         );
 }
