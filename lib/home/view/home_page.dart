@@ -77,6 +77,7 @@ class Art extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: Colors.white,
         ),
+        child: Image.asset('images/tree.gif'),
       ),
     );
   }
