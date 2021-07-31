@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +19,8 @@ class UserRepository {
     print(loginInfo);
 
     try {
-      _user = User.fromJson(loginInfo);
+      final permission = await _getPermission();
+      _user = User.fromJsonWithPermission(loginInfo, permission);
     } on Exception catch (e){
       print(e.toString());
     }
@@ -35,5 +37,11 @@ class UserRepository {
     }
 
     return jsonDecode(infoStr);
+  }
+
+  Future<AccountPermission> _getPermission() async {
+    final prefs = await SharedPreferences.getInstance();
+    final index = prefs.getInt('permission')!;
+    return AccountPermission.values[index];
   }
 }

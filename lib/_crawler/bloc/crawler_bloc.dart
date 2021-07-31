@@ -36,7 +36,9 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     } else if (event is CrawlerPasswordVisibleChanged) {
       yield _mapCrawlerPasswordVisibleChangedToState(event);
     } else if (event is CrawlerSubmitted) {
-      yield* _mapCrawlerSubmittedToState(event);
+      yield* _mapCrawlerSubmittedToState();
+    } else if (event is CrawlerDownload) {
+      yield* _mapCrawlerDownloadToState();
     } else if (event is CrawlerResetStatus) {
       yield _mapCrawlerResetStatusToState();
     }
@@ -57,17 +59,16 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     return state.copyWith(hidePassword: event.hidePassword ?? !state.hidePassword);
   }
 
-  Stream<CrawlerState> _mapCrawlerSubmittedToState(CrawlerSubmitted event) async* {
+  Stream<CrawlerState> _mapCrawlerSubmittedToState() async* {
     if (state.formStatus.isValidated) {
-      UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
-
-      String idStudent = userDataModel.idUser;
-      String idAccount = userDataModel.idAccount;
-
       yield state.copyWith(
         formStatus: FormzStatus.submissionInProgress,
         status: CrawlerStatus.validatingPassword,
       );
+
+      UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
+      String idStudent = userDataModel.idUser;
+      String idAccount = userDataModel.idAccount;
 
       final String password = state.password.value;
 
@@ -125,14 +126,71 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         } else {
           yield state.copyWith(status: CrawlerStatus.ok);
         }
+      } else {
+        yield state.copyWith(status: passwordStatus, formStatus: FormzStatus.submissionFailure);
       }
-
-      yield state.copyWith(status: passwordStatus, formStatus: FormzStatus.submissionFailure);
     } else {
       yield state.copyWith(
         formStatus: FormzStatus.invalid,
         password: QldtPasswordModel.dirty(''),
       );
+    }
+  }
+
+  Stream<CrawlerState> _mapCrawlerDownloadToState() async* {
+    yield state.copyWith(
+      formStatus: FormzStatus.submissionInProgress,
+      status: CrawlerStatus.validatingPassword,
+    );
+
+    UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
+    String idStudent = userDataModel.idUser;
+    String idAccount = userDataModel.idAccount;
+    bool hasError = false;
+
+    //  Crawl score
+    yield state.copyWith(status: CrawlerStatus.crawlingScore);
+    CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
+      ScoreCrawlerModel(
+        idStudent: idStudent,
+        idAccount: idAccount,
+        all: true,
+      ),
+    );
+
+    print(state.formStatus);
+
+    print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+
+    if (scoreCrawlerStatus.isOk) {
+      await userDataModel.scoreServiceController.refresh();
+      userDataModel.scoreServiceController.setConnected();
+    } else {
+      hasError = true;
+    }
+
+    //  Crawl exam schedule
+    yield state.copyWith(status: CrawlerStatus.crawlingExamSchedule);
+    CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
+      ExamScheduleCrawlerModel(
+        idStudent: idStudent,
+        idAccount: idAccount,
+        all: true,
+      ),
+    );
+    print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
+
+    if (examScheduleCrawlerStatus.isOk) {
+      await userDataModel.examScheduleServiceController.refresh();
+      userDataModel.examScheduleServiceController.setConnected();
+    } else {
+      hasError = true;
+    }
+
+    if (hasError) {
+      yield state.copyWith(status: CrawlerStatus.errorWhileCrawling);
+    } else {
+      yield state.copyWith(status: CrawlerStatus.ok);
     }
   }
 

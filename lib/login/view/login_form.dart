@@ -99,11 +99,16 @@ class _LoginFormState extends State<LoginForm> {
                         const SizedBox(height: 40),
                         BlocBuilder<LoginBloc, LoginState>(
                           buildWhen: (previous, current) =>
-                              previous.accountPermission != current.accountPermission,
+                              previous.accountPermission != current.accountPermission ||
+                              previous.status != current.status,
                           builder: (context, state) => Column(
                             children: <Widget>[
-                              state.accountPermission.isUser ? Container() : _loginAnchor,
-                              state.accountPermission.isGuest ? Container() : _loginAsGuestAnchor,
+                              state.accountPermission.isUser || state.status.isSubmissionInProgress
+                                  ? Container()
+                                  : _loginAnchor,
+                              state.accountPermission.isGuest || state.status.isSubmissionInProgress
+                                  ? Container()
+                                  : _loginAsGuestAnchor,
                             ],
                           ),
                         )

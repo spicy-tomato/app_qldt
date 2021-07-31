@@ -5,11 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 class QldtConfirmButton extends StatelessWidget {
+  final bool needPassword;
+
   final Map<CrawlerStatus, String> textMap = {
     CrawlerStatus.validatingPassword: 'Đang xác thực',
     CrawlerStatus.crawlingScore: 'Đang tải dữ liệu điểm',
     CrawlerStatus.crawlingExamSchedule: 'Đang tải dữ liệu lịch thi',
   };
+
+  QldtConfirmButton({Key? key, this.needPassword = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,7 @@ class QldtConfirmButton extends StatelessWidget {
                 onPressed: () {
                   FocusScope.of(context).unfocus();
                   context.read<CrawlerBloc>().add(CrawlerPasswordVisibleChanged(hidePassword: true));
-                  context.read<CrawlerBloc>().add(CrawlerSubmitted());
+                  context.read<CrawlerBloc>().add(needPassword ? CrawlerSubmitted() : CrawlerDownload());
                 },
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all(EdgeInsets.symmetric(
@@ -57,7 +61,7 @@ class QldtConfirmButton extends StatelessWidget {
                   )),
                 ),
                 child: Text(
-                  'Xác nhận',
+                  needPassword ? 'Xác nhận' : 'Tải xuống dữ liệu',
                   style: TextStyle(
                     color: Theme.of(context).backgroundColor,
                   ),

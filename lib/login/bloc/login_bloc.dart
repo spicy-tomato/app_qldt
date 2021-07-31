@@ -36,7 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else if (event is LoginSubmitted) {
       yield* _mapLoginSubmitToState();
     } else if (event is LoginPasswordVisibleChanged) {
-      yield _mapLoginPasswordVisibleChangedToState();
+      yield _mapLoginPasswordVisibleChangedToState(event);
     } else if (event is ShowedLoginFailedDialog) {
       yield _mapShowedLoginFailedDialogToState();
     } else if (event is FormTypeChanged) {
@@ -72,7 +72,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         final apiUrl = AppModeWidget.of(context).apiUrl;
-        final loginUser = LoginUser(state.username.value, state.password.value, state.accountPermission);
+        apiUrl.accountPermission = state.accountPermission;
+        final loginUser = LoginUser(state.username.value, state.password.value);
 
         final LoginStatus loginStatus = await _authenticationRepository.logIn(apiUrl, loginUser);
 
@@ -98,8 +99,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  LoginState _mapLoginPasswordVisibleChangedToState() {
-    return state.copyWith(hidePassword: !state.hidePassword);
+  LoginState _mapLoginPasswordVisibleChangedToState(LoginPasswordVisibleChanged event) {
+    return state.copyWith(hidePassword: event.hidePassword ?? !state.hidePassword);
   }
 
   LoginState _mapShowedLoginFailedDialogToState() {

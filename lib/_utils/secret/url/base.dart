@@ -1,12 +1,22 @@
+import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:app_qldt/_widgets/model/app_mode.dart';
 
 class Host {
   final AppMode mode;
+  AccountPermission _accountPermission;
 
-  Host(this.mode);
+  Host(this.mode) : this._accountPermission = AccountPermission.user;
+
+  set accountPermission(AccountPermission permission) => this._accountPermission = permission;
+
+  AccountPermission get accountPermission => _accountPermission;
+
+  String get base => _accountPermission.isUser ? _userBase : _guestBase;
+
+  String get crawlBase => _accountPermission.isUser ? _userCrawlBase : _guestCrawlBase;
 
   /// User
-  String get base {
+  String get _userBase {
     if (mode.isRelease) {
       return 'https://utcapi.herokuapp.com/api-v2/app/';
     }
@@ -18,7 +28,7 @@ class Host {
     return 'https://utcapi-development.herokuapp.com/api-v2/app/';
   }
 
-  String get crawlBase {
+  String get _userCrawlBase {
     if (mode.isRelease) {
       return 'https://utcapi.herokuapp.com/api-v2/app/crawl/';
     }
@@ -31,7 +41,7 @@ class Host {
   }
 
   /// Guest
-  String get guestBase {
+  String get _guestBase {
     if (mode.isRelease) {
       return 'https://utcapi.herokuapp.com/api-v2/app-guest/';
     }
@@ -43,7 +53,7 @@ class Host {
     return 'https://utcapi-development.herokuapp.com/api-v2/app-guest/';
   }
 
-  String get guestCrawlBase {
+  String get _guestCrawlBase {
     if (mode.isRelease) {
       return 'https://utcapi.herokuapp.com/api-v2/app-guest/crawl/';
     }

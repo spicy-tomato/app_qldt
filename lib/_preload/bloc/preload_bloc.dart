@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:app_qldt/_models/service_controller_data.dart';
-import 'package:app_qldt/_repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_services/api/token_service.dart';
 import 'package:app_qldt/_services/api/version_service.dart';
@@ -31,6 +31,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   final NavigatorState? navigator;
   final String _idAccount;
   final String _idUser;
+  final AccountPermission _permission;
 
   PreloadBloc({
     required this.context,
@@ -38,6 +39,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     required User user,
   })  : _idAccount = user.accountId,
         _idUser = user.id,
+        _permission = user.permission,
         super(PreloadInitial());
 
   @override
@@ -47,9 +49,9 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     if (event is PreloadStatusChanged) {
       yield* _mapPreloadStatusChangedToState(event);
     } else if (event is PreloadLoading) {
-      yield* _mapPreloadLoadingToState(event);
+      yield* _mapPreloadLoadingToState();
     } else if (event is PreloadLoadingAfterLogin) {
-      yield* _mapPreloadLoadingAfterLoginToState(event);
+      yield* _mapPreloadLoadingAfterLoginToState();
     }
   }
 
@@ -57,13 +59,14 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     yield state.copyWith(status: event.status);
   }
 
-  Stream<PreloadState> _mapPreloadLoadingToState(PreloadLoading event) async* {
+  Stream<PreloadState> _mapPreloadLoadingToState() async* {
     yield PreloadState.loading();
     String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
     final minTurnAroundTime = const Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
+    apiUrl.accountPermission = _permission;
     final serviceControllers = _ServiceControllers(
       apiUrl: apiUrl,
       idUser: _idUser,
@@ -88,6 +91,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       examScheduleServiceController: serviceControllers.examSchedule,
       idAccount: _idAccount,
       idUser: _idUser,
+      accountPermission: _permission,
       avatarPath: avatarPath ?? '',
     );
 
@@ -101,7 +105,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     yield PreloadState.loaded(userDataModel);
   }
 
-  Stream<PreloadState> _mapPreloadLoadingAfterLoginToState(PreloadLoadingAfterLogin event) async* {
+  Stream<PreloadState> _mapPreloadLoadingAfterLoginToState() async* {
     yield PreloadState.loadingAfterLogin();
     String? avatarPath;
 
@@ -132,6 +136,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       examScheduleServiceController: serviceControllers.examSchedule,
       idAccount: _idAccount,
       idUser: _idUser,
+      accountPermission: _permission,
       avatarPath: avatarPath ?? '',
     );
 
@@ -223,10 +228,10 @@ class _ServiceControllers {
     DbDataVersion version = event.localService.databaseProvider.dataVersion;
 
     await Future.wait([
-      _refreshEvent(versionMap['Schedule']! as int, version.schedule),
-      _refreshNotification(versionMap['Notification']! as int, version.notification),
-      _refreshExamSchedule(versionMap['Exam_Schedule']! as int, version.examSchedule),
-      _refreshScore(versionMap['Module_Score']! as int, version.score),
+      _refreshEvent(versionMap['Schedule'] as int?, version.schedule),
+      _refreshNotification(versionMap['Notification'] as int?, version.notification),
+      _refreshExamSchedule(versionMap['Exam_Schedule'] as int?, version.examSchedule),
+      _refreshScore(versionMap['Module_Score'] as int?, version.score),
     ]);
   }
 
@@ -234,14 +239,16 @@ class _ServiceControllers {
     await Future.wait([
       _forceRefreshEvent(),
       _forceRefreshNotification(getAll: true),
-      _forceRefreshExamSchedule(versionMap['Exam_Schedule']! as int),
-      _forceRefreshScore(versionMap['Module_Score']! as int),
+      _forceRefreshExamSchedule(versionMap['Exam_Schedule'] as int?),
+      _forceRefreshScore(versionMap['Module_Score'] as int?),
     ]);
   }
 
-  Future<void> _refreshEvent(int serverVersion, localVersion) async {
-    if (serverVersion > localVersion) {
-      await _forceRefreshEvent();
+  Future<void> _refreshEvent(int? serverVersion, localVersion) async {
+    if (serverVersion != null) {
+      if (serverVersion > localVersion) {
+        await _forceRefreshEvent();
+      }
     }
   }
 
@@ -249,9 +256,11 @@ class _ServiceControllers {
     await event.refresh();
   }
 
-  Future<void> _refreshNotification(int serverVersion, localVersion) async {
-    if (serverVersion > localVersion) {
-      await _forceRefreshNotification();
+  Future<void> _refreshNotification(int? serverVersion, localVersion) async {
+    if (serverVersion != null) {
+      if (serverVersion > localVersion) {
+        await _forceRefreshNotification();
+      }
     }
   }
 
@@ -259,11 +268,13 @@ class _ServiceControllers {
     await notification.refresh(getAll: getAll);
   }
 
-  Future<void> _refreshExamSchedule(int serverVersion, localVersion) async {
-    if (serverVersion > localVersion) {
-      await _forceRefreshExamSchedule(serverVersion);
-    } else if (localVersion > 0) {
-      examSchedule.setConnected();
+  Future<void> _refreshExamSchedule(int? serverVersion, localVersion) async {
+    if (serverVersion != null) {
+      if (serverVersion > localVersion) {
+        await _forceRefreshExamSchedule(serverVersion);
+      } else if (localVersion > 0) {
+        examSchedule.setConnected();
+      }
     }
   }
 
@@ -271,11 +282,13 @@ class _ServiceControllers {
     await examSchedule.refresh(newVersion);
   }
 
-  Future<void> _refreshScore(int serverVersion, localVersion) async {
-    if (serverVersion > localVersion) {
-      await _forceRefreshScore(serverVersion);
-    } else if (localVersion > 0) {
-      score.setConnected();
+  Future<void> _refreshScore(int? serverVersion, localVersion) async {
+    if (serverVersion != null) {
+      if (serverVersion > localVersion) {
+        await _forceRefreshScore(serverVersion);
+      } else if (localVersion > 0) {
+        score.setConnected();
+      }
     }
   }
 

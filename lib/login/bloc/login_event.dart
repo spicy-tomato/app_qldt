@@ -35,7 +35,12 @@ class LoginPasswordChanged extends LoginEvent {
 }
 
 class LoginPasswordVisibleChanged extends LoginEvent {
-  const LoginPasswordVisibleChanged();
+  final bool? hidePassword;
+
+  const LoginPasswordVisibleChanged([this.hidePassword]);
+
+  @override
+  List<Object> get props => [hidePassword!];
 }
 
 class LoginSubmitted extends LoginEvent {}

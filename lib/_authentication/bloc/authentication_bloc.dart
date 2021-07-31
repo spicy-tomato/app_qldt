@@ -43,7 +43,8 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   Future<AuthenticationState> _mapAuthenticationStatusChangedToState(
     AuthenticationStatusChanged event,
-  ) async {    final user = await _tryGetUser();
+  ) async {
+    final user = await _tryGetUser();
 
     if (user != null) {
       return AuthenticationState.authenticated(user);

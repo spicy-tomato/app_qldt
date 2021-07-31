@@ -28,3 +28,5 @@ class CrawlerPasswordVisibleChanged extends CrawlerEvent {
 class CrawlerResetStatus extends CrawlerEvent {}
 
 class CrawlerSubmitted extends CrawlerEvent {}
+
+class CrawlerDownload extends CrawlerEvent {}

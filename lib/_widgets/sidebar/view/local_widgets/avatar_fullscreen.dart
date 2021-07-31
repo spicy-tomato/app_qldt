@@ -22,7 +22,6 @@ class AvatarFullScreen extends StatelessWidget {
             key: UniqueKey(),
             fit: BoxFit.fitWidth,
             width: double.infinity,
-            // height: double.infinity,
             alignment: Alignment.center,
           ),
         ),

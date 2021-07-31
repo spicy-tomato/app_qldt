@@ -18,7 +18,8 @@ class VersionService {
     String baseUrl = apiUrl.get.version;
     http.Response response;
 
-    String url = '$baseUrl?id_student=$idStudent';
+    String url = '$baseUrl?id=$idStudent';
+    print(url);
 
     try {
       response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

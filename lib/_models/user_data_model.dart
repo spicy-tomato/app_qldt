@@ -3,6 +3,8 @@ import 'package:app_qldt/_services/controller/exam_schedule_service_controller.d
 import 'package:app_qldt/_services/controller/notification_service_controller.dart';
 import 'package:app_qldt/_services/controller/score_service_controller.dart';
 
+import 'account_permission_enum.dart';
+
 class UserDataModel {
   final EventServiceController eventServiceController;
   final ScoreServiceController scoreServiceController;
@@ -10,6 +12,7 @@ class UserDataModel {
   final ExamScheduleServiceController examScheduleServiceController;
   final String idAccount;
   final String idUser;
+  final AccountPermission accountPermission;
   String avatarPath;
 
   UserDataModel({
@@ -19,6 +22,7 @@ class UserDataModel {
     required this.examScheduleServiceController,
     required this.idAccount,
     required this.idUser,
+    required this.accountPermission,
     required this.avatarPath,
   });
 }
