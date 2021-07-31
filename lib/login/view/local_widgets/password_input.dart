@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'style/style.dart';
@@ -37,21 +39,24 @@ class _PasswordInputState extends State<PasswordInput> {
         children: <Widget>[
           BlocBuilder<LoginBloc, LoginState>(
             buildWhen: (previous, current) {
-              return previous.password != current.password || previous.hidePassword != current.hidePassword;
+              return previous.password != current.password ||
+                  previous.hidePassword != current.hidePassword ||
+                  previous.status != current.status;
             },
             builder: (context, state) {
               return TextField(
                 key: const Key('loginForm_passwordInput_textField'),
-                onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
                 style: const FormTextStyle(),
+                focusNode: passwordFocusNode,
+                textInputAction: TextInputAction.done,
+                enabled: !state.status.isSubmissionInProgress,
                 obscureText: state.hidePassword,
                 decoration: InputDecoration(
                   labelText: 'Mật khẩu',
                   errorText: state.password.invalid ? 'Hãy nhập mật khẩu' : null,
                   contentPadding: const EdgeInsets.only(right: 48),
                 ),
-                focusNode: passwordFocusNode,
-                textInputAction: TextInputAction.done,
+                onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
                 onSubmitted: (_) => widget.focusNode.unfocus(),
               );
             },
@@ -60,8 +65,10 @@ class _PasswordInputState extends State<PasswordInput> {
             icon: const Icon(Icons.remove_red_eye),
             iconSize: 20,
             onPressed: () {
-              passwordFocusNode.requestFocus();
-              context.read<LoginBloc>().add(LoginPasswordVisibleChanged());
+              if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
+                passwordFocusNode.requestFocus();
+                context.read<LoginBloc>().add(LoginPasswordVisibleChanged());
+              }
             },
           )
         ],

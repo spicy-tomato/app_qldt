@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 
@@ -10,8 +11,7 @@ class LoginPage extends StatelessWidget {
   static Route route() {
     return PageRouteBuilder(
       pageBuilder: (context, __, ___) => LoginPage(),
-      transitionsBuilder: (context, animation, _, child) =>
-          FadeTransition(opacity: animation, child: child),
+      transitionsBuilder: (context, animation, _, child) => FadeTransition(opacity: animation, child: child),
       transitionDuration: Duration(milliseconds: 1500),
     );
   }
@@ -78,8 +78,10 @@ class BackScreen extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              context.read<LoginBloc>().add(HideLoginDialog(true));
-              FocusScope.of(context).requestFocus(new FocusNode());
+              if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
+                context.read<LoginBloc>().add(HideLoginDialog(true));
+                FocusScope.of(context).requestFocus(new FocusNode());
+              }
             },
           ),
           Align(

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'style/style.dart';
@@ -15,9 +17,11 @@ class UsernameInput extends StatelessWidget {
     return SizedBox(
       height: 60,
       child: BlocBuilder<LoginBloc, LoginState>(
-        buildWhen: (previous, current) => previous.username != current.username,
+        buildWhen: (previous, current) =>
+            previous.username != current.username || previous.status != current.status,
         builder: (context, state) {
           return TextField(
+            enabled: !state.status.isSubmissionInProgress,
             key: const Key('loginForm_usernameInput_textField'),
             style: const FormTextStyle(),
             decoration: InputDecoration(

@@ -1,6 +1,9 @@
-import 'package:app_qldt/_crawler/bloc/crawler_bloc.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+
+import 'package:app_qldt/_crawler/bloc/crawler_bloc.dart';
 import 'package:app_qldt/_crawler/model/status.dart';
 
 class QldtInputPassword extends StatelessWidget {
@@ -18,8 +21,8 @@ class QldtInputPassword extends StatelessWidget {
                 previous.status != current.status,
             builder: (context, state) {
               return TextField(
-                onChanged: (password) =>
-                    context.read<CrawlerBloc>().add(CrawlerPasswordChanged(password)),
+                enabled: !state.formStatus.isSubmissionInProgress,
+                onChanged: (password) => context.read<CrawlerBloc>().add(CrawlerPasswordChanged(password)),
                 obscureText: state.hidePassword,
                 decoration: InputDecoration(
                   errorText: state.password.invalid
