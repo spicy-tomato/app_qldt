@@ -1,3 +1,4 @@
+import 'package:app_qldt/_authentication/authentication.dart';
 import 'package:app_qldt/plan/plan.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             child: Container(
+              padding: EdgeInsets.only(top: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -57,10 +59,18 @@ class _HomePageState extends State<HomePage> {
 class Greeting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userName = context.read<AuthenticationBloc>().state.user.name;
+    final displayLetters = userName.split(' ');
+    final letterNumbers = displayLetters.length;
+    final displayName = displayLetters.length >= 2
+        ? '${displayLetters[letterNumbers - 2]} ${displayLetters[letterNumbers - 1]}'
+        : displayLetters[0];
+
     return Center(
-      child: const Text(
-        'Xin chào',
+      child: Text(
+        'Xin chào\n$displayName',
         style: TextStyle(fontSize: 35),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -71,8 +81,8 @@ class Art extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 170,
-        width: 170,
+        height: 200,
+        width: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           color: Colors.white,
@@ -89,8 +99,9 @@ class Quote extends StatelessWidget {
     return Center(
       child: Container(
         child: const Text(
-          'No pain, no gain',
-          style: TextStyle(fontSize: 25),
+          'Chúc bạn\nmột ngày tốt lành!',
+          style: TextStyle(fontSize: 24),
+          textAlign: TextAlign.center,
         ),
       ),
     );
