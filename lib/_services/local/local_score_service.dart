@@ -1,14 +1,16 @@
 import 'package:app_qldt/_models/score_model.dart';
+import 'package:app_qldt/_models/semester_model.dart';
 import 'package:app_qldt/_services/api/api_service.dart';
 import 'package:app_qldt/_services/controller/score_service_controller.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
-import 'package:app_qldt/_models/semester_model.dart';
 
 class LocalScoreService extends LocalService {
   List<ScoreModel> scoreData = [];
   List<SemesterModel> semester = [];
+
+  SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
   LocalScoreService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
 
@@ -27,8 +29,7 @@ class LocalScoreService extends LocalService {
   }
 
   @override
-  ServiceController<LocalService, ApiService> get serviceController =>
-      controller as ScoreServiceController;
+  ServiceController<LocalService, ApiService> get serviceController => controller as ScoreServiceController;
 
   Future<void> _removeOld() async {
     await databaseProvider.score.delete();

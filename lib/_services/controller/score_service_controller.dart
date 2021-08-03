@@ -21,6 +21,8 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
 
   List<SemesterModel> get semester => localService.semester;
 
+  SemesterModel? get lastSemester => localService.lastSemester;
+
   Future<void> refresh([int? newVersion]) async {
     ServiceResponse response = await apiService.request();
 
@@ -75,6 +77,16 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
 
       return newScoreData;
     }
+  }
+
+  List<ScoreModel> getScoreOfLastSemester() {
+    final semester = lastSemester;
+
+    if (semester == null) {
+      return [];
+    }
+
+    return scoreData.where((s) => s.semester == semester.query).toList();
   }
 
   List<ScoreModel> getSpecificScoreData(SemesterModel semester, SubjectEvaluation subjectEvaluation) {

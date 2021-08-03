@@ -1,22 +1,23 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:app_qldt/_crawler/crawler.dart';
 import 'package:app_qldt/_models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/_models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/_models/score_model.dart';
+import 'package:app_qldt/_models/semester_model.dart';
+import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:app_qldt/_repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/_services/api/crawler_service.dart';
 import 'package:app_qldt/_services/controller/score_service_controller.dart';
 import 'package:app_qldt/_widgets/model/app_mode.dart';
-import 'package:app_qldt/_models/user_data_model.dart';
 import 'package:app_qldt/score/bloc/enum/score_type.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
-import 'package:app_qldt/_models/semester_model.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'enum/score_page_status.dart';
 export 'enum/score_page_status.dart';
@@ -32,8 +33,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   ScoreBloc(BuildContext context)
       : _userDataModel = context.read<UserRepository>().userDataModel,
         _crawlerService = CrawlerService(AppModeWidget.of(context).apiUrl),
-        super(ScoreInitialState(
-            context.read<UserRepository>().userDataModel.scoreServiceController.scoreData));
+        super(ScoreInitialState(userDataModel: context.read<UserRepository>().userDataModel));
 
   @override
   Stream<ScoreState> mapEventToState(
@@ -84,8 +84,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     }
     //  Query a specific semester with a specific subject status
     else {
-      newScoreData =
-          scoreServiceController.getSpecificScoreData(event.semester, event.subjectEvaluation);
+      newScoreData = scoreServiceController.getSpecificScoreData(event.semester, event.subjectEvaluation);
     }
 
     return state.copyWith(

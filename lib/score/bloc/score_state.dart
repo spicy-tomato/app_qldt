@@ -41,11 +41,12 @@ class ScoreState extends Equatable {
 }
 
 class ScoreInitialState extends ScoreState {
-  ScoreInitialState(List<ScoreModel> scoreData)
-      : super(
-          scoreData: scoreData,
+  ScoreInitialState({
+    required UserDataModel userDataModel,
+  }) : super(
+          scoreData: userDataModel.scoreServiceController.getScoreOfLastSemester(),
           status: ScorePageStatus.unknown,
-          semester: const SemesterModel(''),
+          semester: userDataModel.scoreServiceController.lastSemester ?? SemesterModel.none(),
           subjectEvaluation: SubjectEvaluation.all,
           scoreType: ScoreType.moduleScore,
         );
