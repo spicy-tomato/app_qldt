@@ -15,6 +15,11 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   late bool showLoginFailedDialog;
 
+  TextStyle get _titleTextStyle => TextStyle(
+        fontSize: 20,
+        color: Colors.black,
+      );
+
   @override
   void initState() {
     super.initState();
@@ -74,18 +79,14 @@ class _LoginFormState extends State<LoginForm> {
                                     ? Text(
                                         'Đăng nhập để tiếp tục',
                                         key: ValueKey(0),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.black,
-                                        ),
+                                        style: _titleTextStyle,
+                                        textAlign: TextAlign.center,
                                       )
                                     : Text(
-                                        'Đăng nhập với tư cách khách',
+                                        'Đăng nhập với tài khoản\n Quản lý đào tạo',
                                         key: ValueKey(1),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.black,
-                                        ),
+                                        style: _titleTextStyle,
+                                        textAlign: TextAlign.center,
                                       ),
                               );
                             },
