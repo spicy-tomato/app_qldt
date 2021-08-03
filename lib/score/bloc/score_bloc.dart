@@ -18,7 +18,6 @@ import 'package:app_qldt/_widgets/model/app_mode.dart';
 import 'package:app_qldt/score/bloc/enum/score_type.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
 
-
 import 'enum/score_page_status.dart';
 export 'enum/score_page_status.dart';
 
@@ -50,7 +49,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     } else if (event is ScorePageStatusChanged) {
       yield _mapScorePageStatusChangedToState(event);
     } else if (event is ScoreTypeChanged) {
-      yield* _mapScoreTypeChangedToState(event);
+      yield _mapScoreTypeChangedToState(event);
     }
   }
 
@@ -71,11 +70,11 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreServiceController scoreServiceController = _userDataModel.scoreServiceController;
 
     //  Query all
-    if (event.semester == SemesterModel.all() && event.subjectEvaluation == SubjectEvaluation.all) {
+    if (event.semester == SemesterModel.all() && event.subjectEvaluation.isAll) {
       newScoreData = scoreServiceController.scoreData;
     }
     //  Query a specific semester with all subject status
-    else if (event.subjectEvaluation == SubjectEvaluation.all) {
+    else if (event.subjectEvaluation.isAll) {
       newScoreData = scoreServiceController.getScoreDataOfAllEvaluation(event.semester);
     }
     //  Query all semester with a specific subject status
@@ -124,8 +123,9 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       await _userDataModel.scoreServiceController.refresh();
 
       yield state.copyWith(
-        scoreData: _userDataModel.scoreServiceController.scoreData,
         status: ScorePageStatus.successfully,
+        scoreData: _userDataModel.scoreServiceController
+            .getSpecificScoreData(state.semester, state.subjectEvaluation),
       );
     }
 
@@ -138,19 +138,18 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     return state.copyWith(status: event.status);
   }
 
-  Stream<ScoreState> _mapScoreTypeChangedToState(ScoreTypeChanged event) async* {
-    if (state.scoreType != event.type) {
-      if (event.type == ScoreType.gpaScore) {
-        yield state.copyWith(
-          scoreData: _userDataModel.scoreServiceController.getGpaModulesData(),
-          scoreType: event.type,
-        );
-      } else {
-        yield state.copyWith(
-          scoreData: _userDataModel.scoreServiceController.scoreData,
-          scoreType: event.type,
-        );
-      }
+  ScoreState _mapScoreTypeChangedToState(ScoreTypeChanged event) {
+    if (event.type == ScoreType.gpaScore) {
+      return state.copyWith(
+        scoreData: _userDataModel.scoreServiceController.getGpaModulesData(),
+        scoreType: event.type,
+      );
     }
+
+    return state.copyWith(
+      scoreType: event.type,
+      scoreData:
+          _userDataModel.scoreServiceController.getSpecificScoreData(state.semester, state.subjectEvaluation),
+    );
   }
 }

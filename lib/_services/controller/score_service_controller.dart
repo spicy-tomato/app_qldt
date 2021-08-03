@@ -50,33 +50,38 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
   }
 
   List<ScoreModel> getScoreDataOfAllSemester(SubjectEvaluation subjectEvaluation) {
-    if (subjectEvaluation == SubjectEvaluation.pass) {
+    //  All Subjects
+    if (subjectEvaluation.isAll) {
+      return scoreData;
+    }
+
+    //  Passed Subjects
+    if (subjectEvaluation.isPass) {
       return scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
     }
-    //  Fail
-    else {
-      List<ScoreModel> newScoreData = [];
-      List<ScoreModel> passedScoreData =
-          scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
 
-      scoreData.forEach((score) {
-        if (score.evaluation == SubjectEvaluation.fail.query) {
-          bool fail = true;
+    //  Failed Subjects
+    List<ScoreModel> newScoreData = [];
+    List<ScoreModel> passedScoreData =
+        scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
 
-          passedScoreData.forEach((passedScore) {
-            if (score.moduleName == passedScore.moduleName) {
-              fail = false;
-            }
-          });
+    scoreData.forEach((score) {
+      if (score.evaluation == SubjectEvaluation.fail.query) {
+        bool fail = true;
 
-          if (fail) {
-            newScoreData.add(score);
+        passedScoreData.forEach((passedScore) {
+          if (score.moduleName == passedScore.moduleName) {
+            fail = false;
           }
-        }
-      });
+        });
 
-      return newScoreData;
-    }
+        if (fail) {
+          newScoreData.add(score);
+        }
+      }
+    });
+
+    return newScoreData;
   }
 
   List<ScoreModel> getScoreOfLastSemester() {
@@ -107,12 +112,6 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
 
   List<ScoreModel> _parseData(dynamic responseData) {
     List data = responseData as List;
-    List<ScoreModel> listModel = [];
-
-    for (var element in data) {
-      listModel.add(ScoreModel.fromJson(element));
-    }
-
-    return listModel;
+    return data.map((x) => ScoreModel.fromJson(x)).toList();
   }
 }

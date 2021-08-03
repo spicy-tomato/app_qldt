@@ -5,7 +5,13 @@ enum SubjectEvaluation {
 }
 
 extension SubjectStatusExtension on SubjectEvaluation {
-  static String stringFunction(SubjectEvaluation status){
+  bool get isAll => this == SubjectEvaluation.all;
+
+  bool get isPass => this == SubjectEvaluation.pass;
+
+  bool get isFail => this == SubjectEvaluation.fail;
+
+  static String stringFunction(SubjectEvaluation status) {
     return status.string;
   }
 
