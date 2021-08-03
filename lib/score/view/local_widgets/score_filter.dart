@@ -110,8 +110,7 @@ class _StatusFilterState extends State<StatusFilter> {
   Widget build(BuildContext context) {
     return BlocBuilder<ScoreBloc, ScoreState>(
       buildWhen: (previous, current) =>
-          previous.subjectEvaluation != current.subjectEvaluation ||
-          previous.scoreType != current.scoreType,
+          previous.subjectEvaluation != current.subjectEvaluation || previous.scoreType != current.scoreType,
       builder: (context, state) {
         return state.scoreType == ScoreType.gpaScore
             ? Container()
@@ -125,7 +124,10 @@ class _StatusFilterState extends State<StatusFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SubjectEvaluation>(
-                        title: Text('Trạng thái'),
+                        title: Text(
+                          'Chọn trạng thái',
+                          style: TextStyle(color: Colors.black),
+                        ),
                         onSelect: _onSelect,
                         stringFunction: SubjectStatusExtension.stringFunction,
                         currentOption: state.subjectEvaluation,
@@ -166,7 +168,10 @@ class _TypeFilterState extends State<TypeFilter> {
               context: context,
               builder: (context) {
                 return RadioAlertDialog<ScoreType>(
-                  title: Text('Chọn loại điểm'),
+                  title: Text(
+                    'Chọn loại điểm',
+                    style: TextStyle(color: Colors.black),
+                  ),
                   onSelect: _onSelect,
                   stringFunction: ScoreTypeExtension.stringFunction,
                   currentOption: state.scoreType,
