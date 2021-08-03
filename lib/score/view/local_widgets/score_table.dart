@@ -48,7 +48,7 @@ class _ScorePageTableState extends State<ScorePageTable> {
           buildWhen: (previous, current) =>
               previous.scoreData != current.scoreData || previous.scoreType != current.scoreType,
           builder: (context, state) {
-            return state.scoreType == ScoreType.moduleScore
+            return state.scoreType.isModuleScore
                 ? MyDataTable(
                     scrollControllers: widget.scrollControllers,
                     columnWidths: _moduleColumnWidths,

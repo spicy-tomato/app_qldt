@@ -46,18 +46,18 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
   }
 
   List<ScoreModel> getScoreDataOfAllEvaluation(SemesterModel semester) {
-    return scoreData.where((score) => score.semester == semester.query).toList();
+    return scoreData.where((s) => s.semester == semester.query).toList();
   }
 
   List<ScoreModel> getScoreDataOfAllSemester(SubjectEvaluation subjectEvaluation) {
     if (subjectEvaluation == SubjectEvaluation.pass) {
-      return scoreData.where((score) => score.evaluation == SubjectEvaluation.pass.query).toList();
+      return scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
     }
     //  Fail
     else {
       List<ScoreModel> newScoreData = [];
       List<ScoreModel> passedScoreData =
-          scoreData.where((score) => score.evaluation == SubjectEvaluation.pass.query).toList();
+          scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
 
       scoreData.forEach((score) {
         if (score.evaluation == SubjectEvaluation.fail.query) {

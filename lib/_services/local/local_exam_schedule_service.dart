@@ -1,14 +1,18 @@
+import 'package:intl/intl.dart';
+
 import 'package:app_qldt/_models/exam_schedule_model.dart';
+import 'package:app_qldt/_models/semester_model.dart';
 import 'package:app_qldt/_services/api/api_service.dart';
 import 'package:app_qldt/_services/controller/exam_schedule_service_controller.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
-import 'package:app_qldt/_models/semester_model.dart';
 
 class LocalExamScheduleService extends LocalService {
   List<ExamScheduleModel> examScheduleData = [];
   List<SemesterModel> semester = [];
+
+  SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
 
   LocalExamScheduleService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
 
@@ -27,7 +31,7 @@ class LocalExamScheduleService extends LocalService {
 
     connected = true;
 
-    return this.examScheduleData;
+    return examScheduleData;
   }
 
   Future<void> updateVersion(int? newVersion) async {
@@ -49,10 +53,13 @@ class LocalExamScheduleService extends LocalService {
 
   Future<void> _loadExamScheduleDataFromDb() async {
     final rawData = await databaseProvider.examSchedule.all;
+    final dateFormat = DateFormat('d-M-yyyy');
 
     examScheduleData = rawData.map((data) {
       return ExamScheduleModel.fromMap(data);
     }).toList();
+
+    examScheduleData.sort((a, b) => dateFormat.parse(a.dateStart).compareTo(dateFormat.parse(b.dateStart)));
   }
 
   Future<void> _loadSemesterFromDb() async {

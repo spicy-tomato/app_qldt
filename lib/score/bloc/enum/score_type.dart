@@ -4,6 +4,8 @@ enum ScoreType {
 }
 
 extension ScoreTypeExtension on ScoreType {
+  bool get isModuleScore => this == ScoreType.moduleScore;
+
   static String stringFunction(ScoreType status) {
     return status.string;
   }
