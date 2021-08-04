@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.4"
   equatable:
     dependency: "direct main"
     description:
@@ -264,7 +257,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.1"
+    version: "7.1.0"
   flutter_datetime_picker:
     dependency: "direct main"
     description:
@@ -306,14 +299,7 @@ packages:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0"
-  flutter_local_notifications_linux:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0+1"
+    version: "8.0.0"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
@@ -363,7 +349,7 @@ packages:
       name: google_sign_in
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.5"
+    version: "5.0.7"
   google_sign_in_platform_interface:
     dependency: transitive
     description:
@@ -426,7 +412,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.2"
+    version: "0.8.3"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -546,13 +532,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  posix:
-    dependency: transitive
-    description:
-      name: posix
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.2"
   process:
     dependency: transitive
     description:
@@ -690,28 +669,28 @@ packages:
       name: syncfusion_flutter_calendar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.2.49"
+    version: "19.2.51"
   syncfusion_flutter_core:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.2.49"
+    version: "19.2.51"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.2.49"
+    version: "19.2.51"
   syncfusion_localizations:
     dependency: "direct main"
     description:
       name: syncfusion_localizations
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.2.49"
+    version: "19.2.51"
   synchronized:
     dependency: transitive
     description:
