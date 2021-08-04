@@ -1,7 +1,7 @@
 class Gpa {
   final String semester;
-  final double gpa10;
-  final double gpa4;
+  final double? gpa10;
+  final double? gpa4;
 
   Gpa({
     required this.semester,

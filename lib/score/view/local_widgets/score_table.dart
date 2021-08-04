@@ -73,25 +73,33 @@ class _ScorePageTableState extends State<ScorePageTable> {
 
   List<Gpa> _gpaData(List<ScoreModel> scoreData) {
     Map<String, GpaTotalScore> map = {};
+    Map<String, bool> displaySemester = {};
     List<Gpa> gpa = [];
 
     scoreData.forEach((score) {
       if (score.theoreticalScore != null) {
-        if (map[score.semester] == null && score.theoreticalScore != null) {
+        if (map[score.semester] == null) {
           map[score.semester] = GpaTotalScore();
+          displaySemester[score.semester] = true;
         }
 
-        map[score.semester]!.gpa10 += score.theoreticalScore! * score.credit;
-        map[score.semester]!.gpa4 += score.theoreticalScore!.toGpa4() * score.credit;
-        map[score.semester]!.credit += score.credit;
+        if (displaySemester[score.semester]!) {
+          map[score.semester]!.gpa10 += score.theoreticalScore! * score.credit;
+          map[score.semester]!.gpa4 += score.theoreticalScore!.toGpa4() * score.credit;
+          map[score.semester]!.credit += score.credit;
+        }
+      } else {
+        displaySemester[score.semester] = false;
       }
     });
 
-    map.forEach((key, value) {
+    map.forEach((semester, value) {
       gpa.add(Gpa(
-        semester: key,
-        gpa10: double.parse((value.gpa10 / value.credit).toStringAsFixed(2)),
-        gpa4: double.parse((value.gpa4 / value.credit).toStringAsFixed(2)),
+        semester: semester,
+        gpa10:
+            displaySemester[semester]! ? double.parse((value.gpa10 / value.credit).toStringAsFixed(2)) : null,
+        gpa4:
+            displaySemester[semester]! ? double.parse((value.gpa4 / value.credit).toStringAsFixed(2)) : null,
       ));
     });
 
