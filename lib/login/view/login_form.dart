@@ -20,6 +20,7 @@ class _LoginFormState extends State<LoginForm> {
   TextStyle get _titleTextStyle => const TextStyle(
         fontSize: 20,
         color: Colors.black,
+        height: 1.2,
       );
 
   @override
@@ -44,7 +45,11 @@ class _LoginFormState extends State<LoginForm> {
           return KeyboardVisibilityBuilder(
             builder: (context, isKeyboardVisible) {
               return AnimatedContainer(
-                padding: const EdgeInsets.all(32),
+                padding: const EdgeInsets.only(
+                  left: 32,
+                  right: 32,
+                  top: 18,
+                ),
                 width: screenWidth,
                 height: screenHeight,
                 curve: Curves.fastLinearToSlowEaseIn,
@@ -71,27 +76,30 @@ class _LoginFormState extends State<LoginForm> {
                       children: <Widget>[
                         Container(
                           margin: const EdgeInsets.only(bottom: 20),
-                          child: BlocBuilder<LoginBloc, LoginState>(
-                            buildWhen: (previous, current) =>
-                                previous.accountPermission != current.accountPermission,
-                            builder: (context, state) {
-                              return AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 200),
-                                child: state.accountPermission.isUser
-                                    ? Text(
-                                        'Đăng nhập để tiếp tục',
-                                        key: const ValueKey(0),
-                                        style: _titleTextStyle,
-                                        textAlign: TextAlign.center,
-                                      )
-                                    : Text(
-                                        'Đăng nhập với tài khoản\n Quản lý đào tạo',
-                                        key: const ValueKey(1),
-                                        style: _titleTextStyle,
-                                        textAlign: TextAlign.center,
-                                      ),
-                              );
-                            },
+                          child: SizedBox(
+                            height: 50,
+                            child: BlocBuilder<LoginBloc, LoginState>(
+                              buildWhen: (previous, current) =>
+                                  previous.accountPermission != current.accountPermission,
+                              builder: (context, state) {
+                                return AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: state.accountPermission.isUser
+                                      ? Text(
+                                          'Đăng nhập để tiếp tục',
+                                          key: const ValueKey(0),
+                                          style: _titleTextStyle,
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : Text(
+                                          'Đăng nhập với tài khoản\n Quản lý đào tạo',
+                                          key: const ValueKey(1),
+                                          style: _titleTextStyle,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                );
+                              },
+                            ),
                           ),
                         ),
                         UsernameInput(focusNode: focusNode),
@@ -145,6 +153,7 @@ class _LoginFormState extends State<LoginForm> {
           onTap: () => _switchToLoginForm(context),
           child: const Text(
             'Đăng nhập với tài khoản đã xác minh',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 17,
               color: Colors.blueAccent,
@@ -158,7 +167,8 @@ class _LoginFormState extends State<LoginForm> {
         child: GestureDetector(
           onTap: () => _switchToLoginAsGuestForm(context),
           child: const Text(
-            'Đăng nhập với tài khoản khách',
+            'Đăng nhập với tài khoản\nQuản lý đào tạo',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 17,
               color: Colors.blueAccent,
