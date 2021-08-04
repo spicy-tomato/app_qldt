@@ -54,7 +54,7 @@ class _UserInfoState extends State<UserInfo> {
                                 )
                               : Center(
                                   child: Text(
-                                    user.name.split(' ').last[0].toUpperCase(),
+                                    user.name != '' ? user.name.split(' ').last[0].toUpperCase() : '',
                                     style: const TextStyle(
                                       color: Colors.red,
                                       fontWeight: FontWeight.w600,
