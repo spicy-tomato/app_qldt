@@ -63,7 +63,7 @@ class DbSchedule extends TableModel {
   Future<void> insert(List<ScheduleModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    rawData.forEach((element) async {
+    for (var element in rawData) {
       try {
         await database!.insert(
           tableName,
@@ -72,7 +72,7 @@ class DbSchedule extends TableModel {
       } on Exception catch (e) {
         print('Error: ${e.toString()} in DbSchedule.insert()');
       }
-    });
+    }
   }
 
   Future<void> delete() async {

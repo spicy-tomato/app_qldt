@@ -69,7 +69,7 @@ class DbNotification extends TableModel {
   Future<void> insert(List<ReceiveNotificationModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    rawData.forEach((element) async {
+    for (var element in rawData) {
       try {
         await database!.insert(
           tableName,
@@ -78,7 +78,7 @@ class DbNotification extends TableModel {
       } on Exception catch (e) {
         print('$e in DbNotification.insert()');
       }
-    });
+    }
   }
 
   Future<void> delete() async {
@@ -94,7 +94,7 @@ class DbNotification extends TableModel {
   Future<void> deleteRow(List<int> list) async {
     assert(database != null, 'Database must not be null');
 
-    list.forEach((element) async {
+    for (var element in list) {
       try {
         await database!.delete(
           tableName,
@@ -104,6 +104,6 @@ class DbNotification extends TableModel {
       } on Exception catch (e) {
         print('Error: ${e.toString()}');
       }
-    });
+    }
   }
 }

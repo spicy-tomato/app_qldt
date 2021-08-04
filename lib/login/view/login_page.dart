@@ -8,11 +8,13 @@ import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'login_form.dart';
 
 class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   static Route route() {
     return PageRouteBuilder(
-      pageBuilder: (context, __, ___) => LoginPage(),
+      pageBuilder: (context, __, ___) => const LoginPage(),
       transitionsBuilder: (context, animation, _, child) => FadeTransition(opacity: animation, child: child),
-      transitionDuration: Duration(milliseconds: 1500),
+      transitionDuration: const Duration(milliseconds: 1500),
     );
   }
 
@@ -28,11 +30,9 @@ class LoginPage extends StatelessWidget {
           builder: (context, state) {
             return WillPopScope(
               onWillPop: () => _onWillPop(context, state),
-              child: Scaffold(
+              child: const Scaffold(
                 resizeToAvoidBottomInset: false,
-                body: Container(
-                  child: HomeScreen(),
-                ),
+                body: HomeScreen(),
               ),
             );
           },
@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
 
   Future<bool> _onWillPop(BuildContext context, LoginState state) async {
     if (!state.hideLoginDialog) {
-      context.read<LoginBloc>().add(HideLoginDialog(true));
+      context.read<LoginBloc>().add(const HideLoginDialog(true));
     }
 
     return Future.value(state.hideLoginDialog);
@@ -51,10 +51,12 @@ class LoginPage extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[
+      children: const <Widget>[
         BackScreen(),
         LoginForm(),
       ],
@@ -63,14 +65,16 @@ class HomeScreen extends StatelessWidget {
 }
 
 class BackScreen extends StatelessWidget {
+  const BackScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       curve: Curves.fastLinearToSlowEaseIn,
-      duration: Duration(milliseconds: 1000),
-      decoration: new BoxDecoration(
-        image: new DecorationImage(
-          image: new AssetImage('images/background.png'),
+      duration: const Duration(milliseconds: 1000),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('images/background.png'),
           fit: BoxFit.fill,
         ),
       ),
@@ -79,34 +83,32 @@ class BackScreen extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
-                context.read<LoginBloc>().add(HideLoginDialog(true));
-                FocusScope.of(context).requestFocus(new FocusNode());
+                context.read<LoginBloc>().add(const HideLoginDialog(true));
+                FocusScope.of(context).requestFocus(FocusNode());
               }
             },
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              child: GestureDetector(
-                onTap: () {
-                  context.read<LoginBloc>().add(HideLoginDialog(false));
-                },
-                child: Container(
-                  height: 60,
-                  margin: EdgeInsets.all(32),
-                  padding: EdgeInsets.all(20),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFB40284A),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Đăng nhập',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
+            child: GestureDetector(
+              onTap: () {
+                context.read<LoginBloc>().add(const HideLoginDialog(false));
+              },
+              child: Container(
+                height: 60,
+                margin: const EdgeInsets.all(32),
+                padding: const EdgeInsets.all(20),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: const Color(0xfb40284a),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Đăng nhập',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
                     ),
                   ),
                 ),

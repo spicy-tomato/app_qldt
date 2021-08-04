@@ -4,6 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'local_widgets/local_widgets.dart';
 
 class Sidebar extends StatelessWidget {
+  const Sidebar({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -19,30 +21,30 @@ class Sidebar extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [
               Theme.of(context).backgroundColor,
-              Color(0xff7579e7),
-              Color(0xff9ab3f5),
+              const Color(0xff7579e7),
+              const Color(0xff9ab3f5),
             ],
           ),
         ),
         child: Stack(
           children: <Widget>[
-            Align(
+            const Align(
               alignment: Alignment(0.9, -0.95),
               child: CloseSidebarButton(),
             ),
             Container(
               width: screenWidth * 0.7,
-              padding: EdgeInsets.only(top: 50),
+              padding: const EdgeInsets.only(top: 50),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  UserInfo(),
+                  const UserInfo(),
                   Flexible(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Flexible(
+                        const Flexible(
                           child: ScreenPageTilesList(),
                         ),
                         SizedBox(width: screenWidth * 0.15),

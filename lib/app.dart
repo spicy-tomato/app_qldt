@@ -38,15 +38,15 @@ class _ApplicationState extends State<Application> {
   final _themeData = ThemeData(
     //  Brightness and colors
     brightness: Brightness.light,
-    primaryColor: Color(0xff4A2A73),
-    accentColor: Color(0xffF46781),
-    backgroundColor: Color(0xff4A2A73),
+    primaryColor: const Color(0xff4A2A73),
+    accentColor: const Color(0xffF46781),
+    backgroundColor: const Color(0xff4A2A73),
 
     //  Font family
     fontFamily: 'Montserrat',
 
     //  Text theme
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       //  https://api.flutter.dev/flutter/material/TextTheme-class.html
       //  Headline
       headline5: TextStyle(
@@ -151,13 +151,13 @@ class _ApplicationState extends State<Application> {
           },
           routes: {
             '/': (_) => SplashPage(_shouldLoadAfterLogin),
-            '/login': (_) => LoginPage(),
-            '/home': (_) => HomePage(),
+            '/login': (_) => const LoginPage(),
+            '/home': (_) => const HomePage(),
             '/calendar': (_) => CalendarPage(),
-            '/schedule': (_) => SchedulePage(),
+            '/schedule': (_) => const SchedulePage(),
             '/score': (_) => ScorePage(),
             '/examSchedule': (_) => ExamSchedulePage(),
-            '/notification': (_) => NotificationPage(),
+            '/notification': (_) => const NotificationPage(),
           },
         ),
       ),

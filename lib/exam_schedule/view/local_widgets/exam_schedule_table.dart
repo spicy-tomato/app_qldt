@@ -30,7 +30,7 @@ class _ExamScheduleTableState extends State<ExamScheduleTable> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.white),
           ),

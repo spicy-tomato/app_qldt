@@ -31,5 +31,5 @@ class ModifyRangeState extends Equatable {
 }
 
 class ModifyRangeInitial extends ModifyRangeState {
-  ModifyRangeInitial() : super(ModifyRange.thisEvent);
+  const ModifyRangeInitial() : super(ModifyRange.thisEvent);
 }

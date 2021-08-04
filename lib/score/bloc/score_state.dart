@@ -46,7 +46,7 @@ class ScoreInitialState extends ScoreState {
   }) : super(
           scoreData: userDataModel.scoreServiceController.getScoreOfLastSemester(),
           status: ScorePageStatus.unknown,
-          semester: userDataModel.scoreServiceController.lastSemester ?? SemesterModel.none(),
+          semester: userDataModel.scoreServiceController.lastSemester ?? const SemesterModel.none(),
           subjectEvaluation: SubjectEvaluation.all,
           scoreType: ScoreType.moduleScore,
         );

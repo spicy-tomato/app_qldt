@@ -54,9 +54,9 @@ class DbScore extends TableModel {
   Future<void> insert(List<ScoreModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    rawData.forEach((element) async {
+    for (var element in rawData) {
       await database!.insert(tableName, element.toMap());
-    });
+    }
   }
 
   Future<void> delete() async {

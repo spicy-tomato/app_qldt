@@ -35,8 +35,8 @@ class QldtConfirmButton extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(width: 10),
-                  SizedBox(
+                  const SizedBox(width: 10),
+                  const SizedBox(
                     width: 17,
                     height: 17,
                     child: CircularProgressIndicator(
@@ -48,11 +48,11 @@ class QldtConfirmButton extends StatelessWidget {
             : TextButton(
                 onPressed: () {
                   FocusScope.of(context).unfocus();
-                  context.read<CrawlerBloc>().add(CrawlerPasswordVisibleChanged(hidePassword: true));
+                  context.read<CrawlerBloc>().add(const CrawlerPasswordVisibleChanged(hidePassword: true));
                   context.read<CrawlerBloc>().add(needPassword ? CrawlerSubmitted() : CrawlerDownload());
                 },
                 style: ButtonStyle(
-                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                  padding: MaterialStateProperty.all(const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 30,
                   )),

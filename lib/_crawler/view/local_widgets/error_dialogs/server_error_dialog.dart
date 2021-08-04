@@ -13,15 +13,15 @@ class ServerErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 5.0),
-      content: Text('Lỗi hệ thống, vui lòng thử lại sau'),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 5.0),
+      content: const Text('Lỗi hệ thống, vui lòng thử lại sau'),
       actions: <Widget>[
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             rootContext.read<CrawlerBloc>().add(CrawlerResetStatus());
           },
-          child: Text('Đồng ý'),
+          child: const Text('Đồng ý'),
         ),
       ],
     );

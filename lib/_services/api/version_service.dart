@@ -26,7 +26,7 @@ class VersionService {
       return jsonDecode(response.body);
     } on Exception catch (e) {
       print('Error: $e in Version service - getServerDataVersion()');
-      return Map();
+      return {};
     }
   }
 }

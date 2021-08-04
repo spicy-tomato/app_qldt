@@ -24,7 +24,7 @@ class CustomListTile extends StatelessWidget {
       color: disabled != null && disabled! ? Colors.grey.withOpacity(0.5) : null,
       height: defaultHeight == null || defaultHeight == true ? 48 : null,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -32,8 +32,8 @@ class CustomListTile extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  leading ?? SizedBox(width: 25, height: 25),
-                  SizedBox(width: 16),
+                  leading ?? const SizedBox(width: 25, height: 25),
+                  const SizedBox(width: 16),
                   Expanded(child: title),
                 ],
               ),

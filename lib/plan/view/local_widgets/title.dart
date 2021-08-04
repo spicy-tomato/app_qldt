@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 
 class PlanPageTitle extends StatefulWidget {
+  const PlanPageTitle({Key? key}) : super(key: key);
+
   @override
   _PlanPageTitleState createState() => _PlanPageTitleState();
 }
 
 class _PlanPageTitleState extends State<PlanPageTitle> {
-  final _textStyle = TextStyle(fontSize: 25);
+  final _textStyle = const TextStyle(fontSize: 25);
   final _controller = TextEditingController();
 
   @override
@@ -22,7 +24,7 @@ class _PlanPageTitleState extends State<PlanPageTitle> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 60),
+      padding: const EdgeInsets.symmetric(horizontal: 60),
       child: BlocBuilder<PlanBloc, PlanState>(
         buildWhen: (previous, current) => previous.title != current.title,
         builder: (context, state) {

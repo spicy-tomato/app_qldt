@@ -7,6 +7,8 @@ import 'package:app_qldt/plan/plan.dart';
 import 'shared/shared.dart';
 
 class Location extends StatefulWidget {
+  const Location({Key? key}) : super(key: key);
+
   @override
   _LocationState createState() => _LocationState();
 }

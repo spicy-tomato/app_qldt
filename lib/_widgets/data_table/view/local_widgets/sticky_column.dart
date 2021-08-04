@@ -1,14 +1,14 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:table_sticky_headers/cell_dimensions.dart';
 
 import 'cell.dart';
 
-class StickyColumn extends TableCell {
+class StickyColumn extends AppTableCell {
   StickyColumn(
     String text, {
+    Key? key,
     required Color backgroundColor,
-    required Color horizotalBorderColor,
+    required Color horizontalBorderColor,
     required Color verticalBorderColor,
     required CellDimensions cellDimensions,
     required int columnIndex,
@@ -16,10 +16,11 @@ class StickyColumn extends TableCell {
     Color? textColor,
   }) : super(
           text,
+          key: key,
           cellWidth: cellDimensions.columnWidths![columnIndex],
           cellHeight: cellDimensions.stickyLegendHeight,
           backgroundColor: backgroundColor,
-          horizotalBorderColor: horizotalBorderColor,
+          horizontalBorderColor: horizontalBorderColor,
           verticalBorderColor: verticalBorderColor,
           textMaxLines: 3,
           textColor: textColor,

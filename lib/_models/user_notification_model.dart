@@ -45,6 +45,7 @@ class UserNotificationModel {
     };
   }
 
+  @override
   String toString() {
     return 'ID: $idNotification, tiêu đề: $title, nội dung: $content, người gửi: $senderName';
   }

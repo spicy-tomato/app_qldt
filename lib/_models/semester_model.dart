@@ -2,7 +2,7 @@ class SemesterModel {
   final String? _string;
 
   const SemesterModel._([String? semester])
-      : this._string = semester == null
+      : _string = semester == null
             ? null
             : semester == ''
                 ? ''

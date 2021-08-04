@@ -85,7 +85,7 @@ class _SlideState extends State<Slide> {
 
   void _onPanelSlide(double position, PlanState state) {
     if (position > 0.31 && state.visibility.isOpenedApart) {
-      context.read<PlanBloc>().add(OpenPlanPage());
+      context.read<PlanBloc>().add(const OpenPlanPage());
     }
   }
 }

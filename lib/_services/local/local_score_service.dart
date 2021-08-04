@@ -10,7 +10,7 @@ class LocalScoreService extends LocalService {
   List<ScoreModel> scoreData = [];
   List<SemesterModel> semester = [];
 
-  SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
+  SemesterModel? get lastSemester => semester.isEmpty ? null : semester[semester.length - 1];
 
   LocalScoreService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
 
@@ -25,7 +25,7 @@ class LocalScoreService extends LocalService {
 
     connected = true;
 
-    return this.scoreData;
+    return scoreData;
   }
 
   @override
@@ -58,11 +58,11 @@ class LocalScoreService extends LocalService {
 
   Future<void> _loadSemesterFromDb() async {
     final List<Map<String, dynamic>> rawData = await databaseProvider.score.semester;
-    final List<SemesterModel> list = [SemesterModel.all()];
+    final List<SemesterModel> list = [const SemesterModel.all()];
 
-    rawData.forEach((data) {
+    for (var data in rawData) {
       list.add(SemesterModel(data['semester'].toString()));
-    });
+    }
 
     semester = list;
   }

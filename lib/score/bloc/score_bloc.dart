@@ -70,7 +70,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreServiceController scoreServiceController = _userDataModel.scoreServiceController;
 
     //  Query all
-    if (event.semester == SemesterModel.all() && event.subjectEvaluation.isAll) {
+    if (event.semester == const SemesterModel.all() && event.subjectEvaluation.isAll) {
       newScoreData = scoreServiceController.scoreData;
     }
     //  Query a specific semester with all subject status
@@ -78,7 +78,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       newScoreData = scoreServiceController.getScoreDataOfAllEvaluation(event.semester);
     }
     //  Query all semester with a specific subject status
-    else if (event.semester == SemesterModel.all()) {
+    else if (event.semester == const SemesterModel.all()) {
       newScoreData = scoreServiceController.getScoreDataOfAllSemester(event.subjectEvaluation);
     }
     //  Query a specific semester with a specific subject status

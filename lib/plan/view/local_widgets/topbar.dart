@@ -25,7 +25,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 10, right: 15),
+      padding: const EdgeInsets.only(left: 10, right: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -45,7 +45,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
               color: Theme.of(context).backgroundColor,
             ),
           ),
-          Container(
+          SizedBox(
             width: 80,
             height: 40,
             child: Material(
@@ -126,7 +126,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
           child: BlocBuilder<ModifyRangeBloc, ModifyRangeState>(
             builder: (context, state) {
               return RadioAlertDialog<ModifyRange>(
-                title: Text(
+                title: const Text(
                   'Tuỳ chọn sự kiện',
                   style: TextStyle(color: Colors.black),
                 ),
@@ -141,7 +141,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Huỷ'),
+                    child: const Text('Huỷ'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -153,7 +153,7 @@ class _PlanPageTopbarState extends State<PlanPageTopbar> {
                       }
                       rootContext.read<PlanBloc>().add(ClosePlanPage());
                     },
-                    child: Text('Lưu'),
+                    child: const Text('Lưu'),
                   ),
                 ],
               );

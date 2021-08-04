@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class PlanPageConstant extends InheritedWidget {
-  static final _textStyle = TextStyle(
+  static const _textStyle = TextStyle(
     color: Color(0xff000000),
     fontSize: 16,
     fontWeight: FontWeight.w400,
   );
 
   static final TextStyle hintTextFieldStyle = _textStyle.copyWith(
-    color: Color(0xff616161),
+    color: const Color(0xff616161),
   );
 
-  static final TextStyle textFieldStyle = _textStyle;
+  static const textFieldStyle = _textStyle;
 
-  PlanPageConstant({
+  const PlanPageConstant({
     Key? key,
     required Widget child,
   }) : super(key: key, child: child);
@@ -26,5 +26,5 @@ class PlanPageConstant extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(_) => false;
+  bool updateShouldNotify(oldWidget) => false;
 }

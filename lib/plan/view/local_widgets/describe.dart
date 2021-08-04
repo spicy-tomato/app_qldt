@@ -7,6 +7,8 @@ import 'package:app_qldt/plan/bloc/plan_bloc.dart';
 import 'shared/shared.dart';
 
 class Describe extends StatefulWidget {
+  const Describe({Key? key}) : super(key: key);
+
   @override
   _DescribeState createState() => _DescribeState();
 }
@@ -38,7 +40,7 @@ class _DescribeState extends State<Describe> {
     );
   }
 
-  void _onChanged(String text){
+  void _onChanged(String text) {
     context.read<PlanBloc>().add(PlanDescriptionChanged(text));
   }
 }

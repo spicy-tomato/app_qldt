@@ -7,10 +7,10 @@ import 'package:url_launcher/url_launcher.dart';
 const clientId = "227524919974-ogjnrouk4pq2cvsgt7jf19nd0h4fio8a.apps.googleusercontent.com";
 
 class CalendarClientModel {
-  static const _scopes = const [CalendarApi.calendarScope];
+  static const _scopes = [CalendarApi.calendarScope];
 
   insert(title, startTime, endTime) {
-    var _clientID = new ClientId(clientId, "");
+    var _clientID = ClientId(clientId, "");
     clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) {
       var calendar = CalendarApi(client);
       calendar.calendarList.list().then((value) => print("VAL________$value"));
@@ -20,12 +20,12 @@ class CalendarClientModel {
 
       event.summary = title;
 
-      EventDateTime start = new EventDateTime();
+      EventDateTime start = EventDateTime();
       start.dateTime = startTime;
       start.timeZone = "GMT+05:00";
       event.start = start;
 
-      EventDateTime end = new EventDateTime();
+      EventDateTime end = EventDateTime();
       end.timeZone = "GMT+05:00";
       end.dateTime = endTime;
       event.end = end;

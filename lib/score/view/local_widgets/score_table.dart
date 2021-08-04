@@ -39,7 +39,7 @@ class _ScorePageTableState extends State<ScorePageTable> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.white),
           ),
@@ -76,7 +76,7 @@ class _ScorePageTableState extends State<ScorePageTable> {
     Map<String, bool> displaySemester = {};
     List<Gpa> gpa = [];
 
-    scoreData.forEach((score) {
+    for (var score in scoreData) {
       if (score.theoreticalScore != null) {
         if (map[score.semester] == null) {
           map[score.semester] = GpaTotalScore();
@@ -91,7 +91,7 @@ class _ScorePageTableState extends State<ScorePageTable> {
       } else {
         displaySemester[score.semester] = false;
       }
-    });
+    }
 
     map.forEach((semester, value) {
       gpa.add(Gpa(

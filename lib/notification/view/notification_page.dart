@@ -26,13 +26,10 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_notificationServiceController == null) {
-      _notificationServiceController =
-          context.read<UserRepository>().userDataModel.notificationServiceController;
-    }
+    _notificationServiceController ??=
+        context.read<UserRepository>().userDataModel.notificationServiceController;
 
-    List notificationData =
-        _notificationServiceController!.notificationData as List<UserNotificationModel>;
+    List notificationData = _notificationServiceController!.notificationData as List<UserNotificationModel>;
 
     return InheritedPanelController(
       panelController: _panelController,
@@ -42,7 +39,7 @@ class _NotificationPageState extends State<NotificationPage> {
           children: <Widget>[
             SharedUI(
               onWillPop: () async {
-                if (_panelController.isPanelOpen){
+                if (_panelController.isPanelOpen) {
                   await _panelController.close();
                   return Future.value(false);
                 }
@@ -53,7 +50,7 @@ class _NotificationPageState extends State<NotificationPage> {
               child: Item(
                 child: SmartRefresher(
                   enablePullDown: true,
-                  header: ClassicHeader(),
+                  header: const ClassicHeader(),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
                   onLoading: _onLoading,
@@ -100,13 +97,13 @@ class _NotificationPageState extends State<NotificationPage> {
 
   void _onRefresh() async {
     await _notificationServiceController!.refresh();
-    await Future.delayed(Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});
   }
 
   void _onLoading() async {
-    await Future.delayed(Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     if (mounted) {
       setState(() {});
       _refreshController.loadComplete();
@@ -131,7 +128,7 @@ class ListItem extends StatelessWidget {
         await InheritedPanelController.of(context).panelController.open();
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 10,
           vertical: 10,
         ),
@@ -162,7 +159,7 @@ class ListItem extends StatelessWidget {
             Expanded(
               flex: 5,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -204,7 +201,7 @@ class ListItem extends StatelessWidget {
 class InheritedPanelController extends InheritedWidget {
   final PanelController panelController;
 
-  InheritedPanelController({
+  const InheritedPanelController({
     Key? key,
     required this.panelController,
     required Widget child,
@@ -219,5 +216,5 @@ class InheritedPanelController extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(_) => false;
+  bool updateShouldNotify(oldWidget) => false;
 }

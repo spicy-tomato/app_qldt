@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'local_widgets/local_widgets.dart';
 
 class RequestQldtPasswordPage extends StatefulWidget {
+  const RequestQldtPasswordPage({Key? key}) : super(key: key);
+
   @override
   _RequestQldtPasswordPageState createState() => _RequestQldtPasswordPageState();
 }
@@ -24,7 +26,7 @@ class _RequestQldtPasswordPageState extends State<RequestQldtPasswordPage> {
               context: context,
               builder: (_) => ServerErrorDialog(rootContext: context),
             );
-          } else if (state.status.hasErrorWhileCrawling){
+          } else if (state.status.hasErrorWhileCrawling) {
             showDialog(
               context: context,
               builder: (_) => CrawlErrorDialog(rootContext: context),
@@ -33,18 +35,18 @@ class _RequestQldtPasswordPageState extends State<RequestQldtPasswordPage> {
         },
         child: Item(
           child: Center(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.85,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Instructor(),
-                  SizedBox(height: 10),
-                  QldtInputPassword(),
-                  SizedBox(height: 15),
+                  const Instructor(),
+                  const SizedBox(height: 10),
+                  const QldtInputPassword(),
+                  const SizedBox(height: 15),
                   QldtConfirmButton(),
-                  SizedBox(height: 25),
-                  QldtNote(),
+                  const SizedBox(height: 25),
+                  const QldtNote(),
                 ],
               ),
             ),

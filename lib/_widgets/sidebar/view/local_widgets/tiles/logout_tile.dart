@@ -15,18 +15,18 @@ class LogoutTile extends ScreenPageTile {
               context: context,
               builder: (context) => AlertDialog(
                 contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 5.0),
-                content: Text('Bạn có muốn đăng xuất không?'),
+                content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                       context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
                     },
-                    child: Text('Có'),
+                    child: const Text('Có'),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text('Không'),
+                    child: const Text('Không'),
                   ),
                 ],
               ),

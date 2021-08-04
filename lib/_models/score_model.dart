@@ -49,9 +49,9 @@ class ScoreModel {
       semester: json['School_Year'],
       credit: json['Credit'],
       evaluation: json['Evaluation'],
-      processScore: json['Process_Score'] == null ? null : json['Process_Score'].toDouble(),
-      testScore: json['Test_Score'] == null ? null : json['Test_Score'].toDouble(),
-      theoreticalScore: json['Theoretical_Score'] == null ? null : json['Theoretical_Score'].toDouble(),
+      processScore: json['Process_Score']?.toDouble(),
+      testScore: json['Test_Score']?.toDouble(),
+      theoreticalScore: json['Theoretical_Score']?.toDouble(),
     );
   }
 
@@ -60,10 +60,10 @@ class ScoreModel {
       moduleName: map['module_name'],
       semester: map['semester'],
       credit: map['credit'],
-      evaluation: map['evaluation'] == null ? null : map['evaluation'],
-      processScore: map['process_score'] == null ? null : map['process_score'],
-      testScore: map['test_score'] == null ? null : map['test_score'],
-      theoreticalScore: map['theoretical_score'] == null ? null : map['theoretical_score'],
+      evaluation: map['evaluation'],
+      processScore: map['process_score'],
+      testScore: map['test_score'],
+      theoreticalScore: map['theoretical_score'],
       letterScore: map['theoretical_score'] == null ? null : toLetterScore(map['theoretical_score']),
     );
   }

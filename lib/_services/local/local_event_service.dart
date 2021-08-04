@@ -18,7 +18,7 @@ class LocalEventService extends LocalService {
   List<UserEventModel> eventData = [];
 
   //  For calendar
-  Map<DateTime, List<UserEventModel>> calendarData = Map();
+  Map<DateTime, List<UserEventModel>> calendarData = {};
 
   /// Constructs a [LocalEventService] instance with user's ID account
   ///

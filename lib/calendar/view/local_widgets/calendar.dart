@@ -11,21 +11,21 @@ import 'package:app_qldt/calendar/bloc/calendar_bloc.dart';
 import 'calendar_widgets/calendar_widgets.dart';
 
 extension DateTimeExtexsion on DateTime {
-  DateTime get toStandard => DateTime(this.year, this.month, this.day);
+  DateTime get toStandard => DateTime(year, month, day);
 
   bool isBetween(DateTime before, DateTime after) {
-    return this.isAfter(before) && this.isBefore(after);
+    return isAfter(before) && isBefore(after);
   }
 
   bool isTheSameMonth(DateTime dateTime) {
-    return this.month == dateTime.month;
+    return month == dateTime.month;
   }
 }
 
 class Calendar<UserEvent> extends StatefulWidget {
   final Map<DateTime, List<UserEvent?>> events;
 
-  Calendar({
+  const Calendar({
     Key? key,
     required this.events,
   }) : super(key: key);
@@ -68,14 +68,14 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
     return BlocBuilder<CalendarBloc, CalendarState>(
       builder: (_, __) {
         return Padding(
-          padding: EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.symmetric(vertical: 5),
           child: TableCalendar(
             firstDay: firstDay,
             lastDay: lastDay,
             focusedDay: _focusedDay,
             locale: 'vi_VI',
             eventLoader: _eventLoader,
-            weekendDays: [DateTime.sunday],
+            weekendDays: const [DateTime.sunday],
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarFormat: CalendarFormat.month,
             availableGestures: AvailableGestures.all,
@@ -84,7 +84,7 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
             headerStyle: HeaderStyle(
               titleCentered: true,
               titleTextFormatter: _titleTextFormatter,
-              titleTextStyle: TextStyle(
+              titleTextStyle: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w300,
               ),
@@ -92,14 +92,14 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
             daysOfWeekHeight: 20,
             daysOfWeekStyle: DaysOfWeekStyle(
               dowTextFormatter: _dowTextFormatter,
-              weekdayStyle: TextStyle(
+              weekdayStyle: const TextStyle(
                 color: Colors.white,
               ),
               weekendStyle: TextStyle(
                 color: Theme.of(context).accentColor,
               ),
             ),
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               cellMargin: EdgeInsets.all(2),
             ),
             calendarBuilders: CalendarBuilders(
@@ -157,14 +157,12 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
 
   void _onCalendarCreated(PageController pageController) {
     _pageController = pageController;
-    context
-        .read<CalendarBloc>()
-        .add(CalendarDaySelected(_focusedDay, widget.events[_focusedDay] ?? []));
+    context.read<CalendarBloc>().add(CalendarDaySelected(_focusedDay, widget.events[_focusedDay] ?? []));
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     context.read<PlanBloc>().add(PlanFromDateChanged(focusedDay));
-    context.read<PlanBloc>().add(PlanToDateChanged(focusedDay.add(Duration(hours: 1))));
+    context.read<PlanBloc>().add(PlanToDateChanged(focusedDay.add(const Duration(hours: 1))));
 
     if (!isSameDay(_selectedDay, selectedDay)) {
       selectedDay = selectedDay.toStandard;
@@ -175,19 +173,18 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
         _selectedDay = selectedDay;
 
         await _pageController.previousPage(
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
 
         setState(() {
-          _focusedDay = focusedDay.subtract(Duration(days: 1));
+          _focusedDay = focusedDay.subtract(const Duration(days: 1));
         });
       } else if (selectedDay.month != focusedDay.month && selectedDay.isAfter(focusedDay)) {
         _selectedDay = selectedDay;
 
-        await _pageController.nextPage(
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+        await _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
 
         setState(() {
-          _focusedDay = focusedDay.add(Duration(days: 1));
+          _focusedDay = focusedDay.add(const Duration(days: 1));
         });
       } else {
         setState(() {

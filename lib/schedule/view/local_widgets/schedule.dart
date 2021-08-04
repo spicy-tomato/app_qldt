@@ -38,7 +38,7 @@ class _ScheduleState extends State<Schedule> {
         return SfCalendar(
           controller: widget.controller,
           dataSource: widget.dataSource,
-          allowedViews: [
+          allowedViews: const [
             CalendarView.schedule,
             CalendarView.day,
             CalendarView.week,
@@ -86,7 +86,7 @@ class _ScheduleState extends State<Schedule> {
         context.read<PlanBloc>().add(ShowApartPlanPage(details.date!));
       } else if (_previousSelectedDay != null && details.date == _previousSelectedDay) {
         widget.controller.selectedDate = null;
-        context.read<PlanBloc>().add(OpenPlanPage());
+        context.read<PlanBloc>().add(const OpenPlanPage());
       } else if (_previousSelectedDay != null && details.date != _previousSelectedDay) {
         widget.controller.selectedDate = null;
         context.read<PlanBloc>().add(ClosePlanPage());
@@ -130,7 +130,7 @@ class _ScheduleState extends State<Schedule> {
           bottom: 0,
           child: Text(
             '$monthName' '${details.date.year.toString()}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.w500,
               color: Colors.black,

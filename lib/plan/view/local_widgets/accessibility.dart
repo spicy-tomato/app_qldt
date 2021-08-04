@@ -4,23 +4,25 @@ import 'package:flutter/material.dart';
 import 'shared/shared.dart';
 
 class Accessibility extends StatefulWidget {
+  const Accessibility({Key? key}) : super(key: key);
+
   @override
   _AccessibilityState createState() => _AccessibilityState();
 }
 
 class _AccessibilityState extends State<Accessibility> {
   late String display = 'Mặc định';
-  List _listItem = ['Công khai', 'Mặc định', 'Riêng tư'];
+  final List _listItem = ['Công khai', 'Mặc định', 'Riêng tư'];
 
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      leading: Icon(Icons.lock_outline),
+      leading: const Icon(Icons.lock_outline),
       title: DropdownButton(
         dropdownColor: Colors.grey,
-        style: TextStyle(color: Colors.black, fontSize: 22.0),
+        style: const TextStyle(color: Colors.black, fontSize: 22.0),
         elevation: 5,
-        icon: new Icon(Icons.arrow_drop_down),
+        icon: const Icon(Icons.arrow_drop_down),
         iconSize: 36.0,
         isExpanded: true,
         value: display,

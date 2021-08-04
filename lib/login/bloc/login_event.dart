@@ -50,7 +50,7 @@ class ShowedLoginFailedDialog extends LoginEvent {}
 class FormTypeChanged extends LoginEvent {
   final AccountPermission accountPermission;
 
-  FormTypeChanged(this.accountPermission);
+  const FormTypeChanged(this.accountPermission);
 
   @override
   List<Object> get props => [accountPermission];

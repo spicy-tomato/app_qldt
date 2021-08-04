@@ -12,21 +12,21 @@ class CrawlErrorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 5.0),
-      content: Text('Có lỗi không xác định đã xảy ra, vui lòng khởi động lại ứng dụng'),
+      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 5.0),
+      content: const Text('Có lỗi không xác định đã xảy ra, vui lòng khởi động lại ứng dụng'),
       actions: <Widget>[
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Huỷ'),
+          child: const Text('Huỷ'),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
             Phoenix.rebirth(context);
           },
-          child: Text('Đồng ý'),
+          child: const Text('Đồng ý'),
         ),
       ],
     );

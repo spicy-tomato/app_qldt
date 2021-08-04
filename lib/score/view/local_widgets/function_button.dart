@@ -11,6 +11,8 @@ enum ButtonOption {
 }
 
 class FunctionButton extends StatefulWidget {
+  const FunctionButton({Key? key}) : super(key: key);
+
   @override
   _FunctionButtonState createState() => _FunctionButtonState();
 }
@@ -33,7 +35,7 @@ class _FunctionButtonState extends State<FunctionButton> {
                 tooltip: '',
                 enableFeedback: false,
                 padding: EdgeInsets.zero,
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                   color: Colors.white,
                 ),
@@ -76,12 +78,10 @@ class _FunctionButtonState extends State<FunctionButton> {
       builder: (context) {
         return AlertDialog(
           scrollable: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 10),
-          content: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: _listTiles(rootContext, context, state.semester),
-            ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: _listTiles(rootContext, context, state.semester),
           ),
         );
       },
@@ -95,14 +95,14 @@ class _FunctionButtonState extends State<FunctionButton> {
   ) {
     List<Widget> tiles = [];
 
-    semesters.forEach((semester) {
+    for (var semester in semesters) {
       tiles.add(InkWell(
         onTap: () {
           // rootContext.read<ScoreBloc>().add(ScoreSemesterChanged(rootContext, semester));
           Navigator.of(dialogContext).pop();
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: <Widget>[
               Radio<SemesterModel>(
@@ -115,7 +115,7 @@ class _FunctionButtonState extends State<FunctionButton> {
           ),
         ),
       ));
-    });
+    }
 
     return tiles;
   }

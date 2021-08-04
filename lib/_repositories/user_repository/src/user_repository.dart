@@ -33,7 +33,7 @@ class UserRepository {
     String? infoStr = prefs.getString('user_info');
 
     if (infoStr == null){
-      return new Map();
+      return {};
     }
 
     return jsonDecode(infoStr);

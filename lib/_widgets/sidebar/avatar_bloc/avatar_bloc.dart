@@ -48,13 +48,13 @@ class AvatarBloc extends Bloc<AvatarEvent, AvatarState> {
     File? croppedImage = await ImageCropper.cropImage(
       sourcePath: imagePath,
       aspectRatioPresets: [CropAspectRatioPreset.square],
-      androidUiSettings: AndroidUiSettings(
+      androidUiSettings: const AndroidUiSettings(
         toolbarTitle: 'Chỉnh sửa ảnh',
         hideBottomControls: true,
       ),
       compressQuality: 100,
       cropStyle: CropStyle.circle,
-      iosUiSettings: IOSUiSettings(title: 'Chỉnh sửa ảnh'),
+      iosUiSettings: const IOSUiSettings(title: 'Chỉnh sửa ảnh'),
     );
 
     return croppedImage;

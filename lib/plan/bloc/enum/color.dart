@@ -67,40 +67,40 @@ extension PlanColorsExtension on PlanColors {
   Color get color {
     switch (this) {
       case PlanColors.tomato:
-        return Color(0xffff3d1e);
+        return const Color(0xffff3d1e);
 
       case PlanColors.tangerine:
-        return Color(0xfff28500);
+        return const Color(0xfff28500);
 
       case PlanColors.banana:
-        return Color(0xfff8cf0e);
+        return const Color(0xfff8cf0e);
 
       case PlanColors.basil:
-        return Color(0xff579229);
+        return const Color(0xff579229);
 
       case PlanColors.sage:
-        return Color(0xff32CD32);
+        return const Color(0xff32CD32);
 
       case PlanColors.peacock:
-        return Color(0xff007bff);
+        return const Color(0xff007bff);
 
       case PlanColors.blueberry:
-        return Color(0xff464196);
+        return const Color(0xff464196);
 
       case PlanColors.lavender:
-        return Color(0xffbaa2fd);
+        return const Color(0xffbaa2fd);
 
       case PlanColors.grape:
-        return Color(0xff8d2da8);
+        return const Color(0xff8d2da8);
 
       case PlanColors.flamingo:
-        return Color(0xfffc8eac);
+        return const Color(0xfffc8eac);
 
       case PlanColors.graphite:
-        return Color(0xff848884);
+        return const Color(0xff848884);
 
       default:
-        return Color(0xff007bff);
+        return const Color(0xff007bff);
     }
   }
 }

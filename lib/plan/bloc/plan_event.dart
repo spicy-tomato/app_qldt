@@ -102,7 +102,7 @@ class PlanLocationChanged extends PlanEvent {
 class OpenPlanPage extends PlanEvent {
   final PlanType? type;
 
-  OpenPlanPage({this.type});
+  const OpenPlanPage({this.type});
 
   @override
   List<Object> get props => [type!];

@@ -40,7 +40,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   })  : _idAccount = user.accountId,
         _idUser = user.id,
         _permission = user.permission,
-        super(PreloadInitial());
+        super(const PreloadInitial());
 
   @override
   Stream<PreloadState> mapEventToState(
@@ -60,11 +60,11 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   }
 
   Stream<PreloadState> _mapPreloadLoadingToState() async* {
-    yield PreloadState.loading();
+    yield const PreloadState.loading();
     String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
-    final minTurnAroundTime = const Duration(seconds: 2);
+    const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
     apiUrl.accountPermission = _permission;
     final serviceControllers = _ServiceControllers(
@@ -106,11 +106,11 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   }
 
   Stream<PreloadState> _mapPreloadLoadingAfterLoginToState() async* {
-    yield PreloadState.loadingAfterLogin();
+    yield const PreloadState.loadingAfterLogin();
     String? avatarPath;
 
     Stopwatch stopwatch = Stopwatch()..start();
-    final minTurnAroundTime = const Duration(seconds: 2);
+    const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
     final serviceControllers = _ServiceControllers(
       apiUrl: apiUrl,

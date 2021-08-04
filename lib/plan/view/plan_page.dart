@@ -12,7 +12,7 @@ class PlanPage extends StatefulWidget {
   final ScrollController scrollController;
   final Function()? onCloseButtonTap;
 
-  PlanPage({
+  const PlanPage({
     Key? key,
     required this.scrollController,
     this.onCloseButtonTap,
@@ -48,7 +48,7 @@ class _FullPlanPage extends StatefulWidget {
   final ScrollController scrollController;
   final Function()? onCloseButtonTap;
 
-  _FullPlanPage({
+  const _FullPlanPage({
     Key? key,
     required this.scrollController,
     this.onCloseButtonTap,
@@ -68,7 +68,7 @@ class _FullPlanPageState extends State<_FullPlanPage> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 10),
               child: Image.asset(
                 'images/icon/swipe-down-icon.png',
                 width: 40,
@@ -83,21 +83,21 @@ class _FullPlanPageState extends State<_FullPlanPage> {
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             children: <Widget>[
-              PlanPageTitle(),
+              const PlanPageTitle(),
               PlanPageDivider(context: context),
-              PlanPageTime(),
+              const PlanPageTime(),
               PlanPageDivider(context: context),
               // AddGuest(),
               // PlanPageDivider(context: context),
-              Location(),
+              const Location(),
               PlanPageDivider(context: context),
-              Describe(),
+              const Describe(),
               PlanPageDivider(context: context),
               // Accessibility(),
               // PlanPageDivider(context: context),
               // Status(),
               // PlanPageDivider(context: context),
-              PlanColor(),
+              const PlanColor(),
               PlanPageDivider(context: context),
             ],
           ),
@@ -133,7 +133,7 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -146,7 +146,7 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
+              padding: const EdgeInsets.symmetric(vertical: 5),
               child: Image.asset(
                 'images/icon/minimize-icon.png',
                 width: 80,
@@ -162,7 +162,7 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
             ),
             CustomListTile(
               title: Padding(
-                padding: EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 15),
                 child: Text(
                   '${DayOfWeekVN.get(_fromDay.weekday)}, '
                   'ngày ${_fromDay.day} '
@@ -175,7 +175,7 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
               defaultHeight: false,
             ),
             CustomListTile(
-              leading: Icon(Icons.people_alt_outlined),
+              leading: const Icon(Icons.people_alt_outlined),
               title: Text(
                 'Thêm người',
                 style: PlanPageConstant.hintTextFieldStyle,
@@ -188,6 +188,6 @@ class __ApartPlanPageState extends State<_ApartPlanPage> {
   }
 
   void _onTap() {
-    context.read<PlanBloc>().add(OpenPlanPage());
+    context.read<PlanBloc>().add(const OpenPlanPage());
   }
 }

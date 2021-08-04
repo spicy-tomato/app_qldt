@@ -12,7 +12,7 @@ class LocalExamScheduleService extends LocalService {
   List<ExamScheduleModel> examScheduleData = [];
   List<SemesterModel> semester = [];
 
-  SemesterModel? get lastSemester => semester.length == 0 ? null : semester[semester.length - 1];
+  SemesterModel? get lastSemester => semester.isEmpty ? null : semester[semester.length - 1];
 
   LocalExamScheduleService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
 
@@ -66,9 +66,9 @@ class LocalExamScheduleService extends LocalService {
     final List<Map<String, dynamic>> rawData = await databaseProvider.examSchedule.semester;
     final List<SemesterModel> list = [];
 
-    rawData.forEach((data) {
+    for (var data in rawData){
       list.add(SemesterModel(data['semester'].toString()));
-    });
+    }
 
     semester = list;
   }

@@ -43,23 +43,21 @@ class _CalendarPageState extends State<CalendarPage> {
               return Future.value(null);
             },
             topRightWidget: _refreshButton(context),
-            child: Container(
-              child: BlocProvider<CalendarBloc>(
-                create: (_) => CalendarBloc(),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Calendar(events: schedulesData),
-                        _fader(),
-                      ],
-                    ),
-                    Expanded(child: EventList()),
-                    BottomNote(
-                      useCurrentTime: false,
-                    ),
-                  ],
-                ),
+            child: BlocProvider<CalendarBloc>(
+              create: (_) => CalendarBloc(),
+              child: Column(
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Calendar(events: schedulesData),
+                      _fader(),
+                    ],
+                  ),
+                  const Expanded(child: EventList()),
+                  const BottomNote(
+                    useCurrentTime: false,
+                  ),
+                ],
               ),
             ),
           );
@@ -84,7 +82,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _fader() {
     return ValueListenableBuilder<bool>(
       builder: (_, value, __) {
-        return value ? Loading() : Container();
+        return value ? const Loading() : Container();
       },
       valueListenable: widget.isLoading,
     );

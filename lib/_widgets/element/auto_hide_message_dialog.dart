@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 extension IconExtension on Icon {
   Icon copyWith(Color? color) {
     return Icon(
-      this.icon,
-      key: this.key,
-      size: this.size,
-      semanticLabel: this.semanticLabel,
-      textDirection: this.textDirection,
+      icon,
+      key: key,
+      size: size,
+      semanticLabel: semanticLabel,
+      textDirection: textDirection,
       color: color ?? this.color,
     );
   }
@@ -38,8 +38,7 @@ class AutoHideMessageDialog extends StatefulWidget {
   _AutoHideMessageDialogState createState() => _AutoHideMessageDialogState();
 }
 
-class _AutoHideMessageDialogState extends State<AutoHideMessageDialog>
-    with SingleTickerProviderStateMixin {
+class _AutoHideMessageDialogState extends State<AutoHideMessageDialog> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _backgroundColorAnimation;
   late Animation<Color?> _textColorAnimation;
@@ -101,31 +100,29 @@ class _AutoHideMessageDialogState extends State<AutoHideMessageDialog>
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Container(
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: _backgroundColorAnimation.value,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            padding: EdgeInsets.all(15),
-            width: MediaQuery.of(context).size.width * 0.75,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                widget.icon != null ? widget.icon!.copyWith(_iconColorAnimation.value) : Container(),
-                widget.icon != null ? SizedBox(width: 10) : Container(),
-                Expanded(
-                  child: Text(
-                    widget.message,
-                    softWrap: true,
-                    style: TextStyle(
-                      color: _textColorAnimation.value,
-                    ),
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            color: _backgroundColorAnimation.value,
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+          ),
+          padding: const EdgeInsets.all(15),
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              widget.icon != null ? widget.icon!.copyWith(_iconColorAnimation.value) : Container(),
+              widget.icon != null ? const SizedBox(width: 10) : Container(),
+              Expanded(
+                child: Text(
+                  widget.message,
+                  softWrap: true,
+                  style: TextStyle(
+                    color: _textColorAnimation.value,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -4,6 +4,8 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import '_models/calendar_client_model.dart';
 
 class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -11,8 +13,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   CalendarClientModel calendarClient = CalendarClientModel();
   DateTime startTime = DateTime.now();
-  DateTime endTime = DateTime.now().add(Duration(days: 1));
-  TextEditingController _eventName = TextEditingController();
+  DateTime endTime = DateTime.now().add(const Duration(days: 1));
+  final TextEditingController _eventName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,11 @@ class _HomeState extends State<Home> {
                       print('change $date');
                     }, onConfirm: (date) {
                       setState(() {
-                        this.startTime = date;
+                        startTime = date;
                       });
                     }, currentTime: DateTime.now(), locale: LocaleType.en);
                   },
-                  child: Text(
+                  child: const Text(
                     'Event Start Time',
                     style: TextStyle(color: Colors.blue),
                   )),
@@ -59,11 +61,11 @@ class _HomeState extends State<Home> {
                       print('change $date');
                     }, onConfirm: (date) {
                       setState(() {
-                        this.endTime = date;
+                        endTime = date;
                       });
                     }, currentTime: DateTime.now(), locale: LocaleType.en);
                   },
-                  child: Text(
+                  child: const Text(
                     'Event End Time',
                     style: TextStyle(color: Colors.blue),
                   )),
@@ -74,13 +76,11 @@ class _HomeState extends State<Home> {
             padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _eventName,
-              decoration: InputDecoration(hintText: 'Enter Event name'),
+              decoration: const InputDecoration(hintText: 'Enter Event name'),
             ),
           ),
           ElevatedButton(
-              child: Text(
-                'Insert Event',
-              ),
+              child: const Text('Insert Event'),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.grey),
               ),

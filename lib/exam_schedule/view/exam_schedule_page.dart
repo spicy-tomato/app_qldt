@@ -20,6 +20,8 @@ class ExamSchedulePage extends StatefulWidget {
     horizontalTitleController: ScrollController(),
   );
 
+  ExamSchedulePage({Key? key}) : super(key: key);
+
   @override
   _ExamSchedulePageState createState() => _ExamSchedulePageState();
 }
@@ -36,36 +38,34 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           topRightWidget: _refreshButton(),
           child: Stack(
             children: <Widget>[
-              Container(
-                child: BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
-                  buildWhen: (previous, current) =>
-                      (previous.semester.hasData && !current.semester.hasData) ||
-                      (!previous.semester.hasData && current.semester.hasData),
-                  builder: (context, state) {
-                    return state.semester.hasData
-                        ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ExamScheduleFilter(),
-                              ExamScheduleTable(scrollControllers: widget._scrollControllers),
-                            ],
-                          )
-                        : Center(
-                            child: Text('Chưa có dữ liệu'),
-                          );
-                  },
-                ),
+              BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
+                buildWhen: (previous, current) =>
+                    (previous.semester.hasData && !current.semester.hasData) ||
+                    (!previous.semester.hasData && current.semester.hasData),
+                builder: (context, state) {
+                  return state.semester.hasData
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const ExamScheduleFilter(),
+                            ExamScheduleTable(scrollControllers: widget._scrollControllers),
+                          ],
+                        )
+                      : const Center(
+                          child: Text('Chưa có dữ liệu'),
+                        );
+                },
               ),
               BlocBuilder<ExamScheduleBloc, ExamScheduleState>(
                 buildWhen: (previous, current) => previous.status != current.status,
                 builder: (context, state) {
                   return state.status.isLoading
-                      ? Loading()
+                      ? const Loading()
                       : state.status.isFailed
                           ? AutoHideMessageDialog(
                               onClose: () => _onClose(context),
                               message: 'Không thể làm mới do lỗi hệ thống, vui lòng thử lại sau',
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.error_outline,
                                 color: Colors.red,
                               ),
@@ -74,7 +74,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                               ? AutoHideMessageDialog(
                                   onClose: () => _onClose(context),
                                   message: 'Làm mới dữ liệu thành công',
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.done,
                                     color: Colors.green,
                                   ),
@@ -102,6 +102,6 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
   void _onClose(BuildContext currentContext) {
     currentContext
         .read<ExamScheduleBloc>()
-        .add(ExamSchedulePageStatusChanged(ExamSchedulePageStatus.unknown));
+        .add(const ExamSchedulePageStatusChanged(ExamSchedulePageStatus.unknown));
   }
 }

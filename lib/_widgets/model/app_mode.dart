@@ -34,5 +34,5 @@ class AppModeWidget extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(_) => false;
+  bool updateShouldNotify(oldWidget) => false;
 }

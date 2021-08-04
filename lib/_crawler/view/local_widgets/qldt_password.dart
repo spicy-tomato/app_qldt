@@ -7,10 +7,12 @@ import 'package:app_qldt/_crawler/bloc/crawler_bloc.dart';
 import 'package:app_qldt/_crawler/model/status.dart';
 
 class QldtInputPassword extends StatelessWidget {
+  const QldtInputPassword({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Stack(
         alignment: Alignment.centerRight,
         children: <Widget>[
@@ -38,7 +40,7 @@ class QldtInputPassword extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.remove_red_eye),
             iconSize: 20,
-            onPressed: () => context.read<CrawlerBloc>().add(CrawlerPasswordVisibleChanged()),
+            onPressed: () => context.read<CrawlerBloc>().add(const CrawlerPasswordVisibleChanged()),
           )
         ],
       ),

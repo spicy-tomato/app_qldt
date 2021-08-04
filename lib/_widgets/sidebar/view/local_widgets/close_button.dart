@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CloseSidebarButton extends StatelessWidget {
+  const CloseSidebarButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 45,
       height: 45,
       child: Material(
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         color: Colors.white,
         child: InkWell(
-          customBorder: CircleBorder(),
+          customBorder: const CircleBorder(),
           onTap: () async => await Navigator.maybePop(context),
           child: Icon(
             Icons.close,

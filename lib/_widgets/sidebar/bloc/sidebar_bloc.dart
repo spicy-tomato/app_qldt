@@ -23,10 +23,10 @@ class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
   ) {
     switch (event.screenPage) {
       case ScreenPage.notification:
-        return ScreenState.notification();
+        return const ScreenState.notification();
 
       default:
-        return ScreenState.home();
+        return const ScreenState.home();
     }
   }
 }

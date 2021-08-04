@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'screen_page_tile.dart';
 
 class CurrentScreenPageTile extends ScreenPageTile {
-  CurrentScreenPageTile({
+  const CurrentScreenPageTile({
     Key? key,
     required ScreenPage screenPage,
   }) : super(

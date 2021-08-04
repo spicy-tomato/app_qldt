@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class PlanPageDivider extends Divider {
-  PlanPageDivider({required BuildContext context})
-      : super(color: Colors.grey);
+  const PlanPageDivider({
+    Key? key,
+    required BuildContext context,
+  }) : super(
+          key: key,
+          color: Colors.grey,
+        );
 }

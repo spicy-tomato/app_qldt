@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 class UnstableButton extends StatelessWidget {
   final GlobalKey tooltipKey = GlobalKey();
 
-  @override
-  Key? get key => super.key;
+  UnstableButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       key: tooltipKey,
       verticalOffset: 20,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.only(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(
         left: 100,
         right: 20,
       ),

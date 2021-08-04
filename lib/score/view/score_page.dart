@@ -14,6 +14,8 @@ import 'package:table_sticky_headers/table_sticky_headers.dart';
 import 'local_widgets/local_widgets.dart';
 
 class ScorePage extends StatefulWidget {
+  ScorePage({Key? key}) : super(key: key);
+
   final ScrollControllers _scrollControllers = ScrollControllers(
     verticalTitleController: ScrollController(),
     verticalBodyController: ScrollController(),
@@ -43,16 +45,14 @@ class _ScorePageState extends State<ScorePage> {
                     (!previous.semester.hasData && current.semester.hasData),
                 builder: (context, state) {
                   return state.semester.hasData
-                      ? Container(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ScoreFilter(),
-                              ScorePageTable(scrollControllers: widget._scrollControllers),
-                            ],
-                          ),
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const ScoreFilter(),
+                            ScorePageTable(scrollControllers: widget._scrollControllers),
+                          ],
                         )
-                      : Center(
+                      : const Center(
                           child: Text('Chưa có dữ liệu'),
                         );
                 },
@@ -61,12 +61,12 @@ class _ScorePageState extends State<ScorePage> {
                 buildWhen: (previous, current) => previous.status != current.status,
                 builder: (context, state) {
                   return state.status.isLoading
-                      ? Loading()
+                      ? const Loading()
                       : state.status.isFailed
                           ? AutoHideMessageDialog(
                               onClose: () => _onClose(context),
                               message: 'Không thể làm mới do lỗi hệ thống, vui lòng thử lại sau',
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.error_outline,
                                 color: Colors.red,
                               ),
@@ -75,7 +75,7 @@ class _ScorePageState extends State<ScorePage> {
                               ? AutoHideMessageDialog(
                                   onClose: () => _onClose(context),
                                   message: 'Làm mới dữ liệu thành công',
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.done,
                                     color: Colors.green,
                                   ),
@@ -103,6 +103,6 @@ class _ScorePageState extends State<ScorePage> {
   }
 
   void _onClose(BuildContext currentContext) {
-    currentContext.read<ScoreBloc>().add(ScorePageStatusChanged(ScorePageStatus.unknown));
+    currentContext.read<ScoreBloc>().add(const ScorePageStatusChanged(ScorePageStatus.unknown));
   }
 }

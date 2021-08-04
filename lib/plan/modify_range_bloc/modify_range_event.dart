@@ -10,7 +10,7 @@ abstract class ModifyRangeEvent extends Equatable {
 class ModifyRangeChanged extends ModifyRangeEvent {
   final ModifyRange range;
 
-  ModifyRangeChanged(this.range);
+  const ModifyRangeChanged(this.range);
 
   @override
   List<Object> get props => [range];

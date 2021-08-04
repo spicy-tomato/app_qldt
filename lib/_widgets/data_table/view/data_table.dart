@@ -47,7 +47,7 @@ class MyDataTable extends StatelessWidget {
         backgroundColor: Theme.of(context).backgroundColor,
         textColor: Colors.white,
         verticalBorderColor: Colors.white,
-        horizotalBorderColor: Colors.white,
+        horizontalBorderColor: Colors.white,
       ),
       rowsTitleBuilder: (i) => StickyRow(
         // data[i].moduleName,
@@ -57,7 +57,7 @@ class MyDataTable extends StatelessWidget {
         textColor: Colors.white,
         backgroundColor: Colors.red,
         verticalBorderColor: Colors.white,
-        horizotalBorderColor: Colors.white,
+        horizontalBorderColor: Colors.white,
       ),
       contentCellBuilder: (i, j) => ContentCell(
         dataRow[j][i] == null ? '' : dataRow[j][i].toString(),
@@ -74,7 +74,7 @@ class MyDataTable extends StatelessWidget {
         legendContent,
         cellDimensions: _cellDimensions,
         backgroundColor: Theme.of(context).backgroundColor,
-        horizotalBorderColor: Colors.white,
+        horizontalBorderColor: Colors.white,
         verticalBorderColor: Colors.white,
       ),
     );

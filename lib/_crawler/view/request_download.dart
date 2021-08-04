@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'local_widgets/local_widgets.dart';
 
 class RequestDownloadPage extends StatefulWidget {
+  const RequestDownloadPage({Key? key}) : super(key: key);
+
   @override
   _RequestDownloadPageState createState() => _RequestDownloadPageState();
 }
@@ -33,14 +35,14 @@ class _RequestDownloadPageState extends State<RequestDownloadPage> {
         },
         child: Item(
           child: Center(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.85,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   QldtConfirmButton(needPassword: false),
-                  SizedBox(height: 25),
-                  QldtNote(),
+                  const SizedBox(height: 25),
+                  const QldtNote(),
                 ],
               ),
             ),

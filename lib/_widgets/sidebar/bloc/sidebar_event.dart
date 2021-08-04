@@ -10,7 +10,7 @@ abstract class ScreenEvent extends Equatable {
 class ScreenPageChange extends ScreenEvent {
   final ScreenPage screenPage;
 
-  ScreenPageChange(this.screenPage);
+  const ScreenPageChange(this.screenPage);
 
   @override
   List<Object> get props => [screenPage];

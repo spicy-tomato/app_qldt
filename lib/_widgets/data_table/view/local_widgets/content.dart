@@ -1,12 +1,12 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:table_sticky_headers/cell_dimensions.dart';
 
 import 'cell.dart';
 
-class ContentCell extends TableCell {
+class ContentCell extends AppTableCell {
   ContentCell(
     String text, {
+    Key? key,
     required Color backgroundColor,
     required Color horizontalBorderColor,
     required Color verticalBorderColor,
@@ -17,10 +17,11 @@ class ContentCell extends TableCell {
     Color? textColor,
   }) : super(
           text,
+          key: key,
           cellWidth: cellDimensions.columnWidths![columnIndex],
           cellHeight: cellDimensions.contentCellHeight!,
           backgroundColor: backgroundColor,
-          horizotalBorderColor: horizontalBorderColor,
+          horizontalBorderColor: horizontalBorderColor,
           verticalBorderColor: verticalBorderColor,
           textColor: textColor,
           isLastColumn: isLastColumn,

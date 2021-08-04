@@ -65,21 +65,21 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
     List<ScoreModel> passedScoreData =
         scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
 
-    scoreData.forEach((score) {
+    for (var score in scoreData) {
       if (score.evaluation == SubjectEvaluation.fail.query) {
         bool fail = true;
 
-        passedScoreData.forEach((passedScore) {
+        for (var passedScore in passedScoreData) {
           if (score.moduleName == passedScore.moduleName) {
             fail = false;
           }
-        });
+        }
 
         if (fail) {
           newScoreData.add(score);
         }
       }
-    });
+    }
 
     return newScoreData;
   }
@@ -103,8 +103,8 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
   List<ScoreModel> getGpaModulesData() {
     return scoreData
         .where((element) =>
-            element.moduleName.indexOf('Giáo dục thể chất') == -1 &&
-            element.moduleName.indexOf('Giáo dục QP-AN') == -1 &&
+            !element.moduleName.contains('Giáo dục thể chất') &&
+            !element.moduleName.contains('Giáo dục QP-AN') &&
             element.moduleName != 'Tiếng Anh A1' &&
             element.moduleName != 'Tiếng Anh A2')
         .toList();

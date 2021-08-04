@@ -10,29 +10,25 @@ class TodayInFocusedMonthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Center(
-            child: Container(
-              width: 45,
-              height: 45,
-              decoration: BoxDecoration(
-                color: Color(0xffD55C7D),
-                borderRadius: BorderRadius.circular(50),
-              ),
+    return Stack(
+      children: <Widget>[
+        Center(
+          child: Container(
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              color: const Color(0xffD55C7D),
+              borderRadius: BorderRadius.circular(50),
             ),
           ),
-          Center(
-            child: Text(
-              '${date.day}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w600
-              ),
-            ),
+        ),
+        Center(
+          child: Text(
+            '${date.day}',
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -47,29 +43,25 @@ class TodayOutFocusedMonthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: <Widget>[
-          Center(
-            child: Container(
-              width: 45,
-              height: 45,
-              decoration: BoxDecoration(
-                color: Color(0xffD55C7D),
-                borderRadius: BorderRadius.circular(50),
-              ),
+    return Stack(
+      children: <Widget>[
+        Center(
+          child: Container(
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              color: const Color(0xffD55C7D),
+              borderRadius: BorderRadius.circular(50),
             ),
           ),
-          Center(
-            child: Text(
-              '${date.day}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w400
-              ),
-            ),
+        ),
+        Center(
+          child: Text(
+            '${date.day}',
+            style: const TextStyle(fontWeight: FontWeight.w400),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

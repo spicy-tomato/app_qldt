@@ -30,7 +30,7 @@ class SharedUI extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).backgroundColor,
-      drawer: Sidebar(),
+      drawer: const Sidebar(),
       body: Container(
         decoration: decoration,
         child: Column(

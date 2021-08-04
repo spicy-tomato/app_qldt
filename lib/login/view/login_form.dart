@@ -8,6 +8,8 @@ import 'package:app_qldt/login/bloc/login_bloc.dart';
 import 'local_widgets/local_widgets.dart';
 
 class LoginForm extends StatefulWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
   @override
   _LoginFormState createState() => _LoginFormState();
 }
@@ -15,7 +17,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   late bool showLoginFailedDialog;
 
-  TextStyle get _titleTextStyle => TextStyle(
+  TextStyle get _titleTextStyle => const TextStyle(
         fontSize: 20,
         color: Colors.black,
       );
@@ -55,7 +57,7 @@ class _LoginFormState extends State<LoginForm> {
                             ? 170
                             : 270,
                     1),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
@@ -78,13 +80,13 @@ class _LoginFormState extends State<LoginForm> {
                                 child: state.accountPermission.isUser
                                     ? Text(
                                         'Đăng nhập để tiếp tục',
-                                        key: ValueKey(0),
+                                        key: const ValueKey(0),
                                         style: _titleTextStyle,
                                         textAlign: TextAlign.center,
                                       )
                                     : Text(
                                         'Đăng nhập với tài khoản\n Quản lý đào tạo',
-                                        key: ValueKey(1),
+                                        key: const ValueKey(1),
                                         style: _titleTextStyle,
                                         textAlign: TextAlign.center,
                                       ),
@@ -143,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
           onTap: () => _switchToLoginForm(context),
           child: const Text(
             'Đăng nhập với tài khoản đã xác minh',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 17,
               color: Colors.blueAccent,
             ),
@@ -157,7 +159,7 @@ class _LoginFormState extends State<LoginForm> {
           onTap: () => _switchToLoginAsGuestForm(context),
           child: const Text(
             'Đăng nhập với tài khoản khách',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 17,
               color: Colors.blueAccent,
             ),
@@ -172,8 +174,8 @@ class _LoginFormState extends State<LoginForm> {
         return Future.value(true);
       },
       child: AlertDialog(
-        title: Text('Thông tin'),
-        content: Text('Đăng nhập thất bại'),
+        title: const Text('Thông tin'),
+        content: const Text('Đăng nhập thất bại'),
         actions: [
           TextButton(
             onPressed: () {
@@ -188,10 +190,10 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _switchToLoginForm(BuildContext context) {
-    context.read<LoginBloc>().add(FormTypeChanged(AccountPermission.user));
+    context.read<LoginBloc>().add(const FormTypeChanged(AccountPermission.user));
   }
 
   void _switchToLoginAsGuestForm(BuildContext context) {
-    context.read<LoginBloc>().add(FormTypeChanged(AccountPermission.guest));
+    context.read<LoginBloc>().add(const FormTypeChanged(AccountPermission.guest));
   }
 }

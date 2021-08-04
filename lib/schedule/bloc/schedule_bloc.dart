@@ -48,19 +48,19 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     final UserDataModel userDataModel = _context.read<UserRepository>().userDataModel;
 
     //  Event
-    userDataModel.eventServiceController.eventData.forEach((event) {
+    for (var event in userDataModel.eventServiceController.eventData) {
       events.add(event);
-    });
+    }
 
     //  Schedule
-    userDataModel.eventServiceController.scheduleData.forEach((schedule) {
+    for (var schedule in userDataModel.eventServiceController.scheduleData) {
       events.add(schedule);
-    });
+    }
 
     //  Exam Schedule
-    userDataModel.examScheduleServiceController.examScheduleData.forEach((element) {
+    for (var element in userDataModel.examScheduleServiceController.examScheduleData) {
       events.add(UserEventModel.fromExamScheduleModel(element));
-    });
+    }
 
     state.sourceModel.appointments = events;
 

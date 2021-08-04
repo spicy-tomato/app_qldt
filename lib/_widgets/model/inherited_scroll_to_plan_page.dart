@@ -8,11 +8,11 @@ import 'package:app_qldt/plan/plan.dart';
 class InheritedScrollToPlanPage extends InheritedWidget {
   final PanelController panelController;
 
-  InheritedScrollToPlanPage({
+  const InheritedScrollToPlanPage({
     Key? key,
     required this.panelController,
     required Widget child,
-  })   : assert(child is BlocProvider<PlanBloc>,
+  })  : assert(child is BlocProvider<PlanBloc>,
             'Child of InheritedScrollToPlanPage should be BlocProvider<PlanBloc>'),
         super(key: key, child: child);
 
@@ -25,5 +25,5 @@ class InheritedScrollToPlanPage extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(_) => false;
+  bool updateShouldNotify(oldWidget) => false;
 }

@@ -73,5 +73,5 @@ class PreloadState extends Equatable {
 }
 
 class PreloadInitial extends PreloadState {
-  PreloadInitial() : super(status: PreloadStatus.loading);
+  const PreloadInitial() : super(status: PreloadStatus.loading);
 }

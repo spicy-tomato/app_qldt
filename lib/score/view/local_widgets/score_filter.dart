@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScoreFilter extends StatelessWidget {
+  const ScoreFilter({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ScoreBloc, ScoreState>(
@@ -21,11 +23,11 @@ class ScoreFilter extends StatelessWidget {
             backgroundColor: Colors.white,
             expandedCrossAxisAlignment: CrossAxisAlignment.start,
             maintainState: true,
-            title: Text(
+            title: const Text(
               'Thông tin',
               textAlign: TextAlign.center,
             ),
-            children: <Widget>[
+            children: const <Widget>[
               SemesterFilter(),
               StatusFilter(),
               TypeFilter(),
@@ -51,6 +53,8 @@ class _CommonListTile extends CustomListTile {
 }
 
 class SemesterFilter extends StatefulWidget {
+  const SemesterFilter({Key? key}) : super(key: key);
+
   @override
   _SemesterFilterState createState() => _SemesterFilterState();
 }
@@ -77,7 +81,7 @@ class _SemesterFilterState extends State<SemesterFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SemesterModel>(
-                        title: Text(
+                        title: const Text(
                           'Chọn học kỳ',
                           style: TextStyle(color: Colors.black),
                         ),
@@ -101,6 +105,8 @@ class _SemesterFilterState extends State<SemesterFilter> {
 }
 
 class StatusFilter extends StatefulWidget {
+  const StatusFilter({Key? key}) : super(key: key);
+
   @override
   _StatusFilterState createState() => _StatusFilterState();
 }
@@ -124,7 +130,7 @@ class _StatusFilterState extends State<StatusFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SubjectEvaluation>(
-                        title: Text(
+                        title: const Text(
                           'Chọn trạng thái',
                           style: TextStyle(color: Colors.black),
                         ),
@@ -148,6 +154,8 @@ class _StatusFilterState extends State<StatusFilter> {
 }
 
 class TypeFilter extends StatefulWidget {
+  const TypeFilter({Key? key}) : super(key: key);
+
   @override
   _TypeFilterState createState() => _TypeFilterState();
 }
@@ -168,7 +176,7 @@ class _TypeFilterState extends State<TypeFilter> {
               context: context,
               builder: (context) {
                 return RadioAlertDialog<ScoreType>(
-                  title: Text(
+                  title: const Text(
                     'Chọn loại điểm',
                     style: TextStyle(color: Colors.black),
                   ),

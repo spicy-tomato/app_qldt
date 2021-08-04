@@ -16,7 +16,7 @@ class SplashPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
+            SizedBox(
               width: 270,
               height: 270,
               child: Hero(
@@ -26,12 +26,12 @@ class SplashPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
             Column(children: <Widget>[
-              CircularProgressIndicator(),
-              SizedBox(height: 50,),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 50,),
               shouldLoadAfterLogin
                   ? Column(
                       children: <Widget>[

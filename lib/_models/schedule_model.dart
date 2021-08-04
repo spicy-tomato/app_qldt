@@ -53,6 +53,7 @@ class ScheduleModel {
     };
   }
 
+  @override
   String toString() {
     return 'Mã HP: $idModuleClass, HP: $moduleClassName, id: $id';
   }

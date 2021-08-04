@@ -10,5 +10,5 @@ class NotificationState extends Equatable {
 }
 
 class NotificationInitial extends NotificationState {
-  NotificationInitial() : super();
+  const NotificationInitial() : super();
 }

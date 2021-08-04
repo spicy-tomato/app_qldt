@@ -52,8 +52,8 @@ class PlanState extends Equatable {
     return PlanState(
       title: title ?? this.title,
       isAllDay: isAllDay ?? this.isAllDay,
-      fromDay: from ?? this.fromDay,
-      toDay: to ?? this.toDay,
+      fromDay: from ?? fromDay,
+      toDay: to ?? toDay,
       type: type ?? this.type,
       repeat: repeat ?? this.repeat,
       people: people ?? this.people,

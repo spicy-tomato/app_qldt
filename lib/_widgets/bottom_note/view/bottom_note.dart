@@ -39,7 +39,7 @@ class BottomText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Color(0xff26153B),
         ),
         child: TextButton(
@@ -47,9 +47,9 @@ class BottomText extends StatelessWidget {
             if (useCurrentTime == null || useCurrentTime!) {
               context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
             }
-            context.read<PlanBloc>().add(OpenPlanPage());
+            context.read<PlanBloc>().add(const OpenPlanPage());
           },
-          child: Padding(
+          child: const Padding(
             padding: EdgeInsets.only(left: 15),
             child: Align(
               alignment: Alignment.centerLeft,
@@ -76,25 +76,25 @@ class AddNoteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment(1, 0),
-      child: Container(
+      alignment: const Alignment(1, 0),
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.25,
         child: Material(
           shape: addNoteButtonShape(),
-          color: Color(0xff694A85),
+          color: const Color(0xff694A85),
           child: InkWell(
             customBorder: addNoteButtonShape(),
             onTap: () {
               if (useCurrentTime == null || useCurrentTime!) {
                 context.read<PlanBloc>().add(PlanTimeChangedToCurrentTime());
               }
-              context.read<PlanBloc>().add(OpenPlanPage());
+              context.read<PlanBloc>().add(const OpenPlanPage());
             },
             child: Align(
-              alignment: Alignment(-0.7, 0),
+              alignment: const Alignment(-0.7, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: const <Widget>[
                   Icon(
                     Icons.add,
                     size: 16,

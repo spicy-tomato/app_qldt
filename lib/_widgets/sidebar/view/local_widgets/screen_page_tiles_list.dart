@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'tiles/tiles.dart';
 
 class ScreenPageTilesList extends StatelessWidget {
+  const ScreenPageTilesList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -37,7 +39,7 @@ class ScreenPageTilesList extends StatelessWidget {
     if (currentScreenPage.index == 1) {
       _firstListItem = AboveEmptyTile(context);
     } else {
-      _firstListItem = EmptyTile();
+      _firstListItem = const EmptyTile();
     }
 
     List<Widget> _list = [_firstListItem];

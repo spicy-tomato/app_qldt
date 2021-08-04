@@ -10,7 +10,7 @@ abstract class NotificationEvent extends Equatable {
 class NotificationChanged extends NotificationEvent {
   final UserNotificationModel notification;
 
-  NotificationChanged(this.notification);
+  const NotificationChanged(this.notification);
 
   @override
   List<Object> get props => [notification];

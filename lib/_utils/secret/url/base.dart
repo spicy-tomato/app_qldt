@@ -3,17 +3,13 @@ import 'package:app_qldt/_widgets/model/app_mode.dart';
 
 class Host {
   final AppMode mode;
-  AccountPermission _accountPermission;
+  AccountPermission accountPermission;
 
-  Host(this.mode) : this._accountPermission = AccountPermission.user;
+  Host(this.mode) : accountPermission = AccountPermission.user;
 
-  set accountPermission(AccountPermission permission) => this._accountPermission = permission;
+  String get base => accountPermission.isUser ? _userBase : _guestBase;
 
-  AccountPermission get accountPermission => _accountPermission;
-
-  String get base => _accountPermission.isUser ? _userBase : _guestBase;
-
-  String get crawlBase => _accountPermission.isUser ? _userCrawlBase : _guestCrawlBase;
+  String get crawlBase => accountPermission.isUser ? _userCrawlBase : _guestCrawlBase;
 
   /// User
   String get _userBase {

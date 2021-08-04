@@ -62,7 +62,7 @@ class DbEventSchedule extends TableModel {
     );
 
     try {
-      eventList.forEach((event) async {
+      for (var event in eventList) {
         map['id_schedule'] = event['id_schedule'];
         try {
           await database!.insert(
@@ -73,7 +73,7 @@ class DbEventSchedule extends TableModel {
         } on Exception catch (e) {
           print('Error: ${e.toString()} in updateWithName');
         }
-      });
+      }
     } on Exception catch (e) {
       print('Error: ${e.toString()} in updateWithName');
     }

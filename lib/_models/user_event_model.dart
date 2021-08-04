@@ -45,7 +45,7 @@ class UserEventModel {
   }) {
     if (from != null) {
       this.from = from;
-      this.to = to ?? from.add(Duration(hours: 2, minutes: 25));
+      this.to = to ?? from.add(const Duration(hours: 2, minutes: 25));
     } else {
       this.from = this.to = null;
     }
@@ -77,15 +77,15 @@ class UserEventModel {
   UserEventModel withId(int id) {
     return UserEventModel(
       id: id,
-      type: this.type,
-      from: this.from,
-      to: this.to,
-      eventName: this.eventName,
-      location: this.location,
-      isAllDay: this.isAllDay,
-      people: this.people,
-      color: this.color,
-      description: this.description,
+      type: type,
+      from: from,
+      to: to,
+      eventName: eventName,
+      location: location,
+      isAllDay: isAllDay,
+      people: people,
+      color: color,
+      description: description,
     );
   }
 
@@ -108,8 +108,8 @@ class UserEventModel {
       int indexOfOpenBrace = newStr.lastIndexOf('(');
       int indexOfCloseBrace = newStr.lastIndexOf(')');
 
-      newStr = newStr.substring(0, indexOfOpenBrace) +
-          newStr.substring(indexOfOpenBrace + 1, indexOfCloseBrace);
+      newStr =
+          newStr.substring(0, indexOfOpenBrace) + newStr.substring(indexOfOpenBrace + 1, indexOfCloseBrace);
 
       return newStr;
     } on RangeError catch (_) {
@@ -171,7 +171,7 @@ class UserEventModel {
   }
 
   Map<String, dynamic> toMap() {
-    return Map();
+    return {};
   }
 
   @override
@@ -208,6 +208,6 @@ extension DateTimeWithShift on DateTime {
         break;
     }
 
-    return DateTime(this.year, this.month, this.day, hour, minute);
+    return DateTime(year, month, day, hour, minute);
   }
 }

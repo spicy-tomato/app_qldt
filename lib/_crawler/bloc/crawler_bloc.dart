@@ -21,11 +21,11 @@ part 'crawler_state.dart';
 
 class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
   final BuildContext context;
-  CrawlerService _crawlerService;
+  final CrawlerService _crawlerService;
 
   CrawlerBloc(this.context)
       : _crawlerService = CrawlerService(AppModeWidget.of(context).apiUrl),
-        super(CrawlerInitial());
+        super(const CrawlerInitial());
 
   @override
   Stream<CrawlerState> mapEventToState(
@@ -132,7 +132,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
     } else {
       yield state.copyWith(
         formStatus: FormzStatus.invalid,
-        password: QldtPasswordModel.dirty(''),
+        password: const QldtPasswordModel.dirty(''),
       );
     }
   }

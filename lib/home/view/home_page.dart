@@ -8,6 +8,8 @@ import 'package:app_qldt/_widgets/wrapper/shared_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -38,10 +40,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             child: Container(
-              padding: EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.only(top: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
+                children: const <Widget>[
                   Greeting(),
                   Art(),
                   Quote(),
@@ -57,6 +59,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Greeting extends StatelessWidget {
+  const Greeting({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final userName = context.read<AuthenticationBloc>().state.user.name;
@@ -69,7 +73,7 @@ class Greeting extends StatelessWidget {
     return Center(
       child: Text(
         'Xin chào\n$displayName',
-        style: TextStyle(fontSize: 35),
+        style: const TextStyle(fontSize: 35),
         textAlign: TextAlign.center,
       ),
     );
@@ -77,6 +81,8 @@ class Greeting extends StatelessWidget {
 }
 
 class Art extends StatelessWidget {
+  const Art({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -94,15 +100,15 @@ class Art extends StatelessWidget {
 }
 
 class Quote extends StatelessWidget {
+  const Quote({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: const Text(
-          'Chúc bạn\nmột ngày tốt lành!',
-          style: TextStyle(fontSize: 24),
-          textAlign: TextAlign.center,
-        ),
+    return const Center(
+      child: Text(
+        'Chúc bạn\nmột ngày tốt lành!',
+        style: TextStyle(fontSize: 24),
+        textAlign: TextAlign.center,
       ),
     );
   }

@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'avatar_fullscreen.dart';
 
 class UserInfo extends StatefulWidget {
+  const UserInfo({Key? key}) : super(key: key);
+
   @override
   _UserInfoState createState() => _UserInfoState();
 }
@@ -32,7 +34,7 @@ class _UserInfoState extends State<UserInfo> {
                     child: Container(
                       width: 120,
                       height: 120,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.all(Radius.circular(60)),
                       ),
@@ -41,7 +43,7 @@ class _UserInfoState extends State<UserInfo> {
                           width: 112,
                           height: 112,
                           clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(60)),
                           ),
@@ -74,7 +76,7 @@ class _UserInfoState extends State<UserInfo> {
                   height: 38,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.3),
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
                   ),
                   child: BlocBuilder<AvatarBloc, AvatarState>(
                     builder: (context, state) {

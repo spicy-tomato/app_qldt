@@ -6,10 +6,12 @@ import 'package:app_qldt/plan/plan.dart';
 import 'package:app_qldt/plan/view/local_widgets/local_widgets.dart';
 
 class AddGuest extends StatelessWidget {
+  const AddGuest({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: const <Widget>[
         AddGuestTile(),
         ViewScheduleButton(),
       ],
@@ -18,6 +20,8 @@ class AddGuest extends StatelessWidget {
 }
 
 class AddGuestTile extends StatelessWidget {
+  const AddGuestTile({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
@@ -31,16 +35,16 @@ class AddGuestTile extends StatelessWidget {
         showGeneralDialog(
           barrierDismissible: false,
           barrierColor: Colors.black.withOpacity(0.5),
-          transitionDuration: Duration(milliseconds: 200),
+          transitionDuration: const Duration(milliseconds: 200),
           context: context,
           pageBuilder: (_, __, ___) {
-            return AddGuestScreen();
+            return const AddGuestScreen();
           },
           transitionBuilder: (_, anim1, __, child) {
             return SlideTransition(
               position: Tween(
-                begin: Offset(0, 0.4),
-                end: Offset(0, 0),
+                begin: const Offset(0, 0.4),
+                end: const Offset(0, 0),
               ).animate(anim1),
               child: child,
             );
@@ -52,33 +56,31 @@ class AddGuestTile extends StatelessWidget {
 }
 
 class ViewScheduleButton extends StatelessWidget {
+  const ViewScheduleButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      title: Container(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: OutlinedButton(
-            onPressed: () {
-              // print('Xem lịch biểu');
-            },
-            child: Text(
-              'Xem lịch biểu',
-              style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w600,
-              ),
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: OutlinedButton(
+          onPressed: () {
+            // print('Xem lịch biểu');
+          },
+          child: Text(
+            'Xem lịch biểu',
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.w600,
             ),
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-              ),
-              side: MaterialStateProperty.all<BorderSide>(BorderSide(color: Colors.grey)),
-              shape: MaterialStateProperty.all<OutlinedBorder>(
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+          ),
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(horizontal: 20),
             ),
+            side: MaterialStateProperty.all<BorderSide>(const BorderSide(color: Colors.grey)),
+            shape: MaterialStateProperty.all<OutlinedBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
           ),
         ),
       ),
@@ -87,6 +89,8 @@ class ViewScheduleButton extends StatelessWidget {
 }
 
 class AddGuestScreen extends StatefulWidget {
+  const AddGuestScreen({Key? key}) : super(key: key);
+
   @override
   _AddGuestScreen createState() => _AddGuestScreen();
 }
@@ -97,7 +101,7 @@ class _AddGuestScreen extends State<AddGuestScreen> {
     return SafeArea(
       child: Scaffold(
         body: Column(
-          children: [
+          children: const [
             CustomListTile(
               title: TextField(),
             ),

@@ -32,59 +32,56 @@ class _EventInfoPageState extends State<EventInfoPage> {
     final DateTime now = DateTime.now();
 
     return Scaffold(
-      body: Container(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              _Topbar(
-                widget.context,
-                event: widget.event,
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            _Topbar(
+              widget.context,
+              event: widget.event,
+            ),
+            const SizedBox(height: 10),
+            ListTile(
+              horizontalTitleGap: 4,
+              leading: Container(
+                width: 25,
+                height: 25,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: widget.event.color.color,
+                ),
               ),
-              SizedBox(height: 10),
-              ListTile(
-                horizontalTitleGap: 4,
-                leading: Container(
-                  width: 25,
-                  height: 25,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: widget.event.color.color,
+              title: Text(
+                widget.event.eventName,
+                style: const TextStyle(fontSize: 23),
+                softWrap: true,
+              ),
+              subtitle: Text(
+                widget.event.from == DateTime(now.year, now.month, now.day) ? 'Hôm nay' : _date(),
+              ),
+            ),
+            widget.event.location == null || widget.event.location == ''
+                ? Container()
+                : ListTile(
+                    horizontalTitleGap: 4,
+                    leading: const Icon(Icons.location_on_outlined),
+                    title: Text(widget.event.location!),
                   ),
-                ),
-                title: Text(
-                  widget.event.eventName,
-                  style: TextStyle(fontSize: 23),
-                  softWrap: true,
-                ),
-                subtitle: Text(
-                  widget.event.from == DateTime(now.year, now.month, now.day) ? 'Hôm nay' : _date(),
-                ),
-              ),
-              widget.event.location == null || widget.event.location == ''
-                  ? Container()
-                  : ListTile(
-                      horizontalTitleGap: 4,
-                      leading: Icon(Icons.location_on_outlined),
-                      title: Text(widget.event.location!),
-                    ),
-              widget.event.description == null || widget.event.description == ''
-                  ? Container()
-                  : ListTile(
-                      horizontalTitleGap: 4,
-                      leading: Icon(Icons.sticky_note_2_outlined),
-                      title: Text(widget.event.description!),
-                    ),
-              widget.event.people == null || widget.event.people == ''
-                  ? Container()
-                  : ListTile(
-                      horizontalTitleGap: 4,
-                      leading: Icon(Icons.people_alt_outlined),
-                      title:
-                          Text('${widget.event.type.isSchedule ? 'Gv. ' : ''}${widget.event.people!}'),
-                    )
-            ],
-          ),
+            widget.event.description == null || widget.event.description == ''
+                ? Container()
+                : ListTile(
+                    horizontalTitleGap: 4,
+                    leading: const Icon(Icons.sticky_note_2_outlined),
+                    title: Text(widget.event.description!),
+                  ),
+            widget.event.people == null || widget.event.people == ''
+                ? Container()
+                : ListTile(
+                    horizontalTitleGap: 4,
+                    leading: const Icon(Icons.people_alt_outlined),
+                    title: Text('${widget.event.type.isSchedule ? 'Gv. ' : ''}${widget.event.people!}'),
+                  )
+          ],
         ),
       ),
     );
@@ -119,7 +116,7 @@ class __TopbarState extends State<_Topbar> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.clear),
+          icon: const Icon(Icons.clear),
           onPressed: _onClose,
         ),
         Row(
@@ -127,7 +124,7 @@ class __TopbarState extends State<_Topbar> {
           children: <Widget>[
             IconButton(
               splashRadius: 25,
-              icon: Icon(Icons.edit_outlined),
+              icon: const Icon(Icons.edit_outlined),
               onPressed: _onEdit,
             ),
             HideTooltip(
@@ -135,7 +132,7 @@ class __TopbarState extends State<_Topbar> {
                 child: PopupMenuButton<_DropdownOption>(
                   tooltip: '',
                   onSelected: _onSelect,
-                  icon: Icon(Icons.more_vert),
+                  icon: const Icon(Icons.more_vert),
                   itemBuilder: (context) {
                     return <PopupMenuEntry<_DropdownOption>>[
                       const PopupMenuItem<_DropdownOption>(
@@ -191,11 +188,11 @@ class __TopbarState extends State<_Topbar> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text('Không thể xóa sự kiện này!'),
+            content: const Text('Không thể xóa sự kiện này!'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text('Đồng ý'),
+                child: const Text("Đồng ý"),
               ),
             ],
           );

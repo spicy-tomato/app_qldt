@@ -6,7 +6,7 @@ abstract class LocalService {
   late final ServiceController controller;
   bool connected = false;
 
-  LocalService(DatabaseProvider? databaseProvider){
+  LocalService(DatabaseProvider? databaseProvider) {
     this.databaseProvider = databaseProvider ?? DatabaseProvider();
   }
 

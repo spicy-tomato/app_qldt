@@ -110,14 +110,14 @@ class PlanBloc extends Bloc<PlanEvent, PlanState> {
   PlanState _mapPlanChangedToCurrentTimeToState(PlanTimeChangedToCurrentTime event) {
     return state.copyWith(
       from: event.current,
-      to: event.current.add(Duration(hours: 1)),
+      to: event.current.add(const Duration(hours: 1)),
     );
   }
 
   Stream<PlanState> _mapShowApartPlanPageToState(ShowApartPlanPage event) async* {
     yield state.copyWith(
       from: event.dateTime,
-      to: event.dateTime.add(Duration(hours: 1)),
+      to: event.dateTime.add(const Duration(hours: 1)),
       visibility: PlanPageVisibility.apart,
     );
 

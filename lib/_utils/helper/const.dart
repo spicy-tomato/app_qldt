@@ -2,8 +2,8 @@ import 'package:app_qldt/_models/screen.dart';
 import 'package:flutter/material.dart';
 
 class Const {
-  static Duration get requestTimeout => Duration(seconds: 20);
-  static Duration get crawlerTimeout => Duration(minutes: 5);
+  static Duration get requestTimeout => const Duration(seconds: 20);
+  static Duration get crawlerTimeout => const Duration(minutes: 5);
 
   static String get defaultPage => ScreenPage.home.string;
 

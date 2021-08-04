@@ -10,7 +10,7 @@ class HideTooltip extends StatelessWidget {
     return Theme(
         //  Hide tooltip
         data: Theme.of(context).copyWith(
-            tooltipTheme: TooltipThemeData(decoration: BoxDecoration(color: Colors.transparent))),
+            tooltipTheme: const TooltipThemeData(decoration: BoxDecoration(color: Colors.transparent))),
         child: child);
   }
 }

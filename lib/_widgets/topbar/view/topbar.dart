@@ -28,7 +28,7 @@ class _TopBarState extends State<TopBar> {
       color: widget.backgroundColor ?? Colors.transparent,
       height: 60,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -54,7 +54,7 @@ class _TopBarState extends State<TopBar> {
       widget.beforeOpenSidebar!.call();
     }
 
-    Scaffold.of(context)..openDrawer();
+    Scaffold.of(context).openDrawer();
   }
 }
 
@@ -74,19 +74,17 @@ class TopBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(50),
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.all(7.5),
-            child: Icon(
-              icon,
-              size: 30,
-              color: color ?? Colors.white,
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(50),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(7.5),
+          child: Icon(
+            icon,
+            size: 30,
+            color: color ?? Colors.white,
           ),
         ),
       ),

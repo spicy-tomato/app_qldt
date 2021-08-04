@@ -32,12 +32,12 @@ class DbDataVersion extends TableModel {
   static Future<void> insertInitial(Database db) async {
     List<String> _initialFields = ['schedule', 'notification', 'exam_schedule', 'score'];
 
-    _initialFields.forEach((field) async {
+    for (var field in _initialFields) {
       await db.insert(tableName, {
         'data_field': field,
         'version': 0,
       });
-    });
+    }
   }
 
   Future<void> update(String dataField, int version) async {
@@ -106,7 +106,7 @@ class DbDataVersion extends TableModel {
     } else {
       examSchedule++;
     }
-    
+
     await _setVersion('exam_schedule', examSchedule);
   }
 

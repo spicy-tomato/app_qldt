@@ -33,8 +33,8 @@ class _CrawlablePageState extends State<CrawlablePage> {
           return widget.controller.connected
               ? widget.child
               : permission.isUser
-                  ? RequestQldtPasswordPage()
-                  : RequestDownloadPage();
+                  ? const RequestQldtPasswordPage()
+                  : const RequestDownloadPage();
         },
       ),
     );

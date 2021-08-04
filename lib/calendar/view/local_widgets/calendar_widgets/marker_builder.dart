@@ -15,7 +15,7 @@ class _RowMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     if (events.isNotEmpty) {
       return Align(
-        alignment: Alignment(0, 0.6),
+        alignment: const Alignment(0, 0.6),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: events.take(3).map((_) => Marker(color)).toList(),
@@ -50,19 +50,23 @@ class Marker extends StatelessWidget {
 }
 
 class DayInFocusMonthMarker extends _RowMarker {
-  final List<UserEventModel?> events;
-
-  DayInFocusMonthMarker(
-    this.events, {
+  const DayInFocusMonthMarker(
+    List<UserEventModel?> events, {
     Key? key,
-  }) : super(events, Color(0xff4cbbb9));
+  }) : super(
+          events,
+          const Color(0xff4cbbb9),
+          key: key,
+        );
 }
 
 class DayOutFocusedMonthMarker extends _RowMarker {
-  final List<UserEventModel?> events;
-
-  DayOutFocusedMonthMarker(
-    this.events, {
+  const DayOutFocusedMonthMarker(
+    List<UserEventModel?> events, {
     Key? key,
-  }) : super(events, Color(0xffb7e4e3));
+  }) : super(
+          events,
+          const Color(0xffb7e4e3),
+          key: key,
+        );
 }

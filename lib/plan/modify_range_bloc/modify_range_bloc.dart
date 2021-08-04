@@ -7,7 +7,7 @@ part 'modify_range_event.dart';
 part 'modify_range_state.dart';
 
 class ModifyRangeBloc extends Bloc<ModifyRangeEvent, ModifyRangeState> {
-  ModifyRangeBloc() : super(ModifyRangeInitial());
+  ModifyRangeBloc() : super(const ModifyRangeInitial());
 
   @override
   Stream<ModifyRangeState> mapEventToState(

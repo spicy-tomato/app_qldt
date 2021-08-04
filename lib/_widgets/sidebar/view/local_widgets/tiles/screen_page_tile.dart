@@ -8,12 +8,12 @@ class ScreenPageTile extends StatelessWidget {
   final CustomPainter? painter;
   final Function()? onTap;
 
-  final TextStyle tileTextStyle = TextStyle(
+  final TextStyle tileTextStyle = const TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
   );
 
-  ScreenPageTile({
+  const ScreenPageTile({
     Key? key,
     this.screenPage,
     this.current,
@@ -28,7 +28,7 @@ class ScreenPageTile extends StatelessWidget {
       painter: painter,
       child: Container(
         decoration: current != null && current!
-            ? BoxDecoration(
+            ? const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(45),
@@ -39,7 +39,7 @@ class ScreenPageTile extends StatelessWidget {
         child: empty == null || !empty!
             ? ListTile(
                 title: Padding(
-                  padding: EdgeInsets.only(left: 5),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Text(
                     screenPage != null ? screenPage!.name : 'Đăng xuất',
                     style: TextStyle(

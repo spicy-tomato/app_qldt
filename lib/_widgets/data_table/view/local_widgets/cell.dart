@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TableCell extends StatelessWidget {
+class AppTableCell extends StatelessWidget {
   final String text;
   final Color? textColor;
   final int? textMaxLines;
@@ -9,23 +9,24 @@ class TableCell extends StatelessWidget {
   final double cellWidth;
   final double cellHeight;
 
-  final Color horizotalBorderColor;
+  final Color horizontalBorderColor;
   final Color verticalBorderColor;
   final bool isLastColumn;
   final bool isLastRow;
 
-  TableCell(
+  const AppTableCell(
     this.text, {
+    Key? key,
     required this.cellWidth,
     required this.cellHeight,
     required this.backgroundColor,
-    required this.horizotalBorderColor,
+    required this.horizontalBorderColor,
     required this.verticalBorderColor,
     required this.isLastColumn,
     required this.isLastRow,
     this.textColor,
     this.textMaxLines,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class TableCell extends StatelessWidget {
       width: cellWidth,
       height: cellHeight,
       alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Text(
         text,
         style: TextStyle(
@@ -58,7 +59,7 @@ class TableCell extends StatelessWidget {
               ? BorderSide.none
               : BorderSide(
                   width: 1,
-                  color: horizotalBorderColor,
+                  color: horizontalBorderColor,
                 ),
         ),
       ),

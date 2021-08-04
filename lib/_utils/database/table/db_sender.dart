@@ -18,13 +18,13 @@ class DbSender extends TableModel {
   Future<void> insert(List<SenderModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    rawData.forEach((element) async {
+    for (var element in rawData) {
       await database!.insert(
         tableName,
         element.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore,
       );
-    });
+    }
   }
 
   Future<void> delete() async {

@@ -8,7 +8,7 @@ class NotificationPostPage extends StatefulWidget {
   final UserNotificationModel notification;
   final ScrollController scrollController;
 
-  NotificationPostPage({
+  const NotificationPostPage({
     Key? key,
     required this.notification,
     required this.scrollController,
@@ -35,7 +35,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
               color: Theme.of(context).backgroundColor,
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           _CommonPadding(
             child: Text(
               widget.notification.title,
@@ -47,7 +47,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
               softWrap: true,
             ),
           ),
-          SizedBox(height: 30),
+          const SizedBox(height: 30),
           _CommonPadding(
             child: Row(
               children: <Widget>[
@@ -70,7 +70,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -105,7 +105,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
               ],
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           _CommonPadding(
             child: RichText(
               text: TextSpan(
@@ -113,7 +113,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
               ),
             ),
           ),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
         ],
       ),
     );
@@ -144,7 +144,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
 
       return TextSpan(
         text: displayText,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.w400,
           color: Color(0xff1e2bff),
@@ -161,7 +161,7 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
 
     return TextSpan(
       text: text + '\n',
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 17,
         fontWeight: FontWeight.w400,
         color: Color(0xff4A2A73),
@@ -173,13 +173,13 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
   String _timeSent() {
     final now = DateTime.now();
 
-    if (now.subtract(Duration(days: 30)).isAfter(widget.notification.timeCreated)) {
+    if (now.subtract(const Duration(days: 30)).isAfter(widget.notification.timeCreated)) {
       return widget.notification.timeCreated.toString();
-    } else if (now.subtract(Duration(days: 1)).isAfter(widget.notification.timeCreated)) {
+    } else if (now.subtract(const Duration(days: 1)).isAfter(widget.notification.timeCreated)) {
       return '${DateTime.now().difference(widget.notification.timeCreated).inDays} ngày trước';
-    } else if (now.subtract(Duration(hours: 1)).isAfter(widget.notification.timeCreated)) {
+    } else if (now.subtract(const Duration(hours: 1)).isAfter(widget.notification.timeCreated)) {
       return '${DateTime.now().difference(widget.notification.timeCreated).inHours} giờ trước';
-    } else if (now.subtract(Duration(minutes: 1)).isAfter(widget.notification.timeCreated)) {
+    } else if (now.subtract(const Duration(minutes: 1)).isAfter(widget.notification.timeCreated)) {
       return '${DateTime.now().difference(widget.notification.timeCreated).inMinutes} phút trước';
     } else {
       return '${DateTime.now().difference(widget.notification.timeCreated).inSeconds} giây trước';
@@ -188,12 +188,12 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
 }
 
 class _CommonPadding extends Padding {
-  _CommonPadding({
+  const _CommonPadding({
     Key? key,
     required child,
   }) : super(
           key: key,
           child: child,
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
         );
 }

@@ -31,9 +31,7 @@ class AuthenticationRepository {
   }
 
   Future<LoginStatus> logIn(ApiUrl apiUrl, LoginUser loginUser) async {
-    if (_loginService == null) {
-      _loginService = LoginService(apiUrl);
-    }
+    _loginService ??= LoginService(apiUrl);
 
     final LoginResponse loginResponse = await _loginService!.login(loginUser);
 

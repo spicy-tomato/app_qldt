@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExamScheduleFilter extends StatefulWidget {
+  const ExamScheduleFilter({Key? key}) : super(key: key);
+
   @override
   _ExamScheduleFilterState createState() => _ExamScheduleFilterState();
 }
@@ -35,7 +37,7 @@ class _ExamScheduleFilterState extends State<ExamScheduleFilter> {
                     context: context,
                     builder: (context) {
                       return RadioAlertDialog<SemesterModel>(
-                        title: Text(
+                        title: const Text(
                           'Chọn học kỳ',
                           style: TextStyle(color: Colors.black),
                         ),

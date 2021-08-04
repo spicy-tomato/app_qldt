@@ -36,7 +36,7 @@ class ExamScheduleInitial extends ExamScheduleState {
     required UserDataModel userDataModel,
   }) : super(
           examScheduleData: userDataModel.examScheduleServiceController.getExamScheduleOfLastSemester(),
-          semester: userDataModel.examScheduleServiceController.lastSemester ?? SemesterModel.none(),
+          semester: userDataModel.examScheduleServiceController.lastSemester ?? const SemesterModel.none(),
           status: ExamSchedulePageStatus.unknown,
         );
 }

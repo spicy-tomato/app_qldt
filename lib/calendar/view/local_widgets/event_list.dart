@@ -19,18 +19,18 @@ class EventList extends StatelessWidget {
     return BlocBuilder<CalendarBloc, CalendarState>(
       buildWhen: (previous, current) {
         return current.buildFirstTime &&
-            !DeepCollectionEquality().equals(
+            !const DeepCollectionEquality().equals(
               previous.selectedEvents,
               current.selectedEvents,
             );
       },
       builder: (_, state) {
-        return state.selectedEvents == null || state.selectedEvents!.length == 0
+        return state.selectedEvents == null || state.selectedEvents!.isEmpty
             ? Container(color: Colors.transparent)
             : Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                     width: MediaQuery.of(context).size.width * 0.95,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
@@ -44,8 +44,8 @@ class EventList extends StatelessWidget {
                         itemCount: min(state.selectedEvents!.length, 3),
                         separatorBuilder: (_, __) {
                           return Container(
-                            margin: EdgeInsets.symmetric(vertical: 5),
-                            child: Divider(
+                            margin: const EdgeInsets.symmetric(vertical: 5),
+                            child: const Divider(
                               color: Color(0xff694A85),
                               indent: 45,
                               endIndent: 45,
@@ -53,12 +53,11 @@ class EventList extends StatelessWidget {
                             ),
                           );
                         },
-                        itemBuilder: (_, index) =>
-                            _EventListItem(event: state.selectedEvents![index]),
+                        itemBuilder: (_, index) => _EventListItem(event: state.selectedEvents![index]),
                       ),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               );
       },
@@ -92,46 +91,42 @@ class _EventListItem extends StatelessWidget {
 
     String? hour = event.from?.hour.toString();
 
-    return Container(
-      child: Row(
-        children: <Widget>[
-          hour != null && minute != null
-              ? Text(
-                  hour + ':' + minute,
-                  style: TextStyle(
-                    color: Color(0xff694A85),
-                    fontSize: 25,
-                  ),
-                )
-              : Container(),
-          SizedBox(width: 10),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Text(
-                    event.eventName,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xff694A85),
-                      // ),
-                    ),
-                  ),
+    return Row(
+      children: <Widget>[
+        hour != null && minute != null
+            ? Text(
+                hour + ':' + minute,
+                style: const TextStyle(
+                  color: Color(0xff694A85),
+                  fontSize: 25,
                 ),
-                Text(
-                  event.location ?? '',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff694A85),
-                  ),
+              )
+            : Container(),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                event.eventName,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff694A85),
+                  // ),
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+              Text(
+                event.location ?? '',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff694A85),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }

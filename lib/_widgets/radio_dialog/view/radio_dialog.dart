@@ -31,7 +31,7 @@ class _RadioAlertDialogState<T> extends State<RadioAlertDialog<T>> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.title,
-      contentPadding: EdgeInsets.symmetric(vertical: 10),
+      contentPadding: const EdgeInsets.symmetric(vertical: 10),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: _listTiles(widget.currentOption),
@@ -43,12 +43,12 @@ class _RadioAlertDialogState<T> extends State<RadioAlertDialog<T>> {
   List<Widget> _listTiles(T currentOption) {
     List<Widget> tiles = [];
 
-    widget.optionsList.forEach((option) {
+    for (var option in widget.optionsList) {
       tiles.add(
         InkWell(
           onTap: () => widget.onSelect(option),
           child: Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 5,
               vertical: 12,
             ),
@@ -64,7 +64,7 @@ class _RadioAlertDialogState<T> extends State<RadioAlertDialog<T>> {
           ),
         ),
       );
-    });
+    }
 
     return tiles;
   }
@@ -98,7 +98,7 @@ class _CustomRadio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
         height: 20,
         width: 20,
