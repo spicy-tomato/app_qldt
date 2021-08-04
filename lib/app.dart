@@ -121,6 +121,7 @@ class _ApplicationState extends State<Application> {
                       break;
 
                     default:
+                      _shouldLoadAfterLogin = false;
                       await defaultCase();
                       break;
                   }
