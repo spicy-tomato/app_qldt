@@ -21,7 +21,6 @@ class LegendCell extends AppTableCell {
           horizontalBorderColor: horizontalBorderColor,
           verticalBorderColor: verticalBorderColor,
           textColor: textColor,
-          isLastColumn: false,
           isLastRow: false,
         );
 }

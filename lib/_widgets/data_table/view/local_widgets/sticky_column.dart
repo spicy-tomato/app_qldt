@@ -12,7 +12,6 @@ class StickyColumn extends AppTableCell {
     required Color verticalBorderColor,
     required CellDimensions cellDimensions,
     required int columnIndex,
-    required bool isLastColumn,
     Color? textColor,
   }) : super(
           text,
@@ -24,7 +23,6 @@ class StickyColumn extends AppTableCell {
           verticalBorderColor: verticalBorderColor,
           textMaxLines: 3,
           textColor: textColor,
-          isLastColumn: isLastColumn,
           isLastRow: false,
         );
 }

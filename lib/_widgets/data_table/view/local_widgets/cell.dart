@@ -11,7 +11,6 @@ class AppTableCell extends StatelessWidget {
 
   final Color horizontalBorderColor;
   final Color verticalBorderColor;
-  final bool isLastColumn;
   final bool isLastRow;
 
   const AppTableCell(
@@ -22,7 +21,6 @@ class AppTableCell extends StatelessWidget {
     required this.backgroundColor,
     required this.horizontalBorderColor,
     required this.verticalBorderColor,
-    required this.isLastColumn,
     required this.isLastRow,
     this.textColor,
     this.textMaxLines,
@@ -49,12 +47,10 @@ class AppTableCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         border: Border(
-          right: isLastColumn
-              ? BorderSide.none
-              : BorderSide(
-                  width: 1,
-                  color: verticalBorderColor,
-                ),
+          right: BorderSide(
+            width: 1,
+            color: verticalBorderColor,
+          ),
           bottom: isLastRow
               ? BorderSide.none
               : BorderSide(

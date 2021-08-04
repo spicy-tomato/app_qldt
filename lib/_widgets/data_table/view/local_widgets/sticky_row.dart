@@ -22,7 +22,6 @@ class StickyRow extends AppTableCell {
           horizontalBorderColor: horizontalBorderColor,
           verticalBorderColor: verticalBorderColor,
           textColor: textColor,
-          isLastColumn: false,
           isLastRow: isLastRow,
         );
 }

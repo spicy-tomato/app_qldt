@@ -24,7 +24,6 @@ class ContentCell extends AppTableCell {
           horizontalBorderColor: horizontalBorderColor,
           verticalBorderColor: verticalBorderColor,
           textColor: textColor,
-          isLastColumn: isLastColumn,
           isLastRow: isLastRow,
         );
 }

@@ -42,7 +42,6 @@ class MyDataTable extends StatelessWidget {
       columnsTitleBuilder: (i) => StickyColumn(
         columnTitles[i],
         columnIndex: i,
-        isLastColumn: i == columnTitles.length - 1,
         cellDimensions: _cellDimensions,
         backgroundColor: Theme.of(context).backgroundColor,
         textColor: Colors.white,
@@ -50,7 +49,6 @@ class MyDataTable extends StatelessWidget {
         horizontalBorderColor: Colors.white,
       ),
       rowsTitleBuilder: (i) => StickyRow(
-        // data[i].moduleName,
         rowTitles[i],
         cellDimensions: _cellDimensions,
         isLastRow: i == data.length - 1,
