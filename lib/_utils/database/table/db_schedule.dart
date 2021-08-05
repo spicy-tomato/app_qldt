@@ -1,4 +1,5 @@
 import 'package:app_qldt/_models/schedule_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -41,7 +42,7 @@ class DbSchedule extends TableModel {
         'ON $tableName.id_schedule = $eventScheduleTable.id_schedule;',
       );
     } on Exception catch (e) {
-      print('$e in DbSchedule.all');
+      debugPrint('$e in DbSchedule.all');
       return [];
     }
   }
@@ -55,7 +56,7 @@ class DbSchedule extends TableModel {
         'FROM $tableName;',
       );
     } on Exception catch (e) {
-      print('$e in DbSchedule.moduleClass');
+      debugPrint('$e in DbSchedule.moduleClass');
       return [];
     }
   }
@@ -70,7 +71,7 @@ class DbSchedule extends TableModel {
           element.toMap(),
         );
       } on Exception catch (e) {
-        print('Error: ${e.toString()} in DbSchedule.insert()');
+        debugPrint('Error: ${e.toString()} in DbSchedule.insert()');
       }
     }
   }
@@ -81,7 +82,7 @@ class DbSchedule extends TableModel {
     try {
       await database!.delete(tableName);
     } on Exception catch (e) {
-      print('Error: ${e.toString()} in DbSchedule.delete()');
+      debugPrint('Error: ${e.toString()} in DbSchedule.delete()');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:app_qldt/_models/receive_notification_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -58,10 +59,10 @@ class DbNotification extends TableModel {
         limit: 1,
       ))[0]['id_notification'] as int;
 
-      print('Last notification id: $lastId');
+      debugPrint('Last notification id: $lastId');
       return lastId;
     } on Error catch (e) {
-      print('$e in DbNotification.lastId');
+      debugPrint('$e in DbNotification.lastId');
       return null;
     }
   }
@@ -76,7 +77,7 @@ class DbNotification extends TableModel {
           element.toMap(),
         );
       } on Exception catch (e) {
-        print('$e in DbNotification.insert()');
+        debugPrint('$e in DbNotification.insert()');
       }
     }
   }
@@ -87,7 +88,7 @@ class DbNotification extends TableModel {
     try {
       await database!.delete(tableName);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      debugPrint('Error: ${e.toString()}');
     }
   }
 
@@ -102,7 +103,7 @@ class DbNotification extends TableModel {
           whereArgs: [element],
         );
       } on Exception catch (e) {
-        print('Error: ${e.toString()}');
+        debugPrint('Error: ${e.toString()}');
       }
     }
   }

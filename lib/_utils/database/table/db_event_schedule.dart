@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -25,7 +26,7 @@ class DbEventSchedule extends TableModel {
         'FROM $tableName;',
       );
     } on Exception catch (e) {
-      print('$e in DbEventSchedule.map');
+      debugPrint('$e in DbEventSchedule.map');
       return [];
     }
   }
@@ -47,7 +48,7 @@ class DbEventSchedule extends TableModel {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      debugPrint('Error: ${e.toString()}');
     }
   }
 
@@ -71,11 +72,11 @@ class DbEventSchedule extends TableModel {
             conflictAlgorithm: ConflictAlgorithm.replace,
           );
         } on Exception catch (e) {
-          print('Error: ${e.toString()} in updateWithName');
+          debugPrint('Error: ${e.toString()} in updateWithName');
         }
       }
     } on Exception catch (e) {
-      print('Error: ${e.toString()} in updateWithName');
+      debugPrint('Error: ${e.toString()} in updateWithName');
     }
   }
 }

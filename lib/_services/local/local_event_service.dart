@@ -7,6 +7,7 @@ import 'package:app_qldt/_services/controller/event_service_controller.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:flutter/widgets.dart';
 
 /// This class used for saving data about events (or schedules)
 /// into local storage
@@ -38,7 +39,7 @@ class LocalEventService extends LocalService {
   /// 4. Return data.
   ///
   Future<void> saveNewData(List<ScheduleModel> newData) async {
-    print('Event service: Updating new data');
+    debugPrint('Event service: Updating new data');
 
     await _remove();
     await _save(newData);
@@ -80,27 +81,27 @@ class LocalEventService extends LocalService {
   }
 
   Future<int?> saveNewEvent(UserEventModel event) async {
-    print('Adding event: $event');
+    debugPrint('Adding event: $event');
     return await databaseProvider.event.insert(event.toMap());
   }
 
   Future<void> saveModifiedEvent(EventModel event) async {
-    print('Modifying schedule: $event');
+    debugPrint('Modifying schedule: $event');
     await databaseProvider.event.update(event.toMap());
   }
 
   Future<void> saveModifiedSchedule(EventScheduleModel event) async {
-    print('Modifying schedule: $event');
+    debugPrint('Modifying schedule: $event');
     await databaseProvider.eventSchedule.update(event.toMap());
   }
 
   Future<void> saveAllModifiedScheduleWithName(String name, EventScheduleModel event) async {
-    print('Modifying all schedules with name $name: $event');
+    debugPrint('Modifying all schedules with name $name: $event');
     await databaseProvider.eventSchedule.updateWithName(name, event.toMap());
   }
 
   Future<void> deleteEvent(int id) async {
-    print('Deleting schedule has id: $id');
+    debugPrint('Deleting schedule has id: $id');
     await databaseProvider.event.delete(id);
   }
 

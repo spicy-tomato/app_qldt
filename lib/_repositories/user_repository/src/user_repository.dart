@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:app_qldt/_models/user_data_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/models.dart';
@@ -16,13 +17,13 @@ class UserRepository {
 
     if (loginInfo.isEmpty) return null;
 
-    print(loginInfo);
+    debugPrint(loginInfo.toString());
 
     try {
       final permission = await _getPermission();
       _user = User.fromJsonWithPermission(loginInfo, permission);
     } on Exception catch (e){
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
     return _user;

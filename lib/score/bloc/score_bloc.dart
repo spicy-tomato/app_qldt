@@ -104,7 +104,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
         idAccount: _userDataModel.idAccount,
       ),
     );
-    print('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+    debugPrint('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
     //  Also request to crawl exam schedule
     CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
@@ -113,7 +113,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
         idAccount: _userDataModel.idAccount,
       ),
     );
-    print('score_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
+    debugPrint('score_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
     if (examScheduleCrawlerStatus.isOk) {
       await _userDataModel.examScheduleServiceController.refresh();
     }

@@ -5,6 +5,7 @@ import 'package:app_qldt/_services/controller/score_service_controller.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:flutter/widgets.dart';
 
 class LocalScoreService extends LocalService {
   List<ScoreModel> scoreData = [];
@@ -15,7 +16,7 @@ class LocalScoreService extends LocalService {
   LocalScoreService({DatabaseProvider? databaseProvider}) : super(databaseProvider);
 
   Future<List<ScoreModel>> saveNewData(List<ScoreModel> newData) async {
-    print('Score service: Updating new data');
+    debugPrint('Score service: Updating new data');
 
     await _removeOld();
     await _saveNew(newData);

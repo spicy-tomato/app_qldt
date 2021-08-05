@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/widgets.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,7 +14,7 @@ class CalendarClientModel {
     var _clientID = ClientId(clientId, "");
     clientViaUserConsent(_clientID, _scopes, prompt).then((AuthClient client) {
       var calendar = CalendarApi(client);
-      calendar.calendarList.list().then((value) => print("VAL________$value"));
+      calendar.calendarList.list().then((value) => debugPrint("VAL________$value"));
 
       String calendarId = "primary";
       Event event = Event();
@@ -32,7 +33,7 @@ class CalendarClientModel {
 
       try {
         calendar.events.insert(event, calendarId).then((value) {
-          print("ADDED_________________${value.status}");
+          debugPrint("ADDED_________________${value.status}");
           if (value.status == "confirmed") {
             log('Event added in google calendar');
           } else {
@@ -46,9 +47,9 @@ class CalendarClientModel {
   }
 
   void prompt(String url) async {
-    print("Please go to the following URL and grant access:");
-    print("  => $url");
-    print("");
+    debugPrint("Please go to the following URL and grant access:");
+    debugPrint("  => $url");
+    debugPrint("");
 
     if (await canLaunch(url)) {
       await launch(url);

@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -23,7 +24,7 @@ class DbEventExam extends TableModel {
         'FROM $tableName;',
       );
     } on Exception catch (e) {
-      print('$e in DbEventExam.map');
+      debugPrint('$e in DbEventExam.map');
       return [];
     }
   }
@@ -34,7 +35,7 @@ class DbEventExam extends TableModel {
     try {
       await database!.update(tableName, map);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      debugPrint('Error: ${e.toString()}');
     }
   }
 }

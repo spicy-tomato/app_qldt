@@ -5,6 +5,7 @@ import 'package:app_qldt/_services/api/api_exam_schedule_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_exam_schedule_service.dart';
 import 'package:app_qldt/_services/model/service_response.dart';
+import 'package:flutter/widgets.dart';
 
 class ExamScheduleServiceController
     extends ServiceController<LocalExamScheduleService, ApiExamScheduleService> {
@@ -35,7 +36,7 @@ class ExamScheduleServiceController
       if (response.statusCode == 204 && localService.databaseProvider.dataVersion.examSchedule > 0) {
         setConnected();
       } else {
-        print('Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart');
+        debugPrint('Error with status code: ${response.statusCode} at exam_schedule_service_controller.dart');
       }
     }
   }

@@ -1,4 +1,5 @@
 import 'package:app_qldt/_models/sender_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -33,7 +34,7 @@ class DbSender extends TableModel {
     try {
       await database!.delete(tableName);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      debugPrint('Error: ${e.toString()}');
     }
   }
 }

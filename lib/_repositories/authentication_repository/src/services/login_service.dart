@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/models.dart';
@@ -40,7 +41,7 @@ class LoginService {
         data: status.isSuccessfully ? response.body : null,
       );
     } on Exception catch (e) {
-      print('Error: $e in Login service');
+      debugPrint('Error: $e in Login service');
       return LoginResponse(status: LoginStatus.serverError);
     }
   }

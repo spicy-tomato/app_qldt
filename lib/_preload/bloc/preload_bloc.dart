@@ -82,7 +82,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     final timeEnded = stopwatch.elapsed;
     stopwatch.stop();
 
-    print(timeEnded);
+    debugPrint(timeEnded.toString());
 
     final userDataModel = UserDataModel(
       eventServiceController: serviceControllers.event,
@@ -127,7 +127,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     final timeEnded = stopwatch.elapsed;
     stopwatch.stop();
 
-    print(timeEnded);
+    debugPrint(timeEnded.toString());
 
     final userDataModel = UserDataModel(
       eventServiceController: serviceControllers.event,
@@ -169,7 +169,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     ).getServerDataVersion();
 
     if (versionMap.isNotEmpty) {
-      print(versionMap);
+      debugPrint(versionMap.toString());
       if (force) {
         await serviceControllers.forceRefresh(versionMap);
       } else {

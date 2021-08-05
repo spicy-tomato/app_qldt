@@ -23,7 +23,7 @@ void main() async {
   AppMode devMode = AppMode.debug;
   AppMode mode = kReleaseMode ? AppMode.release : devMode;
 
-  print('Running in mode $mode');
+  debugPrint('Running in mode $mode');
 
   runApp(
     Phoenix(

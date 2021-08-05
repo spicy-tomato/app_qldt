@@ -80,7 +80,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         ),
       );
 
-      print('crawler_bloc.dart --- Update password: $passwordStatus');
+      debugPrint('crawler_bloc.dart --- Update password: $passwordStatus');
 
       if (passwordStatus.isOk) {
         bool hasError = false;
@@ -94,7 +94,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
             all: true,
           ),
         );
-        print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+        debugPrint('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
         if (scoreCrawlerStatus.isOk) {
           await userDataModel.scoreServiceController.refresh();
@@ -112,7 +112,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
             all: true,
           ),
         );
-        print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
+        debugPrint('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
 
         if (examScheduleCrawlerStatus.isOk) {
           await userDataModel.examScheduleServiceController.refresh();
@@ -158,9 +158,9 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
       ),
     );
 
-    print(state.formStatus);
+    debugPrint(state.formStatus.toString());
 
-    print('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
+    debugPrint('crawler_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
     if (scoreCrawlerStatus.isOk) {
       await userDataModel.scoreServiceController.refresh();
@@ -178,7 +178,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         all: true,
       ),
     );
-    print('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
+    debugPrint('crawler_bloc.dart --- Crawl exam Schedule: $examScheduleCrawlerStatus');
 
     if (examScheduleCrawlerStatus.isOk) {
       await userDataModel.examScheduleServiceController.refresh();

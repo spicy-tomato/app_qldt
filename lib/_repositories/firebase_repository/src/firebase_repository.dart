@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FirebaseRepository {
@@ -25,8 +26,7 @@ class FirebaseRepository {
       importance: Importance.max,
     );
 
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('mipmap/ic_launcher');
@@ -45,8 +45,8 @@ class FirebaseRepository {
         RemoteNotification? notification = message.notification;
         AndroidNotification? android = message.notification?.android;
 
-        print(message.data);
-        print(message.notification);
+        debugPrint(message.data.toString());
+        debugPrint(message.notification.toString());
 
         if (notification != null && android != null) {
           flutterLocalNotificationsPlugin.show(
@@ -72,11 +72,11 @@ class FirebaseRepository {
   }
 
   Future<String?> getToken() async {
-    print('Getting token');
+    debugPrint('Getting token');
     try {
       return await FirebaseMessaging.instance.getToken();
     } on Exception catch (e) {
-      print('Get token error: $e');
+      debugPrint('Get token error: $e');
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_score_service.dart';
 import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/score/bloc/enum/subject_status.dart';
+import 'package:flutter/widgets.dart';
 
 class ScoreServiceController extends ServiceController<LocalScoreService, ApiScoreService> {
   ScoreServiceController(ServiceControllerData data)
@@ -36,7 +37,7 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
       if (response.statusCode == 204 && localService.databaseProvider.dataVersion.score > 0) {
         setConnected();
       } else {
-        print('Error with status code: ${response.statusCode} at score_service_controller.dart');
+        debugPrint('Error with status code: ${response.statusCode} at score_service_controller.dart');
       }
     }
   }

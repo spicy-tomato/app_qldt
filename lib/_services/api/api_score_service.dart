@@ -6,6 +6,7 @@ import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class ApiScoreService extends ApiService {
@@ -48,11 +49,11 @@ class ApiScoreService extends ApiService {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return ServiceResponse(response);
     } on TimeoutException catch (e) {
-      print('Timeout error: $e at Score service');
+      debugPrint('Timeout error: $e at Score service');
     } on SocketException catch (e) {
-      print('Socket error: $e at Score service');
+      debugPrint('Socket error: $e at Score service');
     } on Error catch (e) {
-      print('General Error: $e at Score service');
+      debugPrint('General Error: $e at Score service');
     }
 
     return ServiceResponse.error();

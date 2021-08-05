@@ -5,6 +5,7 @@ import 'package:app_qldt/_utils/database/table/db_event.dart';
 import 'package:app_qldt/_utils/database/table/db_event_exam.dart';
 import 'package:app_qldt/_utils/database/table/db_event_schedule.dart';
 import 'package:app_qldt/_utils/database/table/db_exam_schedule.dart';
+import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -30,10 +31,10 @@ class DatabaseProvider {
     await _initDb();
     await _initTables();
 
-    print('DbProvider: Schedule version ${dataVersion.schedule}');
-    print('DbProvider: Notification version ${dataVersion.notification}');
-    print('DbProvider: ExamSchedule version ${dataVersion.examSchedule}');
-    print('DbProvider: Score version ${dataVersion.score}');
+    debugPrint('DbProvider: Schedule version ${dataVersion.schedule}');
+    debugPrint('DbProvider: Notification version ${dataVersion.notification}');
+    debugPrint('DbProvider: ExamSchedule version ${dataVersion.examSchedule}');
+    debugPrint('DbProvider: Score version ${dataVersion.score}');
   }
 
   Future<void> _initDb() async {
@@ -103,9 +104,8 @@ class DatabaseProvider {
       var dv = DbDataVersion();
       dv.create(db);
       DbDataVersion.insertInitial(db);
-
     } on Exception catch (e) {
-      print('$e in DatabaseProvider._onCreate()');
+      debugPrint('$e in DatabaseProvider._onCreate()');
     }
   }
 
@@ -115,7 +115,7 @@ class DatabaseProvider {
         await _upgradeToV2(db);
       }
     } on Exception catch (e) {
-      print('$e in DatabaseProvider._onUpgrade()');
+      debugPrint('$e in DatabaseProvider._onUpgrade()');
     }
   }
 

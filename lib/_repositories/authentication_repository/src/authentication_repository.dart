@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/services.dart';
@@ -35,7 +36,7 @@ class AuthenticationRepository {
 
     final LoginResponse loginResponse = await _loginService!.login(loginUser);
 
-    print('Login status: ${loginResponse.status}, permission: ${apiUrl.accountPermission}');
+    debugPrint('Login status: ${loginResponse.status}, permission: ${apiUrl.accountPermission}');
 
     if (loginResponse.status.isSuccessfully) {
       await _saveUserInfo(loginResponse.data!, apiUrl.accountPermission);
@@ -54,7 +55,7 @@ class AuthenticationRepository {
   }
 
   Future<void> logOut() async {
-    print('${DateTime.now()}: Request to logout');
+    debugPrint('${DateTime.now()}: Request to logout');
 
     await DatabaseProvider.deleteDb();
     await _removeUserInfo();

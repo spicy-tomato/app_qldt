@@ -6,6 +6,7 @@ import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class ApiEventService extends ApiService {
@@ -46,11 +47,11 @@ class ApiEventService extends ApiService {
       http.Response response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return ServiceResponse.withVersion(response);
     } on TimeoutException catch (e) {
-      print('Timeout error: $e at Event service');
+      debugPrint('Timeout error: $e at Event service');
     } on SocketException catch (e) {
-      print('Socket error: $e at Event service');
+      debugPrint('Socket error: $e at Event service');
     } on Error catch (e) {
-      print('General Error: $e at Event service');
+      debugPrint('General Error: $e at Event service');
     }
 
     return ServiceResponse.error();

@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'package:app_qldt/_models/exam_schedule_model.dart';
@@ -21,7 +22,7 @@ class LocalExamScheduleService extends LocalService {
       controller as ExamScheduleServiceController;
 
   Future<List<ExamScheduleModel>?> saveNewData(List<ExamScheduleModel> newData) async {
-    print('ExamSchedule service: Updating new data');
+    debugPrint('ExamSchedule service: Updating new data');
 
     await _removeOld();
     await _saveNew(newData);

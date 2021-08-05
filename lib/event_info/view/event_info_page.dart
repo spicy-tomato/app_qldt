@@ -205,6 +205,6 @@ class __TopbarState extends State<_Topbar> {
   }
 
   void _duplicateEvent() {
-    print('Duplicate event');
+    debugPrint('Duplicate event');
   }
 }

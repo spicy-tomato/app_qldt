@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:app_qldt/_utils/secret/url/url.dart';
@@ -19,13 +20,13 @@ class VersionService {
     http.Response response;
 
     String url = '$baseUrl?id=$idStudent';
-    print(url);
+    debugPrint(url);
 
     try {
       response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return jsonDecode(response.body);
     } on Exception catch (e) {
-      print('Error: $e in Version service - getServerDataVersion()');
+      debugPrint('Error: $e in Version service - getServerDataVersion()');
       return {};
     }
   }

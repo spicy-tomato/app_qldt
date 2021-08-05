@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 
 class ServiceResponse {
@@ -19,7 +20,7 @@ class ServiceResponse {
         data = body['data'];
         version = body['data_version'];
       } on Exception catch (e) {
-        print('$e in ServiceResponse._()');
+        debugPrint('$e in ServiceResponse._()');
       }
     }
   }

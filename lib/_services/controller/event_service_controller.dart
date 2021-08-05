@@ -7,6 +7,7 @@ import 'package:app_qldt/_services/api/api_event_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_event_service.dart';
 import 'package:app_qldt/_services/model/service_response.dart';
+import 'package:flutter/widgets.dart';
 
 class EventServiceController extends ServiceController<LocalEventService, ApiEventService> {
   EventServiceController(ServiceControllerData data)
@@ -33,9 +34,9 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
       await localService.updateVersion(response.version!);
     } else {
       if (response.statusCode == 204) {
-        print('There are no new data');
+        debugPrint('There are no new data');
       } else {
-        print('Error with status code: ${response.statusCode} at event_service_controller.dart');
+        debugPrint('Error with status code: ${response.statusCode} at event_service_controller.dart');
       }
     }
   }

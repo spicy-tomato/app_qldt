@@ -5,6 +5,7 @@ import 'package:app_qldt/_services/api/api_notification_service.dart';
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_notification_service.dart';
 import 'package:app_qldt/_services/model/service_response.dart';
+import 'package:flutter/widgets.dart';
 
 class NotificationServiceController
     extends ServiceController<LocalNotificationService, ApiNotificationService> {
@@ -37,9 +38,9 @@ class NotificationServiceController
       await localService.updateVersion(response.version!);
     } else {
       if (response.statusCode == 204) {
-        print('There are no new data');
+        debugPrint('There are no new data');
       } else {
-        print('Error with status code: ${response.statusCode} at notification_service_controller.dart');
+        debugPrint('Error with status code: ${response.statusCode} at notification_service_controller.dart');
       }
     }
   }

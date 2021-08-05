@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -24,7 +25,7 @@ class DbColorEvent extends TableModel {
         'color_event;',
       );
     } on Exception catch (e) {
-      print('$e in DbColorEvent.get');
+      debugPrint('$e in DbColorEvent.get');
       return [];
     }
   }
@@ -35,7 +36,7 @@ class DbColorEvent extends TableModel {
   //   try {
   //     await database!.update('color_event', map);
   //   } on Exception catch (e) {
-  //     print('Error: ${e.toString()}');
+  //     debugPrint('Error: ${e.toString()}');
   //   }
   // }
 }

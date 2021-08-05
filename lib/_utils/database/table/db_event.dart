@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'table_model.dart';
@@ -26,7 +27,7 @@ class DbEvent extends TableModel {
     try {
       return await database!.query(tableName);
     } on Exception catch (e) {
-      print('$e in DbEvent.get');
+      debugPrint('$e in DbEvent.get');
       return [];
     }
   }
@@ -37,7 +38,7 @@ class DbEvent extends TableModel {
     try {
       return await database!.insert(tableName, event);
     } on Exception catch (e) {
-      print('$e in DbEvent.insert()');
+      debugPrint('$e in DbEvent.insert()');
     }
   }
 
@@ -47,7 +48,7 @@ class DbEvent extends TableModel {
     try {
       await database!.update(tableName, map);
     } on Exception catch (e) {
-      print('Error: ${e.toString()} in DbEvent.update()');
+      debugPrint('Error: ${e.toString()} in DbEvent.update()');
     }
   }
 
@@ -61,7 +62,7 @@ class DbEvent extends TableModel {
         whereArgs: [id],
       );
     } on Exception catch (e) {
-      print('Error: ${e.toString()} in DbEvent.delete()');
+      debugPrint('Error: ${e.toString()} in DbEvent.delete()');
     }
   }
 }

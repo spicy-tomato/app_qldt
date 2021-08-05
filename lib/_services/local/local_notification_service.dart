@@ -6,6 +6,7 @@ import 'package:app_qldt/_services/controller/notification_service_controller.da
 import 'package:app_qldt/_services/controller/service_controller.dart';
 import 'package:app_qldt/_services/local/local_service.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:flutter/widgets.dart';
 
 class LocalNotificationService extends LocalService {
   List<UserNotificationModel> notificationData = [];
@@ -21,7 +22,7 @@ class LocalNotificationService extends LocalService {
     List<ReceiveNotificationModel>? notificationList,
     List<int>? deleteList,
   ) async {
-    print('Notification service: Updating new data');
+    debugPrint('Notification service: Updating new data');
 
     await _saveNotification(notificationList);
     await _saveSender(senderList);

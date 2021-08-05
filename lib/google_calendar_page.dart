@@ -36,7 +36,7 @@ class _HomeState extends State<Home> {
                         showTitleActions: true,
                         minTime: DateTime(2019, 3, 5),
                         maxTime: DateTime(2200, 6, 7), onChanged: (date) {
-                      print('change $date');
+                      debugPrint('change $date');
                     }, onConfirm: (date) {
                       setState(() {
                         startTime = date;
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
                         showTitleActions: true,
                         minTime: DateTime(2019, 3, 5),
                         maxTime: DateTime(2200, 6, 7), onChanged: (date) {
-                      print('change $date');
+                      debugPrint('change $date');
                     }, onConfirm: (date) {
                       setState(() {
                         endTime = date;

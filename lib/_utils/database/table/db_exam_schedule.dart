@@ -1,5 +1,6 @@
 import 'package:app_qldt/_models/exam_schedule_model.dart';
 import 'package:app_qldt/_utils/database/table/table_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbExamSchedule extends TableModel {
@@ -61,7 +62,7 @@ class DbExamSchedule extends TableModel {
     try {
       await database!.delete(tableName);
     } on Exception catch (e) {
-      print('Error: ${e.toString()}');
+      debugPrint('Error: ${e.toString()}');
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:app_qldt/_services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -50,11 +51,11 @@ class ApiExamScheduleService extends ApiService {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return ServiceResponse(response);
     } on TimeoutException catch (e) {
-      print('Timeout error: $e at ExamSchedule service');
+      debugPrint('Timeout error: $e at ExamSchedule service');
     } on SocketException catch (e) {
-      print('Socket error: $e at ExamSchedule service');
+      debugPrint('Socket error: $e at ExamSchedule service');
     } on Error catch (e) {
-      print('General Error: $e at ExamSchedule service');
+      debugPrint('General Error: $e at ExamSchedule service');
     }
 
     return ServiceResponse.error();
