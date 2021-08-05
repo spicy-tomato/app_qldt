@@ -19,7 +19,15 @@ class NotificationPostPage extends StatefulWidget {
 }
 
 class _NotificationPostPageState extends State<NotificationPostPage> {
-  final _contentRegex = RegExp(r'<a>([^<]*[^\/]*[^a]*[^/])<\/a>');
+  final _linkRegex = RegExp(r'<a>([^<]*[^\/]*[^a]*[^/])<\/a>');
+  final _phoneNumberRegex = RegExp(r'[0-9]([0-9. ]){9,12}[0-9]');
+  final _textStyle = const TextStyle(
+    height: 1.25,
+    fontSize: 17,
+    fontWeight: FontWeight.w400,
+    color: Color(0xff4a2a73),
+    fontFamily: 'Montserrat',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +115,8 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
           ),
           const SizedBox(height: 50),
           _CommonPadding(
-            child: RichText(
-              text: TextSpan(
+            child: SelectableText.rich(
+              TextSpan(
                 children: _createText(),
               ),
             ),
@@ -123,50 +131,78 @@ class _NotificationPostPageState extends State<NotificationPostPage> {
     final result = <TextSpan>[];
     String content = widget.notification.content;
 
-    _contentRegex.allMatches(content).forEach((value) {
+    _linkRegex.allMatches(content).forEach((value) {
       final regexMatch = value.group(0)!;
-      result.add(_createTextSpan(content.split(regexMatch)[0]));
-      result.add(_createTextSpan(regexMatch, isHyperlink: true));
+      result.addAll(_createTextSpans(content.split(regexMatch)[0]));
+      result.add(_createLinkTextSpan(regexMatch));
       content = content.split(value.group(0)!)[1];
     });
 
     if (content != '') {
-      result.add(_createTextSpan(content));
+      result.addAll(_createTextSpans(content));
     }
 
     return result;
   }
 
-  TextSpan _createTextSpan(String text, {bool isHyperlink = false}) {
-    if (isHyperlink) {
-      final url = text.substring(3, text.length - 4);
-      final displayText = Uri.decodeComponent(url).split('/').last;
+  List<TextSpan> _createTextSpans(String text) {
+    final result = <TextSpan>[];
 
-      return TextSpan(
-        text: displayText,
-        style: const TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w400,
-          color: Color(0xff1e2bff),
-          fontFamily: 'Montserrat',
+    _phoneNumberRegex.allMatches(text).forEach((value) {
+      final regexMatch = value.group(0)!;
+      result.add(_createTextSpan(text.split(regexMatch)[0]));
+      result.add(_createPhoneNumberSpan(regexMatch));
+      text = text.split(value.group(0)!)[1];
+    });
+
+    if (text != '') {
+      result.add(_createTextSpan(text));
+    }
+
+    return result;
+  }
+
+  TextSpan _createTextSpan(String text) {
+    return TextSpan(
+      text: text,
+      style: _textStyle,
+    );
+  }
+
+  TextSpan _createPhoneNumberSpan(String phoneNumber) {
+    final Uri phoneUrl = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+
+    return TextSpan(
+        text: phoneNumber,
+        style: _textStyle.copyWith(
+          color: const Color(0xff1e2bff),
         ),
         recognizer: TapGestureRecognizer()
           ..onTap = () async {
-            if (await canLaunch(url)) {
-              await launch(url);
+            if (await canLaunch(phoneUrl.toString())) {
+              await launch(phoneUrl.toString());
             }
-          },
-      );
-    }
+          });
+  }
+
+  TextSpan _createLinkTextSpan(String text) {
+    final url = text.substring(3, text.length - 4);
+    final displayText = Uri.decodeComponent(url).split('/').last;
 
     return TextSpan(
-      text: text + '\n',
-      style: const TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w400,
-        color: Color(0xff4A2A73),
-        fontFamily: 'Montserrat',
+      text: '\n$displayText',
+      style: _textStyle.copyWith(
+        color: const Color(0xff1e2bff),
       ),
+      recognizer: TapGestureRecognizer()
+        ..onTap = () async {
+          if (await canLaunch(url)) {
+            await launch(url);
+          }
+        },
     );
   }
 
