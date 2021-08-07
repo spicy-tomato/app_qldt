@@ -16,14 +16,13 @@ class Sidebar extends StatelessWidget {
       height: screenHeight,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Theme.of(context).backgroundColor,
-              const Color(0xff7579e7),
-              const Color(0xff9ab3f5),
-            ],
+          image: DecorationImage(
+            image: const AssetImage('images/sidebar.jpg'),
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.25),
+              BlendMode.srcATop,
+            ),
+            fit: BoxFit.cover,
           ),
         ),
         child: Stack(
