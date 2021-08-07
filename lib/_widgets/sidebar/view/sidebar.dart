@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/_authentication/authentication.dart';
+
 import 'local_widgets/local_widgets.dart';
 
-class Sidebar extends StatelessWidget {
+class Sidebar extends StatefulWidget {
   const Sidebar({Key? key}) : super(key: key);
 
+  @override
+  _SidebarState createState() => _SidebarState();
+}
+
+class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -27,9 +36,33 @@ class Sidebar extends StatelessWidget {
         ),
         child: Stack(
           children: <Widget>[
-            const Align(
-              alignment: Alignment(0.9, -0.95),
-              child: CloseSidebarButton(),
+            /// Close button
+            Align(
+              alignment: const Alignment(0.9, -0.95),
+              child: IconButton(
+                onPressed: _onCloseSidebar,
+                icon: const SidebarIcon(Icons.close),
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0.9, 0.95),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// Setting button
+                  IconButton(
+                    icon: const SidebarIcon(Icons.settings),
+                    onPressed: _onOpenSetting,
+                  ),
+                  const SizedBox(width: 10),
+
+                  /// Logout button
+                  IconButton(
+                    icon: const SidebarIcon(Icons.exit_to_app_outlined),
+                    onPressed: _onLogout,
+                  )
+                ],
+              ),
             ),
             Container(
               width: screenWidth * 0.7,
@@ -55,6 +88,37 @@ class Sidebar extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _onCloseSidebar() async {
+    await Navigator.maybePop(context);
+  }
+
+  void _onOpenSetting() {
+    print('Setting');
+  }
+
+  void _onLogout() async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 5.0),
+        content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested());
+            },
+            child: const Text('Có'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Không'),
+          ),
+        ],
       ),
     );
   }

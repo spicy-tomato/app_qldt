@@ -1,6 +1,4 @@
 import 'package:app_qldt/_models/screen.dart';
-import 'package:app_qldt/_widgets/sidebar/view/local_widgets/tiles/above_empty_tile.dart';
-import 'package:app_qldt/_widgets/sidebar/view/local_widgets/tiles/empty_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'tiles/tiles.dart';
@@ -27,46 +25,38 @@ class ScreenPageTilesList extends StatelessWidget {
       }
     }
 
-    List<Widget> _items = _getScreenPagesList(context, currentScreenPage);
-    _items.add(_logoutTile(context, currentScreenPage));
-
-    return _items;
+    return _getScreenPagesList(context, currentScreenPage);
   }
 
   List<Widget> _getScreenPagesList(BuildContext context, ScreenPage currentScreenPage) {
-    Widget _firstListItem;
+    final _firstListItem = currentScreenPage.index == 1
+        //
+        ? AboveEmptyTile(context)
+        : const EmptyTile();
 
-    if (currentScreenPage.index == 1) {
-      _firstListItem = AboveEmptyTile(context);
-    } else {
-      _firstListItem = const EmptyTile();
-    }
+    final _lastListItem = currentScreenPage.index == ScreenPage.values.length - 2
+        //
+        ? BelowEmptyTile(context)
+        : const EmptyTile();
 
     List<Widget> _list = [_firstListItem];
 
-    for (var screenPage in ScreenPage.values) {
-      ///  Chỉ số 0 là trang đăng nhập, vì thế bỏ qua trang này
-      if (screenPage.index != 0) {
-        if (screenPage.index == currentScreenPage.index) {
-          _list.add(CurrentScreenPageTile(screenPage: screenPage));
-        } else if (screenPage.index == currentScreenPage.index - 1) {
-          _list.add(AboveScreenPageTile(context, screenPage: screenPage));
-        } else if (screenPage.index == currentScreenPage.index + 1) {
-          _list.add(BelowScreenPageTile(context, screenPage: screenPage));
-        } else {
-          _list.add(NormalScreenPageTile(context, screenPage: screenPage));
-        }
+    for (int i = 1; i < ScreenPage.values.length - 1; i++) {
+      final page = ScreenPage.values[i];
+
+      if (page.index == currentScreenPage.index) {
+        _list.add(CurrentScreenPageTile(screenPage: page));
+      } else if (page.index == currentScreenPage.index - 1) {
+        _list.add(AboveScreenPageTile(context, screenPage: page));
+      } else if (page.index == currentScreenPage.index + 1) {
+        _list.add(BelowScreenPageTile(context, screenPage: page));
+      } else {
+        _list.add(NormalScreenPageTile(context, screenPage: page));
       }
     }
 
+    _list.add(_lastListItem);
+
     return _list;
-  }
-
-  Widget _logoutTile(BuildContext context, ScreenPage currentScreenPage) {
-    if (currentScreenPage.index == ScreenPage.values.length - 1) {
-      return BelowCurrentLogoutTile(context);
-    }
-
-    return NormalLogoutTile(context);
   }
 }
