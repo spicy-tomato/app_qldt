@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/schedule_model.dart';
+import 'package:app_qldt/models/event/schedule_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 

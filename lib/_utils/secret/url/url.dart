@@ -1,6 +1,6 @@
-import 'package:app_qldt/_models/account_permission_enum.dart';
 import 'package:app_qldt/_utils/secret/url/base.dart';
-import 'package:app_qldt/_widgets/model/app_mode.dart';
+import 'package:app_qldt/enums/config/account_permission_enum.dart';
+import 'package:app_qldt/enums/config/app_mode.dart';
 
 import 'get.dart';
 import 'post.dart';

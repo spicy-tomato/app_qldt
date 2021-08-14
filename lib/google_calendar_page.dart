@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
-import '_models/calendar_client_model.dart';
+import 'models/google_calendar/calendar_client_model.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

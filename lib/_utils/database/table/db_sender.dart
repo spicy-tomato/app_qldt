@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/sender_model.dart';
+import 'package:app_qldt/models/notification/sender_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 

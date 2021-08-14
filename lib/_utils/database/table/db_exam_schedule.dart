@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/exam_schedule_model.dart';
+import 'package:app_qldt/models/exam_schedule/exam_schedule_model.dart';
 import 'package:app_qldt/_utils/database/table/table_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
