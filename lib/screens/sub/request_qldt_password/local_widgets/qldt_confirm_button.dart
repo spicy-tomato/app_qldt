@@ -1,3 +1,4 @@
+import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/blocs/crawler/crawler_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +16,8 @@ class QldtConfirmButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = context.read<AppSettingBloc>().state.theme.data;
+
     return BlocBuilder<CrawlerBloc, CrawlerState>(
       buildWhen: (previous, current) => previous.formStatus != current.formStatus,
       builder: (context, state) {
@@ -28,7 +31,7 @@ class QldtConfirmButton extends StatelessWidget {
                       return Text(
                         textMap[state.status] ?? textMap[CrawlerStatus.validatingPassword]!,
                         style: TextStyle(
-                          color: Theme.of(context).backgroundColor,
+                          color: themeData.secondaryTextColor,
                         ),
                       );
                     },
@@ -55,13 +58,13 @@ class QldtConfirmButton extends StatelessWidget {
                     horizontal: 30,
                   )),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    side: BorderSide(color: Theme.of(context).backgroundColor),
+                    side: BorderSide(color: themeData.secondaryTextColor),
                   )),
                 ),
                 child: Text(
                   needPassword ? 'Xác nhận' : 'Tải xuống dữ liệu',
                   style: TextStyle(
-                    color: Theme.of(context).backgroundColor,
+                    color: themeData.secondaryTextColor,
                   ),
                 ),
               );

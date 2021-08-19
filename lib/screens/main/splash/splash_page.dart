@@ -1,5 +1,9 @@
-import 'package:app_qldt/constant/constant.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
+import 'package:app_qldt/constant/constant.dart';
 
 class SplashPage extends StatelessWidget {
   final bool shouldLoadAfterLogin;
@@ -11,6 +15,8 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = context.read<AppSettingBloc>().state.theme.data;
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -39,13 +45,15 @@ class SplashPage extends StatelessWidget {
                         Text(
                           'Đang tải dữ liệu, vui lòng chờ',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Theme.of(context).backgroundColor),
+                          style: TextStyle(
+                            color: themeData.secondaryTextColor,
+                          )
                         ),
                         Text(
                           '* Bước này chỉ xảy ra một lần sau khi đăng nhập',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
+                            color: themeData.secondaryTextColor,
                             fontSize: 12,
                           ),
                         ),
