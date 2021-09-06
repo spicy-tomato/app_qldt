@@ -440,7 +440,7 @@ packages:
       name: image_picker_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.0"
+    version: "2.4.1"
   intl:
     dependency: "direct main"
     description:
@@ -689,37 +689,37 @@ packages:
     description:
       path: "./packages/syncfusion_flutter_calendar"
       ref: HEAD
-      resolved-ref: bc138255b52a410cbe8456201e6c32d89a37e1f2
+      resolved-ref: "0ce2a67a14e409fc0efedc3cd018ae94dcd0e154"
       url: "https://github.com/annguyen-it/flutter-widgets.git"
     source: git
-    version: "18.3.35+1"
+    version: "18.3.35+3"
   syncfusion_flutter_core:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: "./packages/syncfusion_flutter_core"
       ref: HEAD
-      resolved-ref: bc138255b52a410cbe8456201e6c32d89a37e1f2
+      resolved-ref: "0ce2a67a14e409fc0efedc3cd018ae94dcd0e154"
       url: "https://github.com/annguyen-it/flutter-widgets.git"
     source: git
-    version: "18.3.40"
+    version: "18.3.40+1"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       path: "./packages/syncfusion_flutter_datepicker"
       ref: HEAD
-      resolved-ref: bc138255b52a410cbe8456201e6c32d89a37e1f2
+      resolved-ref: "0ce2a67a14e409fc0efedc3cd018ae94dcd0e154"
       url: "https://github.com/annguyen-it/flutter-widgets.git"
     source: git
-    version: "18.3.35"
+    version: "18.3.35+2"
   syncfusion_localizations:
     dependency: "direct main"
     description:
       path: "./packages/syncfusion_localizations"
       ref: HEAD
-      resolved-ref: bc138255b52a410cbe8456201e6c32d89a37e1f2
+      resolved-ref: "0ce2a67a14e409fc0efedc3cd018ae94dcd0e154"
       url: "https://github.com/annguyen-it/flutter-widgets.git"
     source: git
-    version: "18.3.35-nullsafety"
+    version: "18.3.35+2"
   synchronized:
     dependency: transitive
     description:
@@ -824,7 +824,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.8"
+    version: "2.2.9"
   xdg_directories:
     dependency: transitive
     description:

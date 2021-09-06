@@ -63,10 +63,6 @@ dependencies:
     git:
       url: https://github.com/annguyen-it/flutter-widgets.git
       path: ./packages/syncfusion_flutter_calendar
-  syncfusion_flutter_core:
-    git:
-      url: https://github.com/annguyen-it/flutter-widgets.git
-      path: ./packages/syncfusion_flutter_core
   syncfusion_localizations:
     git:
       url: https://github.com/annguyen-it/flutter-widgets.git

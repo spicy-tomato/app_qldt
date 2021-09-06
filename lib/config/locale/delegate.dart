@@ -4,6 +4,6 @@ final _localizationsDelegates = [
   GlobalMaterialLocalizations.delegate,
   GlobalWidgetsLocalizations.delegate,
   GlobalCupertinoLocalizations.delegate,
-  SfLocalizationsVnDelegate(),
+  SfGlobalLocalizations.delegate,
   PullToRefreshVnDelegate(),
 ];
