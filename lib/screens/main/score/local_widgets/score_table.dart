@@ -65,9 +65,9 @@ class _ScorePageTableState extends State<ScorePageTable> {
   }
 
   List<Gpa> _gpaData(List<ScoreModel> scoreData) {
-    Map<String, GpaTotalScore> map = {};
-    Map<String, bool> displaySemester = {};
-    List<Gpa> gpa = [];
+    final Map<String, GpaTotalScore> map = {};
+    final Map<String, bool> displaySemester = {};
+    final List<Gpa> gpa = [];
 
     for (var score in scoreData) {
       if (score.theoreticalScore != null) {

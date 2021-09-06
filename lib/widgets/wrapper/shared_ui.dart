@@ -52,7 +52,7 @@ class SharedUI extends StatelessWidget {
               child: WillPopScope(
                 onWillPop: () async {
                   if (onWillPop != null) {
-                    bool? pop = await onWillPop!.call();
+                    final bool? pop = await onWillPop!.call();
                     if (pop != null) {
                       return Future.value(pop);
                     }

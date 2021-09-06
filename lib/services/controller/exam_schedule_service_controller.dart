@@ -25,10 +25,10 @@ class ExamScheduleServiceController
   SemesterModel? get lastSemester => localService.lastSemester;
 
   Future<void> refresh([int? newVersion]) async {
-    ServiceResponse response = await apiService.request();
+    final ServiceResponse response = await apiService.request();
 
     if (response.statusCode == 200) {
-      List<ExamScheduleModel> newData = _parseData(response.data);
+      final List<ExamScheduleModel> newData = _parseData(response.data);
       await localService.updateVersion(newVersion);
       await localService.saveNewData(newData);
       setConnected();
@@ -46,8 +46,8 @@ class ExamScheduleServiceController
   }
 
   List<ExamScheduleModel> _parseData(dynamic responseData) {
-    List data = responseData as List;
-    List<ExamScheduleModel> listModel = [];
+    final List data = responseData as List;
+    final List<ExamScheduleModel> listModel = [];
 
     for (var element in data) {
       listModel.add(ExamScheduleModel.fromJson(element));
@@ -61,7 +61,7 @@ class ExamScheduleServiceController
       return [];
     }
 
-    List<ExamScheduleModel> res = examScheduleData.where((e) => e.semester == semester.query).toList();
+    final List<ExamScheduleModel> res = examScheduleData.where((e) => e.semester == semester.query).toList();
 
     return res;
   }

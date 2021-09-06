@@ -51,7 +51,7 @@ class DbExamSchedule extends TableModel {
   Future<void> insert(List<ExamScheduleModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in rawData) {
+    for (final element in rawData) {
       await database!.insert(tableName, element.toMap());
     }
   }

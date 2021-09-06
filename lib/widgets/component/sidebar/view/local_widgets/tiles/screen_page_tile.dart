@@ -10,7 +10,7 @@ class ScreenPageTile extends StatelessWidget {
   final CustomPainter? painter;
   final Function()? onTap;
 
-  final TextStyle tileTextStyle = const TextStyle(
+  TextStyle get tileTextStyle => const TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
   );

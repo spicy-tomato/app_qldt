@@ -152,7 +152,7 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
   }
 
   String _titleTextFormatter(DateTime date, dynamic locale) {
-    String s = DateFormat.yMMMM(locale).format(_focusedDay);
+    final String s = DateFormat.yMMMM(locale).format(_focusedDay);
     return s[0].toUpperCase() + s.substring(1);
   }
 
@@ -161,7 +161,7 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
     context.read<CalendarBloc>().add(CalendarDaySelected(_focusedDay, widget.events[_focusedDay] ?? []));
   }
 
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
+  Future<void> _onDaySelected(DateTime selectedDay, DateTime focusedDay) async {
     context.read<PlanBloc>().add(PlanFromDateChanged(focusedDay));
     context.read<PlanBloc>().add(PlanToDateChanged(focusedDay.add(const Duration(hours: 1))));
 
@@ -196,7 +196,7 @@ class _CalendarState extends State<Calendar<UserEventModel>> with TickerProvider
     }
   }
 
-  _onPageChanged(DateTime focusedDay) {
+  void _onPageChanged(DateTime focusedDay) {
     setState(() {
       _focusedDay = focusedDay;
     });

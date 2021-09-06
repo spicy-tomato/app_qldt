@@ -62,7 +62,7 @@ class LocalEventService extends LocalService {
   Future<void> _loadScheduleData() async {
     scheduleData.clear();
 
-    List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
+    final List<Map<String, dynamic>> rawData = await databaseProvider.schedule.all;
 
     scheduleData =
         List.generate(rawData.length, (index) => UserEventModel.fromScheduleMap(rawData[index]));
@@ -75,7 +75,7 @@ class LocalEventService extends LocalService {
   Future<void> _loadEventData() async {
     eventData.clear();
 
-    List<Map<String, dynamic>> rawData = await databaseProvider.event.all;
+    final List<Map<String, dynamic>> rawData = await databaseProvider.event.all;
 
     eventData = List.generate(rawData.length, (index) => UserEventModel.fromMap(rawData[index]));
   }

@@ -42,10 +42,10 @@ class ApiExamScheduleService extends ApiService {
   ///     ...
   /// ]
   Future<ServiceResponse> _fetchData() async {
-    String baseUrl = apiUrl.get.examSchedule;
-    int version = controller.localService.databaseProvider.dataVersion.examSchedule;
+    final String baseUrl = apiUrl.get.examSchedule;
+    final int version = controller.localService.databaseProvider.dataVersion.examSchedule;
 
-    String url = '$baseUrl?id_student=$idUser&version=$version';
+    final String url = '$baseUrl?id_student=$idUser&version=$version';
 
     try {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

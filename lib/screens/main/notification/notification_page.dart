@@ -29,7 +29,7 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     _notificationServiceController ??= context.read<UserRepository>().userDataModel.notificationServiceController;
 
-    List notificationData = _notificationServiceController!.notificationData as List<UserNotificationModel>;
+    final List notificationData = _notificationServiceController!.notificationData as List<UserNotificationModel>;
 
     return InheritedPanelController(
       panelController: _panelController,
@@ -95,14 +95,14 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  void _onRefresh() async {
+  Future<void> _onRefresh() async {
     await _notificationServiceController!.refresh();
     await Future.delayed(const Duration(milliseconds: 800));
     _refreshController.refreshCompleted();
     setState(() {});
   }
 
-  void _onLoading() async {
+  Future<void> _onLoading() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     if (mounted) {
       setState(() {});

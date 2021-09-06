@@ -25,10 +25,10 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
   SemesterModel? get lastSemester => localService.lastSemester;
 
   Future<void> refresh([int? newVersion]) async {
-    ServiceResponse response = await apiService.request();
+    final ServiceResponse response = await apiService.request();
 
     if (response.statusCode == 200) {
-      List<ScoreModel> newData = _parseData(response.data);
+      final List<ScoreModel> newData = _parseData(response.data);
       await localService.saveNewData(newData);
       await localService.updateVersion(newVersion);
       setConnected();
@@ -62,8 +62,8 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
     }
 
     //  Failed Subjects
-    List<ScoreModel> newScoreData = [];
-    List<ScoreModel> passedScoreData = scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
+    final List<ScoreModel> newScoreData = [];
+    final List<ScoreModel> passedScoreData = scoreData.where((s) => s.evaluation == SubjectEvaluation.pass.query).toList();
 
     for (var score in scoreData) {
       if (score.evaluation == SubjectEvaluation.fail.query) {
@@ -109,7 +109,7 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
   }
 
   List<ScoreModel> _parseData(dynamic responseData) {
-    List data = responseData as List;
+    final List data = responseData as List;
     return data.map((x) => ScoreModel.fromJson(x)).toList();
   }
 }

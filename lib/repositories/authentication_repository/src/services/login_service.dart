@@ -21,8 +21,8 @@ class LoginService {
       return LoginResponse(status: LoginStatus.noInternetConnection);
     }
 
-    String url = apiUrl.post.authentication;
-    String body = jsonEncode(loginUser);
+    final String url = apiUrl.post.authentication;
+    final String body = jsonEncode(loginUser);
 
     http.Response? response;
 
@@ -34,7 +34,7 @@ class LoginService {
           )
           .timeout(Const.requestTimeout);
 
-      LoginStatus status = statusFromCode(response.statusCode);
+      final LoginStatus status = statusFromCode(response.statusCode);
 
       return LoginResponse(
         status: status,

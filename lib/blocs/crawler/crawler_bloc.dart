@@ -69,13 +69,13 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
         status: CrawlerStatus.validatingPassword,
       );
 
-      UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
-      String idStudent = userDataModel.idUser;
-      String idAccount = userDataModel.idAccount;
+      final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
+      final String idStudent = userDataModel.idUser;
+      final String idAccount = userDataModel.idAccount;
 
       final String password = state.password.value;
 
-      CrawlerStatus passwordStatus = await _crawlerService.updatePassword(
+      final CrawlerStatus passwordStatus = await _crawlerService.updatePassword(
         UpdatePasswordCrawlerModel(
           idAccount: idAccount,
           idStudent: idStudent,
@@ -90,7 +90,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
         //  Crawl score
         yield state.copyWith(status: CrawlerStatus.crawlingScore);
-        CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
+        final CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
           ScoreCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
@@ -108,7 +108,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
         //  Crawl exam schedule
         yield state.copyWith(status: CrawlerStatus.crawlingExamSchedule);
-        CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
+        final CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
           ExamScheduleCrawlerModel(
             idStudent: idStudent,
             idAccount: idAccount,
@@ -146,14 +146,14 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
       status: CrawlerStatus.validatingPassword,
     );
 
-    UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
-    String idStudent = userDataModel.idUser;
-    String idAccount = userDataModel.idAccount;
+    final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
+    final String idStudent = userDataModel.idUser;
+    final String idAccount = userDataModel.idAccount;
     bool hasError = false;
 
     //  Crawl score
     yield state.copyWith(status: CrawlerStatus.crawlingScore);
-    CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
+    final CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
       ScoreCrawlerModel(
         idStudent: idStudent,
         idAccount: idAccount,
@@ -174,7 +174,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
     //  Crawl exam schedule
     yield state.copyWith(status: CrawlerStatus.crawlingExamSchedule);
-    CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
+    final CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
         idStudent: idStudent,
         idAccount: idAccount,

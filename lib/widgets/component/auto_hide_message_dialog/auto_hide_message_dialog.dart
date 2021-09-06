@@ -111,8 +111,8 @@ class _AutoHideMessageDialogState extends State<AutoHideMessageDialog> with Sing
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              widget.icon != null ? widget.icon!.copyWith(_iconColorAnimation.value) : Container(),
-              widget.icon != null ? const SizedBox(width: 10) : Container(),
+              if (widget.icon != null) widget.icon!.copyWith(_iconColorAnimation.value) else Container(),
+              if (widget.icon != null) const SizedBox(width: 10) else Container(),
               Expanded(
                 child: Text(
                   widget.message,

@@ -55,7 +55,7 @@ class DbEventSchedule extends TableModel {
   Future<void> updateWithName(String eventName, Map<String, dynamic> map) async {
     assert(database != null, 'Database must not be null');
 
-    List<Map<String, dynamic>> eventList = await database!.query(
+    final List<Map<String, dynamic>> eventList = await database!.query(
       scheduleTable,
       where: 'module_class_name=?',
       whereArgs: [eventName],
@@ -63,7 +63,7 @@ class DbEventSchedule extends TableModel {
     );
 
     try {
-      for (var event in eventList) {
+      for (final event in eventList) {
         map['id_schedule'] = event['id_schedule'];
         try {
           await database!.insert(

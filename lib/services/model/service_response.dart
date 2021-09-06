@@ -8,6 +8,8 @@ class ServiceResponse {
   late final int? version;
   late final dynamic data;
 
+  ServiceResponse(Response response) : this.__(response);
+
   ServiceResponse._(Response response) {
     statusCode = response.statusCode;
 
@@ -16,7 +18,7 @@ class ServiceResponse {
       data = null;
     } else {
       try {
-        Map<String, dynamic> body = jsonDecode(response.body);
+        final Map<String, dynamic> body = jsonDecode(response.body);
         data = body['data'];
         version = body['data_version'];
       } on Exception catch (e) {
@@ -40,8 +42,6 @@ class ServiceResponse {
     required this.version,
     this.data,
   });
-
-  ServiceResponse(Response response) : this.__(response);
 
   ServiceResponse.withVersion(Response response) : this._(response);
 

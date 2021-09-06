@@ -60,7 +60,7 @@ class UserEventModel {
   }
 
   factory UserEventModel.fromSchedule(ScheduleModel schedule, [int? color]) {
-    DateTime curr = schedule.daySchedules.withShift(schedule.shiftSchedules);
+    final DateTime curr = schedule.daySchedules.withShift(schedule.shiftSchedules);
 
     return UserEventModel(
       id: schedule.id,
@@ -94,9 +94,9 @@ class UserEventModel {
     }
 
     try {
-      List<String> listSplitByWhiteSpace = string.split(' ');
-      String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
-      List<String> strArr = oldStr.split('-');
+      final List<String> listSplitByWhiteSpace = string.split(' ');
+      final String oldStr = listSplitByWhiteSpace[listSplitByWhiteSpace.length - 2];
+      final List<String> strArr = oldStr.split('-');
 
       strArr.removeLast();
       strArr.removeLast();
@@ -104,8 +104,8 @@ class UserEventModel {
       String newStr = strArr.join('-');
       newStr = string.replaceAll(oldStr, newStr);
 
-      int indexOfOpenBrace = newStr.lastIndexOf('(');
-      int indexOfCloseBrace = newStr.lastIndexOf(')');
+      final int indexOfOpenBrace = newStr.lastIndexOf('(');
+      final int indexOfCloseBrace = newStr.lastIndexOf(')');
 
       newStr =
           newStr.substring(0, indexOfOpenBrace) + newStr.substring(indexOfOpenBrace + 1, indexOfCloseBrace);
@@ -117,14 +117,14 @@ class UserEventModel {
   }
 
   factory UserEventModel.fromExamScheduleModel(ExamScheduleModel examScheduleModel) {
-    String timeStr = RegExp(r'(\d{2}:\d{2})').firstMatch(examScheduleModel.timeStart)!.group(0)!;
-    int hour = int.parse(timeStr.split(':')[0]);
-    int minute = int.parse(timeStr.split(':')[1]);
+    final String timeStr = RegExp(r'(\d{2}:\d{2})').firstMatch(examScheduleModel.timeStart)!.group(0)!;
+    final int hour = int.parse(timeStr.split(':')[0]);
+    final int minute = int.parse(timeStr.split(':')[1]);
 
     DateTime from = DateFormat('d-M-yyyy').parse(examScheduleModel.dateStart);
     from = from.add(Duration(hours: hour, minutes: minute));
 
-    DateTime to = from.add(Duration(minutes: examScheduleModel.credit * 45));
+    final DateTime to = from.add(Duration(minutes: examScheduleModel.credit * 45));
 
     return UserEventModel(
       id: -1,
@@ -154,7 +154,7 @@ class UserEventModel {
   }
 
   factory UserEventModel.fromScheduleMap(Map<String, dynamic> map) {
-    DateTime curr = DateTime.parse(map['day_schedules']).withShift(map['shift_schedules'] as int);
+    final DateTime curr = DateTime.parse(map['day_schedules']).withShift(map['shift_schedules'] as int);
 
     return UserEventModel(
       id: map['id_schedule'],
@@ -164,7 +164,7 @@ class UserEventModel {
       color: map['color'] != null ? (map['color'] as int).toPlanColors() : null,
       location: map['id_room'],
       description: map['description'],
-      isAllDay: map['is_all_day'] != null ? (map['is_all_day'] as int) == 1 : false,
+      isAllDay: map['is_all_day'] && (map['is_all_day'] as int) == 1,
       people: map['teacher'],
     );
   }

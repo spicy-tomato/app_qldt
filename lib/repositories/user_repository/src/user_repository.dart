@@ -13,9 +13,11 @@ class UserRepository {
   late UserDataModel userDataModel;
 
   Future<User?> getUser() async {
-    Map<String, dynamic> loginInfo = await _getSavedLoginInfo();
+    final Map<String, dynamic> loginInfo = await _getSavedLoginInfo();
 
-    if (loginInfo.isEmpty) return null;
+    if (loginInfo.isEmpty) {
+      return null;
+    }
 
     debugPrint(loginInfo.toString());
 
@@ -31,7 +33,7 @@ class UserRepository {
 
   Future<Map<String, dynamic>> _getSavedLoginInfo() async {
     final prefs = await SharedPreferences.getInstance();
-    String? infoStr = prefs.getString('user_info');
+    final String? infoStr = prefs.getString('user_info');
 
     if (infoStr == null){
       return {};

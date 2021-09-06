@@ -60,27 +60,32 @@ class _EventInfoPageState extends State<EventInfoPage> {
                 widget.event.from == DateTime(now.year, now.month, now.day) ? 'Hôm nay' : _date(),
               ),
             ),
-            widget.event.location == null || widget.event.location == ''
-                ? Container()
-                : ListTile(
-                    horizontalTitleGap: 4,
-                    leading: const Icon(Icons.location_on_outlined),
-                    title: Text(widget.event.location!),
-                  ),
-            widget.event.description == null || widget.event.description == ''
-                ? Container()
-                : ListTile(
-                    horizontalTitleGap: 4,
-                    leading: const Icon(Icons.sticky_note_2_outlined),
-                    title: Text(widget.event.description!),
-                  ),
-            widget.event.people == null || widget.event.people == ''
-                ? Container()
-                : ListTile(
-                    horizontalTitleGap: 4,
-                    leading: const Icon(Icons.people_alt_outlined),
-                    title: Text('${widget.event.type.isSchedule ? 'Gv. ' : ''}${widget.event.people!}'),
-                  )
+            if (widget.event.location == null || widget.event.location == '')
+              Container()
+            else
+              ListTile(
+                horizontalTitleGap: 4,
+                leading: const Icon(Icons.location_on_outlined),
+                title: Text(widget.event.location!),
+              ),
+
+            if (widget.event.description == null || widget.event.description == '')
+              Container()
+            else
+              ListTile(
+                horizontalTitleGap: 4,
+                leading: const Icon(Icons.sticky_note_2_outlined),
+                title: Text(widget.event.description!),
+              ),
+
+            if (widget.event.people == null || widget.event.people == '')
+              Container()
+            else
+              ListTile(
+                horizontalTitleGap: 4,
+                leading: const Icon(Icons.people_alt_outlined),
+                title: Text('${widget.event.type.isSchedule ? 'Gv. ' : ''}${widget.event.people!}'),
+              )
           ],
         ),
       ),
@@ -192,7 +197,7 @@ class __TopbarState extends State<_Topbar> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Đồng ý"),
+                child: const Text('Đồng ý'),
               ),
             ],
           );

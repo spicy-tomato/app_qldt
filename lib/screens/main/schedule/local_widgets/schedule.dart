@@ -113,7 +113,7 @@ class _ScheduleState extends State<Schedule> {
     );
   }
 
-  void _onTap(CalendarTapDetails details, PlanState state) async {
+  Future<void> _onTap(CalendarTapDetails details, PlanState state) async {
     if (_prevView == CalendarView.month) {
       widget.controller.selectedDate = null;
       return;

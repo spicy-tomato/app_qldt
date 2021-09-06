@@ -18,8 +18,8 @@ class Sidebar extends StatefulWidget {
 class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
 
     return SizedBox(
       width: screenWidth,
@@ -93,11 +93,11 @@ class _SidebarState extends State<Sidebar> {
     );
   }
 
-  void _onCloseSidebar() async {
+  Future<void> _onCloseSidebar() async {
     await Navigator.maybePop(context);
   }
 
-  void _onOpenSetting() async {
+  Future<void> _onOpenSetting() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => const SettingPage(),
@@ -105,7 +105,7 @@ class _SidebarState extends State<Sidebar> {
     );
   }
 
-  void _onLogout() async {
+  Future<void> _onLogout() async {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(

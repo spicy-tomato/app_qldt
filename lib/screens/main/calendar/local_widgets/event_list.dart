@@ -89,19 +89,20 @@ class _EventListItem extends StatelessWidget {
       minute = minute.substring(minute.length - 2);
     }
 
-    String? hour = event.from?.hour.toString();
+    final String? hour = event.from?.hour.toString();
 
     return Row(
       children: <Widget>[
-        hour != null && minute != null
-            ? Text(
-                hour + ':' + minute,
-                style: const TextStyle(
-                  color: Color(0xff694A85),
-                  fontSize: 25,
-                ),
-              )
-            : Container(),
+        if (hour != null && minute != null)
+          Text(
+            hour + ':' + minute,
+            style: const TextStyle(
+              color: Color(0xff694A85),
+              fontSize: 25,
+            ),
+          )
+        else
+          Container(),
         const SizedBox(width: 10),
         Flexible(
           child: Column(

@@ -16,10 +16,10 @@ class VersionService {
   });
 
   Future<Map<String, dynamic>> getServerDataVersion() async {
-    String baseUrl = apiUrl.get.version;
+    final String baseUrl = apiUrl.get.version;
     http.Response response;
 
-    String url = '$baseUrl?id=$idStudent';
+    final String url = '$baseUrl?id=$idStudent';
 
     try {
       response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

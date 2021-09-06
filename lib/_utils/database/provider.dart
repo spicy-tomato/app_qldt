@@ -38,8 +38,8 @@ class DatabaseProvider {
   }
 
   Future<void> _initDb() async {
-    String path = await _getPath();
-    bool dbExisted = await databaseExists(path);
+    final String path = await _getPath();
+    final bool dbExisted = await databaseExists(path);
 
     if (!dbExisted) {
       try {
@@ -51,17 +51,17 @@ class DatabaseProvider {
   }
 
   static Future<void> deleteDb() async {
-    DatabaseProvider databaseProvider = DatabaseProvider();
+    final DatabaseProvider databaseProvider = DatabaseProvider();
     await databaseProvider.init();
 
-    String path = await databaseProvider._getPath();
+    final String path = await databaseProvider._getPath();
 
     await databaseProvider.database.close();
     await deleteDatabase(path);
   }
 
   Future<void> _openDb() async {
-    String path = await _getPath();
+    final String path = await _getPath();
 
     database = await openDatabase(
       path,
@@ -101,7 +101,7 @@ class DatabaseProvider {
       DbEventSchedule().create(db);
       DbEventExam().create(db);
 
-      var dv = DbDataVersion();
+      final dv = DbDataVersion();
       dv.create(db);
       DbDataVersion.insertInitial(db);
     } on Exception catch (e) {
@@ -109,7 +109,7 @@ class DatabaseProvider {
     }
   }
 
-  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     try {
       if (oldVersion < 2) {
         await _upgradeToV2(db);

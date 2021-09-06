@@ -109,16 +109,18 @@ class _LoginFormState extends State<LoginForm> {
                         const SizedBox(height: 40),
                         BlocBuilder<LoginBloc, LoginState>(
                           buildWhen: (previous, current) =>
-                              previous.accountPermission != current.accountPermission ||
-                              previous.status != current.status,
+                              previous.accountPermission != current.accountPermission || previous.status != current.status,
                           builder: (context, state) => Column(
                             children: <Widget>[
-                              state.accountPermission.isUser || state.status.isSubmissionInProgress
-                                  ? Container()
-                                  : _loginAnchor,
-                              state.accountPermission.isGuest || state.status.isSubmissionInProgress
-                                  ? Container()
-                                  : _loginAsGuestAnchor,
+                              if (state.accountPermission.isUser || state.status.isSubmissionInProgress)
+                                Container()
+                              else
+                                _loginAnchor,
+
+                              if (state.accountPermission.isGuest || state.status.isSubmissionInProgress)
+                                Container()
+                              else
+                                _loginAsGuestAnchor,
                             ],
                           ),
                         )
@@ -134,7 +136,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _showDialogListener(BuildContext context, LoginState state) async {
+  Future<void> _showDialogListener(BuildContext context, LoginState state) async {
     if (state.status.isSubmissionFailure && !showLoginFailedDialog && state.shouldShowLoginFailedDialog) {
       showLoginFailedDialog = true;
       context.read<LoginBloc>().add(ShowedLoginFailedDialog());
@@ -176,7 +178,6 @@ class _LoginFormState extends State<LoginForm> {
         ),
       );
 
-  /// TODO: Alert wrong login information, server or no internet
   Widget _loginFailedDialog(BuildContext context) {
     return WillPopScope(
       onWillPop: () {

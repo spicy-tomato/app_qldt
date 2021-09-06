@@ -64,7 +64,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     yield const PreloadState.loading();
     String? avatarPath;
 
-    Stopwatch stopwatch = Stopwatch()..start();
+    final Stopwatch stopwatch = Stopwatch()..start();
     const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
     apiUrl.accountPermission = _permission;
@@ -110,7 +110,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     yield const PreloadState.loadingAfterLogin();
     String? avatarPath;
 
-    Stopwatch stopwatch = Stopwatch()..start();
+    final Stopwatch stopwatch = Stopwatch()..start();
     const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
     final serviceControllers = _ServiceControllers(
@@ -164,7 +164,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   }) async {
     await serviceControllers.init(loadOldData: !force);
 
-    Map<String, dynamic> versionMap = await VersionService(
+    final Map<String, dynamic> versionMap = await VersionService(
       apiUrl: apiUrl,
       idStudent: _idUser,
     ).getServerDataVersion();
@@ -226,7 +226,7 @@ class _ServiceControllers {
   }
 
   Future<void> refresh(Map<String, dynamic> versionMap) async {
-    DbDataVersion version = event.localService.databaseProvider.dataVersion;
+    final DbDataVersion version = event.localService.databaseProvider.dataVersion;
 
     await Future.wait([
       _refreshEvent(versionMap['Schedule'] as int?, version.schedule),

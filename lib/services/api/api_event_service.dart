@@ -38,13 +38,13 @@ class ApiEventService extends ApiService {
   ///     ...
   /// ]
   Future<ServiceResponse> _fetchData() async {
-    String baseUrl = apiUrl.get.schedule;
-    int version = controller.localService.databaseProvider.dataVersion.schedule;
+    final String baseUrl = apiUrl.get.schedule;
+    final int version = controller.localService.databaseProvider.dataVersion.schedule;
 
-    String url = '$baseUrl?id=$idUser&version=$version';
+    final String url = '$baseUrl?id=$idUser&version=$version';
 
     try {
-      http.Response response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      final http.Response response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return ServiceResponse.withVersion(response);
     } on TimeoutException catch (e) {
       debugPrint('Timeout error: $e at Event service');

@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _body(BuildContext context) {
+  Widget _body(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

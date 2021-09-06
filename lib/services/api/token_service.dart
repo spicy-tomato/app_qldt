@@ -19,7 +19,7 @@ class TokenService {
 
   Future<void> upsert(String studentId) async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
-      String? token = await _firebaseRepository.getToken();
+      final String? token = await _firebaseRepository.getToken();
       debugPrint('Token: $token');
 
       final json = <String, String?>{

@@ -16,7 +16,7 @@ class ScreenPageTilesList extends StatelessWidget {
 
   List<Widget> _getSidebarItems(BuildContext context) {
     ScreenPage currentScreenPage = ScreenPage.login;
-    String? currentRoute = ModalRoute.of(context)!.settings.name;
+    final String? currentRoute = ModalRoute.of(context)!.settings.name;
 
     for (var value in ScreenPage.values) {
       if (value.string == currentRoute) {
@@ -39,7 +39,7 @@ class ScreenPageTilesList extends StatelessWidget {
         ? BelowEmptyTile(context)
         : const EmptyTile();
 
-    List<Widget> _list = [_firstListItem];
+    final List<Widget> _list = [_firstListItem];
 
     for (int i = 1; i < ScreenPage.values.length - 1; i++) {
       final page = ScreenPage.values[i];

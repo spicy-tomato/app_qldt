@@ -20,7 +20,7 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget listTile = Container(
+    final Widget listTile = Container(
       color: disabled != null && disabled! ? Colors.grey.withOpacity(0.5) : null,
       height: defaultHeight == null || defaultHeight == true ? 48 : null,
       child: Padding(

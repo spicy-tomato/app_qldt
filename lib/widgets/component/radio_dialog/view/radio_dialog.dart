@@ -43,7 +43,7 @@ class _RadioAlertDialogState<T> extends State<RadioAlertDialog<T>> {
   }
 
   List<Widget> _listTiles(T currentOption) {
-    List<Widget> tiles = [];
+    final List<Widget> tiles = [];
     final themeData = context.read<AppSettingBloc>().state.theme.data;
 
     for (var option in widget.optionsList) {

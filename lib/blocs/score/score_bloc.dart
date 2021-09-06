@@ -65,7 +65,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
   ScoreState _mapScoreDataChangedToState(ScoreDataChanged event) {
     List<ScoreModel> newScoreData = [];
-    ScoreServiceController scoreServiceController = _userDataModel.scoreServiceController;
+    final ScoreServiceController scoreServiceController = _userDataModel.scoreServiceController;
 
     //  Query all
     if (event.semester == const SemesterModel.all() && event.subjectEvaluation.isAll) {
@@ -96,7 +96,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     yield state.copyWith(status: ScorePageStatus.loading);
 
-    CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
+    final CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
       ScoreCrawlerModel(
         idStudent: _userDataModel.idUser,
         idAccount: _userDataModel.idAccount,
@@ -105,7 +105,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     debugPrint('score_bloc.dart --- Crawl score: $scoreCrawlerStatus');
 
     //  Also request to crawl exam schedule
-    CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
+    final CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
         idStudent: _userDataModel.idUser,
         idAccount: _userDataModel.idAccount,

@@ -52,12 +52,12 @@ class DbNotification extends TableModel {
     assert(database != null, 'Database must not be null');
 
     try {
-      int lastId = (await database!.query(
+      final int lastId = (await database!.query(
         tableName,
         columns: ['id_notification'],
         orderBy: 'id_notification DESC',
         limit: 1,
-      ))[0]['id_notification'] as int;
+      ))[0]['id_notification']! as int;
 
       debugPrint('Last notification id: $lastId');
       return lastId;
@@ -70,7 +70,7 @@ class DbNotification extends TableModel {
   Future<void> insert(List<ReceiveNotificationModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in rawData) {
+    for (final element in rawData) {
       try {
         await database!.insert(
           tableName,
@@ -95,7 +95,7 @@ class DbNotification extends TableModel {
   Future<void> deleteRow(List<int> list) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in list) {
+    for (final element in list) {
       try {
         await database!.delete(
           tableName,

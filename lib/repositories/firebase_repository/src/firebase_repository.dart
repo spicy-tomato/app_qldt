@@ -42,8 +42,8 @@ class FirebaseRepository {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
-        RemoteNotification? notification = message.notification;
-        AndroidNotification? android = message.notification?.android;
+        final RemoteNotification? notification = message.notification;
+        final AndroidNotification? android = message.notification?.android;
 
         debugPrint(message.data.toString());
         debugPrint(message.notification.toString());

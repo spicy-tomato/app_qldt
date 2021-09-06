@@ -31,7 +31,7 @@ class ApiNotificationService extends ApiService {
 
   Future<ServiceResponse> request() async {
     if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
-      int? idNotification = await controller.localService.databaseProvider.notification.lastId;
+      final int? idNotification = await controller.localService.databaseProvider.notification.lastId;
       return await _fetchData(idNotification: idNotification);
     }
 
@@ -39,8 +39,8 @@ class ApiNotificationService extends ApiService {
   }
 
   Future<ServiceResponse> _fetchData({int? idNotification}) async {
-    String baseUrl = apiUrl.get.notification;
-    int version = controller.localService.databaseProvider.dataVersion.notification;
+    final String baseUrl = apiUrl.get.notification;
+    final int version = controller.localService.databaseProvider.dataVersion.notification;
 
     String url = '$baseUrl?id_student=$idUser&id_account=$idAccount&version=$version';
     if (idNotification != null){

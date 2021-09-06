@@ -68,7 +68,7 @@ class ReceiveNotificationModel {
       return [];
     }
 
-    List<ReceiveNotificationModel> res = [];
+    final List<ReceiveNotificationModel> res = [];
 
     for (var item in list){
       res.add(ReceiveNotificationModel.fromJson(item));

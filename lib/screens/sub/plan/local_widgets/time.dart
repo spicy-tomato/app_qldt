@@ -127,7 +127,7 @@ class _FromDatePickerState extends State<FromDatePicker> {
     );
   }
 
-  _chooseDay(BuildContext context, PlanState state) async {
+  Future<void> _chooseDay(BuildContext context, PlanState state) async {
     DateTime? newDate = await showRoundedDatePicker(
       context: context,
       firstDate: DateTime(2020),
@@ -165,8 +165,8 @@ class _FromDatePickerState extends State<FromDatePicker> {
     }
   }
 
-  _chooseTime(BuildContext context, PlanState state) async {
-    TimeOfDay? newTime = await showRoundedTimePicker(
+  Future<void> _chooseTime(BuildContext context, PlanState state) async {
+    final TimeOfDay? newTime = await showRoundedTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(state.fromDay),
       theme: ThemeData(
@@ -188,7 +188,7 @@ class _FromDatePickerState extends State<FromDatePicker> {
     );
 
     if (newTime != null) {
-      DateTime newDate = DateTime(
+      final DateTime newDate = DateTime(
         state.fromDay.year,
         state.fromDay.month,
         state.fromDay.day,
@@ -257,7 +257,7 @@ class _ToDatePickerState extends State<ToDatePicker> {
     );
   }
 
-  _chooseDay(BuildContext context, PlanState state) async {
+  Future<void> _chooseDay(BuildContext context, PlanState state) async {
     DateTime? newDate = await showRoundedDatePicker(
       context: context,
       firstDate: DateTime(2020),
@@ -295,8 +295,8 @@ class _ToDatePickerState extends State<ToDatePicker> {
     }
   }
 
-  _chooseTime(BuildContext context, PlanState state) async {
-    TimeOfDay? newTime = await showRoundedTimePicker(
+  Future<void> _chooseTime(BuildContext context, PlanState state) async {
+    final TimeOfDay? newTime = await showRoundedTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(state.fromDay),
       theme: ThemeData(
@@ -318,7 +318,7 @@ class _ToDatePickerState extends State<ToDatePicker> {
     );
 
     if (newTime != null) {
-      DateTime newDate = DateTime(
+      final DateTime newDate = DateTime(
         state.toDay.year,
         state.toDay.month,
         state.toDay.day,
@@ -373,7 +373,7 @@ class _RepeatState extends State<Repeat> {
   }
 
   List<Widget> listRadioItem(PlanState state) {
-    List<Widget> widgets = [];
+    final List<Widget> widgets = [];
 
     for (int i = 0; i < _listItem.length; i++) {
       widgets.add(InkWell(

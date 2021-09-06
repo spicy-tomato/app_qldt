@@ -40,10 +40,10 @@ class ApiScoreService extends ApiService {
   ///     ...
   /// ]
   Future<ServiceResponse> _fetchData() async {
-    String baseUrl = apiUrl.get.score;
-    int version = controller.localService.databaseProvider.dataVersion.score;
+    final String baseUrl = apiUrl.get.score;
+    final int version = controller.localService.databaseProvider.dataVersion.score;
 
-    String url = '$baseUrl?id_student=$idUser&version=$version';
+    final String url = '$baseUrl?id_student=$idUser&version=$version';
 
     try {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

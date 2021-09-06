@@ -45,7 +45,7 @@ class AvatarBloc extends Bloc<AvatarEvent, AvatarState> {
   }
 
   Future<File?> _cropImage(String imagePath) async {
-    File? croppedImage = await ImageCropper.cropImage(
+    final File? croppedImage = await ImageCropper.cropImage(
       sourcePath: imagePath,
       aspectRatioPresets: [CropAspectRatioPreset.square],
       androidUiSettings: const AndroidUiSettings(

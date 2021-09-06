@@ -6,7 +6,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'app.dart';
 import 'widgets/wrapper/app_mode.dart';
 
-void main() async {
+Future<void> main() async {
   await initializeApp();
 
   runApp(

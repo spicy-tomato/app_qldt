@@ -64,7 +64,7 @@ class DbSchedule extends TableModel {
   Future<void> insert(List<ScheduleModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in rawData) {
+    for (final element in rawData) {
       try {
         await database!.insert(
           tableName,

@@ -1,5 +1,10 @@
+import 'package:flutter/widgets.dart';
+
+@immutable
 class SemesterModel {
   final String? _string;
+
+  const SemesterModel(String semester) : this._(semester);
 
   const SemesterModel._([String? semester])
       : _string = semester == null
@@ -7,8 +12,6 @@ class SemesterModel {
             : semester == ''
                 ? ''
                 : semester;
-
-  const SemesterModel(String semester) : this._(semester);
 
   const SemesterModel.all() : this._('');
 

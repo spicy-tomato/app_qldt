@@ -65,7 +65,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
     yield state.copyWith(status: ExamSchedulePageStatus.loading);
 
     //  Also request to crawl score
-    CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
+    final CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
       ScoreCrawlerModel(
         idStudent: _userDataModel.idUser,
         idAccount: _userDataModel.idAccount,
@@ -76,7 +76,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
       await _userDataModel.scoreServiceController.refresh();
     }
 
-    CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
+    final CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
         idStudent: _userDataModel.idUser,
         idAccount: _userDataModel.idAccount,

@@ -39,27 +39,26 @@ class SplashPage extends StatelessWidget {
               const SizedBox(
                 height: 50,
               ),
-              shouldLoadAfterLogin
-                  ? Column(
-                      children: <Widget>[
-                        Text(
-                          'Đang tải dữ liệu, vui lòng chờ',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: themeData.secondaryTextColor,
-                          )
-                        ),
-                        Text(
-                          '* Bước này chỉ xảy ra một lần sau khi đăng nhập',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: themeData.secondaryTextColor,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
+              if (shouldLoadAfterLogin)
+                Column(
+                  children: <Widget>[
+                    Text('Đang tải dữ liệu, vui lòng chờ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: themeData.secondaryTextColor,
+                        )),
+                    Text(
+                      '* Bước này chỉ xảy ra một lần sau khi đăng nhập',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: themeData.secondaryTextColor,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                )
+              else
+                Container(),
             ]),
           ],
         ),

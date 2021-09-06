@@ -26,10 +26,10 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
   Map<DateTime, List<UserEventModel>> get calendarData => localService.calendarData;
 
   Future<void> refresh() async {
-    ServiceResponse response = await apiService.request();
+    final ServiceResponse response = await apiService.request();
 
     if (response.statusCode == 200) {
-      List<ScheduleModel> newData = _getListModel(response.data);
+      final List<ScheduleModel> newData = _getListModel(response.data);
       await localService.saveNewData(newData);
       await localService.updateVersion(response.version!);
     } else {
@@ -46,7 +46,7 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
   }
 
   Future<int?> saveNewEvent(UserEventModel event) async {
-    int? lastId = await localService.saveNewEvent(event);
+    final int? lastId = await localService.saveNewEvent(event);
     await localService.loadEvents();
 
     return lastId;
@@ -73,8 +73,8 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
   }
 
   List<ScheduleModel> _getListModel(dynamic responseData) {
-    List data = responseData as List;
-    List<ScheduleModel> listModel = [];
+    final List data = responseData as List;
+    final List<ScheduleModel> listModel = [];
 
     for (var element in data) {
       listModel.add(ScheduleModel.fromJson(element));

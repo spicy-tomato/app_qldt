@@ -11,8 +11,8 @@ class AbovePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final themeData = context.read<AppSettingBloc>().state.theme.data;
 
-    Path path = Path();
-    Paint paint = Paint();
+    final Path path = Path();
+    final Paint paint = Paint();
     paint.color = themeData.primaryTextColor;
 
     path.moveTo(38, 56);

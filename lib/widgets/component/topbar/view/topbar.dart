@@ -40,7 +40,7 @@ class _TopBarState extends State<TopBar> {
             ),
             Row(
               children: <Widget>[
-                widget.stable! ? Container() : UnstableButton(),
+                if (widget.stable!) Container() else UnstableButton(),
                 widget.topRightWidget ?? Container(),
               ],
             ),

@@ -16,8 +16,8 @@ class CrawlerService {
 
   Future<CrawlerStatus> updatePassword(UpdatePasswordCrawlerModel crawler) async {
     http.Response response;
-    String url = apiUrl.post.updatePasswordCrawler;
-    String body = jsonEncode(crawler);
+    final String url = apiUrl.post.updatePasswordCrawler;
+    final String body = jsonEncode(crawler);
 
     try {
       response = await http.post(Uri.parse(url), body: body).timeout(Const.crawlerTimeout);
@@ -29,8 +29,8 @@ class CrawlerService {
   }
 
   Future<CrawlerStatus> crawlScore(ScoreCrawlerModel crawler) async {
-    String url = apiUrl.post.scoreCrawler;
-    String body = jsonEncode(crawler);
+    final String url = apiUrl.post.scoreCrawler;
+    final String body = jsonEncode(crawler);
     http.Response response;
 
     try {
@@ -43,8 +43,8 @@ class CrawlerService {
   }
 
   Future<CrawlerStatus> crawlExamSchedule(ExamScheduleCrawlerModel crawler) async {
-    String url = apiUrl.post.examScheduleCrawler;
-    String body = jsonEncode(crawler);
+    final String url = apiUrl.post.examScheduleCrawler;
+    final String body = jsonEncode(crawler);
     http.Response response;
 
     try {

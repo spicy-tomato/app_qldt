@@ -26,7 +26,7 @@ class SenderModel {
       return [];
     }
 
-    List<SenderModel> res = [];
+    final List<SenderModel> res = [];
 
     for (var item in list){
       res.add(SenderModel.fromJson(item));

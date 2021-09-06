@@ -21,13 +21,13 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   ScheduleBloc(BuildContext context)
       : _context = context,
-        _userDataModel = context.read<UserRepository>().userDataModel,
+        _userDataModel = context
+            .read<UserRepository>()
+            .userDataModel,
         super(ScheduleInitial());
 
   @override
-  Stream<ScheduleState> mapEventToState(
-    ScheduleEvent event,
-  ) async* {
+  Stream<ScheduleState> mapEventToState(ScheduleEvent event,) async* {
     if (event is InitializeEvents) {
       _mapInitializeEventsToState(event);
     } else if (event is AddEvent) {
@@ -45,20 +45,22 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   void _mapInitializeEventsToState(InitializeEvents event) {
     final List<UserEventModel> events = <UserEventModel>[];
-    final UserDataModel userDataModel = _context.read<UserRepository>().userDataModel;
+    final UserDataModel userDataModel = _context
+        .read<UserRepository>()
+        .userDataModel;
 
     //  Event
-    for (var event in userDataModel.eventServiceController.eventData) {
+    for (final event in userDataModel.eventServiceController.eventData) {
       events.add(event);
     }
 
     //  Schedule
-    for (var schedule in userDataModel.eventServiceController.scheduleData) {
+    for (final schedule in userDataModel.eventServiceController.scheduleData) {
       events.add(schedule);
     }
 
     //  Exam Schedule
-    for (var element in userDataModel.examScheduleServiceController.examScheduleData) {
+    for (final element in userDataModel.examScheduleServiceController.examScheduleData) {
       events.add(UserEventModel.fromExamScheduleModel(element));
     }
 
@@ -69,7 +71,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   Future<void> _mapAddEventToState(AddEvent event) async {
     final newEvent = event.event;
-    int? lastId = await _userDataModel.eventServiceController.saveNewEvent(newEvent);
+    final int? lastId = await _userDataModel.eventServiceController.saveNewEvent(newEvent);
 
     if (lastId != null) {
       state.sourceModel.appointments!.add(newEvent.withId(lastId));
@@ -78,7 +80,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   }
 
   Future<void> _mapRemoveEventToState(RemoveEvent event) async {
-    int shouldDeleteEventId = event.id;
+    final int shouldDeleteEventId = event.id;
 
     await _userDataModel.eventServiceController.deleteEvent(shouldDeleteEventId);
 
@@ -92,7 +94,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     await _userDataModel.eventServiceController.saveModifiedEvent(modifiedEventInfo);
 
     final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
-        .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
+        .firstWhere((oldEvent) => oldEvent.id == modifiedEventInfo.id);
     modifiedEvent.color = modifiedEventInfo.color;
     modifiedEvent.description = modifiedEventInfo.description;
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
@@ -103,7 +105,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     await _userDataModel.eventServiceController.saveModifiedSchedule(modifiedEventInfo);
 
     final modifiedEvent = (state.sourceModel.appointments as List<UserEventModel>?)!
-        .firstWhere((oldEvent) => (oldEvent).id == modifiedEventInfo.id);
+        .firstWhere((oldEvent) => oldEvent.id == modifiedEventInfo.id);
     modifiedEvent.color = modifiedEventInfo.color;
     modifiedEvent.description = modifiedEventInfo.description;
     state.sourceModel.notifyListeners(CalendarDataSourceAction.reset, state.sourceModel.appointments!);
@@ -115,7 +117,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         .saveAllModifiedScheduleWithName(modifiedEventInfo.eventName, modifiedEventInfo);
 
     (state.sourceModel.appointments as List<UserEventModel>?)!
-        .where((oldEvent) => (oldEvent).eventName == modifiedEventInfo.eventName)
+        .where((oldEvent) => oldEvent.eventName == modifiedEventInfo.eventName)
         .forEach((event) {
       event.color = modifiedEventInfo.color;
       event.description = modifiedEventInfo.description;
