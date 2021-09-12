@@ -1,4 +1,5 @@
 enum ScreenPage {
+  root,
   login,
   home,
   // calendar,
@@ -12,6 +13,9 @@ enum ScreenPage {
 extension ScreenPageExtension on ScreenPage {
   String get string {
     switch (this) {
+      case ScreenPage.root:
+        return '/';
+
       case ScreenPage.login:
         return '/login';
 
@@ -65,5 +69,19 @@ extension ScreenPageExtension on ScreenPage {
       default:
         return 'Thông báo';
     }
+  }
+
+  static List<ScreenPage> get displayPagesInSidebar {
+    return [
+      ScreenPage.home,
+      ScreenPage.schedule,
+      ScreenPage.notification,
+      ScreenPage.score,
+      ScreenPage.examSchedule,
+    ];
+  }
+
+  int get sidebarIndex {
+    return displayPagesInSidebar.indexOf(this);
   }
 }
