@@ -54,16 +54,19 @@ class _PasswordInputState extends State<PasswordInput> {
             );
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.remove_red_eye),
-          iconSize: 20,
-          onPressed: () {
-            if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
-              passwordFocusNode.requestFocus();
-              context.read<LoginBloc>().add(const LoginPasswordVisibleChanged());
-            }
-          },
-        )
+        Opacity(
+          opacity: passwordFocusNode.hasFocus ? 1 : 0,
+          child: IconButton(
+            icon: const Icon(Icons.remove_red_eye),
+            iconSize: 20,
+            onPressed: () {
+              if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
+                passwordFocusNode.requestFocus();
+                context.read<LoginBloc>().add(const LoginPasswordVisibleChanged());
+              }
+            },
+          )
+        ),
       ],
     );
   }
