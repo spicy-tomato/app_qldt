@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/score_model.dart';
+import 'package:app_qldt/models/score/score_models.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -55,7 +55,7 @@ class DbScore extends TableModel {
   Future<void> insert(List<ScoreModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in rawData) {
+    for (final element in rawData) {
       await database!.insert(tableName, element.toMap());
     }
   }

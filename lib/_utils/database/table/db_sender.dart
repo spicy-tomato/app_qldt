@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/sender_model.dart';
+import 'package:app_qldt/models/notification/sender_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -19,7 +19,7 @@ class DbSender extends TableModel {
   Future<void> insert(List<SenderModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in rawData) {
+    for (final element in rawData) {
       await database!.insert(
         tableName,
         element.toMap(),

@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/screen.dart';
+import 'package:app_qldt/enums/config/screen.dart';
 import 'package:flutter/material.dart';
 
 class Const {

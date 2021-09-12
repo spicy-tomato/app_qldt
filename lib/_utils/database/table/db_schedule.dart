@@ -1,4 +1,4 @@
-import 'package:app_qldt/_models/schedule_model.dart';
+import 'package:app_qldt/models/event/schedule_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -64,7 +64,7 @@ class DbSchedule extends TableModel {
   Future<void> insert(List<ScheduleModel> rawData) async {
     assert(database != null, 'Database must not be null');
 
-    for (var element in rawData) {
+    for (final element in rawData) {
       try {
         await database!.insert(
           tableName,
