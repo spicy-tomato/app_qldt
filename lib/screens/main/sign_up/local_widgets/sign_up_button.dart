@@ -47,7 +47,7 @@ class Button extends StatelessWidget {
           ),
         ),
       ),
-      child: const Text('Đăng nhập'),
+      child: const Text('Đăng ký'),
       onPressed: _onPressed,
     );
   }

@@ -73,16 +73,14 @@ class _LoginFormState extends State<LoginForm> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: SizedBox(
-                            height: 50,
-                            child: Text(
-                              'Đăng nhập để tiếp tục',
-                              key: const ValueKey(0),
-                              style: _titleTextStyle,
-                              textAlign: TextAlign.center,
-                            ),
+                        const SizedBox(height: 5),
+                        SizedBox(
+                          height: 35,
+                          child: Text(
+                            'Đăng nhập để tiếp tục',
+                            key: const ValueKey(0),
+                            style: _titleTextStyle,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         LoginUsernameInput(focusNode: focusNode),
