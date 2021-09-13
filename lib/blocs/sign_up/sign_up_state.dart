@@ -1,41 +1,41 @@
-part of 'login_bloc.dart';
+part of 'sign_up_bloc.dart';
 
-class LoginState extends Equatable {
+class SignUpState extends Equatable {
   final FormzStatus status;
   final UsernameModel username;
   final PasswordModel password;
   final bool hidePassword;
   final bool hideKeyboard;
-  final bool hideLoginDialog;
-  final bool shouldShowLoginFailedDialog;
+  final bool hideSignUpDialog;
+  final bool shouldShowSignUpFailedDialog;
 
-  const LoginState({
+  const SignUpState({
     required this.status,
     required this.username,
     required this.password,
     required this.hidePassword,
     required this.hideKeyboard,
-    required this.hideLoginDialog,
-    required this.shouldShowLoginFailedDialog,
+    required this.hideSignUpDialog,
+    required this.shouldShowSignUpFailedDialog,
   });
 
-  LoginState copyWith({
+  SignUpState copyWith({
     FormzStatus? status,
     UsernameModel? username,
     PasswordModel? password,
     bool? hidePassword,
     bool? hideKeyboard,
-    bool? hideLoginDialog,
-    bool? shouldShowLoginFailedDialog,
+    bool? hideSignUpDialog,
+    bool? shouldShowSignUpFailedDialog,
   }) {
-    return LoginState(
+    return SignUpState(
       status: status ?? this.status,
       username: username ?? this.username,
       password: password ?? this.password,
       hidePassword: hidePassword ?? this.hidePassword,
       hideKeyboard: hideKeyboard ?? this.hideKeyboard,
-      hideLoginDialog: hideLoginDialog ?? this.hideLoginDialog,
-      shouldShowLoginFailedDialog: shouldShowLoginFailedDialog ?? this.shouldShowLoginFailedDialog,
+      hideSignUpDialog: hideSignUpDialog ?? this.hideSignUpDialog,
+      shouldShowSignUpFailedDialog: shouldShowSignUpFailedDialog ?? this.shouldShowSignUpFailedDialog,
     );
   }
 
@@ -46,20 +46,20 @@ class LoginState extends Equatable {
         password,
         hidePassword,
         hideKeyboard,
-        hideLoginDialog,
-        shouldShowLoginFailedDialog,
+        hideSignUpDialog,
+        shouldShowSignUpFailedDialog,
       ];
 }
 
-class LoginInitial extends LoginState {
-  const LoginInitial()
+class SignUpInitial extends SignUpState {
+  const SignUpInitial()
       : super(
           status: FormzStatus.pure,
           username: const UsernameModel.pure(),
           password: const PasswordModel.pure(),
           hidePassword: true,
           hideKeyboard: true,
-          hideLoginDialog: true,
-          shouldShowLoginFailedDialog: true,
+          hideSignUpDialog: true,
+          shouldShowSignUpFailedDialog: true,
         );
 }

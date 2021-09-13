@@ -46,12 +46,3 @@ class LoginPasswordVisibleChanged extends LoginEvent {
 class LoginSubmitted extends LoginEvent {}
 
 class ShowedLoginFailedDialog extends LoginEvent {}
-
-class FormTypeChanged extends LoginEvent {
-  final AccountPermission accountPermission;
-
-  const FormTypeChanged(this.accountPermission);
-
-  @override
-  List<Object> get props => [accountPermission];
-}
