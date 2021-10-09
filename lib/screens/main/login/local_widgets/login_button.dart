@@ -41,7 +41,6 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      key: const Key('loginForm_continue_raisedButton'),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(const Color(0xfb40284a)),
         shape: MaterialStateProperty.all<OutlinedBorder>(

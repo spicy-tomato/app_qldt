@@ -9,7 +9,7 @@ class UserDataModel {
   final ScoreServiceController scoreServiceController;
   final NotificationServiceController notificationServiceController;
   final ExamScheduleServiceController examScheduleServiceController;
-  final String idAccount;
+  final int idAccount;
   final String idUser;
   final AccountPermission accountPermission;
   String avatarPath;

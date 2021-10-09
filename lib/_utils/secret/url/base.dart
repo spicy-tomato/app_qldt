@@ -1,5 +1,6 @@
 import 'package:app_qldt/enums/config/account_permission_enum.dart';
 import 'package:app_qldt/enums/config/app_mode.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Host {
   final AppMode mode;
@@ -14,26 +15,18 @@ class Host {
   /// User
   String get _userBase {
     if (mode.isRelease) {
-      return 'https://utcapi.herokuapp.com/api-v2/app/';
+      return dotenv.env['RELEASE_URL']!;
     }
 
     if (mode.isStaging) {
-      return 'https://utcapi-staging.herokuapp.com/api-v2/app/';
+      return dotenv.env['STAGE_URL']!;
     }
 
-    return 'https://utcapi-development.herokuapp.com/api-v2/app/';
+    return dotenv.env['DEV_URL']!;
   }
 
   String get _userCrawlBase {
-    if (mode.isRelease) {
-      return 'https://utcapi.herokuapp.com/api-v2/app/crawl/';
-    }
-
-    if (mode.isStaging) {
-      return 'https://utcapi-staging.herokuapp.com/api-v2/app/crawl/';
-    }
-
-    return 'https://utcapi-development.herokuapp.com/api-v2/app/crawl/';
+    return '$_userBase/student/crawl/';
   }
 
   /// Guest

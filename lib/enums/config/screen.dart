@@ -9,6 +9,7 @@ enum ScreenPage {
   examSchedule,
   setting,
   signUp,
+  enterInformation
 }
 
 extension ScreenPageExtension on ScreenPage {
@@ -41,6 +42,9 @@ extension ScreenPageExtension on ScreenPage {
       case ScreenPage.signUp:
         return '/signUp';
 
+      case ScreenPage.enterInformation:
+        return '/enterInformation';
+
       default:
         return '/notification';
     }
@@ -71,6 +75,9 @@ extension ScreenPageExtension on ScreenPage {
 
       case ScreenPage.signUp:
         return 'Đăng ký';
+
+      case ScreenPage.enterInformation:
+        return 'Nhập thông tin';
 
       case ScreenPage.notification:
       default:

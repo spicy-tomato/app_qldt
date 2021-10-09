@@ -11,10 +11,14 @@ class SignUpButton extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: 56,
-        child:
-            // state.status.isSubmissionInProgress ?
-            // const ProcessingWidget() :
-            Button(focusNode),
+        child: BlocBuilder<SignUpBloc, SignUpState>(
+          buildWhen: (previous, current) {
+            return previous.status != current.status;
+          },
+          builder: (_, state) {
+            return state.status.isSubmissionInProgress ? const ProcessingWidget() : Button(focusNode);
+          },
+        ),
       ),
     );
   }
@@ -31,11 +35,16 @@ class ProcessingWidget extends StatelessWidget {
   }
 }
 
-class Button extends StatelessWidget {
+class Button extends StatefulWidget {
   final FocusNode focusNode;
 
   const Button(this.focusNode, {Key? key}) : super(key: key);
 
+  @override
+  _ButtonState createState() => _ButtonState();
+}
+
+class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -52,5 +61,9 @@ class Button extends StatelessWidget {
     );
   }
 
-  void _onPressed() {}
+  void _onPressed() {
+    FocusScope.of(context).unfocus();
+    context.read<SignUpBloc>().add(const SignUpPasswordVisibleChanged(true));
+    context.read<SignUpBloc>().add(SignUpSubmitted());
+  }
 }

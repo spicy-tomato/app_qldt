@@ -45,3 +45,4 @@ key.properties
 upload-keystore.jks
 
 /android/app/build.gradle
+.env

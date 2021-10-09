@@ -21,6 +21,9 @@ class LoginService {
 
     final String url = apiUrl.post.authentication;
     final String body = jsonEncode(loginUser);
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
 
     http.Response? response;
 
@@ -28,11 +31,13 @@ class LoginService {
       response = await http
           .post(
             Uri.parse(url),
+            headers: headers,
             body: body,
           )
           .timeout(Const.requestTimeout);
 
       final HttpResponseStatus status = statusFromCode(response.statusCode);
+
 
       return HttpResponseModel(
         status: status,

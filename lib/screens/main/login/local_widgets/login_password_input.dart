@@ -52,9 +52,8 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
             );
           },
         ),
-        Opacity(
-          opacity: passwordFocusNode.hasFocus ? 1 : 0,
-          child: IconButton(
+        if (passwordFocusNode.hasFocus)
+          IconButton(
             icon: const Icon(Icons.remove_red_eye),
             iconSize: 20,
             onPressed: () {
@@ -64,7 +63,8 @@ class _LoginPasswordInputState extends State<LoginPasswordInput> {
               }
             },
           )
-        ),
+        else
+          Container()
       ],
     );
   }
