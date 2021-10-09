@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:app_qldt/enums/config/account_permission_enum.dart';
-import 'package:app_qldt/models/login/models.dart';
+import 'package:app_qldt/enums/http/http_status.dart';
+import 'package:app_qldt/models/form/form.dart';
 import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
 import 'package:app_qldt/repositories/authentication_repository/src/services/services.dart';
 import 'package:app_qldt/widgets/wrapper/app_mode.dart';
@@ -37,8 +37,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield _mapLoginPasswordVisibleChangedToState(event);
     } else if (event is ShowedLoginFailedDialog) {
       yield _mapShowedLoginFailedDialogToState();
-    } else if (event is FormTypeChanged) {
-      yield _mapFormTypeChangedToState(event);
     }
   }
 
@@ -70,10 +68,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         final apiUrl = AppModeWidget.of(context).apiUrl;
-        apiUrl.accountPermission = state.accountPermission;
         final loginUser = LoginUser(state.username.value, state.password.value);
 
-        final LoginStatus loginStatus = await _authenticationRepository.logIn(apiUrl, loginUser);
+        final HttpResponseStatus loginStatus = await _authenticationRepository.logIn(apiUrl, loginUser);
 
         if (loginStatus.isSuccessfully) {
           yield state.copyWith(status: FormzStatus.submissionSuccess);
@@ -103,9 +100,5 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginState _mapShowedLoginFailedDialogToState() {
     return state.copyWith(shouldShowLoginFailedDialog: false);
-  }
-
-  LoginState _mapFormTypeChangedToState(FormTypeChanged event) {
-    return state.copyWith(accountPermission: event.accountPermission);
   }
 }

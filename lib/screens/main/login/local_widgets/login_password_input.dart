@@ -1,16 +1,15 @@
 part of 'local_widgets.dart';
 
-
-class PasswordInput extends StatefulWidget {
+class LoginPasswordInput extends StatefulWidget {
   final FocusNode focusNode;
 
-  const PasswordInput({Key? key, required this.focusNode}) : super(key: key);
+  const LoginPasswordInput({Key? key, required this.focusNode}) : super(key: key);
 
   @override
-  _PasswordInputState createState() => _PasswordInputState();
+  _LoginPasswordInputState createState() => _LoginPasswordInputState();
 }
 
-class _PasswordInputState extends State<PasswordInput> {
+class _LoginPasswordInputState extends State<LoginPasswordInput> {
   late FocusNode passwordFocusNode;
 
   @override
@@ -38,7 +37,6 @@ class _PasswordInputState extends State<PasswordInput> {
           },
           builder: (context, state) {
             return TextField(
-              key: const Key('loginForm_passwordInput_textField'),
               style: const FormTextStyle(),
               focusNode: passwordFocusNode,
               textInputAction: TextInputAction.done,
@@ -54,16 +52,19 @@ class _PasswordInputState extends State<PasswordInput> {
             );
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.remove_red_eye),
-          iconSize: 20,
-          onPressed: () {
-            if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
-              passwordFocusNode.requestFocus();
-              context.read<LoginBloc>().add(const LoginPasswordVisibleChanged());
-            }
-          },
-        )
+        Opacity(
+          opacity: passwordFocusNode.hasFocus ? 1 : 0,
+          child: IconButton(
+            icon: const Icon(Icons.remove_red_eye),
+            iconSize: 20,
+            onPressed: () {
+              if (!context.read<LoginBloc>().state.status.isSubmissionInProgress) {
+                passwordFocusNode.requestFocus();
+                context.read<LoginBloc>().add(const LoginPasswordVisibleChanged());
+              }
+            },
+          )
+        ),
       ],
     );
   }

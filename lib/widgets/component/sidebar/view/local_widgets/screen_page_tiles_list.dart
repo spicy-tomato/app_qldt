@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'tiles/tiles.dart';
 
-class ScreenPageTilesList extends StatelessWidget {
+class ScreenPageTilesList extends StatefulWidget {
   const ScreenPageTilesList({Key? key}) : super(key: key);
 
+  @override
+  _ScreenPageTilesListState createState() => _ScreenPageTilesListState();
+}
+
+class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -15,40 +20,43 @@ class ScreenPageTilesList extends StatelessWidget {
   }
 
   List<Widget> _getSidebarItems(BuildContext context) {
-    ScreenPage currentScreenPage = ScreenPage.login;
-    final String? currentRoute = ModalRoute.of(context)!.settings.name;
-
-    for (var value in ScreenPage.values) {
-      if (value.string == currentRoute) {
-        currentScreenPage = value;
-        break;
-      }
-    }
-
+    final ScreenPage currentScreenPage = _getCurrentScreenPage();
     return _getScreenPagesList(context, currentScreenPage);
   }
 
+  ScreenPage _getCurrentScreenPage() {
+    final String? currentRoute = ModalRoute.of(context)!.settings.name;
+
+    for (var value in ScreenPageExtension.displayPagesInSidebar) {
+      if (value.string == currentRoute) {
+        return value;
+      }
+    }
+
+    return ScreenPage.login;
+  }
+
   List<Widget> _getScreenPagesList(BuildContext context, ScreenPage currentScreenPage) {
-    final _firstListItem = currentScreenPage.index == 1
+    final _firstListItem = currentScreenPage.sidebarIndex == 0
         //
         ? AboveEmptyTile(context)
         : const EmptyTile();
 
-    final _lastListItem = currentScreenPage.index == ScreenPage.values.length - 2
+    final _lastListItem = currentScreenPage.sidebarIndex == ScreenPageExtension.displayPagesInSidebar.length - 1
         //
         ? BelowEmptyTile(context)
         : const EmptyTile();
 
     final List<Widget> _list = [_firstListItem];
 
-    for (int i = 1; i < ScreenPage.values.length - 1; i++) {
-      final page = ScreenPage.values[i];
+    for (int i = 0; i < ScreenPageExtension.displayPagesInSidebar.length; i++) {
+      final page = ScreenPageExtension.displayPagesInSidebar[i];
 
-      if (page.index == currentScreenPage.index) {
+      if (page.sidebarIndex == currentScreenPage.sidebarIndex) {
         _list.add(CurrentScreenPageTile(screenPage: page));
-      } else if (page.index == currentScreenPage.index - 1) {
+      } else if (page.sidebarIndex == currentScreenPage.sidebarIndex - 1) {
         _list.add(AboveScreenPageTile(context, screenPage: page));
-      } else if (page.index == currentScreenPage.index + 1) {
+      } else if (page.sidebarIndex == currentScreenPage.sidebarIndex + 1) {
         _list.add(BelowScreenPageTile(context, screenPage: page));
       } else {
         _list.add(NormalScreenPageTile(context, screenPage: page));

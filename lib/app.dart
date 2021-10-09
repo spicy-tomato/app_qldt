@@ -1,14 +1,15 @@
 import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/config/config.dart';
 import 'package:app_qldt/constant/constant.dart';
+import 'package:app_qldt/enums/config/screen.dart';
 import 'package:flutter/material.dart';
+import 'package:app_qldt/screens/main/sign_up/sign_up_page.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/preload/preload_bloc.dart';
 import 'repositories/authentication_repository/authentication_repository.dart';
 import 'repositories/user_repository/user_repository.dart';
-import 'screens/main/calendar/calendar_page.dart';
 import 'screens/main/exam_schedule/exam_schedule_page.dart';
 import 'screens/main/home/home_page.dart';
 import 'screens/main/login/login_page.dart';
@@ -116,15 +117,16 @@ class _ApplicationState extends State<Application> {
                 );
               },
               routes: {
-                '/': (_) => SplashPage(_shouldLoadAfterLogin),
-                '/login': (_) => const LoginPage(),
-                '/home': (_) => const HomePage(),
-                '/calendar': (_) => CalendarPage(),
-                '/schedule': (_) => const SchedulePage(),
-                '/score': (_) => ScorePage(),
-                '/examSchedule': (_) => ExamSchedulePage(),
-                '/notification': (_) => const NotificationPage(),
-                '/setting': (_) => const SettingPage(),
+                ScreenPage.root.string: (_) => SplashPage(_shouldLoadAfterLogin),
+                ScreenPage.login.string: (_) => const LoginPage(),
+                ScreenPage.signUp.string: (_) => const SignUpPage(),
+                ScreenPage.home.string: (_) => const HomePage(),
+                // '/calendar': (_) => CalendarPage(),
+                ScreenPage.schedule.string: (_) => const SchedulePage(),
+                ScreenPage.score.string: (_) => ScorePage(),
+                ScreenPage.examSchedule.string: (_) => ExamSchedulePage(),
+                ScreenPage.notification.string: (_) => const NotificationPage(),
+                ScreenPage.setting.string: (_) => const SettingPage(),
               },
             );
           },
@@ -134,20 +136,26 @@ class _ApplicationState extends State<Application> {
   }
 
   Future<void> unauthenticated() async {
-    if (ModalRoute.of(context)?.settings.name != '/login') {
-      await _navigator!.pushNamedAndRemoveUntil('/login', (_) => false);
+    final loginRoute = ScreenPage.login.string;
+
+    if (ModalRoute.of(context)?.settings.name != loginRoute) {
+      await _navigator!.pushNamedAndRemoveUntil(loginRoute, (_) => false);
     }
   }
 
   Future<void> authenticated(AuthenticationState state) async {
-    if (ModalRoute.of(context)?.settings.name != '/') {
-      await _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+    final rootRoute = ScreenPage.root.string;
+
+    if (ModalRoute.of(context)?.settings.name != rootRoute) {
+      await _navigator!.pushNamedAndRemoveUntil(rootRoute, (_) => false);
     }
   }
 
   Future<void> defaultCase() async {
-    if (ModalRoute.of(context)?.settings.name != '/') {
-      await _navigator!.pushNamedAndRemoveUntil('/', (_) => false);
+    final rootRoute = ScreenPage.root.string;
+
+    if (ModalRoute.of(context)?.settings.name != rootRoute) {
+      await _navigator!.pushNamedAndRemoveUntil(rootRoute, (_) => false);
       await Future.delayed(const Duration(milliseconds: 2000));
     }
   }

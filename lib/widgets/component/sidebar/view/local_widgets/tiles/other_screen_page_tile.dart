@@ -15,7 +15,7 @@ class OtherScreenPageTile extends ScreenPageTile {
           painter: painter,
           onTap: () async {
             await Navigator.maybePop(context);
-            await Navigator.of(context).pushNamedAndRemoveUntil(screenPage.string, (route) => false);
+            await Navigator.of(context).pushNamedAndRemoveUntil(screenPage.string, (_) => false);
           },
         );
 }

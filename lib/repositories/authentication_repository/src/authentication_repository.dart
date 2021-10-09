@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:app_qldt/enums/config/account_permission_enum.dart';
+import 'package:app_qldt/enums/http/http_status.dart';
+import 'package:app_qldt/models/http/response.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,10 +33,10 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<LoginStatus> logIn(ApiUrl apiUrl, LoginUser loginUser) async {
+  Future<HttpResponseStatus> logIn(ApiUrl apiUrl, LoginUser loginUser) async {
     _loginService ??= LoginService(apiUrl);
 
-    final LoginResponse loginResponse = await _loginService!.login(loginUser);
+    final HttpResponseModel loginResponse = await _loginService!.login(loginUser);
 
     debugPrint('Login status: ${loginResponse.status}, permission: ${apiUrl.accountPermission}');
 

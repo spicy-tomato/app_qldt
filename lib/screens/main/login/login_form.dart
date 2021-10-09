@@ -1,5 +1,4 @@
 import 'package:app_qldt/blocs/login/login_bloc.dart';
-import 'package:app_qldt/enums/config/account_permission_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -74,56 +73,23 @@ class _LoginFormState extends State<LoginForm> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 20),
-                          child: SizedBox(
-                            height: 50,
-                            child: BlocBuilder<LoginBloc, LoginState>(
-                              buildWhen: (previous, current) => previous.accountPermission != current.accountPermission,
-                              builder: (context, state) {
-                                return AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 200),
-                                  child: state.accountPermission.isUser
-                                      ? Text(
-                                          'Đăng nhập để tiếp tục',
-                                          key: const ValueKey(0),
-                                          style: _titleTextStyle,
-                                          textAlign: TextAlign.center,
-                                        )
-                                      : Text(
-                                          'Đăng nhập với tài khoản\n Quản lý đào tạo',
-                                          key: const ValueKey(1),
-                                          style: _titleTextStyle,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                );
-                              },
-                            ),
+                        const SizedBox(height: 5),
+                        SizedBox(
+                          height: 35,
+                          child: Text(
+                            'Đăng nhập để tiếp tục',
+                            key: const ValueKey(0),
+                            style: _titleTextStyle,
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                        UsernameInput(focusNode: focusNode),
+                        LoginUsernameInput(focusNode: focusNode),
                         const SizedBox(height: 20),
-                        PasswordInput(focusNode: focusNode),
+                        LoginPasswordInput(focusNode: focusNode),
                         const SizedBox(height: 20),
                         LoginButton(focusNode),
                         const SizedBox(height: 40),
-                        BlocBuilder<LoginBloc, LoginState>(
-                          buildWhen: (previous, current) =>
-                              previous.accountPermission != current.accountPermission || previous.status != current.status,
-                          builder: (context, state) => Column(
-                            children: <Widget>[
-                              if (state.accountPermission.isUser || state.status.isSubmissionInProgress)
-                                Container()
-                              else
-                                _loginAnchor,
-
-                              if (state.accountPermission.isGuest || state.status.isSubmissionInProgress)
-                                Container()
-                              else
-                                _loginAsGuestAnchor,
-                            ],
-                          ),
-                        )
+                        const SignUpButton(),
                       ],
                     ),
                   ],
@@ -148,36 +114,6 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  Widget get _loginAnchor => Container(
-        margin: const EdgeInsets.only(bottom: 15),
-        child: GestureDetector(
-          onTap: () => _switchToLoginForm(context),
-          child: const Text(
-            'Đăng nhập với tài khoản đã xác minh',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 17,
-              color: Colors.blueAccent,
-            ),
-          ),
-        ),
-      );
-
-  Widget get _loginAsGuestAnchor => Container(
-        margin: const EdgeInsets.only(bottom: 15),
-        child: GestureDetector(
-          onTap: () => _switchToLoginAsGuestForm(context),
-          child: const Text(
-            'Đăng nhập với tài khoản\nQuản lý đào tạo',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 17,
-              color: Colors.blueAccent,
-            ),
-          ),
-        ),
-      );
-
   Widget _loginFailedDialog(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
@@ -197,13 +133,5 @@ class _LoginFormState extends State<LoginForm> {
         ],
       ),
     );
-  }
-
-  void _switchToLoginForm(BuildContext context) {
-    context.read<LoginBloc>().add(const FormTypeChanged(AccountPermission.user));
-  }
-
-  void _switchToLoginAsGuestForm(BuildContext context) {
-    context.read<LoginBloc>().add(const FormTypeChanged(AccountPermission.guest));
   }
 }

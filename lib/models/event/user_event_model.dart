@@ -164,7 +164,7 @@ class UserEventModel {
       color: map['color'] != null ? (map['color'] as int).toPlanColors() : null,
       location: map['id_room'],
       description: map['description'],
-      isAllDay: map['is_all_day'] && (map['is_all_day'] as int) == 1,
+      isAllDay: map['is_all_day'] != null && (map['is_all_day'] as int) == 1,
       people: map['teacher'],
     );
   }
