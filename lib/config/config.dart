@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:app_qldt/_utils/helper/pull_to_fresh_vn_delegate.dart';
@@ -6,15 +7,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
-part 'locale/locale.dart';
-
 part 'locale/delegate.dart';
-
+part 'locale/locale.dart';
 part 'mode/mode.dart';
-
 part 'setup/initialize_app.dart';
 
 class AppConfig {

@@ -1,4 +1,5 @@
 import 'package:app_qldt/blocs/crawler/crawler_bloc.dart';
+import 'package:app_qldt/enums/config/screen.dart';
 import 'package:app_qldt/enums/http/http_status.dart';
 import 'package:app_qldt/models/form/form.dart';
 import 'package:app_qldt/models/sign_up/sign_up_user.dart';
@@ -61,6 +62,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
         if (loginStatus.isSuccessfully) {
           yield state.copyWith(status: FormzStatus.submissionSuccess);
+          await Navigator.of(context).pushNamedAndRemoveUntil(ScreenPage.enterInformation.string, (_) => false);
         } else {
           yield state.copyWith(
             status: FormzStatus.submissionFailure,

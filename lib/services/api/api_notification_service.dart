@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class ApiNotificationService extends ApiService {
-  final String idAccount;
+  final int idAccount;
 
   ApiNotificationService({
     required this.idAccount,

@@ -16,7 +16,7 @@ extension PreloadStatusExtension on PreloadStatus {
 
 class PreloadState extends Equatable {
   final PreloadStatus status;
-  final String? idAccount;
+  final int? idAccount;
   final String? idUser;
   final EventServiceController? eventServiceController;
   final ScoreServiceController? scoreServiceController;
@@ -35,7 +35,7 @@ class PreloadState extends Equatable {
 
   PreloadState copyWith({
     PreloadStatus? status,
-    String? idAccount,
+    int? idAccount,
     String? idUser,
     EventServiceController? eventServiceController,
     ScoreServiceController? scoreServiceController,

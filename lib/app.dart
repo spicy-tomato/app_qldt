@@ -2,6 +2,7 @@ import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/config/config.dart';
 import 'package:app_qldt/constant/constant.dart';
 import 'package:app_qldt/enums/config/screen.dart';
+import 'package:app_qldt/screens/main/enter_information/enter_information_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_qldt/screens/main/sign_up/sign_up_page.dart';
 
@@ -120,6 +121,7 @@ class _ApplicationState extends State<Application> {
                 ScreenPage.root.string: (_) => SplashPage(_shouldLoadAfterLogin),
                 ScreenPage.login.string: (_) => const LoginPage(),
                 ScreenPage.signUp.string: (_) => const SignUpPage(),
+                ScreenPage.enterInformation.string: (_) => const EnterInformationPage(),
                 ScreenPage.home.string: (_) => const HomePage(),
                 // '/calendar': (_) => CalendarPage(),
                 ScreenPage.schedule.string: (_) => const SchedulePage(),

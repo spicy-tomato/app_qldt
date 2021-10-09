@@ -1,6 +1,6 @@
 class UpdatePasswordCrawlerModel {
   final String idStudent;
-  final String idAccount;
+  final int idAccount;
   final String password;
 
   UpdatePasswordCrawlerModel({
@@ -11,7 +11,7 @@ class UpdatePasswordCrawlerModel {
 
   Map<String, String> toJson() => {
     'id_student': idStudent,
-    'id_account': idAccount,
+    'id_account': idAccount as String,
     'qldt_password': password,
   };
 

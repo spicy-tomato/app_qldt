@@ -30,7 +30,7 @@ part 'preload_state.dart';
 class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   final BuildContext context;
   final NavigatorState? navigator;
-  final String _idAccount;
+  final int _idAccount;
   final String _idUser;
   final AccountPermission _permission;
 
@@ -38,7 +38,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     required this.context,
     required this.navigator,
     required User user,
-  })  : _idAccount = user.accountId,
+  })  : _idAccount = user.accountId!,
         _idUser = user.id,
         _permission = user.permission,
         super(const PreloadInitial());
@@ -192,7 +192,7 @@ class _ServiceControllers {
   late final ExamScheduleServiceController examSchedule;
   final ApiUrl apiUrl;
   final String idUser;
-  final String idAccount;
+  final int idAccount;
 
   _ServiceControllers({
     required this.apiUrl,
