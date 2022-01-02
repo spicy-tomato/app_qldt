@@ -3,10 +3,10 @@ import 'package:app_qldt/config/config.dart';
 import 'package:app_qldt/constant/constant.dart';
 import 'package:app_qldt/enums/config/screen.dart';
 import 'package:app_qldt/screens/main/enter_information/enter_information_page.dart';
-import 'package:flutter/material.dart';
 import 'package:app_qldt/screens/main/sign_up/sign_up_page.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/preload/preload_bloc.dart';
 import 'repositories/authentication_repository/authentication_repository.dart';

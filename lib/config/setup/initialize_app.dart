@@ -2,7 +2,6 @@ part of '../config.dart';
 
 Future<void> initializeApp() async {
   await dotenv.load(fileName: '.env');
-  debugPrint(dotenv.env['RELEASE_URL']);
 
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
