@@ -6,7 +6,7 @@ class PostRequest {
   const PostRequest(this.host);
 
   /// User
-  String get authentication => host.base + 'auth/authenticate';
+  String get authentication => host.base + 'auth/login';
 
   String get upsertToken => host.base + 'device/upsert-device-token';
 

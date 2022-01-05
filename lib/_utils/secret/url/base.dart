@@ -32,25 +32,25 @@ class Host {
   /// Guest
   String get _guestBase {
     if (mode.isRelease) {
-      return 'https://utcapi.herokuapp.com/api-v2/app-guest/';
-    }
+      return 'https://utcketnoi.site';
+  }
 
     if (mode.isStaging) {
-      return 'https://utcapi-staging.herokuapp.com/api-v2/app-guest/';
+      return 'https://utcketnoi.site';
     }
 
-    return 'https://utcapi-development.herokuapp.com/api-v2/app-guest/';
+    return 'https://utcketnoi.site';
   }
 
   String get _guestCrawlBase {
     if (mode.isRelease) {
-      return 'https://utcapi.herokuapp.com/api-v2/app-guest/crawl/';
+      return 'https://utcketnoi.site/crawl/';
     }
 
     if (mode.isStaging) {
-      return 'https://utcapi-staging.herokuapp.com/api-v2/app-guest/crawl/';
+      return 'https://utcketnoi.site/crawl/';
     }
 
-    return 'https://utcapi-development.herokuapp.com/api-v2/app-guest/crawl/';
+    return 'https://utcketnoi.site/crawl/';
   }
 }
