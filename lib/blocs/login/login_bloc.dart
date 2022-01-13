@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:app_qldt/enums/http/http_status.dart';
 import 'package:app_qldt/models/form/form.dart';
 import 'package:app_qldt/repositories/authentication_repository/authentication_repository.dart';
 import 'package:app_qldt/repositories/authentication_repository/src/services/services.dart';
 import 'package:app_qldt/widgets/wrapper/app_mode.dart';
-import 'package:equatable/equatable.dart';
 import 'package:bloc/bloc.dart';
+import 'package:crypto/crypto.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -68,7 +70,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       try {
         final apiUrl = AppModeWidget.of(context).apiUrl;
-        final loginUser = LoginUser(state.username.value, state.password.value);
+        final loginUser = LoginUser(state.username.value, md5.convert(utf8.encode(state.password.value)).toString());
 
         final HttpResponseStatus loginStatus = await _authenticationRepository.logIn(apiUrl, loginUser);
 

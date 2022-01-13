@@ -26,14 +26,14 @@ class User {
 
   factory User.fromJsonWithPermission(Map<String, dynamic> json, AccountPermission permission) {
     return User(
-      id: json['id'],
-      name: json['name'],
-      dob: json['birth'] != null ? DateFormat('yyyy-M-d').parse(json['birth']) : null,
-      idClass: json['id_class'],
-      idCardNumber: json['id_card_number'],
-      phoneNumberStudent: json['phone_number'],
-      address: json['address'],
-      accountId: json['id_account'],
+      id: json['data']['uuid'],
+      name: json['data']['name'],
+      dob: json['data']['birth'] != null ? DateFormat('yyyy-M-d').parse(json['data']['birth']) : null,
+      idClass: json['data']['id_class'],
+      idCardNumber: json['data']['id_card_number'],
+      phoneNumberStudent: json['data']['phone_number'],
+      address: json['data']['address'],
+      accountId: json['data']['uuid_account'],
       permission: permission,
     );
   }
