@@ -1,6 +1,6 @@
 class ExamScheduleCrawlerModel {
   final String idStudent;
-  final int idAccount;
+  final String idAccount;
   final bool all;
 
   ExamScheduleCrawlerModel({
@@ -12,7 +12,7 @@ class ExamScheduleCrawlerModel {
 
   Map<String, String> toJson() => {
     'id_student': idStudent,
-    'id_account': idAccount as String,
+    'id_account': idAccount,
     'all': all.toString(),
   };
 

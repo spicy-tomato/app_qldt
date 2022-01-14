@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 
 class NotificationServiceController
     extends ServiceController<LocalNotificationService, ApiNotificationService> {
-  NotificationServiceController(ServiceControllerData data, int idAccount)
+  NotificationServiceController(ServiceControllerData data, String idAccount)
       : super(
           LocalNotificationService(databaseProvider: data.databaseProvider),
           ApiNotificationService(

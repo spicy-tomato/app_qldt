@@ -1,6 +1,6 @@
 class UpdatePasswordCrawlerModel {
   final String idStudent;
-  final int idAccount;
+  final String idAccount;
   final String password;
 
   UpdatePasswordCrawlerModel({

@@ -71,7 +71,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
       final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
       final String idStudent = userDataModel.idUser;
-      final int idAccount = userDataModel.idAccount;
+      final String idAccount = userDataModel.idAccount;
 
       final String password = state.password.value;
 
@@ -148,7 +148,7 @@ class CrawlerBloc extends Bloc<CrawlerEvent, CrawlerState> {
 
     final UserDataModel userDataModel = context.read<UserRepository>().userDataModel;
     final String idStudent = userDataModel.idUser;
-    final int idAccount = userDataModel.idAccount;
+    final String idAccount = userDataModel.idAccount;
     bool hasError = false;
 
     //  Crawl score

@@ -191,7 +191,7 @@ class _ServiceControllers {
   late final ExamScheduleServiceController examSchedule;
   final ApiUrl apiUrl;
   final String idUser;
-  final int idAccount;
+  final String idAccount;
 
   _ServiceControllers({
     required this.apiUrl,
