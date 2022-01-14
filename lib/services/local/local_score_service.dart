@@ -1,10 +1,10 @@
+import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/models/event/semester_model.dart';
 import 'package:app_qldt/models/score/score_models.dart';
 import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/controller/score_service_controller.dart';
 import 'package:app_qldt/services/controller/service_controller.dart';
 import 'package:app_qldt/services/local/local_service.dart';
-import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:flutter/widgets.dart';
 
 class LocalScoreService extends LocalService {

@@ -1,12 +1,12 @@
 import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/constant/constant.dart';
 import 'package:app_qldt/models/config/app_theme.dart';
+import 'package:app_qldt/models/notification/user_notification_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:app_qldt/models/notification/user_notification_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationPostPage extends StatefulWidget {
   final UserNotificationModel notification;

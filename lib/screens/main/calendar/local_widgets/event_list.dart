@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'package:app_qldt/blocs/calendar/calendar_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 
+import 'package:app_qldt/blocs/calendar/calendar_bloc.dart';
 import 'package:app_qldt/models/event/user_event_model.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventList extends StatelessWidget {

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:app_qldt/enums/crawl/crawler_status.dart';
 import 'package:app_qldt/models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/models/crawler/update_password_crawler_model.dart';
-import 'package:app_qldt/_utils/helper/const.dart';
-import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 

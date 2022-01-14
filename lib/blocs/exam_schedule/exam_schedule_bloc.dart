@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:app_qldt/enums/exam_schedule/exam_schedule_page_status.dart';
 import 'package:app_qldt/enums/crawl/crawler_status.dart';
+import 'package:app_qldt/enums/exam_schedule/exam_schedule_page_status.dart';
 import 'package:app_qldt/models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/models/crawler/score_crawler_model.dart';
+import 'package:app_qldt/models/event/semester_model.dart';
 import 'package:app_qldt/models/exam_schedule/exam_schedule_model.dart';
+import 'package:app_qldt/models/service/user_data_model.dart';
 import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/services/api/crawler_service.dart';
-import 'package:app_qldt/models/service/user_data_model.dart';
-import 'package:app_qldt/models/event/semester_model.dart';
 import 'package:app_qldt/widgets/wrapper/app_mode.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';

@@ -1,5 +1,5 @@
-import 'package:app_qldt/models/exam_schedule/exam_schedule_model.dart';
 import 'package:app_qldt/models/event/semester_model.dart';
+import 'package:app_qldt/models/exam_schedule/exam_schedule_model.dart';
 import 'package:app_qldt/models/service/service_controller_data.dart';
 import 'package:app_qldt/services/api/api_exam_schedule_service.dart';
 import 'package:app_qldt/services/controller/service_controller.dart';

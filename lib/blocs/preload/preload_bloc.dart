@@ -1,7 +1,12 @@
 import 'dart:async';
 
+import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/_utils/database/table/data_version.dart';
+import 'package:app_qldt/_utils/helper/const.dart';
+import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:app_qldt/enums/config/account_permission_enum.dart';
 import 'package:app_qldt/models/service/service_controller_data.dart';
+import 'package:app_qldt/models/service/user_data_model.dart';
 import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/services/api/token_service.dart';
@@ -10,27 +15,21 @@ import 'package:app_qldt/services/controller/event_service_controller.dart';
 import 'package:app_qldt/services/controller/exam_schedule_service_controller.dart';
 import 'package:app_qldt/services/controller/notification_service_controller.dart';
 import 'package:app_qldt/services/controller/score_service_controller.dart';
-import 'package:app_qldt/_utils/database/provider.dart';
-import 'package:app_qldt/_utils/database/table/data_version.dart';
-import 'package:app_qldt/_utils/helper/const.dart';
-import 'package:app_qldt/models/service/user_data_model.dart';
 import 'package:app_qldt/widgets/wrapper/app_mode.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:app_qldt/_utils/secret/url/url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'preload_event.dart';
-
 part 'preload_state.dart';
 
 class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   final BuildContext context;
   final NavigatorState? navigator;
-  final int _idAccount;
+  final String _idAccount;
   final String _idUser;
   final AccountPermission _permission;
 

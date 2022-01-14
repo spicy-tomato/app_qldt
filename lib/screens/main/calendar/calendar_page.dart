@@ -1,5 +1,6 @@
 import 'package:app_qldt/blocs/calendar/calendar_bloc.dart';
 import 'package:app_qldt/blocs/plan/plan_bloc.dart';
+import 'package:app_qldt/models/event/user_event_model.dart';
 import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/widgets/component/bottom_note/bottom_note.dart';
 import 'package:app_qldt/widgets/component/loading/loading.dart';
@@ -7,10 +8,7 @@ import 'package:app_qldt/widgets/component/refresh_button/refresh_button.dart';
 import 'package:app_qldt/widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/widgets/wrapper/shared_ui.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:app_qldt/models/event/user_event_model.dart';
 
 import 'local_widgets/local_widgets.dart';
 

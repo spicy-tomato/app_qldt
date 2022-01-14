@@ -21,7 +21,7 @@ class User {
   final String? idCardNumber;
   final String? phoneNumberStudent;
   final String? address;
-  final int? accountId;
+  final String? accountId;
   final AccountPermission permission;
 
   factory User.fromJsonWithPermission(Map<String, dynamic> json, AccountPermission permission) {

@@ -1,4 +1,5 @@
 import 'package:app_qldt/blocs/crawler/crawler_bloc.dart';
+import 'package:app_qldt/enums/config/account_permission_enum.dart';
 import 'package:app_qldt/enums/crawl/crawler_status.dart';
 import 'package:app_qldt/repositories/user_repository/src/user_repository.dart';
 import 'package:app_qldt/screens/sub/request_qldt_password/request_download.dart';
@@ -6,7 +7,6 @@ import 'package:app_qldt/screens/sub/request_qldt_password/request_qldt_password
 import 'package:app_qldt/services/controller/service_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:app_qldt/enums/config/account_permission_enum.dart';
 
 class CrawlablePage extends StatefulWidget {
   final Widget child;

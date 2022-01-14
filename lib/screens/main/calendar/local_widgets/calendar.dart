@@ -1,12 +1,10 @@
 import 'package:app_qldt/blocs/calendar/calendar_bloc.dart';
 import 'package:app_qldt/blocs/plan/plan_bloc.dart';
+import 'package:app_qldt/models/event/user_event_model.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import 'package:app_qldt/models/event/user_event_model.dart';
 
 import 'calendar_widgets/calendar_widgets.dart';
 

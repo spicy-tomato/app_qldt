@@ -1,13 +1,12 @@
-import 'package:flutter/widgets.dart';
-import 'package:intl/intl.dart';
-
-import 'package:app_qldt/models/exam_schedule/exam_schedule_model.dart';
+import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/models/event/semester_model.dart';
+import 'package:app_qldt/models/exam_schedule/exam_schedule_model.dart';
 import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/controller/exam_schedule_service_controller.dart';
 import 'package:app_qldt/services/controller/service_controller.dart';
 import 'package:app_qldt/services/local/local_service.dart';
-import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class LocalExamScheduleService extends LocalService {
   List<ExamScheduleModel> examScheduleData = [];

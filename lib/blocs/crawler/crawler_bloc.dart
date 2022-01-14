@@ -10,9 +10,9 @@ import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/services/api/crawler_service.dart';
 import 'package:app_qldt/widgets/wrapper/app_mode.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 export 'package:app_qldt/enums/crawl/crawler_status.dart';

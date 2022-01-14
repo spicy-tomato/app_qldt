@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:app_qldt/services/api/api_service.dart';
-import 'package:app_qldt/services/model/service_response.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/services/api/api_service.dart';
+import 'package:app_qldt/services/model/service_response.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;

@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QldtNote extends StatelessWidget {
   const QldtNote({Key? key}) : super(key: key);

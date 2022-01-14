@@ -5,15 +5,14 @@ import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'avatar_event.dart';
-
 part 'avatar_state.dart';
 
 class AvatarBloc extends Bloc<AvatarEvent, AvatarState> {

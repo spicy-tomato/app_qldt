@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:app_qldt/enums/plan/plan_enum.dart';
 import 'package:app_qldt/models/event/user_event_model.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 export 'package:app_qldt/enums/plan/plan_enum.dart';

@@ -1,3 +1,4 @@
+import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/models/notification/receive_notification_model.dart';
 import 'package:app_qldt/models/notification/sender_model.dart';
 import 'package:app_qldt/models/notification/user_notification_model.dart';
@@ -5,7 +6,6 @@ import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/controller/notification_service_controller.dart';
 import 'package:app_qldt/services/controller/service_controller.dart';
 import 'package:app_qldt/services/local/local_service.dart';
-import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:flutter/widgets.dart';
 
 class LocalNotificationService extends LocalService {

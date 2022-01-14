@@ -1,18 +1,17 @@
 import 'dart:async';
+
 import 'package:app_qldt/models/event/event_model.dart';
 import 'package:app_qldt/models/event/event_schedule_model.dart';
 import 'package:app_qldt/models/event/meeting_data_source_model.dart';
-
-import 'package:app_qldt/models/service/user_data_model.dart';
 import 'package:app_qldt/models/event/user_event_model.dart';
+import 'package:app_qldt/models/service/user_data_model.dart';
 import 'package:app_qldt/repositories/user_repository/user_repository.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 part 'schedule_event.dart';
-
 part 'schedule_state.dart';
 
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {

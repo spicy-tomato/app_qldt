@@ -1,5 +1,5 @@
-import 'package:app_qldt/services/controller/service_controller.dart';
 import 'package:app_qldt/_utils/database/provider.dart';
+import 'package:app_qldt/services/controller/service_controller.dart';
 
 abstract class LocalService {
   late final DatabaseProvider databaseProvider;

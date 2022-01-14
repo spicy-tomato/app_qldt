@@ -1,14 +1,13 @@
 import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/blocs/notification/notification_bloc.dart';
+import 'package:app_qldt/models/notification/user_notification_model.dart';
 import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/screens/sub/notification_post/notification_post_page.dart';
 import 'package:app_qldt/services/controller/notification_service_controller.dart';
-import 'package:app_qldt/models/notification/user_notification_model.dart';
 import 'package:app_qldt/widgets/component/item.dart';
 import 'package:app_qldt/widgets/wrapper/shared_ui.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';

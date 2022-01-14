@@ -10,19 +10,19 @@ class EnterInformationPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text(
+            children: const <Widget>[
+              Text(
                 'Xác thực thành công!',
                 style: TextStyle(
                   fontSize: 27,
                 ),
               ),
-              const SizedBox(height: 5),
-            const Text('Hãy nhập một số thông tin dưới đây\n để hoàn tất đăng ký'),
-              const SizedBox(height: 10),
+              SizedBox(height: 5),
+              Text('Hãy nhập một số thông tin dưới đây\n để hoàn tất đăng ký'),
+              SizedBox(height: 10),
             ],
           ),
         ),

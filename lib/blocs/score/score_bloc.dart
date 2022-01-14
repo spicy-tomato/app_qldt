@@ -1,26 +1,24 @@
 import 'dart:async';
+
 import 'package:app_qldt/enums/score/score_enum.dart';
-import 'package:app_qldt/models/score/score_models.dart';
-import 'package:app_qldt/repositories/user_repository/user_repository.dart';
-import 'package:app_qldt/widgets/wrapper/_crawler/crawler.dart';
-import 'package:app_qldt/widgets/wrapper/app_mode.dart';
-import 'package:flutter/widgets.dart';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:app_qldt/models/crawler/exam_schedule_crawler_model.dart';
 import 'package:app_qldt/models/crawler/score_crawler_model.dart';
 import 'package:app_qldt/models/event/semester_model.dart';
+import 'package:app_qldt/models/score/score_models.dart';
 import 'package:app_qldt/models/service/user_data_model.dart';
+import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/services/api/crawler_service.dart';
 import 'package:app_qldt/services/controller/score_service_controller.dart';
+import 'package:app_qldt/widgets/wrapper/_crawler/crawler.dart';
+import 'package:app_qldt/widgets/wrapper/app_mode.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 export 'package:app_qldt/enums/score/score_enum.dart';
 
 part 'score_event.dart';
-
 part 'score_state.dart';
 
 class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {

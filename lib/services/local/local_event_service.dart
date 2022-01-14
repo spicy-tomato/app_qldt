@@ -1,12 +1,12 @@
+import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/models/event/event_model.dart';
 import 'package:app_qldt/models/event/event_schedule_model.dart';
-import 'package:app_qldt/models/event/user_event_model.dart';
 import 'package:app_qldt/models/event/schedule_model.dart';
+import 'package:app_qldt/models/event/user_event_model.dart';
 import 'package:app_qldt/services/api/api_event_service.dart';
 import 'package:app_qldt/services/controller/event_service_controller.dart';
 import 'package:app_qldt/services/controller/service_controller.dart';
 import 'package:app_qldt/services/local/local_service.dart';
-import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:flutter/widgets.dart';
 
 /// This class used for saving data about events (or schedules)

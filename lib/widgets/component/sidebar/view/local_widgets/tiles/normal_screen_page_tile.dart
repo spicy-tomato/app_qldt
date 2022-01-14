@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:app_qldt/enums/config/screen.dart';
+import 'package:flutter/material.dart';
 
 import 'other_screen_page_tile.dart';
 
