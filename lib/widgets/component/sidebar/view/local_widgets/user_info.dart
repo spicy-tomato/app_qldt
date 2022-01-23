@@ -20,6 +20,8 @@ class _UserInfoState extends State<UserInfo> {
     final user = context.read<AuthenticationBloc>().state.user;
     final avatarPath = context.read<UserRepository>().userDataModel.avatarPath;
     final themeData = context.read<AppSettingBloc>().state.theme.data;
+    final isTeacherID = user.grantedPermissions!.contains(11);
+
 
     return Column(
       children: <Widget>[
@@ -105,8 +107,9 @@ class _UserInfoState extends State<UserInfo> {
           ),
         ),
         const SizedBox(height: 10),
+
         Text(
-          user.id,
+          isTeacherID?"":user.id,
           style: TextStyle(
             color: themeData.primaryTextColor,
             fontSize: 19,
