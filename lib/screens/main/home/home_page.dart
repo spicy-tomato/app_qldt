@@ -19,7 +19,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final themeData = context.read<AppSettingBloc>().state.theme.data;
+    final themeData = context
+        .read<AppSettingBloc>()
+        .state
+        .theme
+        .data;
 
     return NavigablePlanPage(
       child: BlocBuilder<PlanBloc, PlanState>(
@@ -67,17 +71,27 @@ class Greeting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = context.read<AppSettingBloc>().state.theme.data;
-    final userName = context.read<AuthenticationBloc>().state.user.name;
+    final themeData = context
+      .read<AppSettingBloc>()
+        .state
+        .theme
+        .data;
+    final user = context
+        .read<AuthenticationBloc>()
+        .state
+        .user;
+    final isTeacher = user.grantedPermissions!.contains(11);
+
+    final userName = user.name;
     final displayLetters = userName.split(' ');
     final letterNumbers = displayLetters.length;
-    final displayName = displayLetters.length >= 2
-        ? '${displayLetters[letterNumbers - 2]} ${displayLetters[letterNumbers - 1]}'
-        : displayLetters[0];
+    final displayName = displayLetters.length < 2
+        ? displayLetters[0]
+        : isTeacher ? displayLetters[letterNumbers - 1] : '${displayLetters[letterNumbers - 2]} ${displayLetters[letterNumbers - 1]}';
 
     return Center(
       child: Text(
-        'Xin chào\n$displayName',
+        'Xin chào\n${isTeacher ? (user.isFemale! ? 'cô' : 'thầy') : ''} $displayName',
         style: TextStyle(
           color: themeData.primaryTextColor,
           fontSize: 35,
@@ -112,7 +126,11 @@ class Quote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = context.read<AppSettingBloc>().state.theme.data;
+    final themeData = context
+        .read<AppSettingBloc>()
+        .state
+        .theme
+        .data;
 
     return Center(
       child: Text(
