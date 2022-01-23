@@ -109,7 +109,7 @@ class _UserInfoState extends State<UserInfo> {
         const SizedBox(height: 10),
 
         Text(
-          isTeacherID?"":user.id,
+          isTeacherID ? "" : user.id,
           style: TextStyle(
             color: themeData.primaryTextColor,
             fontSize: 19,
