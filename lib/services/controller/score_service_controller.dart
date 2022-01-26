@@ -13,7 +13,7 @@ class ScoreServiceController extends ServiceController<LocalScoreService, ApiSco
       : super(
           LocalScoreService(databaseProvider: data.databaseProvider),
           ApiScoreService(
-            idUser: data.idUser,
+            user: data.user,
             apiUrl: data.apiUrl,
           ),
         );

@@ -15,7 +15,7 @@ class NotificationServiceController
           ApiNotificationService(
             apiUrl: data.apiUrl,
             idAccount: idAccount,
-            idStudent: data.idUser,
+            user: data.user,
           ),
         );
 

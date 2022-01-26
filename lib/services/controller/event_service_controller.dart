@@ -15,7 +15,7 @@ class EventServiceController extends ServiceController<LocalEventService, ApiEve
           LocalEventService(databaseProvider: data.databaseProvider),
           ApiEventService(
             apiUrl: data.apiUrl,
-            idUser: data.idUser,
+            user: data.user,
           ),
         );
 

@@ -4,7 +4,6 @@ import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_utils/database/table/data_version.dart';
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
-import 'package:app_qldt/enums/config/account_permission_enum.dart';
 import 'package:app_qldt/models/service/service_controller_data.dart';
 import 'package:app_qldt/models/service/user_data_model.dart';
 import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
@@ -24,23 +23,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'preload_event.dart';
+
 part 'preload_state.dart';
 
 class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   final BuildContext context;
   final NavigatorState? navigator;
-  final String _idAccount;
-  final String _idUser;
-  final AccountPermission _permission;
+  final User user;
 
   PreloadBloc({
     required this.context,
     required this.navigator,
-    required User user,
-  })  : _idAccount = user.accountId!,
-        _idUser = user.id,
-        _permission = user.permission,
-        super(const PreloadInitial());
+    required this.user,
+  }) : super(const PreloadInitial());
 
   @override
   Stream<PreloadState> mapEventToState(
@@ -66,12 +61,8 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     final Stopwatch stopwatch = Stopwatch()..start();
     const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
-    apiUrl.accountPermission = _permission;
-    final serviceControllers = _ServiceControllers(
-      apiUrl: apiUrl,
-      idUser: _idUser,
-      idAccount: _idAccount,
-    );
+    apiUrl.accountPermission = user.permission;
+    final serviceControllers = _ServiceControllers(apiUrl: apiUrl, user: user);
 
     await Future.wait([
       _upsertToken(apiUrl),
@@ -89,16 +80,15 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       scoreServiceController: serviceControllers.score,
       notificationServiceController: serviceControllers.notification,
       examScheduleServiceController: serviceControllers.examSchedule,
-      idAccount: _idAccount,
-      idUser: _idUser,
-      accountPermission: _permission,
+      idAccount: user.accountId!,
+      idUser: user.id,
+      accountPermission: user.permission,
       avatarPath: avatarPath ?? '',
     );
 
     context.read<UserRepository>().userDataModel = userDataModel;
 
-    await Future.delayed(
-        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () async {
+    await Future.delayed(timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () async {
       await navigator?.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
     });
 
@@ -112,11 +102,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     final Stopwatch stopwatch = Stopwatch()..start();
     const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
-    final serviceControllers = _ServiceControllers(
-      apiUrl: apiUrl,
-      idUser: _idUser,
-      idAccount: _idAccount,
-    );
+    final serviceControllers = _ServiceControllers(apiUrl: apiUrl, user: user);
 
     await Future.wait([
       _upsertToken(apiUrl),
@@ -134,16 +120,15 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       scoreServiceController: serviceControllers.score,
       notificationServiceController: serviceControllers.notification,
       examScheduleServiceController: serviceControllers.examSchedule,
-      idAccount: _idAccount,
-      idUser: _idUser,
-      accountPermission: _permission,
+      idAccount: user.accountId!,
+      idUser: user.id,
+      accountPermission: user.permission,
       avatarPath: avatarPath ?? '',
     );
 
     context.read<UserRepository>().userDataModel = userDataModel;
 
-    await Future.delayed(
-        timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () async {
+    await Future.delayed(timeEnded < minTurnAroundTime ? minTurnAroundTime - timeEnded : const Duration(seconds: 0), () async {
       await navigator?.pushNamedAndRemoveUntil(Const.defaultPage, (_) => false);
     });
 
@@ -153,7 +138,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
   Future<void> _upsertToken(ApiUrl apiUrl) async {
     final tokenService = TokenService(apiUrl);
     await tokenService.init();
-    await tokenService.upsert(_idUser);
+    await tokenService.upsert(user.id);
   }
 
   Future<void> _initAndRefreshApiServices(
@@ -165,7 +150,7 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
 
     final Map<String, dynamic> versionMap = await VersionService(
       apiUrl: apiUrl,
-      idStudent: _idUser,
+      idStudent: user.id,
     ).getServerDataVersion();
 
     if (versionMap.isNotEmpty) {
@@ -190,14 +175,9 @@ class _ServiceControllers {
   late final NotificationServiceController notification;
   late final ExamScheduleServiceController examSchedule;
   final ApiUrl apiUrl;
-  final String idUser;
-  final String idAccount;
+  final User user;
 
-  _ServiceControllers({
-    required this.apiUrl,
-    required this.idAccount,
-    required this.idUser,
-  });
+  _ServiceControllers({required this.apiUrl, required this.user});
 
   Future<void> init({bool loadOldData = false}) async {
     final DatabaseProvider databaseProvider = DatabaseProvider();
@@ -206,12 +186,12 @@ class _ServiceControllers {
     final ServiceControllerData controllerData = ServiceControllerData(
       databaseProvider: databaseProvider,
       apiUrl: apiUrl,
-      idUser: idUser,
+      user: user,
     );
 
     event = EventServiceController(controllerData);
     score = ScoreServiceController(controllerData);
-    notification = NotificationServiceController(controllerData, idAccount);
+    notification = NotificationServiceController(controllerData, user.accountId!);
     examSchedule = ExamScheduleServiceController(controllerData);
 
     if (loadOldData) {

@@ -1,14 +1,15 @@
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 
 class ServiceControllerData {
   final DatabaseProvider databaseProvider;
   final ApiUrl apiUrl;
-  final String idUser;
+  final User user;
 
   ServiceControllerData({
     required this.databaseProvider,
     required this.apiUrl,
-    required this.idUser,
+    required this.user,
   });
 }

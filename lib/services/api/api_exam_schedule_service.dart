@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/model/service_response.dart';
 import 'package:connectivity/connectivity.dart';
@@ -11,10 +12,10 @@ import 'package:http/http.dart' as http;
 
 class ApiExamScheduleService extends ApiService {
   ApiExamScheduleService({
-    required String idUser,
+    required User user,
     required ApiUrl apiUrl,
   }) : super(
-          idUser: idUser,
+          user: user,
           apiUrl: apiUrl,
         );
 
@@ -44,7 +45,7 @@ class ApiExamScheduleService extends ApiService {
     final String baseUrl = apiUrl.get.examSchedule;
     final int version = controller.localService.databaseProvider.dataVersion.examSchedule;
 
-    final String url = '$baseUrl?id_student=$idUser&version=$version';
+    final String url = '$baseUrl?id_student=$user&version=$version';
 
     try {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

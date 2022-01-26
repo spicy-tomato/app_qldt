@@ -13,7 +13,7 @@ class ExamScheduleServiceController
       : super(
           LocalExamScheduleService(databaseProvider: data.databaseProvider),
           ApiExamScheduleService(
-            idUser: data.idUser,
+            user: data.user,
             apiUrl: data.apiUrl,
           ),
         );

@@ -7,6 +7,8 @@ class GetRequest {
 
   String get schedule => host.base + 'student/schedule';
 
+  String get teacherSchedule => host.base + '';
+
   String get notification => host.base + 'student/notification';
 
   String get score => host.base + 'student/module-score';

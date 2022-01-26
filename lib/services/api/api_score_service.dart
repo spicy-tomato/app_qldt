@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/model/service_response.dart';
 import 'package:connectivity/connectivity.dart';
@@ -11,10 +12,10 @@ import 'package:http/http.dart' as http;
 
 class ApiScoreService extends ApiService {
   ApiScoreService({
-    required String idUser,
+    required User user,
     required ApiUrl apiUrl,
   }) : super(
-          idUser: idUser,
+          user: user,
           apiUrl: apiUrl,
         );
 
@@ -43,7 +44,7 @@ class ApiScoreService extends ApiService {
     final String baseUrl = apiUrl.get.score;
     final int version = controller.localService.databaseProvider.dataVersion.score;
 
-    final String url = '$baseUrl?id_student=$idUser&version=$version';
+    final String url = '$baseUrl?id_student=$user&version=$version';
 
     try {
       final response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);

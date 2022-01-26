@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/model/service_response.dart';
 import 'package:connectivity/connectivity.dart';
@@ -14,10 +15,10 @@ class ApiNotificationService extends ApiService {
 
   ApiNotificationService({
     required this.idAccount,
-    required String idStudent,
+    required User user,
     required ApiUrl apiUrl,
   }) : super(
-          idUser: idStudent,
+          user: user,
           apiUrl: apiUrl,
         );
 
@@ -42,7 +43,7 @@ class ApiNotificationService extends ApiService {
     final String baseUrl = apiUrl.get.notification;
     final int version = controller.localService.databaseProvider.dataVersion.notification;
 
-    String url = '$baseUrl?id_student=$idUser&id_account=$idAccount&version=$version';
+    String url = '$baseUrl?id_student=$user&id_account=$idAccount&version=$version';
     if (idNotification != null){
       url += '&id_notification=$idNotification';
     }
