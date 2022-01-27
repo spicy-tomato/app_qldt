@@ -11,7 +11,7 @@ class UpdatePasswordCrawlerModel {
 
   Map<String, String> toJson() => {
     'id_student': idStudent,
-    'id_account': idAccount as String,
+    'id_account': idAccount,
     'qldt_password': password,
   };
 
