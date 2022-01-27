@@ -1,5 +1,5 @@
 import 'package:app_qldt/blocs/authentication/authentication_bloc.dart';
-import 'package:app_qldt/constant/permission.constant.dart';
+import 'package:app_qldt/enums/config/role.enum.dart';
 
 import 'package:app_qldt/enums/config/screen.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +24,21 @@ class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
   }
 
   List<Widget> _getSidebarItems(BuildContext context) {
-    final ScreenPage currentScreenPage = _getCurrentScreenPage();
-    return _getScreenPagesList(context, currentScreenPage);
+    final isTeacher = context
+        .read<AuthenticationBloc>()
+        .state
+        .user
+        .grantedPermissions!
+        .contains(11);
+    final Role role =  isTeacher ? Role.teacher: Role.student;
+    final ScreenPage currentScreenPage = _getCurrentScreenPage(role);
+    return _getScreenPagesList(context, currentScreenPage, role);
   }
 
-  ScreenPage _getCurrentScreenPage() {
+  ScreenPage _getCurrentScreenPage(Role role) {
     final String? currentRoute = ModalRoute.of(context)!.settings.name;
 
-    for (var value in ScreenPageExtension.displayPagesInSidebar) {
+    for (var value in ScreenPageExtension.displayPagesInSidebar(role)) {
       if (value.string == currentRoute) {
         return value;
       }
@@ -41,37 +48,28 @@ class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
   }
 
   List<Widget> _getScreenPagesList(
-      BuildContext context, ScreenPage currentScreenPage) {
-    final _firstListItem = currentScreenPage.sidebarIndex == 0
+      BuildContext context, ScreenPage currentScreenPage, Role role) {
+    final _firstListItem = currentScreenPage.sidebarIndex(role) == 0
         //
         ? AboveEmptyTile(context)
         : const EmptyTile();
 
-    final _lastListItem = currentScreenPage.sidebarIndex ==
-            ScreenPageExtension.displayPagesInSidebar.length - 1
+    final _lastListItem = currentScreenPage.sidebarIndex(role) ==
+            ScreenPageExtension.displayPagesInSidebar(role).length - 1
         //
         ? BelowEmptyTile(context)
         : const EmptyTile();
 
     final List<Widget> _list = [_firstListItem];
 
-    for (int i = 0; i < ScreenPageExtension.displayPagesInSidebar.length; i++) {
-      final page = ScreenPageExtension.displayPagesInSidebar[i];
-      final isTeacher = context
-          .read<AuthenticationBloc>()
-          .state
-          .user
-          .grantedPermissions!
-          .contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE);
-      if (page == ScreenPage.score && isTeacher) {
-        continue;
-      }
+    for (int i = 0; i < ScreenPageExtension.displayPagesInSidebar(role).length; i++) {
+      final page = ScreenPageExtension.displayPagesInSidebar(role)[i];
 
-      if (page.sidebarIndex == currentScreenPage.sidebarIndex) {
+      if (page.sidebarIndex(role) == currentScreenPage.sidebarIndex(role)) {
         _list.add(CurrentScreenPageTile(screenPage: page));
-      } else if (page.sidebarIndex == currentScreenPage.sidebarIndex - 1) {
+      } else if (page.sidebarIndex(role) == currentScreenPage.sidebarIndex(role) - 1) {
         _list.add(AboveScreenPageTile(context, screenPage: page));
-      } else if (page.sidebarIndex == currentScreenPage.sidebarIndex + 1) {
+      } else if (page.sidebarIndex(role) == currentScreenPage.sidebarIndex(role) + 1) {
         _list.add(BelowScreenPageTile(context, screenPage: page));
       } else {
         _list.add(NormalScreenPageTile(context, screenPage: page));

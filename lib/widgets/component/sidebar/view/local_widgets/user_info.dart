@@ -23,7 +23,6 @@ class _UserInfoState extends State<UserInfo> {
     final themeData = context.read<AppSettingBloc>().state.theme.data;
     final isTeacherID = user.grantedPermissions!.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE);
 
-
     return Column(
       children: <Widget>[
         BlocProvider<AvatarBloc>(
@@ -108,9 +107,8 @@ class _UserInfoState extends State<UserInfo> {
           ),
         ),
         const SizedBox(height: 10),
-
         Text(
-          isTeacherID ? "" : user.id,
+          isTeacherID ? '' : user.id,
           style: TextStyle(
             color: themeData.primaryTextColor,
             fontSize: 19,

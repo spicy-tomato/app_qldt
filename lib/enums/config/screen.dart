@@ -1,3 +1,5 @@
+import 'package:app_qldt/enums/config/role.enum.dart';
+
 enum ScreenPage {
   root,
   login,
@@ -85,17 +87,30 @@ extension ScreenPageExtension on ScreenPage {
     }
   }
 
-  static List<ScreenPage> get displayPagesInSidebar {
-    return [
-      ScreenPage.home,
-      ScreenPage.schedule,
-      ScreenPage.notification,
-      ScreenPage.score,
-      ScreenPage.examSchedule,
-    ];
+  static List<ScreenPage> displayPagesInSidebar(Role role) {
+    switch (role){
+
+      case Role.student:
+        return [
+          ScreenPage.home,
+          ScreenPage.schedule,
+          ScreenPage.notification,
+          ScreenPage.score,
+          ScreenPage.examSchedule,
+        ];
+
+      case Role.teacher:
+        return [
+          ScreenPage.home,
+          ScreenPage.schedule,
+          ScreenPage.notification,
+          ScreenPage.examSchedule,
+        ];
+    }
+
   }
 
-  int get sidebarIndex {
-    return displayPagesInSidebar.indexOf(this);
+  int sidebarIndex (Role role) {
+    return displayPagesInSidebar(role).indexOf(this);
   }
 }
