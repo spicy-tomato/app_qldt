@@ -9,7 +9,11 @@ import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/model/service_response.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_interceptor/http_interceptor.dart';
+
+//import 'package:http/http.dart' as http;
+
+import 'header_interceptor.dart';
 
 class ApiEventService extends ApiService {
   ApiEventService({
@@ -40,15 +44,24 @@ class ApiEventService extends ApiService {
   ///     ...
   /// ]
   Future<ServiceResponse> _fetchData() async {
-    final String baseUrl = (user.grantedPermissions?.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE) ?? false) ? apiUrl.get.teacherSchedule : apiUrl.get.schedule;
+    final String baseUrl = (user.grantedPermissions?.contains(
+                PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE) ??
+            false)
+        ? apiUrl.get.teacherSchedule
+        : apiUrl.get.schedule;
+    final client = InterceptedClient.build(interceptors: [
+      HeaderInterceptor(),
+    ]);
 
     debugPrint('$baseUrl at Event service');
 
-    final int version = controller.localService.databaseProvider.dataVersion.schedule;
+    final int version =
+        controller.localService.databaseProvider.dataVersion.schedule;
     final String url = '$baseUrl?id=$user&version=$version';
 
     try {
-      final http.Response response = await http.get(Uri.parse(url)).timeout(Const.requestTimeout);
+      final response =
+          await client.get(Uri.parse(url)).timeout(Const.requestTimeout);
       return ServiceResponse.withVersion(response);
     } on TimeoutException catch (e) {
       debugPrint('Timeout error: $e at Event service');
