@@ -1,4 +1,5 @@
 import 'package:app_qldt/blocs/authentication/authentication_bloc.dart';
+import 'package:app_qldt/constant/permission.constant.dart';
 import 'package:app_qldt/enums/config/role.enum.dart';
 
 import 'package:app_qldt/enums/config/screen.dart';
@@ -29,7 +30,7 @@ class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
         .state
         .user
         .grantedPermissions!
-        .contains(11);
+        .contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE);
     final Role role =  isTeacher ? Role.teacher: Role.student;
     final ScreenPage currentScreenPage = _getCurrentScreenPage(role);
     return _getScreenPagesList(context, currentScreenPage, role);
