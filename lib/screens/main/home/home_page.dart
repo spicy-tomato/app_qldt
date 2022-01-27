@@ -2,6 +2,7 @@ import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/blocs/authentication/authentication_bloc.dart';
 import 'package:app_qldt/blocs/plan/plan_bloc.dart';
 import 'package:app_qldt/constant/constant.dart';
+import 'package:app_qldt/constant/permission.constant.dart';
 import 'package:app_qldt/widgets/component/bottom_note/bottom_note.dart';
 import 'package:app_qldt/widgets/wrapper/navigable_plan_page.dart';
 import 'package:app_qldt/widgets/wrapper/shared_ui.dart';
@@ -80,7 +81,7 @@ class Greeting extends StatelessWidget {
         .read<AuthenticationBloc>()
         .state
         .user;
-    final isTeacher = user.grantedPermissions!.contains(11);
+    final isTeacher = user.grantedPermissions!.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE);
 
     final userName = user.name;
     final displayLetters = userName.split(' ');

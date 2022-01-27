@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app_qldt/_utils/helper/const.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
+import 'package:app_qldt/constant/permission.constant.dart';
 import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 import 'package:app_qldt/services/api/api_service.dart';
 import 'package:app_qldt/services/model/service_response.dart';
@@ -39,7 +40,7 @@ class ApiEventService extends ApiService {
   ///     ...
   /// ]
   Future<ServiceResponse> _fetchData() async {
-    final String baseUrl = (user.grantedPermissions?.contains(11) ?? false) ? apiUrl.get.teacherSchedule : apiUrl.get.schedule;
+    final String baseUrl = (user.grantedPermissions?.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE) ?? false) ? apiUrl.get.teacherSchedule : apiUrl.get.schedule;
 
     debugPrint('$baseUrl at Event service');
 

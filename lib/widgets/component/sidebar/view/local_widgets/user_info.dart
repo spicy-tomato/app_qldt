@@ -1,5 +1,6 @@
 import 'package:app_qldt/blocs/app_setting/app_setting_bloc.dart';
 import 'package:app_qldt/blocs/authentication/authentication_bloc.dart';
+import 'package:app_qldt/constant/permission.constant.dart';
 import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:app_qldt/widgets/component/sidebar/avatar_bloc/avatar_bloc.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _UserInfoState extends State<UserInfo> {
     final user = context.read<AuthenticationBloc>().state.user;
     final avatarPath = context.read<UserRepository>().userDataModel.avatarPath;
     final themeData = context.read<AppSettingBloc>().state.theme.data;
-    final isTeacherID = user.grantedPermissions!.contains(11);
+    final isTeacherID = user.grantedPermissions!.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE);
 
 
     return Column(

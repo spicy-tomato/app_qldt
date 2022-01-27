@@ -177,14 +177,14 @@ class _FromDatePickerState extends State<FromDatePicker> {
           bodyText2: TextStyle(color: widget.themeData.primaryColor),
         ),
       ),
-      styleDatePicker: MaterialRoundedDatePickerStyle(
-        paddingMonthHeader: const EdgeInsets.all(13),
-        textStyleMonthYearHeader: TextStyle(color: widget.themeData.secondaryTextColor),
-        colorArrowPrevious: widget.themeData.secondaryTextColor,
-        colorArrowNext: widget.themeData.secondaryTextColor,
-        textStyleButtonPositive: TextStyle(color: widget.themeData.secondaryTextColor),
-        textStyleButtonNegative: TextStyle(color: widget.themeData.secondaryTextColor),
-      ),
+      // styleDatePicker: MaterialRoundedDatePickerStyle(
+      //   paddingMonthHeader: const EdgeInsets.all(13),
+      //   textStyleMonthYearHeader: TextStyle(color: widget.themeData.secondaryTextColor),
+      //   colorArrowPrevious: widget.themeData.secondaryTextColor,
+      //   colorArrowNext: widget.themeData.secondaryTextColor,
+      //   textStyleButtonPositive: TextStyle(color: widget.themeData.secondaryTextColor),
+      //   textStyleButtonNegative: TextStyle(color: widget.themeData.secondaryTextColor),
+      // ),
     );
 
     if (newTime != null) {
@@ -307,14 +307,14 @@ class _ToDatePickerState extends State<ToDatePicker> {
           bodyText2: TextStyle(color: widget.themeData.primaryColor),
         ),
       ),
-      styleDatePicker: MaterialRoundedDatePickerStyle(
-        paddingMonthHeader: const EdgeInsets.all(13),
-        textStyleMonthYearHeader: TextStyle(color: widget.themeData.secondaryTextColor),
-        colorArrowPrevious: widget.themeData.secondaryTextColor,
-        colorArrowNext: widget.themeData.secondaryTextColor,
-        textStyleButtonPositive: TextStyle(color: widget.themeData.secondaryTextColor),
-        textStyleButtonNegative: TextStyle(color: widget.themeData.secondaryTextColor),
-      ),
+      // styleDatePicker: MaterialRoundedDatePickerStyle(
+      //   paddingMonthHeader: const EdgeInsets.all(13),
+      //   textStyleMonthYearHeader: TextStyle(color: widget.themeData.secondaryTextColor),
+      //   colorArrowPrevious: widget.themeData.secondaryTextColor,
+      //   colorArrowNext: widget.themeData.secondaryTextColor,
+      //   textStyleButtonPositive: TextStyle(color: widget.themeData.secondaryTextColor),
+      //   textStyleButtonNegative: TextStyle(color: widget.themeData.secondaryTextColor),
+      // ),
     );
 
     if (newTime != null) {
