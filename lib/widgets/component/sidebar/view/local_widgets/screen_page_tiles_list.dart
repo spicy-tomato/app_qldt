@@ -32,7 +32,7 @@ class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
         .user
         .grantedPermissions!
         .contains(11);
-    final Role role =  isTeacher == true ? Role.teacher: Role.student;
+    final Role role =  isTeacher ? Role.teacher: Role.student;
     final ScreenPage currentScreenPage = _getCurrentScreenPage(role);
     return _getScreenPagesList(context, currentScreenPage, role);
   }

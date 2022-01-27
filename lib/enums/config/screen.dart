@@ -88,13 +88,26 @@ extension ScreenPageExtension on ScreenPage {
   }
 
   static List<ScreenPage> displayPagesInSidebar(Role role) {
-    return [
-      ScreenPage.home,
-      ScreenPage.schedule,
-      ScreenPage.notification,
-      if (role == Role.student) ScreenPage.score,
-      ScreenPage.examSchedule,
-    ];
+    switch (role){
+
+      case Role.student:
+        return [
+          ScreenPage.home,
+          ScreenPage.schedule,
+          ScreenPage.notification,
+          ScreenPage.score,
+          ScreenPage.examSchedule,
+        ];
+
+      case Role.teacher:
+        return [
+          ScreenPage.home,
+          ScreenPage.schedule,
+          ScreenPage.notification,
+          ScreenPage.examSchedule,
+        ];
+    }
+
   }
 
   int sidebarIndex (Role role) {
