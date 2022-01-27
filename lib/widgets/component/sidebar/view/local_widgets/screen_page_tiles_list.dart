@@ -3,11 +3,9 @@ import 'package:app_qldt/enums/config/role.enum.dart';
 
 import 'package:app_qldt/enums/config/screen.dart';
 import 'package:flutter/material.dart';
-//import 'package:googleapis/admin/directory_v1.dart';
-import 'package:provider/src/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'tiles/tiles.dart';
-
 
 class ScreenPageTilesList extends StatefulWidget {
   const ScreenPageTilesList({Key? key}) : super(key: key);
@@ -26,13 +24,8 @@ class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
   }
 
   List<Widget> _getSidebarItems(BuildContext context) {
-    final isTeacher = context
-        .read<AuthenticationBloc>()
-        .state
-        .user
-        .grantedPermissions!
-        .contains(11);
-    final Role role =  isTeacher == true ? Role.teacher: Role.student;
+    final isTeacher = context.read<AuthenticationBloc>().state.user.grantedPermissions!.contains(11);
+    final Role role = isTeacher == true ? Role.teacher : Role.student;
     final ScreenPage currentScreenPage = _getCurrentScreenPage(role);
     return _getScreenPagesList(context, currentScreenPage, role);
   }
@@ -49,15 +42,13 @@ class _ScreenPageTilesListState extends State<ScreenPageTilesList> {
     return ScreenPage.login;
   }
 
-  List<Widget> _getScreenPagesList(
-      BuildContext context, ScreenPage currentScreenPage, Role role) {
+  List<Widget> _getScreenPagesList(BuildContext context, ScreenPage currentScreenPage, Role role) {
     final _firstListItem = currentScreenPage.sidebarIndex(role) == 0
         //
         ? AboveEmptyTile(context)
         : const EmptyTile();
 
-    final _lastListItem = currentScreenPage.sidebarIndex(role) ==
-            ScreenPageExtension.displayPagesInSidebar(role).length - 1
+    final _lastListItem = currentScreenPage.sidebarIndex(role) == ScreenPageExtension.displayPagesInSidebar(role).length - 1
         //
         ? BelowEmptyTile(context)
         : const EmptyTile();
