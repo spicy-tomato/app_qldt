@@ -25,7 +25,7 @@ class CrawlablePage extends StatefulWidget {
 class _CrawlablePageState extends State<CrawlablePage> {
   @override
   Widget build(BuildContext context) {
-    final permission = context.read<UserRepository>().userDataModel.accountPermission;
+    final permission = context.read<UserRepository>().userDataModel.role;
 
     return BlocProvider<CrawlerBloc>(
       create: (_) => CrawlerBloc(context),

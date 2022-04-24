@@ -5,7 +5,6 @@ import 'package:app_qldt/repositories/user_repository/user_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-
 part 'authentication_event.dart';
 
 part 'authentication_state.dart';
@@ -21,8 +20,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   })  : _authenticationRepository = authenticationRepository,
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
-    _authenticationStatusSubscription =
-        _authenticationRepository.stream.listen((status) => add(AuthenticationStatusChanged(status)));
+    _authenticationStatusSubscription = _authenticationRepository.stream.listen((status) => add(AuthenticationStatusChanged(status)));
   }
 
   @override

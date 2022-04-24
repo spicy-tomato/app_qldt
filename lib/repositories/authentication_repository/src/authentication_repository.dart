@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:app_qldt/_utils/database/provider.dart';
 import 'package:app_qldt/_utils/secret/url/url.dart';
-import 'package:app_qldt/enums/config/account_permission_enum.dart';
 import 'package:app_qldt/enums/http/http_status.dart';
+import 'package:app_qldt/models/core/response_model.dart';
 import 'package:app_qldt/models/http/response.dart';
+import 'package:app_qldt/repositories/user_repository/src/models/user.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,11 +40,16 @@ class AuthenticationRepository {
 
     final HttpResponseModel loginResponse = await _loginService!.login(loginUser);
 
-    debugPrint('Login status: ${loginResponse.status}, permission: ${apiUrl.accountPermission}');
-
     if (loginResponse.status.isSuccessfully) {
-      await _saveUserInfo(loginResponse.data!, apiUrl.accountPermission);
-      _controller.add(AuthenticationStatus.authenticated);
+      try {
+        final response = ResponseModel<User>.fromJson(jsonDecode(loginResponse.data!));
+        final User userInfo = response.data;
+
+        await _saveUserInfo(userInfo);
+        _controller.add(AuthenticationStatus.authenticated);
+      } on Exception {
+        _controller.add(AuthenticationStatus.unauthenticated);
+      }
     } else {
       _controller.add(AuthenticationStatus.unauthenticated);
     }
@@ -50,10 +57,9 @@ class AuthenticationRepository {
     return loginResponse.status;
   }
 
-  Future<void> _saveUserInfo(String info, AccountPermission permission) async {
+  Future<void> _saveUserInfo(User user) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('user_info', info);
-    prefs.setInt('permission', permission.index);
+    prefs.setString('user_info', jsonEncode(user));
   }
 
   Future<void> logOut() async {

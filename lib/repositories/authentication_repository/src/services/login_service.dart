@@ -38,7 +38,6 @@ class LoginService {
 
       final HttpResponseStatus status = statusFromCode(response.statusCode);
 
-
       return HttpResponseModel(
         status: status,
         data: status.isSuccessfully ? response.body : null,

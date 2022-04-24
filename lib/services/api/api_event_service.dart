@@ -40,7 +40,8 @@ class ApiEventService extends ApiService {
   ///     ...
   /// ]
   Future<ServiceResponse> _fetchData() async {
-    final String baseUrl = (user.grantedPermissions?.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE) ?? false) ? apiUrl.get.teacherSchedule : apiUrl.get.schedule;
+    final String baseUrl =
+        (user.permissions.contains(PermissionConstant.requestChangeTeachingSchedule)) ? apiUrl.get.teacherSchedule : apiUrl.get.schedule;
 
     debugPrint('$baseUrl at Event service');
 

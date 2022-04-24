@@ -60,7 +60,7 @@ class PreloadState extends Equatable {
   PreloadState.loaded(UserDataModel userDataModel)
       : this(
           status: PreloadStatus.loaded,
-          idAccount: userDataModel.idAccount,
+          idAccount: userDataModel.uuidAccount,
           idUser: userDataModel.idUser,
           eventServiceController: userDataModel.eventServiceController,
           scoreServiceController: userDataModel.scoreServiceController,

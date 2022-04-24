@@ -1,48 +1,80 @@
 import 'package:app_qldt/enums/config/account_permission_enum.dart';
-import 'package:intl/intl.dart';
+import 'package:app_qldt/models/core/simple_model.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class User {
   const User({
-    this.id = '',
-    this.name = '',
-    this.dob,
-    this.isFemale,
-    this.idClass,
-    this.idCardNumber,
-    this.phoneNumberStudent,
+    required this.department,
+    required this.faculty,
+    required this.id,
+    required this.name,
+    required this.permissions,
+    required this.role,
+    required this.uuidAccount,
     this.address,
-    this.accountId,
-    this.grantedPermissions,
-    this.permission = AccountPermission.user,
+    this.birth,
+    this.email,
+    this.idCardNumber,
+    this.idClass,
+    this.isFemale,
+    this.notificationDataVersion,
+    this.phone,
+    this.scheduleDataVersion,
+    this.universityTeacherDegree,
   });
 
-  final String id;
+  static const empty = User(
+      faculty: null,
+      id: '',
+      notificationDataVersion: -1,
+      permissions: [],
+      role: AccountRole.guest,
+      department: null,
+      name: '',
+      scheduleDataVersion: -1,
+      uuidAccount: '');
+
+  final String uuidAccount;
   final String name;
-  final DateTime? dob;
+  final String id;
+  final DateTime? birth;
+  final String? phone;
+
+  @JsonKey(fromJson: _boolFromInt, toJson: _boolToInt)
   final bool? isFemale;
+  @JsonKey(name: 'idRole')
+  final AccountRole role;
+  final int? scheduleDataVersion;
+  final int? notificationDataVersion;
+  final List<int> permissions;
+
   final String? idClass;
   final String? idCardNumber;
-  final String? phoneNumberStudent;
   final String? address;
-  final String? accountId;
-  final AccountPermission permission;
-  final List<int>? grantedPermissions;
 
-  factory User.fromJsonWithPermission(Map<String, dynamic> json, AccountPermission permission) {
-    return User(
-        id: json['data']['uuid'],
-        name: json['data']['name'],
-        dob: json['data']['birth'] != null ? DateFormat('yyyy-M-d').parse(json['data']['birth']) : null,
-        isFemale: json['data']['is_female'] == 1,
-        idClass: json['data']['id_class'],
-        idCardNumber: json['data']['id_card_number'],
-        phoneNumberStudent: json['data']['phone_number'],
-        address: json['data']['address'],
-        accountId: json['data']['uuid_account'],
-        permission: permission,
-        grantedPermissions: (json['data']['permissions'] as List<dynamic>).cast<int>()
-    );
-  }
+  final String? universityTeacherDegree;
+  final String? email;
+  final SimpleModel? department;
+  final SimpleModel? faculty;
 
-  static const empty = User();
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  String get title => isFemale == null
+      ? 'Bạn'
+      : isFemale!
+          ? 'cô'
+          : 'thầy';
+
+  static bool? _boolFromInt(int? value) => value == null ? null : value == 1;
+
+  static int? _boolToInt(bool? value) => value == null
+      ? null
+      : value
+          ? 1
+          : 0;
 }

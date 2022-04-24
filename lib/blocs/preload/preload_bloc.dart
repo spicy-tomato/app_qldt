@@ -61,7 +61,6 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
     final Stopwatch stopwatch = Stopwatch()..start();
     const minTurnAroundTime = Duration(seconds: 2);
     final ApiUrl apiUrl = AppModeWidget.of(context).apiUrl;
-    apiUrl.accountPermission = user.permission;
     final serviceControllers = _ServiceControllers(apiUrl: apiUrl, user: user);
 
     await Future.wait([
@@ -80,9 +79,9 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       scoreServiceController: serviceControllers.score,
       notificationServiceController: serviceControllers.notification,
       examScheduleServiceController: serviceControllers.examSchedule,
-      idAccount: user.accountId!,
+      uuidAccount: user.uuidAccount,
       idUser: user.id,
-      accountPermission: user.permission,
+      role: user.role,
       avatarPath: avatarPath ?? '',
     );
 
@@ -120,9 +119,9 @@ class PreloadBloc extends Bloc<PreloadEvent, PreloadState> {
       scoreServiceController: serviceControllers.score,
       notificationServiceController: serviceControllers.notification,
       examScheduleServiceController: serviceControllers.examSchedule,
-      idAccount: user.accountId!,
+      uuidAccount: user.uuidAccount,
       idUser: user.id,
-      accountPermission: user.permission,
+      role: user.role,
       avatarPath: avatarPath ?? '',
     );
 
@@ -191,7 +190,7 @@ class _ServiceControllers {
 
     event = EventServiceController(controllerData);
     score = ScoreServiceController(controllerData);
-    notification = NotificationServiceController(controllerData, user.accountId!);
+    notification = NotificationServiceController(controllerData, user.uuidAccount);
     examSchedule = ExamScheduleServiceController(controllerData);
 
     if (loadOldData) {

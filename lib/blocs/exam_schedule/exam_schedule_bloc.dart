@@ -68,7 +68,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
     final CrawlerStatus scoreCrawlerStatus = await _crawlerService.crawlScore(
       ScoreCrawlerModel(
         idStudent: _userDataModel.idUser,
-        idAccount: _userDataModel.idAccount,
+        idAccount: _userDataModel.uuidAccount,
       ),
     );
     debugPrint('exam_schedule_bloc.dart --- Crawl score: $scoreCrawlerStatus');
@@ -79,7 +79,7 @@ class ExamScheduleBloc extends Bloc<ExamScheduleEvent, ExamScheduleState> {
     final CrawlerStatus examScheduleCrawlerStatus = await _crawlerService.crawlExamSchedule(
       ExamScheduleCrawlerModel(
         idStudent: _userDataModel.idUser,
-        idAccount: _userDataModel.idAccount,
+        idAccount: _userDataModel.uuidAccount,
       ),
     );
     debugPrint('exam_schedule_bloc.dart --- Crawl Exam Schedule: $examScheduleCrawlerStatus');

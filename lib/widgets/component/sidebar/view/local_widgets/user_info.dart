@@ -21,7 +21,7 @@ class _UserInfoState extends State<UserInfo> {
     final user = context.read<AuthenticationBloc>().state.user;
     final avatarPath = context.read<UserRepository>().userDataModel.avatarPath;
     final themeData = context.read<AppSettingBloc>().state.theme.data;
-    final isTeacherID = user.grantedPermissions!.contains(PermissionConstant.REQUEST_CHANGE_TEACHING_SCHEDULE);
+    final isTeacherID = user.permissions.contains(PermissionConstant.requestChangeTeachingSchedule);
 
     return Column(
       children: <Widget>[

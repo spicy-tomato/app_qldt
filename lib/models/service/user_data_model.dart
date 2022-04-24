@@ -9,9 +9,9 @@ class UserDataModel {
   final ScoreServiceController scoreServiceController;
   final NotificationServiceController notificationServiceController;
   final ExamScheduleServiceController examScheduleServiceController;
-  final String idAccount;
+  final String uuidAccount;
   final String idUser;
-  final AccountPermission accountPermission;
+  final AccountRole role;
   String avatarPath;
 
   UserDataModel({
@@ -19,9 +19,9 @@ class UserDataModel {
     required this.scoreServiceController,
     required this.notificationServiceController,
     required this.examScheduleServiceController,
-    required this.idAccount,
+    required this.uuidAccount,
     required this.idUser,
-    required this.accountPermission,
+    required this.role,
     required this.avatarPath,
   });
 }
